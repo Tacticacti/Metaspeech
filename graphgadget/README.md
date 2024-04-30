@@ -1,38 +1,19 @@
-# create-svelte
+# graphgadget
+This is the project containing the web application that we will be developing.
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/main/packages/create-svelte).
+## how to run
+1. Install [nodejs](https://nodejs.org/en/download). You can whether it is intalled by running the command "npm" in the terminal.
+2. Move with the terminal to the "code/graphgadget" directory.
+3. For the first time you must run "npm install" this will fetch all required packages
+4. Build the project using the command "npm run build". The output should be visible in the "graphgadget/build" folder.
+5. To run the website use "npm run preview". You can also use "npm run dev" if you dont want to build each time.
+6. When you are finished press 'q' to exit
 
-## Creating a project
+## testing
+There are 2 main ways of testing.
 
-If you're seeing this, you've probably already done this step. Congrats!
+The first is with vitest. These are files in "graphgadget/src" that end with the extension: .test.ts . These tests are meant for unit tests.
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
+The second method is via playwright, which allows system tests. These are found in the "graphgadget/tests" directory. 
 
-# create a new project in my-app
-npm create svelte@latest my-app
-```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+To run the test you can use the command "npm run test"
