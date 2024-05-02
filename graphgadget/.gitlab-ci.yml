@@ -27,32 +27,11 @@ build:
   artifacts:
     paths:
       - dist
-  only:
-    - main # or dev, the branch you want to publish
 
-lint:
-  stage: test
-  script: npm run lint
-  only:
-    - main # or dev, the branch you want to publish
-
-ts:
-  stage: test
-  script: npm run check
-  only:
-    - main # or dev, the branch you want to publish
-
-prettier:
-  stage: test
-  script: npm run format-check
-  only:
-    - main # or dev, the branch you want to publish
 
 test:
   stage: test
   script: npm run test
-  only:
-    - main # or dev, the branch you want to publish
 
 pages:
   # Another interesting concept to keep in mind are build stages. Your web app can pass through a lot of tests and other tasks until it’s deployed to staging or production environments. There are three default stages on GitLab CI: build, test, and deploy. To specify which stage your job is running, simply add another line to your CI:
@@ -66,5 +45,3 @@ pages:
   artifacts:
     paths:
       - public # mandatory, other folder won't work
-  only:
-    - main # or dev, the branch you want to publish
