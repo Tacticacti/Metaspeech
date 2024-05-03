@@ -6,9 +6,11 @@ image: node:20.0.0
 
 stages:
   - prepare
+  - check
   - build
   - test
   - deploy
+
 prepare:
   stage: prepare
   script:
@@ -22,16 +24,22 @@ prepare:
    paths:
    - graphgadget/node_modules
 
+check:
+  stage: check
+  script:
+    - cd graphgadget
+    - npm run lint
+
 build:
   stage: build
   script:
     - cd graphgadget
+    - export NODE_ENV=production
     - npm run build
   artifacts:
    paths: 
-     - graphgadget/build
-
-
+     - graphgadget/build # used for deploying
+     - graphgadget/.svelte-kit/tsconfig.json # used by testing
 
 test:
   stage: test
@@ -39,6 +47,12 @@ test:
     - cd graphgadget
     - npx playwright install --with-deps
     - npm run test
+  artifacts:
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: graphgadget/coverage/cobertura-coverage.xml
+  coverage: '/^Statements\s*:\s*([^%]+)/'
 
 pages:
   stage: deploy
