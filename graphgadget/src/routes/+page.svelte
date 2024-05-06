@@ -1,8 +1,14 @@
 <script lang="ts">
-	let inputFile: HTMLInputElement;
+	import FileUploader from './components/FileUploader.svelte'
 
-	function uploadDataClick() {
-		alert(inputFile.files[0].name);
+	function inputFilesChanged(event: CustomEvent) {
+		const inputFiles: FileList = event.detail;
+
+		if (inputFiles) {
+			for (const f of inputFiles) {
+				console.log(f.name);
+			}
+		}
 	}
 </script>
 
@@ -17,8 +23,7 @@
 	<nav>
 		<ul>
 			<li>
-				<input bind:this={inputFile} on:change={uploadDataClick} type="file" id="upload-data" hidden />
-				<label for="upload-data">Upload Data</label>
+				<FileUploader on:inputFilesChanged={inputFilesChanged}/>
 			</li>
 
 			<li><a href=".">Previous Data</a></li>
