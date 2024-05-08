@@ -1,2 +1,18 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<script lang="ts">
+	import { state, StateEnum } from '$lib/store';
+	import Importer from '$lib/importer/importer.svelte';
+	import Tableview from '$lib/tableview/tableview.svelte';
+	import Grapher from '$lib/grapher/grapher.svelte';
+</script>
+
+{#if $state === StateEnum.input}
+	<Importer />
+{/if}
+
+{#if $state === StateEnum.modify}
+	<Tableview />
+{/if}
+
+{#if $state === StateEnum.graph}
+	<Grapher />
+{/if}

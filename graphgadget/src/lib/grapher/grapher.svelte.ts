@@ -1,7 +1,7 @@
 import { it, expect } from 'vitest';
 import { render } from '@testing-library/svelte';
 import userEvent from '@testing-library/user-event';
-import sut from './+page.svelte';
+import sut from './grapher.svelte';
 
 it('right side says nothing', () => {
 	const { getByTestId } = render(sut);
