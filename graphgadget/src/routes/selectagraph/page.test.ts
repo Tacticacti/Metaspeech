@@ -7,32 +7,32 @@ it('right side says nothing', () => {
 	const { getByTestId } = render(sut);
 
 	expect(getByTestId('name-chart').innerHTML).toEqual('nothing');
-    expect(getByTestId('description-chart').innerHTML).toEqual('nothing');
+	expect(getByTestId('description-chart').innerHTML).toEqual('nothing');
 });
 it('hover histogram', async () => {
-    const user = userEvent.setup();
+	const user = userEvent.setup();
 	const { getByTestId } = render(sut);
 
-    const hist = getByTestId('histogram')
+	const hist = getByTestId('histogram');
 
-    await user.hover(hist)
+	await user.hover(hist);
 	expect(getByTestId('name-chart').innerHTML).toEqual('Histogram');
-    expect(getByTestId('description-chart').innerHTML).toEqual('Histogram description');
+	expect(getByTestId('description-chart').innerHTML).toEqual('Histogram description');
+	// const backgroundColor = window.getComputedStyle(hist).getPropertyValue('background-color');
+	// expect(backgroundColor).toEqual('rgba(128, 128, 128, 0)')
 });
 it('unhover histogram', async () => {
-    const user = userEvent.setup();
+	const user = userEvent.setup();
 	const { getByTestId } = render(sut);
 
-    const hist = getByTestId('histogram')
+	const hist = getByTestId('histogram');
 
-    await user.hover(hist)
+	await user.hover(hist);
 	expect(getByTestId('name-chart').innerHTML).toEqual('Histogram');
-    expect(getByTestId('description-chart').innerHTML).toEqual('Histogram description');
+	expect(getByTestId('description-chart').innerHTML).toEqual('Histogram description');
 
-    await user.unhover(hist)
+	await user.unhover(hist);
 
-    expect(getByTestId('name-chart').innerHTML).toEqual('nothing');
-    expect(getByTestId('description-chart').innerHTML).toEqual('nothing');
+	expect(getByTestId('name-chart').innerHTML).toEqual('nothing');
+	expect(getByTestId('description-chart').innerHTML).toEqual('nothing');
 });
-
-
