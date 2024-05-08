@@ -1,17 +1,10 @@
 <script lang="ts">
     
-    let ind = -1;
-    let count = 0;
-    let descriptions = ["histogram description avadadadadadasdadasda asdasd adawd awd awda wdawd awd awd awdawdaw dad awdwad "]
-    let names = ["Histogram"]
-    function handleMouseOver() {
-        ind = 1;
-    }
-
+    let description = "nothing"
+    let name = "nothing"
     function handleMouseOut() {
-        console.log("count: "+count);
-        count++;
-        ind = -1;
+        name = "nothing";
+        description = "nothing";
     }
 </script>
 
@@ -19,19 +12,20 @@
 <div class="main-container" >
     <div class="right-container">
         <div class="name-chart">
-            {#if ind != -1}
-                <p>{names[ind]}</p>
-            {:else}
-                <p>nothing</p>
-            {/if}
+            {name}
         </div>
-        <div class="description"></div>
+        <div class="description">
+            {description}
+        </div>
     </div>
     <div class="left-container">
         <h1 style="text-align:center;">Select a graph</h1>
         <div class="t1">
             <div class="r">
-                <div id="ss" class="s" on:mouseover={handleMouseOver} on:mouseout={handleMouseOut}>
+                <div id="ss" class="s" on:mouseover={() => {
+                    name = "Histogram";
+                    description = "Histogram description asdadw adhuawdoha wdhad ihad haodha";
+                }} on:mouseout={handleMouseOut}>
                     <img src="histogram-img.png" style="background-color: gray;" alt="Description of the image">
                     <div style="align-self:center; font-size: 20px; font-weight: bold;" >histogram</div>
                 </div>
