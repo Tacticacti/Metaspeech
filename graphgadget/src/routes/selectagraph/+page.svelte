@@ -11,10 +11,10 @@
 
 <div class="main-container" >
     <div class="right-container">
-        <div class="name-chart">
+        <div data-testid="name-chart" class="name-chart">
             {name}
         </div>
-        <div class="description">
+        <div data-testid="description-chart" class="description-chart">
             {description}
         </div>
     </div>
@@ -22,10 +22,10 @@
         <h1 style="text-align:center;">Select a graph</h1>
         <div class="t1">
             <div class="r">
-                <div id="ss" class="s" on:mouseover={() => {
+                <div data-testid="histogram" class="s" on:mouseover={() => {
                     name = "Histogram";
-                    description = "Histogram description asdadw adhuawdoha wdhad ihad haodha";
-                }} on:mouseout={handleMouseOut}>
+                    description = "Histogram description";
+                }} on:mouseout={handleMouseOut} >
                     <img src="histogram-img.png" style="background-color: gray;" alt="Description of the image">
                     <div style="align-self:center; font-size: 20px; font-weight: bold;" >histogram</div>
                 </div>
@@ -40,7 +40,7 @@
 </div>
 
 <style>
-    #ss:hover {
+    .s:hover {
         background-color: gray;
     }
     .s {
