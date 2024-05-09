@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { data } from '$lib/store';
+	import { data } from '$lib/Store';
 	import { Chart, type ChartConfiguration } from 'chart.js/auto';
 	import { afterUpdate, onMount } from 'svelte';
 

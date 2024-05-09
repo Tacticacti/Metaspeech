@@ -1,6 +1,6 @@
 <script lang="ts">
 	import TableView from '$lib/TableView.svelte';
-	import { data, state, StateEnum } from '$lib/store';
+	import { data, state, StateEnum } from '$lib/Store';
 </script>
 
 <button on:click={() => state.set(StateEnum.view)}>Next</button>

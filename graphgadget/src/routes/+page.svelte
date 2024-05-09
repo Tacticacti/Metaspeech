@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { state } from '$lib/store';
+	import { state } from '$lib/Store';
 </script>
 
 <svelte:component this={$state} />
