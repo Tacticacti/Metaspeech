@@ -11,8 +11,8 @@ export default defineConfig({
 		environment: 'jsdom',
 		poolOptions: {
 			threads: {
-			  singleThread: true,
-			},
+				singleThread: true
+			}
 		},
 		coverage: {
 			provider: 'istanbul',
