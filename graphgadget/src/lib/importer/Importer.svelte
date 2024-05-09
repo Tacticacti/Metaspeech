@@ -19,4 +19,4 @@
 	}
 </script>
 
-<input type="file" accept=".tsv" on:input={onInput} />
+<input data-testid="input" type="file" accept=".tsv" on:input={onInput} />
