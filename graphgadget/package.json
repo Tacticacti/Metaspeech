@@ -46,6 +46,7 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"chart.js": "^4.4.2"
+		"chart.js": "^4.4.2",
+		"exceljs": "^4.4.0"
 	}
 }
