@@ -16,15 +16,15 @@ prepare:
   script:
     - cd graphgadget
     - npm ci
-    - export PLAYWRIGHT_BROWSERS_PATH=$CI_PROJECT_DIR/graphgadget/.browsers
+    - export PLAYWRIGHT_BROWSERS_PATH=$CI_PROJECT_DIR/.browsers
     - npx playwright install --with-deps
   artifacts:
    paths:
    - graphgadget/node_modules
-   - graphgadget/.browsers
+   - .browsers
   cache:
    paths:
-   - graphgadget/.browsers
+   - .browsers
 
 check:
   stage: check
@@ -46,6 +46,7 @@ test:
   stage: test
   script: 
     - cd graphgadget
+    - export PLAYWRIGHT_BROWSERS_PATH=$CI_PROJECT_DIR/.browsers
     - npm run test
   artifacts:
     reports:
