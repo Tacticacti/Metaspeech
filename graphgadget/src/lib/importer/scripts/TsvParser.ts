@@ -1,5 +1,5 @@
-import { DataFrame } from "dataframe-js";
+import { DataFrame } from 'dataframe-js';
 
 export function ParseTsv(file: File): Promise<DataFrame> {
-    return DataFrame.fromTSV(file);
+	return DataFrame.fromTSV(file);
 }
