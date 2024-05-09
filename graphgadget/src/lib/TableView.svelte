@@ -1,5 +1,5 @@
 <script lang="ts">
-	import DataFrame from 'dataframe-js';
+	import type DataFrame from 'dataframe-js';
 
 	export let data: DataFrame;
 

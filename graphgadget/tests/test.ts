@@ -1,7 +1,8 @@
 import { expect, test } from '@playwright/test';
 
-test('index page has expected h1', async ({ page }) => {
+test('should render', async ({ page }) => {
 	await page.goto('/');
-	await expect(page.getByRole('input'))
-	await expect(page.getByRole('heading', { name: 'Welcome to SvelteKit' })).toBeVisible();
+	//get file input
+	const input = await page.$('input[type=file]');
+	expect(input).not.toBeNull();
 });
