@@ -6,7 +6,7 @@ export type GraphMeta = {
 	component: ConstructorOfATypedSvelteComponent;
 };
 
-export const GraphsMetas: GraphMeta[] = [
+export const GraphMetas: GraphMeta[] = [
 	{
 		title: 'Histogram',
 		description:
