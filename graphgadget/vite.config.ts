@@ -12,8 +12,10 @@ export default defineConfig({
 		coverage: {
 			provider: 'istanbul',
 			include: ['src/**'],
+			exclude: ['src/**/__mocks__/**/*'],
 			reporter: ['cobertura', 'text-summary', 'text'],
 			skipFull: true
-		}
+		},
+		mockReset: true
 	}
 });
