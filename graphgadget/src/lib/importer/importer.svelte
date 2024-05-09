@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
-	import { Parse } from './scripts/FileParser';
+	import { Parse } from '$lib/importer/scripts/FileParser';
 	import { DataFrame } from 'dataframe-js';
 
 	// allows creating component events

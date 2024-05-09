@@ -1,4 +1,4 @@
-import { ParseTsv } from './TsvParser';
+import { ParseTsv } from '$lib/importer/scripts/TsvParser';
 import { DataFrame } from 'dataframe-js';
 
 function GetFileExtension(file: File): string {
