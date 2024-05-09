@@ -16,9 +16,14 @@ prepare:
   script:
     - cd graphgadget
     - npm ci
+    - npx playwright install --with-deps
   artifacts:
    paths:
    - graphgadget/node_modules
+   - ~/.cache/ms-playwright/
+  cache:
+   paths:
+   - ~/.cache/ms-playwright/
 
 check:
   stage: check
@@ -40,7 +45,6 @@ test:
   stage: test
   script: 
     - cd graphgadget
-    - npx playwright install --with-deps
     - npm run test
   artifacts:
     reports:
