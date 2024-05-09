@@ -1,20 +1,21 @@
 <script lang="ts">
-	import { data, state, StateEnum } from '$lib/store';
+	import { createEventDispatcher } from 'svelte';
+	import { Parse } from './scripts/FileParser';
+	import { DataFrame } from 'dataframe-js';
+
+	// allows creating component events
+	const dispatch = createEventDispatcher<{
+		input: DataFrame;
+	}>();
 
 	function onInput(event: Event) {
 		const input = event.target as HTMLInputElement;
 		const file = input.files?.[0];
 		if (!file) return;
 
-		const reader = new FileReader();
-		reader.onload = () => {
-			const text = reader.result as string;
-			// it is tab separated values split it
-			const lines = text.split('\n');
-			data.set(lines.map((line) => line.split('\t')));
-			state.set(StateEnum.modify);
-		};
-		reader.readAsText(file);
+		Parse(file).then((data) => {
+			dispatch('input', data);
+		});
 	}
 </script>
 
