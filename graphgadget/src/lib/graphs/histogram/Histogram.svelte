@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { data } from '$lib/Store';
 	import { Chart, type ChartConfiguration } from 'chart.js/auto';
-	import { afterUpdate, onMount } from 'svelte';
+	import { afterUpdate, onMount, onDestroy  } from 'svelte';
 
 	let canvas: HTMLCanvasElement;
 	let chart: Chart;
@@ -13,15 +13,50 @@
 
 	// setup chart after canvas is mounted
 	onMount(() => {
-		const cfg: ChartConfiguration = {
-			type: 'bar',
-			data: {
-				labels: [],
-				datasets: []
+		// const cfg: ChartConfiguration = {
+		// 	type: 'bar',
+		// 	data: {
+		// 		labels: [],
+		// 		datasets: []
+		// 	}
+		// };
+
+		// chart = new Chart(canvas, cfg);
+
+		const plugin = {
+			id: 'customCanvasBackgroundColor',
+			// @ts-ignore
+			beforeDraw: (chart, args, options) => {
+				const {ctx} = chart;
+				ctx.save();
+				ctx.globalCompositeOperation = 'destination-over';
+				ctx.fillStyle = options.color || '#99ffff';
+				ctx.fillRect(0, 0, chart.width, chart.height);
+				ctx.restore();
+				args = undefined
 			}
+		}
+
+		const data = {
+			labels: [],
+			datasets: []
 		};
 
-		chart = new Chart(canvas, cfg);
+		const config = {
+			type: 'bar',
+			data: data,
+			options: {
+				plugins: {
+					customCanvasBackgroundColor: {
+						color: 'lightGreen',
+					}
+				}
+			},
+			plugins: [plugin],
+		};
+
+		// @ts-ignore
+		chart = new Chart(canvas, config);
 	});
 
 	// called when x_axis or y_axis changes
@@ -31,14 +66,27 @@
 			{
 				label: y_axis,
 				data: $data.toArray(y_axis),
-				backgroundColor: 'rgba(51, 50, 200, 1)',
-				borderColor: 'rgba(255, 99, 132, 1)',
+				backgroundColor: 'rgba(54, 162, 235, 1)',
+				borderColor: 'rgba(255, 255, 255, 1)',
 				borderWidth: 1
 			}
 		];
 
 		chart.update();
 	});
+
+	function downloadCanvasPNG() {
+		const link = document.createElement('a')
+		link.href = chart.toBase64Image()
+		link.download = 'histogram_image.png'
+
+		link.click()
+	};
+
+	onDestroy(() => {
+    	if (chart) chart.destroy();
+ 	 });
+
 </script>
 
 <select data-testid="first-select" bind:value={x_axis}>
@@ -54,6 +102,9 @@
 
 <div>
 	<canvas data-testid="canvas-element" bind:this={canvas} />
+</div>
+<div>
+	<button on:click={downloadCanvasPNG}>PNG</button>
 </div>
 
 <style>
