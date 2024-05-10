@@ -1,5 +1,5 @@
 import Histogram from './histogram/Histogram.svelte';
-import Histogram2 from './histogram2/Histogram2.svelte';
+import Stem from './Stem/Stem.svelte';
 
 export type GraphMeta = {
 	title: string;
@@ -17,10 +17,9 @@ export const GraphMetas: GraphMeta[] = [
 		component: Histogram
 	},
 	{
-		title: 'Histogram2',
-		description:
-			'A histogram is an approximate representation of the distribution of numerical data.',
+		title: 'Stem',
+		description: 'A stem description.',
 		img_src: 'histogram-img.png',
-		component: Histogram2
+		component: Stem
 	}
 ];

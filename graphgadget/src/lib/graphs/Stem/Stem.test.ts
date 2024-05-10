@@ -1,6 +1,6 @@
 import { it, expect } from 'vitest';
 import { render } from '@testing-library/svelte';
-import sut from '$lib/graphs/histogram/Histogram.svelte';
+import sut from '$lib/graphs/Stem/Stem.svelte';
 import { data } from '$lib/Store';
 import userEvent from '@testing-library/user-event';
 import DataFrame from 'dataframe-js';

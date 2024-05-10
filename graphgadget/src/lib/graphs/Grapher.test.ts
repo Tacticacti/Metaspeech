@@ -3,7 +3,7 @@ import sut from '$lib/graphs/Grapher.svelte';
 import { describe, it, expect } from 'vitest';
 import { GraphMetas } from '$lib/graphs/Graphs';
 import userEvent from '@testing-library/user-event';
-import Histogram2 from './histogram2/Histogram2.svelte';
+import Histogram from './histogram/Histogram.svelte';
 import { selected_graph, graph_name, graph_description } from './Store';
 import { get } from 'svelte/store';
 
@@ -29,7 +29,7 @@ describe('View', () => {
 	it('should contain 2 histograms', async () => {
 		const { getByTestId } = render(sut, { graphs: GraphMetas });
 		const hist1 = getByTestId('Histogram');
-		const hist2 = getByTestId('Histogram2');
+		const hist2 = getByTestId('Stem');
 		expect(hist1).to.exist;
 		expect(hist2).to.exist;
 	});
@@ -57,13 +57,11 @@ describe('hovering', () => {
 		const user = userEvent.setup();
 		const { getByTestId } = render(sut, { graphs: GraphMetas });
 
-		const hist = getByTestId('Histogram2');
+		const hist = getByTestId('Stem');
 
 		await user.hover(hist);
-		expect(getByTestId('name-chart').innerHTML).toEqual('Histogram2');
-		expect(getByTestId('description-chart').innerHTML).toEqual(
-			'A histogram is an approximate representation of the distribution of numerical data.'
-		);
+		expect(getByTestId('name-chart').innerHTML).toEqual('Stem');
+		expect(getByTestId('description-chart').innerHTML).toEqual('A stem description.');
 
 		await user.unhover(hist);
 
@@ -75,8 +73,8 @@ it('click histogram', async () => {
 	const user = userEvent.setup();
 	const { getByTestId } = render(sut, { graphs: GraphMetas });
 
-	const hist = getByTestId('Histogram2');
+	const hist = getByTestId('Histogram');
 
 	await user.click(hist);
-	expect(get(selected_graph)).toBe(Histogram2);
+	expect(get(selected_graph)).toBe(Histogram);
 });

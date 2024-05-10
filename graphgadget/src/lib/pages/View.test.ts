@@ -4,7 +4,7 @@ import { vi, describe, it, expect } from 'vitest';
 //import { GraphMetas } from '$lib/graphs/Graphs';
 //import Histogram from '$lib/graphs/histogram/Histogram.svelte';
 
-vi.mock('$lib/graphs/histogram/Histogram.svelte');
+vi.mock('$lib/graphs/Stem/Stem.svelte');
 
 describe('View', () => {
 	it('should render', () => {
@@ -13,7 +13,7 @@ describe('View', () => {
 	});
 	it('should contain Histogram', async () => {
 		const { getByTestId } = render(sut);
-		const histogram = getByTestId('histogram');
+		const histogram = getByTestId('stem');
 		expect(histogram).to.exist;
 	});
 	// it('should have a select component', async () => {
