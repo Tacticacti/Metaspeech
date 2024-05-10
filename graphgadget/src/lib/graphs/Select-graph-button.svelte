@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { graph_name, graph_description, selected_graph } from './Store.ts';
+	import { graph_name, graph_description, selected_graph } from './Store.js';
 	export let graph;
 	function handleMouseOut() {
 		$graph_name = '';

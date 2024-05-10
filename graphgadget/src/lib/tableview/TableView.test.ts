@@ -2,6 +2,7 @@ import { render } from '@testing-library/svelte';
 import TableView from './TableView.svelte';
 import DataFrame from 'dataframe-js';
 import '@testing-library/jest-dom';
+import { writable } from 'svelte/store';
 
 describe('TableView', () => {
 	it('should render a table with headers and rows based on provided data', async () => {
@@ -15,7 +16,7 @@ describe('TableView', () => {
 		);
 
 		// Render the component with mock data
-		const { getByText } = render(TableView, { data: mockData });
+		const { getByText } = render(TableView, { data: writable(mockData) });
 
 		// Check if headers are present
 		expect(getByText('col1')).toBeInTheDocument();

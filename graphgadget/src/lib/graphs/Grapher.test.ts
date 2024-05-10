@@ -1,5 +1,5 @@
 import { render } from '@testing-library/svelte';
-import sut from '$lib/graphs/Grapher.svelte';
+import sut from '$lib/graphs/Select-graph.svelte';
 import { describe, it, expect } from 'vitest';
 import { GraphMetas } from '$lib/graphs/Graphs';
 import userEvent from '@testing-library/user-event';
