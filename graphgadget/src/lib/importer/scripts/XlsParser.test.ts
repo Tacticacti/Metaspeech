@@ -21,10 +21,12 @@ describe('XlsParser', () => {
 			['Header1', 'Header2'],
 			['Data1', 'Data2']
 		];
+		// @ts-ignore
 		XLSX.read.mockReturnValue({
 			SheetNames: ['Sheet1'],
 			Sheets: { Sheet1: {} }
 		});
+		// @ts-ignore
 		XLSX.utils.sheet_to_json.mockReturnValue(jsonMock);
 		const readAsArrayBufferSpy = jest.spyOn(FileReader.prototype, 'readAsArrayBuffer');
 		const result = await ParseXls(file);
@@ -45,18 +47,46 @@ describe('XlsParser', () => {
 	});
 	it('Should have invalid header when converting to dataframe from json', async () => {
 		const file = new File(['dummy data'], 'test.xls', { type: 'application/vnd.ms-excel' });
-		const jsonMock = [];
+		// @ts-ignore
 		XLSX.read.mockReturnValue({
 			SheetNames: ['Sheet1'],
 			Sheets: { Sheet1: {} }
 		});
-		XLSX.utils.sheet_to_json.mockReturnValue(jsonMock);
+		// @ts-ignore
+		XLSX.utils.sheet_to_json.mockReturnValue([]);
 		try {
 			await ParseXls(file);
 			throw new Error('Test failed: Expected ParseXls to throw an error but did not.');
 		} catch (error) {
 			expect(error).toBeInstanceOf(SyntaxError);
+			// @ts-ignore
 			expect(error.message).toContain('Header row format is incorrect or missing');
 		}
 	});
+	it('handles reader onerror', async () => {
+        // Mock the FileReader object and its methods
+		// @ts-ignore
+        window.FileReader = jest.fn().mockImplementation(() => ({
+            readAsArrayBuffer: function() {
+                this.onerror(new Error());
+            },
+        }));
+
+        // Call the parseFile function with a dummy file
+        const file = new File([''], 'filename.xls', { type: 'application/vnd.ms-excel' });
+        await expect(ParseXls(file)).rejects.toThrow();
+    });
+	it('handles data missing', async () => {
+        // Mock the FileReader object and its methods
+		// @ts-ignore
+        window.FileReader = jest.fn().mockImplementation(() => ({
+            readAsArrayBuffer: function() {
+                this.onload({ target: { result: null } });
+            },
+        }));
+
+        // Call the parseFile function with a dummy file
+        const file = new File([''], 'filename.xls', { type: 'application/vnd.ms-excel' });
+        await expect(ParseXls(file)).rejects.toThrow();
+    });
 });
