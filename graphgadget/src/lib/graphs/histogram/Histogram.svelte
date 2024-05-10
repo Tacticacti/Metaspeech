@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { data } from '$lib/Store';
-	import { Chart, type ChartConfiguration } from 'chart.js/auto';
-	import { afterUpdate, onMount, onDestroy  } from 'svelte';
+	import { Chart, type ChartConfiguration, type ChartOptions } from 'chart.js/auto';
+	import { afterUpdate, onMount, onDestroy } from 'svelte';
 
 	let canvas: HTMLCanvasElement;
 	let chart: Chart;
@@ -13,20 +13,18 @@
 
 	// setup chart after canvas is mounted
 	onMount(() => {
-
 		const plugin = {
 			id: 'customCanvasBackgroundColor',
-			// @ts-ignore
-			beforeDraw: (chart, args, options) => {
-				const {ctx} = chart;
+			// @ts-expect-error Not sure the type of chart (not Chart), ignored can be any type
+			beforeDraw: (chart, ignored: string, options: ChartOptions) => {
+				const { ctx } = chart;
 				ctx.save();
 				ctx.globalCompositeOperation = 'destination-over';
 				ctx.fillStyle = options.color || '#99ffff';
 				ctx.fillRect(0, 0, chart.width, chart.height);
 				ctx.restore();
-				args = undefined
 			}
-		}
+		};
 
 		const cfg: ChartConfiguration = {
 			type: 'bar',
@@ -37,13 +35,14 @@
 
 			options: {
 				plugins: {
-					// @ts-ignore
+					// @ts-expect-error Needs a specific type for plugin
 					customCanvasBackgroundColor: {
-						color: 'lightGreen',
+						color: 'lightgreen'
 					}
 				}
 			},
 
+			// @ts-expect-error plugin needs a type same as above
 			plugins: [plugin]
 		};
 
@@ -67,17 +66,16 @@
 	});
 
 	function downloadCanvasPNG() {
-		const link = document.createElement('a')
-		link.href = chart.toBase64Image()
-		link.download = 'histogram_image.png'
+		const link = document.createElement('a');
+		link.href = chart.toBase64Image();
+		link.download = 'histogram_image.png';
 
-		link.click()
-	};
+		link.click();
+	}
 
 	onDestroy(() => {
-    	if (chart) chart.destroy();
- 	 });
-
+		if (chart) chart.destroy();
+	});
 </script>
 
 <select data-testid="first-select" bind:value={x_axis}>
