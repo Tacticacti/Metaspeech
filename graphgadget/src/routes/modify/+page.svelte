@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { data as unmodified } from '$lib/Store';
 	import { goto } from '$app/navigation';
-	import { hasMissingValues } from '$lib/datamanipulation/DataFrameUtils';
+	import { hasMissingValues } from '$lib/utils/DataFrameUtils';
 
 	function handleClick() {
 		// write changes
