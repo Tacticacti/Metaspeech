@@ -20,7 +20,6 @@
 	on:mouseout={handleMouseOut}
 	on:click={() => {
 		$selected_graph = graph.component;
-		console.log($selected_graph);
 	}}
 >
 	<img src={graph.img_src} alt="graph img" />
