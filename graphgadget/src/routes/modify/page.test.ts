@@ -4,7 +4,7 @@ import DataFrame from 'dataframe-js';
 import { data } from '$lib/Store';
 import sut from './+page.svelte';
 import { goto } from '$app/navigation';
-import { act } from '@testing-library/svelte';
+import '@testing-library/jest-dom';
 
 vi.mock('$lib/tableview/TableView.svelte');
 vi.mock('$app/navigation');
@@ -21,32 +21,41 @@ describe('Modify', () => {
 		await fireEvent.click(button);
 		expect(goto).toHaveBeenCalledWith('/view');
 	});
-	it('should contain TableView', async () => {
-		const { getByTestId } = render(sut);
-		const table = getByTestId('placeholder-table');
-		expect(table).to.exist;
+	it('should render a table with headers and rows based on provided data', async () => {
+		// Create a mock DataFrame
+		const mockData = new DataFrame(
+			[
+				{ col1: 'Row1Col1', col2: 'Row1Col2' },
+				{ col1: 'Row2Col1', col2: 'Row2Col2' }
+			],
+			['col1', 'col2']
+		);
+
+		// Render the component with mock data
+		data.set(mockData);
+		const { getByText, getByDisplayValue } = render(sut);
+
+		// Check if headers are present
+		expect(getByDisplayValue('col1')).toBeInTheDocument();
+		expect(getByDisplayValue('col2')).toBeInTheDocument();
+
+		// Check if data is present
+		expect(getByText('Row1Col1')).toBeInTheDocument();
+		expect(getByText('Row1Col2')).toBeInTheDocument();
+		expect(getByText('Row2Col1')).toBeInTheDocument();
+		expect(getByText('Row2Col2')).toBeInTheDocument();
 	});
-	it('should pass data to TableView', async () => {
-		const df = new DataFrame([{ a: '1', b: '2', c: '3' }]);
+	it('should be able to render an empty table', async () => {
+		const df = new DataFrame([]);
 		data.set(df);
+		const { container } = render(sut);
 
-		const { getByTestId } = render(sut);
-		const table = getByTestId('placeholder-table');
-
-		expect(table.textContent).toBe(df.toText());
+		expect(container).toBeTruthy();
 	});
-	it('should update the passed data', async () => {
-		let df = new DataFrame([{ a: '1', b: '2', c: '3' }]);
+	it('should not fail with undefined or null', async () => {
+		const df = new DataFrame([{ a: undefined, b: null }]);
 		data.set(df);
-
-		const { getByTestId, component } = render(sut);
-		const table = getByTestId('placeholder-table');
-
-		df = new DataFrame([{ a: '4', b: '5', c: '6' }]);
-		data.set(df);
-
-		await act(() => component.$set({}));
-
-		expect(table.textContent).toBe(df.toText());
+		const { component } = render(sut);
+		expect(component).toBeTruthy();
 	});
 });

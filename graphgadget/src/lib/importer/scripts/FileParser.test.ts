@@ -1,6 +1,6 @@
-import { it, expect } from 'vitest';
-import { Parse } from './FileParser';
+import { it, expect, vi } from 'vitest';
 import DataFrame from 'dataframe-js';
+import { Parse, ParseXls, GetFileExtension } from './FileParser';
 
 // Function to create and write data to a TSV file
 function createTSVFile(data: string[][]) {
@@ -9,53 +9,114 @@ function createTSVFile(data: string[][]) {
 	return [tsvData];
 }
 
-it('importer pass tsv', async () => {
-	const testData = [
-		['Name', 'Age', 'Location'],
-		['John', '30', 'New York'],
-		['Alice', '25', 'London'],
-		['Bob', '40', 'Paris']
-	];
-	const file = new File(createTSVFile(testData), 'testdata.tsv', {
-		type: 'text/tab-separated-values'
+describe('Tests for GetFileExtension function', () => {
+	it('should return the correct file extension for standard file names', () => {
+		const file = new File([], 'example.txt');
+		expect(GetFileExtension(file)).toBe('txt');
 	});
 
-	const result = Parse(file);
-	result.then((dataFrame) => {
-		expect(dataFrame).toBeInstanceOf(DataFrame);
+	it('should return the correct file extension for file names with multiple dots', () => {
+		const file = new File([], 'example.with.multiple.dots.jpg');
+		expect(GetFileExtension(file)).toBe('jpg');
 	});
 
-	expect(result).toBeInstanceOf(Promise);
-});
-
-it('pass png file', async () => {
-	const file = new File(['(⌐□_□)'], 'chucknorris.png', { type: 'image/png' });
-
-	const result = Parse(file);
-
-	expect(result).toBeInstanceOf(Promise);
-	result.catch((r) => {
-		expect(r).toBe('Unsupported file type found. Type found: image/png');
+	it('should return an empty string for files without an extension', () => {
+		const file = new File([], 'example');
+		expect(GetFileExtension(file)).toBe('');
 	});
-});
 
-it('pass invalid name', async () => {
-	const file = new File(['(⌐□_□)'], 'chucknorrispng', { type: 'nothing' });
+	it('should return an empty string for files with a dot but no extension', () => {
+		const file = new File([], 'example.');
+		expect(GetFileExtension(file)).toBe('');
+	});
 
-	const result = Parse(file);
+	it('should return the correct file extension for files with complex names', () => {
+		const file = new File([], 'complex_example_file.tar.gz');
+		expect(GetFileExtension(file)).toBe('gz');
+	});
 
-	expect(result).toBeInstanceOf(Promise);
-	result.catch((r) => {
-		expect(r).toBe('Unsupported file type found. Type found: nothing');
+	it('should handle cases with null or undefined file names', () => {
+		const file = new File([], ''); // Simulate an empty file name scenario
+		expect(GetFileExtension(file)).toBe('');
+	});
+
+	it('should return the correct file extension regardless of case sensitivity', () => {
+		const file = new File([], 'EXAMPLE.PDF');
+		expect(GetFileExtension(file)).toBe('PDF');
 	});
 });
+
+describe('Tests for Parse', () => {
+	vi.mock('./XlsParser', () => ({
+		ParseXls: vi.fn(() => Promise.resolve(new DataFrame([])))
+	}));
+
+	it('should correctly parse .xls files', async () => {
+		const file = new File(['dummy content'], 'test.xls', { type: 'application/vnd.ms-excel' });
+		const result = Parse(file);
+		expect(result).toBeInstanceOf(Promise);
+		await expect(result).resolves.toBeInstanceOf(DataFrame);
+		expect(ParseXls).toHaveBeenCalled();
+	});
+
+	it('should correctly parse .xlsx files', async () => {
+		const file = new File(['dummy content'], 'test.xlsx', {
+			type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+		});
+		const result = Parse(file);
+		expect(result).toBeInstanceOf(Promise);
+		await expect(result).resolves.toBeInstanceOf(DataFrame);
+		expect(ParseXls).toHaveBeenCalled();
+	});
+
+	it('importer pass tsv', async () => {
+		const testData = [
+			['Name', 'Age', 'Location'],
+			['John', '30', 'New York'],
+			['Alice', '25', 'London'],
+			['Bob', '40', 'Paris']
+		];
+		const file = new File(createTSVFile(testData), 'testdata.tsv', {
+			type: 'text/tab-separated-values'
+		});
+
+		const result = Parse(file);
+		result.then((dataFrame) => {
+			expect(dataFrame).toBeInstanceOf(DataFrame);
+		});
+
+		expect(result).toBeInstanceOf(Promise);
+	});
+
+	it('pass png file', async () => {
+		const file = new File(['(⌐□_□)'], 'chucknorris.png', { type: 'image/png' });
+
+		const result = Parse(file);
+
+		expect(result).toBeInstanceOf(Promise);
+		result.catch((r) => {
+			expect(r).toBe('Unsupported file type found. Type found: image/png');
+		});
+	});
+
+	it('pass invalid name', async () => {
+		const file = new File(['(⌐□_□)'], 'chucknorrispng', { type: 'nothing' });
+
+		const result = Parse(file);
+
+		expect(result).toBeInstanceOf(Promise);
+		result.catch((r) => {
+			expect(r).toBe('Unsupported file type found. Type found: nothing');
+		});
+	});
 
 it('pass no file', async () => {
 	// @ts-expect-error Undefined is not nice for typescript 
 	const result = Parse(undefined);
 
-	expect(result).toBeInstanceOf(Promise);
-	result.catch((r) => {
-		expect(r).toBe('No file found.');
+		expect(result).toBeInstanceOf(Promise);
+		result.catch((r) => {
+			expect(r).toBe('No file found.');
+		});
 	});
 });
