@@ -10,4 +10,4 @@
 
 <button on:click={handleClick}>Next</button>
 
-<TableView data={$data} />
+<TableView {data} />
