@@ -64,14 +64,14 @@
 	});
 </script>
 
-<select bind:value={x_axis}>
+<select data-testid="first-select" bind:value={x_axis}>
 	{#each column_names as column}
 		<option value={column}>{column}</option>
 	{/each}
 </select>
 
 <div>
-	<canvas bind:this={canvas} />
+	<canvas data-testid="canvas-element" bind:this={canvas} />
 </div>
 
 <style>
