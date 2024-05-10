@@ -3,15 +3,6 @@
 	import GraphButton from './Grapher-button.svelte';
 
 	export let graphs;
-	// function createBox(graphs: GraphMeta[]){
-	// 	let i = 0;
-	// 	while(i < graphs.length){
-	// 		if(i <= graphs.length-2){
-	// 			let element = document.createElement("div");
-
-	// 		}
-	// 	}
-	// }
 </script>
 
 <div class="main-container">
@@ -31,10 +22,6 @@
 					<GraphButton graph={item} />
 				{/each}
 			</div>
-			<!-- <div class="r">
-				<div class="s">cc</div>
-				<div class="s">dd</div>
-			</div> -->
 		</div>
 	</div>
 </div>
