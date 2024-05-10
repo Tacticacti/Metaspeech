@@ -18,4 +18,4 @@
 	}
 </script>
 
-<input type="file" accept=".tsv, .xls, .xlsx" on:input={onInput} />
+<input data-testid="input" type="file" accept=".tsv, .xls, .xlsx" on:input={onInput} />
