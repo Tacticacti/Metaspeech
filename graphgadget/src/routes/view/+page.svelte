@@ -2,7 +2,7 @@
 	import { GraphMetas } from '$lib/graphs/Graphs';
 
 	let graphs = GraphMetas;
-	let selectedGraph = graphs[0];
+	let selectedGraph = graphs.at(0);
 </script>
 
 <select bind:value={selectedGraph}>
@@ -11,4 +11,6 @@
 	{/each}
 </select>
 
-<svelte:component this={selectedGraph.component} />
+{#if selectedGraph}
+	<svelte:component this={selectedGraph.component} />
+{/if}

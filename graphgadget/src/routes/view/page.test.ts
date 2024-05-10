@@ -33,4 +33,10 @@ describe('View', () => {
 		expect(options.length).to.equal(GraphMetas.length);
 		expect(options.map((o) => o.textContent)).toEqual(GraphMetas.map((g) => g.title));
 	});
+	it('should be able to render no graphs', async () => {
+		GraphMetas.length = 0;
+		const { queryAllByRole } = render(sut);
+		const options = queryAllByRole('option') as HTMLOptionElement[];
+		expect(options.length).to.equal(0);
+	});
 });
