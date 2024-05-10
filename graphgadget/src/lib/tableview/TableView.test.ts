@@ -32,7 +32,7 @@ describe('TableView', () => {
 		const df = writable(new DataFrame([{ a: '1', b: '2', c: '3' }]));
 		const { getByText, component } = render(TableView, { data: df });
 		df.set(new DataFrame([{ a: '4', b: '5', c: '6' }]));
-		await act(() => component.$set({data: df}));
+		await act(() => component.$set({ data: df }));
 
 		expect(getByText('4')).toBeInTheDocument();
 	});
