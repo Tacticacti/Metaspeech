@@ -18,10 +18,5 @@
 	}
 </script>
 
-<input 
-	on:input={onInput}
-    type="file" 
-    accept=".tsv, .xls, .xlsx"
-    id="import-data"
-    hidden />
+<input on:input={onInput} type="file" accept=".tsv, .xls, .xlsx" id="import-data" hidden />
 <label for="import-data">Import Data</label>
