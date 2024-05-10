@@ -14,21 +14,27 @@
 	$: column_names = data.listColumns() as string[];
 	$: missing_values = hasMissingValues(data);
 
-	function columnValueChanged(event:Event, previousValue: string) {
+	function columnValueChanged(event: Event, previousValue: string) {
 		const input = event.target as HTMLInputElement;
 		const value = input.value.trim();
 
-		if (value === previousValue || value === '' || value === null || value === undefined || column_names.includes(value)) {
+		if (
+			value === previousValue ||
+			value === '' ||
+			value === null ||
+			value === undefined ||
+			column_names.includes(value)
+		) {
 			//TODO: decide what to do in these cases
 			input.value = previousValue;
 			return;
 		}
 
-		data = data.rename(previousValue, value)
+		data = data.rename(previousValue, value);
 	}
 
 	function hasMissingValues(df: DataFrame): number[][] {
-		const result: number[][] = []
+		const result: number[][] = [];
 		const arr = df.toArray() as any[][];
 		for (let i = 0; i < arr.length; i++) {
 			for (let j = 0; j < arr[i].length; j++) {
@@ -47,13 +53,12 @@
 	function removeColumn(column: string) {
 		data = data.drop(column);
 	}
-
 </script>
 
 {#if missing_values.length !== 0}
 	<span>
-		<p>Warning: Missing values detected</p> 
-		<button on:click={removeMissingValues} >Remove missing values</button>
+		<p>Warning: Missing values detected</p>
+		<button on:click={removeMissingValues}>Remove missing values</button>
 	</span>
 {/if}
 
