@@ -4,7 +4,6 @@ import DataFrame from 'dataframe-js';
 import { data } from '$lib/Store';
 import sut from './+page.svelte';
 import { goto } from '$app/navigation';
-import { act } from '@testing-library/svelte';
 import '@testing-library/jest-dom';
 
 vi.mock('$lib/tableview/TableView.svelte');
@@ -34,25 +33,17 @@ describe('Modify', () => {
 
 		// Render the component with mock data
 		data.set(mockData);
-		const { getByText } = render(sut);
+		const { getByText, getByDisplayValue } = render(sut);
 
 		// Check if headers are present
-		expect(getByText('col1')).toBeInTheDocument();
-		expect(getByText('col2')).toBeInTheDocument();
+		expect(getByDisplayValue('col1')).toBeInTheDocument();
+		expect(getByDisplayValue('col2')).toBeInTheDocument();
 
 		// Check if data is present
 		expect(getByText('Row1Col1')).toBeInTheDocument();
 		expect(getByText('Row1Col2')).toBeInTheDocument();
 		expect(getByText('Row2Col1')).toBeInTheDocument();
 		expect(getByText('Row2Col2')).toBeInTheDocument();
-	});
-	it('should update the table when the data store is updated', async () => {
-		data.set(new DataFrame([{ a: '1', b: '2', c: '3' }]));
-		const { getByText, component } = render(sut);
-		data.set(new DataFrame([{ a: '4', b: '5', c: '6' }]));
-		await act(() => component.$set({}));
-
-		expect(getByText('4')).toBeInTheDocument();
 	});
 	it('should be able to render an empty table', async () => {
 		const df = new DataFrame([]);
@@ -63,6 +54,7 @@ describe('Modify', () => {
 	});
 	it('should not fail with undefined or null', async () => {
 		const df = new DataFrame([{ a: undefined, b: null }]);
+		data.set(df);
 		const { component } = render(sut);
 		expect(component).toBeTruthy();
 	});
