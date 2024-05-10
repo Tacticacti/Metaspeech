@@ -1,5 +1,5 @@
 import { it, expect } from 'vitest';
-import { Parse } from './FileParser.ts';
+import { Parse } from './FileParser';
 import DataFrame from 'dataframe-js';
 
 // Function to create and write data to a TSV file

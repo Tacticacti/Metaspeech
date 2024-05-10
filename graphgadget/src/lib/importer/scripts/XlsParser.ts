@@ -1,60 +1,57 @@
-import ExcelJS from 'exceljs';
 import { DataFrame } from 'dataframe-js';
+import * as XLSX from '@e965/xlsx';
 
 /**
- * @param file: The file input
- * @returns {Promise<DataFrame>}: Returns a DataFrame promise
- **/
-export function ParseXlsx(file: File): Promise<DataFrame> {
-	const workbook = new ExcelJS.Workbook();
+ * Parses an XLS file and returns a promise that resolves to a DataFrame containing the parsed data.
+ * This function reads an XLS file using a FileReader, processes it into a workbook using SheetJS,
+ * then extracts the first worksheet to convert into JSON format which is then transformed into a DataFrame.
+ *
+ * @param file The File object representing the Excel file.
+ * @returns {Promise<DataFrame>} A promise that resolves to a DataFrame with the Excel data.
+ */
+export function ParseXls(file: File): Promise<DataFrame> {
+	// Return a new promise that will resolve with the DataFrame or reject with an error
 	return new Promise((resolve, reject) => {
 		const reader = new FileReader();
 
-		reader.onload = async (e: ProgressEvent<FileReader>) => {
-			const buffer = e.target?.result as ArrayBuffer;
+		// Event handler for file load event
+		reader.onload = (e: ProgressEvent<FileReader>) => {
 			try {
-				await workbook.xlsx.load(buffer);
-				console.log(`Loaded workbook with ${workbook.worksheets.length} worksheet(s)`);
-				// Assuming we want the first sheet if there is at least one sheet
-				if (workbook.worksheets.length > 0) {
-					const worksheet = workbook.getWorksheet(1); // Get the first worksheet
+				// Access the file's contents
+				const data = e.target?.result;
+				if (!data) {
+					reject(new Error('Failed to load file'));
+				}
 
-					if (worksheet == undefined || worksheet == null) {
-						reject('Invalid file');
-						return;
-					}
+				// Parse the binary string to a workbook using SheetJS
+				const workbook = XLSX.read(data, { type: 'binary' });
 
-					console.log(`Working with worksheet: ${worksheet.name}`);
-					// eslint-disable-next-line @typescript-eslint/no-explicit-any
-					const rowsData: any[][] = [];
-					let headers: string[] = [];
+				// Assume the first sheet in the workbook is the target sheet
+				const firstSheetName = workbook.SheetNames[0];
+				const worksheet = workbook.Sheets[firstSheetName];
 
-					// eslint-disable-next-line @typescript-eslint/no-explicit-any
-					worksheet.eachRow((row: any, rowNumber) => {
-						// eslint-disable-next-line @typescript-eslint/no-explicit-any
-						const values = row.values as any[];
-						if (rowNumber === 1) {
-							headers = values.slice(1);
-						} else {
-							rowsData.push(values.slice(1));
-						}
-					});
+				// Convert the worksheet to JSON format
+				const json = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
 
-					resolve(new DataFrame(rowsData, headers));
+				// Validate the format of the first row as headers
+				if (Array.isArray(json[0]) && json[0].every((cell) => typeof cell === 'string')) {
+					// Create a DataFrame from the JSON, slicing from the second element onward and using the first row as headers
+					resolve(new DataFrame(json.slice(1), json[0]));
 				} else {
-					reject('No worksheets found in the workbook');
+					reject(new SyntaxError('Header row format is incorrect or missing'));
 				}
 			} catch (error) {
-				console.error('Error processing Excel data:', error);
+				// Handle any parsing errors
 				reject(error);
 			}
 		};
 
-		reader.onerror = (error) => {
-			console.error('Error reading file:', error);
-			reject(error);
+		// Error handler for file reading errors
+		reader.onerror = () => {
+			reject(new Error('Error reading file'));
 		};
 
-		reader.readAsArrayBuffer(file);
+		// Initiate reading the file as a binary string
+		reader.readAsArrayBuffer(file); // Ensure this matches the expected type in XLSX.read
 	});
 }
