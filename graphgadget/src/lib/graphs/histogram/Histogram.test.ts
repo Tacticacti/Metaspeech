@@ -1,4 +1,4 @@
-import { it, expect } from 'vitest';
+import { it, expect, vi, describe, beforeEach, afterEach } from 'vitest';
 import { render } from '@testing-library/svelte';
 import sut from '$lib/graphs/histogram/Histogram.svelte';
 import { data } from '$lib/Store';
@@ -81,3 +81,21 @@ it('clicking on option changes value of select 2', async () => {
 	await user.selectOptions(secondSelect, ['column1']);
 	expect(secondSelect.value).toEqual('column1');
 });
+
+it("button for downloading exists", () => {
+	const { getByText } = render(sut)
+	const button = getByText("PNG")
+	expect(button).to.exist
+})
+
+it("button gets clicked", async () => {
+	const user = userEvent.setup()
+	const { getByText, getByTestId } = render(sut)
+	const button = getByText("PNG")
+
+	await user.click(button)
+
+	const expectedDiv = getByTestId("download-function-called")
+	expect(expectedDiv).to.exist
+})
+

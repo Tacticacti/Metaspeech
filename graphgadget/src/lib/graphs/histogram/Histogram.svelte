@@ -11,19 +11,25 @@
 	let x_axis = column_names[0];
 	let y_axis = column_names[1];
 
+	// for testing purposes
+	let isDownloadCalled = false
+
+	// @ts-expect-error Not sure the type of chart (not Chart), ignored can be any type
+	function setColor (chart, ignored: string, options: ChartOptions) {
+		const { ctx } = chart;
+		ctx.save();
+		ctx.globalCompositeOperation = 'destination-over';
+		ctx.fillStyle = options.color || '#99ffff';
+		ctx.fillRect(0, 0, chart.width, chart.height);
+		ctx.restore();
+		isColorAdded = true
+	}
+
 	// setup chart after canvas is mounted
 	onMount(() => {
 		const plugin = {
 			id: 'customCanvasBackgroundColor',
-			// @ts-expect-error Not sure the type of chart (not Chart), ignored can be any type
-			beforeDraw: (chart, ignored: string, options: ChartOptions) => {
-				const { ctx } = chart;
-				ctx.save();
-				ctx.globalCompositeOperation = 'destination-over';
-				ctx.fillStyle = options.color || '#99ffff';
-				ctx.fillRect(0, 0, chart.width, chart.height);
-				ctx.restore();
-			}
+			beforeDraw: setColor
 		};
 
 		const cfg: ChartConfiguration = {
@@ -69,8 +75,8 @@
 		const link = document.createElement('a');
 		link.href = chart.toBase64Image();
 		link.download = 'histogram_image.png';
-
 		link.click();
+		isDownloadCalled = true
 	}
 
 	onDestroy(() => {
@@ -95,6 +101,10 @@
 <div>
 	<button on:click={downloadCanvasPNG}>PNG</button>
 </div>
+
+{#if isDownloadCalled}
+  <div data-testid="download-function-called"></div>
+{/if}
 
 <style>
 	div > canvas {
