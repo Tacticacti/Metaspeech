@@ -13,15 +13,6 @@
 
 	// setup chart after canvas is mounted
 	onMount(() => {
-		// const cfg: ChartConfiguration = {
-		// 	type: 'bar',
-		// 	data: {
-		// 		labels: [],
-		// 		datasets: []
-		// 	}
-		// };
-
-		// chart = new Chart(canvas, cfg);
 
 		const plugin = {
 			id: 'customCanvasBackgroundColor',
@@ -37,26 +28,26 @@
 			}
 		}
 
-		const data = {
-			labels: [],
-			datasets: []
-		};
-
-		const config = {
+		const cfg: ChartConfiguration = {
 			type: 'bar',
-			data: data,
+			data: {
+				labels: [],
+				datasets: []
+			},
+
 			options: {
 				plugins: {
+					// @ts-ignore
 					customCanvasBackgroundColor: {
 						color: 'lightGreen',
 					}
 				}
 			},
-			plugins: [plugin],
+
+			plugins: [plugin]
 		};
 
-		// @ts-ignore
-		chart = new Chart(canvas, config);
+		chart = new Chart(canvas, cfg);
 	});
 
 	// called when x_axis or y_axis changes
