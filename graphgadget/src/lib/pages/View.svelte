@@ -1,14 +1,10 @@
 <script lang="ts">
+	import Grapher from './../graphs/Grapher.svelte';
+	import { selected_graph } from '$lib/graphs/Store';
 	import { GraphMetas } from '$lib/graphs/Graphs';
 
 	let graphs = GraphMetas;
-	let selectedGraph = graphs[0];
 </script>
 
-<select bind:value={selectedGraph}>
-	{#each graphs as graph}
-		<option value={graph}>{graph.title}</option>
-	{/each}
-</select>
-
-<svelte:component this={selectedGraph.component} />
+<Grapher {graphs}></Grapher>
+<svelte:component this={$selected_graph} />
