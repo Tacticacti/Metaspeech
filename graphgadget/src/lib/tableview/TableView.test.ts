@@ -1,4 +1,4 @@
-import { render } from '@testing-library/svelte';
+import { act, render } from '@testing-library/svelte';
 import TableView from './TableView.svelte';
 import DataFrame from 'dataframe-js';
 import '@testing-library/jest-dom';
@@ -27,5 +27,24 @@ describe('TableView', () => {
 		expect(getByText('Row1Col2')).toBeInTheDocument();
 		expect(getByText('Row2Col1')).toBeInTheDocument();
 		expect(getByText('Row2Col2')).toBeInTheDocument();
+	});
+	it('should update the table when the data store is updated', async () => {
+		const df = writable(new DataFrame([{ a: '1', b: '2', c: '3' }]));
+		const { getByText, component } = render(TableView, { data: df });
+		df.set(new DataFrame([{ a: '4', b: '5', c: '6' }]));
+		await act(() => component.$set({ data: df }));
+
+		expect(getByText('4')).toBeInTheDocument();
+	});
+	it('should be able to render an empty table', async () => {
+		const df = writable(new DataFrame([]));
+		const { container } = render(TableView, { data: df });
+
+		expect(container).toBeTruthy();
+	});
+	it('should not fail with undefined or null', async () => {
+		const df = writable(new DataFrame([{ a: undefined, b: null }]));
+		const { component } = render(TableView, { data: df });
+		expect(component).toBeTruthy();
 	});
 });
