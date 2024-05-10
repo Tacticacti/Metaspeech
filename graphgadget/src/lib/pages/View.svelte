@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { GraphsMetas } from '$lib/graphs/Graphs';
+	import { GraphMetas } from '$lib/graphs/Graphs';
 
-	let graphs = GraphsMetas;
+	let graphs = GraphMetas;
 	let selectedGraph = graphs[0];
 </script>
 

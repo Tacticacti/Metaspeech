@@ -9,11 +9,18 @@ export default defineConfig({
 		setupFiles: ['./test-setup.ts'],
 		globals: true,
 		environment: 'jsdom',
+		poolOptions: {
+			threads: {
+				singleThread: true
+			}
+		},
 		coverage: {
 			provider: 'istanbul',
 			include: ['src/**'],
+			exclude: ['src/**/__mocks__/**/*'],
 			reporter: ['cobertura', 'text-summary', 'text'],
 			skipFull: true
-		}
+		},
+		restoreMocks: true
 	}
 });
