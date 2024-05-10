@@ -1,24 +1,24 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, fireEvent } from '@testing-library/svelte';
-import { get } from 'svelte/store';
-import { state, StateEnum } from '$lib/Store';
 import DataFrame from 'dataframe-js';
 import { data } from '$lib/Store';
-import sut from './Modify.svelte';
+import sut from './+page.svelte';
+import { goto } from '$app/navigation';
 
 vi.mock('$lib/tableview/TableView.svelte');
+vi.mock('$app/navigation');
 
 describe('Modify', () => {
 	it('should render', () => {
 		const { container } = render(sut);
 		expect(container).to.exist;
 	});
-	it('should have a button that changes state on click', async () => {
+	it('should have a button that directs to view', async () => {
 		const { getByText } = render(sut);
 		const button = getByText('Next');
 		expect(button).to.exist;
 		await fireEvent.click(button);
-		expect(get(state)).toEqual(StateEnum.view);
+		expect(goto).toHaveBeenCalledWith('/view');
 	});
 	it('should contain TableView', async () => {
 		const { getByTestId } = render(sut);

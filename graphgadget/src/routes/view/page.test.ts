@@ -1,5 +1,5 @@
 import { render } from '@testing-library/svelte';
-import sut from '$lib/pages/View.svelte';
+import sut from './+page.svelte';
 import { vi, describe, it, expect } from 'vitest';
 import { GraphMetas } from '$lib/graphs/Graphs';
 import Histogram from '$lib/graphs/histogram/Histogram.svelte';
