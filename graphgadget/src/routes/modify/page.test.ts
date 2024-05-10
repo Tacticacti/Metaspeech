@@ -4,6 +4,7 @@ import DataFrame from 'dataframe-js';
 import { data } from '$lib/Store';
 import sut from './+page.svelte';
 import { goto } from '$app/navigation';
+import { act } from '@testing-library/svelte';
 
 vi.mock('$lib/tableview/TableView.svelte');
 vi.mock('$app/navigation');
@@ -31,6 +32,20 @@ describe('Modify', () => {
 
 		const { getByTestId } = render(sut);
 		const table = getByTestId('placeholder-table');
+
+		expect(table.textContent).toBe(df.toText());
+	});
+	it('should update the passed data', async () => {
+		let df = new DataFrame([{ a: '1', b: '2', c: '3' }]);
+		data.set(df);
+
+		const { getByTestId, component } = render(sut);
+		const table = getByTestId('placeholder-table');
+
+		df = new DataFrame([{ a: '4', b: '5', c: '6' }]);
+		data.set(df);
+
+		await act(() => component.$set({}));
 
 		expect(table.textContent).toBe(df.toText());
 	});

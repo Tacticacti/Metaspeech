@@ -18,7 +18,7 @@ export default defineConfig({
 			provider: 'istanbul',
 			include: ['src/**'],
 			exclude: ['src/**/__mocks__/**/*'],
-			reporter: ['cobertura', 'text-summary', 'text'],
+			reporter: ['cobertura', 'text-summary', 'text', 'html'],
 			skipFull: true
 		},
 		restoreMocks: true

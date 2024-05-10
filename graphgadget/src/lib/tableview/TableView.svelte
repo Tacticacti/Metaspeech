@@ -1,9 +1,10 @@
 <script lang="ts">
 	import type DataFrame from 'dataframe-js';
+	import type { Writable } from 'svelte/store';
 
-	export let data: DataFrame;
+	export let data: Writable<DataFrame>;
 
-	const column_names = data.listColumns();
+	const column_names = $data.listColumns();
 </script>
 
 <table>
@@ -15,7 +16,7 @@
 		</tr>
 	</thead>
 	<tbody>
-		{#each data.toArray() as row}
+		{#each $data.toArray() as row}
 			<tr>
 				{#each row as cell}
 					<td>{cell}</td>
