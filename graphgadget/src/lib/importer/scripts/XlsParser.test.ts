@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { DataFrame } from 'dataframe-js';
 import * as XLSX from '@e965/xlsx';
 import { ParseXls } from './XlsParser';
@@ -12,12 +12,12 @@ vi.mock('@e965/xlsx', () => ({
 }));
 
 describe('XlsParser', () => {
-    const oldFileReader = window.FileReader;
+	const oldFileReader = window.FileReader;
 
-    afterEach(() => {
-        window.FileReader = oldFileReader;
-        vi.restoreAllMocks();
-    });
+	afterEach(() => {
+		window.FileReader = oldFileReader;
+		vi.restoreAllMocks();
+	});
 
 	it('Should return a dataframe', async () => {
 		const file = new File(['dummy data'], 'test.xls', { type: 'application/vnd.ms-excel' });

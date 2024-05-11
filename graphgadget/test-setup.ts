@@ -19,7 +19,6 @@ beforeEach(() => {
 	vi.stubGlobal('ResizeObserver', ResizeObserverMock);
 });
 
-
 Object.entries(customMatchers).forEach(([name, matcher]) => {
 	expect.extend({ [name]: matcher });
 });

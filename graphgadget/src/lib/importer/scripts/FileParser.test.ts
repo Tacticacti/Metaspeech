@@ -134,8 +134,6 @@ describe('Tests for Parse', () => {
 		expect(result).toBeInstanceOf(Promise);
 	});
 
-
-
 	it('should not pass png file', async () => {
 		const file = new File(['(⌐□_□)'], 'chucknorris.png', { type: 'image/png' });
 
