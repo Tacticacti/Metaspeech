@@ -1,6 +1,7 @@
-import { ParseTsv } from '$lib/importer/scripts/TsvParser';
 import { ParseXls } from '$lib/importer/scripts/XlsParser';
 import { DataFrame } from 'dataframe-js';
+import { ParseJson } from './JsonParser';
+import { ParseTsv, ParseCsv } from './DsvLikeParser';
 
 /**
  * Extracts the file extension from a File object.
@@ -30,6 +31,12 @@ export function Parse(file: File): Promise<DataFrame> {
 			return ParseXls(file);
 		case 'xlsx':
 			return ParseXls(file);
+		case 'json':
+			return ParseJson(file);
+		case 'csv':
+			return ParseCsv(file);
+		case 'txt':
+			return ParseTsv(file);
 	}
 
 	return Promise.reject('Unsupported file type found. Type found: ' + file.type);

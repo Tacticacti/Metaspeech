@@ -13,6 +13,9 @@
 
 	$: column_names = data.listColumns() as string[];
 	$: missing_values = hasMissingValues(data);
+	$: columns_with_missing = [...new Set(missing_values.map((v) => v[1]))].map(
+		(v) => column_names[v]
+	);
 
 	function columnValueChanged(event: Event, previousValue: string) {
 		const input = event.target as HTMLInputElement;
@@ -44,7 +47,7 @@
 
 {#if missing_values.length !== 0}
 	<span>
-		<p>Warning: Missing values detected</p>
+		<p>Warning: Missing values detected in: {columns_with_missing.join(', ')}</p>
 		<button on:click={removeMissingValues}>Remove missing values</button>
 	</span>
 {/if}

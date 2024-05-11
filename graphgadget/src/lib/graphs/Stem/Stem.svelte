@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { data } from '$lib/Store';
-	import { Chart, type ChartConfiguration, type ChartOptions } from 'chart.js/auto';
+	import { Chart, type ChartConfiguration } from 'chart.js/auto';
 	import { afterUpdate, onMount, onDestroy } from 'svelte';
 	import { setColor } from '$lib/utils/CanvasUtils';
 
@@ -14,8 +14,6 @@
 
 	// for testing purposes
 	let isDownloadCalled = false;
-
-
 
 	// setup chart after canvas is mounted
 	onMount(() => {

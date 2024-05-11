@@ -21,6 +21,7 @@ export default defineConfig({
 			reporter: ['cobertura', 'text-summary', 'text', 'html'],
 			skipFull: true
 		},
-		restoreMocks: true
+		restoreMocks: true,
+		mockReset: true
 	}
 });

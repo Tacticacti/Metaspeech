@@ -50,6 +50,13 @@ describe('Tests for Parse', () => {
 	vi.mock('./XlsParser', () => ({
 		ParseXls: vi.fn(() => Promise.resolve(new DataFrame([])))
 	}));
+	vi.mock('./JsonParser', () => ({
+		ParseJson: vi.fn(() => Promise.resolve(new DataFrame([])))
+	}));
+	vi.mock('./DsvLikeParser', () => ({
+		ParseTsv: vi.fn(() => Promise.resolve(new DataFrame([]))),
+		ParseCsv: vi.fn(() => Promise.resolve(new DataFrame([])))
+	}));
 
 	it('should correctly parse .xls files', async () => {
 		const file = new File(['dummy content'], 'test.xls', { type: 'application/vnd.ms-excel' });
@@ -88,7 +95,48 @@ describe('Tests for Parse', () => {
 		expect(result).toBeInstanceOf(Promise);
 	});
 
-	it('pass png file', async () => {
+	it('should pass csv', async () => {
+		const file = new File([], 'testdata.csv', {
+			type: 'text/csv'
+		});
+
+		const result = Parse(file);
+		result.then((dataFrame) => {
+			expect(dataFrame).toBeInstanceOf(DataFrame);
+		});
+
+		expect(result).toBeInstanceOf(Promise);
+	});
+
+	it('should pass txt', async () => {
+		const file = new File([], 'testdata.txt', {
+			type: 'text/plain'
+		});
+
+		const result = Parse(file);
+		result.then((dataFrame) => {
+			expect(dataFrame).toBeInstanceOf(DataFrame);
+		});
+
+		expect(result).toBeInstanceOf(Promise);
+	});
+
+	it('should pass json', async () => {
+		const file = new File(['{"name": "John", "age": 30}'], 'testdata.json', {
+			type: 'application/json'
+		});
+
+		const result = Parse(file);
+		result.then((dataFrame) => {
+			expect(dataFrame).toBeInstanceOf(DataFrame);
+		});
+
+		expect(result).toBeInstanceOf(Promise);
+	});
+
+
+
+	it('should not pass png file', async () => {
 		const file = new File(['(⌐□_□)'], 'chucknorris.png', { type: 'image/png' });
 
 		const result = Parse(file);

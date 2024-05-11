@@ -21,7 +21,7 @@
 	data-testid="input"
 	on:input={onInput}
 	type="file"
-	accept=".tsv, .xls, .xlsx"
+	accept=".tsv, .xls, .xlsx, .json, .csv, .txt"
 	id="import-data"
 	hidden
 />
