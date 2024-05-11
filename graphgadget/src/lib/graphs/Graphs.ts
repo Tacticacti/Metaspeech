@@ -1,6 +1,7 @@
 import Histogram from './histogram/Histogram.svelte';
 import Stem from './Stem/Stem.svelte';
 
+// type with the metadata of a graph
 export type GraphMeta = {
 	title: string;
 	description: string;
@@ -8,6 +9,7 @@ export type GraphMeta = {
 	component: ConstructorOfATypedSvelteComponent;
 };
 
+// the graphs we support as options
 export const GraphMetas: GraphMeta[] = [
 	{
 		title: 'Histogram',

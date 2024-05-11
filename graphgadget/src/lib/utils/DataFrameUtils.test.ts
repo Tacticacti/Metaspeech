@@ -1,4 +1,4 @@
-import { hasMissingValues } from './DataFrameUtils';
+import { hasMissingValues, rowWiseMerge } from './DataFrameUtils';
 import { DataFrame } from 'dataframe-js';
 import { expect, it, describe } from 'vitest';
 
@@ -50,6 +50,24 @@ describe('DataFrameUtils', () => {
 			[1, 0],
 			[1, 1],
 			[2, 0]
+		]);
+	});
+	it('should be able to merge two DataFrames row-wise', () => {
+		const df1 = new DataFrame([
+			{ a: 1, b: 2 },
+			{ a: 3, b: 4 },
+			{ a: 5, b: 6 }
+		]);
+		const df2 = new DataFrame([
+			{ c: 7, d: 8 },
+			{ c: 9, d: 10 },
+			{ c: 11, d: 12 }
+		]);
+		const result = rowWiseMerge(df1, df2);
+		expect(result.toCollection()).toEqual([
+			{ a: 1, b: 2, c: 7, d: 8 },
+			{ a: 3, b: 4, c: 9, d: 10 },
+			{ a: 5, b: 6, c: 11, d: 12 }
 		]);
 	});
 });

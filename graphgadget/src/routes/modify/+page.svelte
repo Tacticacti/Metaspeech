@@ -1,7 +1,9 @@
 <script lang="ts">
+	import Importer from './../../lib/importer/Importer.svelte';
 	import { data as unmodified } from '$lib/Store';
 	import { goto } from '$app/navigation';
-	import { hasMissingValues } from '$lib/utils/DataFrameUtils';
+	import { hasMissingValues, rowWiseMerge } from '$lib/utils/DataFrameUtils';
+	import DataFrame from 'dataframe-js';
 
 	function handleClick() {
 		// write changes
@@ -43,6 +45,15 @@
 	function removeColumn(column: string) {
 		data = data.drop(column);
 	}
+
+	let second_data: DataFrame;
+	function handleInput(event: CustomEvent<DataFrame>) {
+		second_data = event.detail;
+	}
+
+	function mergeClick() {
+		data = rowWiseMerge(data, second_data);
+	}
 </script>
 
 {#if missing_values.length !== 0}
@@ -53,6 +64,12 @@
 {/if}
 
 <button on:click={handleClick}>Next</button>
+
+<Importer on:input={handleInput} />
+
+{#if second_data}
+	<button on:click={mergeClick}>row-wise merge</button>
+{/if}
 
 <table>
 	<thead>

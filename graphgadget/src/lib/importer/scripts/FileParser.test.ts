@@ -1,6 +1,7 @@
 import { it, expect, vi } from 'vitest';
 import DataFrame from 'dataframe-js';
-import { Parse, ParseXls, GetFileExtension } from './FileParser';
+import { Parse, GetFileExtension } from './FileParser';
+import { ParseXls } from './XlsParser';
 
 // Function to create and write data to a TSV file
 function createTSVFile(data: string[][]) {

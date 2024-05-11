@@ -9,9 +9,12 @@
 	}>();
 
 	async function onInput(event: Event) {
+		// get file
 		const input = event.target as HTMLInputElement;
 		const file = input.files?.[0];
 		if (!file) return;
+
+		// parse file
 		const data = await Parse(file);
 		dispatch('input', data);
 	}

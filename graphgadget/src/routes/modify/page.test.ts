@@ -7,7 +7,7 @@ import { goto } from '$app/navigation';
 import '@testing-library/jest-dom';
 import { get } from 'svelte/store';
 
-vi.mock('$lib/tableview/TableView.svelte');
+vi.mock('$lib/importer/Importer.svelte');
 vi.mock('$app/navigation');
 
 describe('Modify', () => {
@@ -135,5 +135,24 @@ describe('Modify', () => {
 		await act(() => component.$set({}));
 
 		expect(get(data).toText()).toEqual('a;b\n1;2');
+	});
+	it('should be able to merge two DataFrames', async () => {
+		const df1 = new DataFrame([{ d: 4, e: 5 }]);
+		data.set(df1);
+		const { getByText, component, getByTestId } = render(sut);
+
+		await fireEvent.input(getByTestId('file-input'));
+
+		act(() => component.$set({}));
+
+		const mergeButton = getByText('row-wise merge');
+		expect(mergeButton).toBeInTheDocument();
+
+		await fireEvent.click(mergeButton);
+		await fireEvent.click(getByText('Next'));
+
+		await act(() => component.$set({}));
+
+		expect(get(data).toText()).toEqual('d;e;a;b;c\n4;5;1;2;3');
 	});
 });
