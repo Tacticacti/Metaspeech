@@ -35,7 +35,6 @@ export function Parse(file: File): Promise<DataFrame> {
 		case 'tsv':
 			return ParseTsv(file);
 		case 'xls':
-			return ParseXls(file);
 		case 'xlsx':
 			return ParseXls(file);
 		case 'json':
