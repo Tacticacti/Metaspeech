@@ -14,8 +14,8 @@ const df = new DataFrame(
 );
 
 data.set(df);
-it('test calculateAxis function', () =>{
-	const { container, component } = render(sut);
+it('test calculateAxis function', () => {
+	const { component } = render(sut);
 	let [labels, counts] = component.calculateAxis('column1');
 	expect(labels.length).toBe(3);
 	expect(counts.length).toBe(3);
@@ -27,7 +27,7 @@ it('test calculateAxis function', () =>{
 	expect(counts.length).toBe(2);
 	expect(labels[1]).toBe(4);
 	expect(counts[1]).toBe(2);
-})
+});
 it('2 selects exist', () => {
 	const { container } = render(sut);
 	const selectElements = container.querySelectorAll('select');
