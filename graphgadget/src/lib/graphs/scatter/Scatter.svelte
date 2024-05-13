@@ -12,8 +12,8 @@
 	let x_axis = column_names[0];
 	let y_axis = column_names[1];
 
-    // first element is warning for x_axis, second element is warning for y_axis 
-    let warnings: string[] = ['', ''];
+	// first element is warning for x_axis, second element is warning for y_axis
+	let warnings: string[] = ['', ''];
 	// setup chart after canvas is mounted
 	onMount(() => {
 		const plugin = {
@@ -46,23 +46,21 @@
 
 	// called when x_axis or y_axis changes
 	afterUpdate(() => {
-        
-        if(isNaN(Number($data.toArray(x_axis)[0]))){
-            warnings[0] = 'Warning: x_axis is not a number!';
-            chart.clear();
-            return;
-        }
-        else{
-            warnings[0] = '';
-        }
-        if(isNaN(Number($data.toArray(y_axis)[0]))){
-            warnings[1] = 'Warning: y_axis is not a number!';
-            chart.clear();
-            return;
-        }
-        else{
-            warnings[1] = '';
-        }
+		//check if first element is not a number
+		if (isNaN(Number($data.toArray(x_axis)[0]))) {
+			warnings[0] = 'Warning: x_axis is not a number!';
+			chart.clear();
+			return;
+		} else {
+			warnings[0] = '';
+		}
+		if (isNaN(Number($data.toArray(y_axis)[0]))) {
+			warnings[1] = 'Warning: y_axis is not a number!';
+			chart.clear();
+			return;
+		} else {
+			warnings[1] = '';
+		}
 		chart.data.labels = $data.toArray(x_axis);
 		chart.data.datasets = [
 			{
