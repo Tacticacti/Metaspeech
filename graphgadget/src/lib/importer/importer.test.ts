@@ -4,6 +4,11 @@ import sut from './Importer.svelte';
 import * as fileParserModule from './scripts/FileParser';
 import { DataFrame } from 'dataframe-js';
 
+// Mocking the file parser module to control its behavior
+vi.mock('./scripts/FileParser', () => ({
+	Parse: vi.fn(() => Promise.resolve(new DataFrame([])))
+}));
+
 describe('Page', () => {
 	it('should render', () => {
 		const { container } = render(sut);
@@ -16,11 +21,6 @@ describe('Page', () => {
 		expect(input).toBeDefined();
 	});
 });
-
-// Mocking the file parser module to control its behavior
-vi.mock('./scripts/FileParser', () => ({
-	Parse: vi.fn(() => Promise.resolve(new DataFrame([])))
-}));
 
 describe('Importer', () => {
 	// Clean up mocks after each test run
@@ -63,29 +63,24 @@ describe('Importer', () => {
 		const result = await dispatched;
 		expect(result).toBeInstanceOf(DataFrame); // Verify that the result is indeed an instance of DataFrame
 	});
+
+	it('should not call Parse if no file is selected', async () => {
+		const { getByTestId } = render(sut);
+		const input = getByTestId('input');
+
+		// Simulate the input event with no file selected
+		Object.defineProperty(input, 'files', {
+			value: [], // No files selected
+			writable: false
+		});
+
+		const promise = fireEvent.input(input);
+		await promise;
+
+		// Using a timeout to ensure all async actions inside the input handler are settled
+		await new Promise((resolve) => setTimeout(resolve, 0));
+
+		// Check that Parse was not called since no file was selected
+		expect(fileParserModule.Parse).not.toHaveBeenCalled();
+	});
 });
-
-//doesn't work
-// it('importer pass tsv', async () => {
-//     const testData = [
-//         ['Name', 'Age', 'Location'],
-//         ['John', '30', 'New York'],
-//         ['Alice', '25', 'London'],
-//         ['Bob', '40', 'Paris']
-//     ];
-//     const file = new File(createTSVFile(testData), "testdata.tsv", { type: "text/tab-separated-values" });
-// 	const { component , getByTestId} = render(sut);
-
-//     const eventListenerMock = vi.fn();
-//     component.$on('input', eventListenerMock);
-
-//     const input = getByTestId('input');
-
-//     await waitFor(() =>
-//         fireEvent.change(input, {
-//           target: { files: [file] },
-//         })
-//     );
-
-//     expect(eventListenerMock).toHaveBeenCalled();
-// });
