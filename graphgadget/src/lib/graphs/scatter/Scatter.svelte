@@ -91,8 +91,8 @@
 	{/each}
 </select>
 
-<div>{warnings[0]}</div>
-<div>{warnings[1]}</div>
+<div data-testid="x-axis-warning">{warnings[0]}</div>
+<div data-testid="y-axis-warning">{warnings[1]}</div>
 
 <div>
 	<canvas data-testid="canvas-element" bind:this={canvas} />
