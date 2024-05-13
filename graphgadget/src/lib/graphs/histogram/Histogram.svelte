@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { data } from '$lib/Store';
+	import PngButton from '$lib/shared-components/PNGButton.svelte';
 	import { Chart, type ChartConfiguration } from 'chart.js/auto';
+	import { setColor } from '$lib/utils/CanvasUtils';
 	import { afterUpdate, onMount } from 'svelte';
 
 	let canvas: HTMLCanvasElement;
@@ -60,12 +62,29 @@
 
 	// setup chart with empty config after canvas is mounted
 	onMount(() => {
+		const plugin = {
+			id: 'customCanvasBackgroundColor',
+			beforeDraw: setColor
+		};
+
 		const cfg: ChartConfiguration = {
 			type: 'bar',
 			data: {
 				labels: [],
 				datasets: []
-			}
+			},
+
+			options: {
+				plugins: {
+					// @ts-expect-error Needs a specific type for plugin
+					customCanvasBackgroundColor: {
+						color: 'pink'
+					}
+				}
+			},
+
+			// @ts-expect-error plugin needs a type same as above
+			plugins: [plugin]
 		};
 
 		chart = new Chart(canvas, cfg);
@@ -104,6 +123,8 @@
 <div>
 	<canvas data-testid="canvas-element" bind:this={canvas} />
 </div>
+
+<PngButton {chart} />
 
 <style>
 	div > canvas {

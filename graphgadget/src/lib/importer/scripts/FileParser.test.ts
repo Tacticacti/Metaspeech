@@ -158,6 +158,7 @@ describe('Tests for Parse', () => {
 	});
 
 	it('pass no file', async () => {
+		// @ts-expect-error Undefined is not nice for typescript
 		const result = Parse(undefined);
 
 		expect(result).toBeInstanceOf(Promise);
