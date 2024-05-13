@@ -26,12 +26,14 @@ describe('View', () => {
 		expect(name).to.exist;
 		expect(name.innerHTML).toBe('');
 	});
-	it('should contain 2 histograms', async () => {
+	it('should contain 3 graphs', async () => {
 		const { getByTestId } = render(sut, { graphs: GraphMetas });
 		const hist1 = getByTestId('Histogram');
 		const hist2 = getByTestId('Stem');
+		const hist3 = getByTestId('Scatter');
 		expect(hist1).to.exist;
 		expect(hist2).to.exist;
+		expect(hist3).to.exist;
 	});
 });
 
