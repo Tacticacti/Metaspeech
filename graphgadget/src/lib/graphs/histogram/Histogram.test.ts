@@ -13,8 +13,8 @@ const df = new DataFrame(
 	['column1', 'column2']
 );
 
-data.set(df);
 it('test calculateAxis function', () => {
+	data.set(df);
 	const { component } = render(sut);
 	let [labels, counts] = component.calculateAxis('column1');
 	expect(labels.length).toBe(3);
@@ -23,6 +23,23 @@ it('test calculateAxis function', () => {
 	expect(counts[0]).toBe(1);
 
 	[labels, counts] = component.calculateAxis('column2');
+	expect(labels.length).toBe(2);
+	expect(counts.length).toBe(2);
+	expect(labels[1]).toBe(4);
+	expect(counts[1]).toBe(2);
+});
+it('test calculateNumberAxis function', () => {
+	data.set(df);
+	const { component } = render(sut);
+	let [labels, counts] = component.calculateNumberAxis('column1');
+	expect(labels.length).toBe(6);
+	expect(counts.length).toBe(6);
+	expect(labels[0]).toBe(3);
+	expect(counts[0]).toBe(1);
+	expect(labels[1]).toBe(4);
+	expect(counts[1]).toBe(0);
+
+	[labels, counts] = component.calculateNumberAxis('column2');
 	expect(labels.length).toBe(2);
 	expect(counts.length).toBe(2);
 	expect(labels[1]).toBe(4);

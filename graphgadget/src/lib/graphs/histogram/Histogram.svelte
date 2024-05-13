@@ -29,7 +29,7 @@
 
 		return [labels, counts];
 	}
-	function calculateNumberAxis(x_axis: string) {
+	export function calculateNumberAxis(x_axis: string) {
 		// calculate the frequency of each unique value
 		let map = new Map<number, number>();
 		const arr: number[] = $data.toArray(x_axis) as number[];
