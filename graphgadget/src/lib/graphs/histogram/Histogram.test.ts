@@ -21,7 +21,7 @@ it('2 selects exist', () => {
 	expect(selectElements.length).toEqual(1);
 });
 
-it('all 4 options exist', () => {
+it('all 2 options exist', () => {
 	const { container } = render(sut);
 	const optionElements = container.querySelectorAll('option');
 	expect(optionElements.length).toEqual(2);

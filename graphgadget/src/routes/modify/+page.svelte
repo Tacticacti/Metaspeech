@@ -51,9 +51,20 @@
 		second_data = event.detail;
 	}
 
-	function mergeClick() {
+	function handleRowWiseMerge() {
 		data = rowWiseMerge(data, second_data);
 	}
+
+	function joinColumns() {
+		let renamed = second_data;
+		if (merge_col_1 !== merge_col_2) {
+			renamed = second_data.rename(merge_col_2, merge_col_1);
+		}
+		data = data.fullJoin(renamed, merge_col_1);
+	}
+
+	let merge_col_1: string;
+	let merge_col_2: string;
 </script>
 
 {#if missing_values.length !== 0}
@@ -68,7 +79,20 @@
 <Importer on:input={handleInput} />
 
 {#if second_data}
-	<button on:click={mergeClick}>row-wise merge</button>
+	<button on:click={handleRowWiseMerge}>row-wise merge</button>
+	<select bind:value={merge_col_1}>
+		{#each column_names as col}
+			<option value={col}>{col}</option>
+		{/each}
+	</select>
+	<select bind:value={merge_col_2}>
+		{#each second_data.listColumns() as col}
+			<option value={col}>{col}</option>
+		{/each}
+	</select>
+	{#if merge_col_1 && merge_col_2}
+		<button on:click={joinColumns}>join columns</button>
+	{/if}
 {/if}
 
 <table>
