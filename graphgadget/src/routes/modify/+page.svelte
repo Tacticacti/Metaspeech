@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Importer from './../../lib/importer/Importer.svelte';
+	import Importer from '$lib/importer/Importer.svelte';
 	import { data as unmodified } from '$lib/Store';
 	import { goto } from '$app/navigation';
 	import { hasMissingValues, rowWiseMerge } from '$lib/utils/DataFrameUtils';
@@ -60,7 +60,7 @@
 		if (merge_col_1 !== merge_col_2) {
 			renamed = second_data.rename(merge_col_2, merge_col_1);
 		}
-		data = data.fullJoin(renamed, merge_col_1);
+		data = data.join(renamed, merge_col_1);
 	}
 
 	let merge_col_1: string;
