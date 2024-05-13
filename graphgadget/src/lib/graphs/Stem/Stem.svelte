@@ -3,6 +3,7 @@
 	import { Chart, type ChartConfiguration } from 'chart.js/auto';
 	import { afterUpdate, onMount, onDestroy } from 'svelte';
 	import { setColor } from '$lib/utils/CanvasUtils';
+	import PngButton from '$lib/shared-components/PNGButton.svelte';
 
 	let canvas: HTMLCanvasElement;
 	let chart: Chart;
@@ -11,9 +12,6 @@
 
 	let x_axis = column_names[0];
 	let y_axis = column_names[1];
-
-	// for testing purposes
-	let isDownloadCalled = false;
 
 	// setup chart after canvas is mounted
 	onMount(() => {
@@ -61,14 +59,6 @@
 		chart.update();
 	});
 
-	function downloadCanvasPNG() {
-		const link = document.createElement('a');
-		link.href = chart.toBase64Image();
-		link.download = 'histogram_image.png';
-		link.click();
-		isDownloadCalled = true;
-	}
-
 	onDestroy(() => {
 		if (chart) chart.destroy();
 	});
@@ -89,13 +79,7 @@
 	<canvas data-testid="canvas-element" bind:this={canvas} />
 </div>
 
-<div>
-	<button on:click={downloadCanvasPNG}>PNG</button>
-</div>
-
-{#if isDownloadCalled}
-	<div data-testid="download-function-called"></div>
-{/if}
+<PngButton {chart} />
 
 <style>
 	div > canvas {

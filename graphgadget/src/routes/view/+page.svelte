@@ -1,5 +1,4 @@
 <script lang="ts">
-	// @ts-nocheck
 	import { selected_graph } from '$lib/graphs/Store';
 	import Grapher from '$lib/graphs/Select-graph.svelte';
 	import { GraphMetas } from '$lib/graphs/Graphs';
