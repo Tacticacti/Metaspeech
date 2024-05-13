@@ -8,13 +8,26 @@ import DataFrame from 'dataframe-js';
 const df = new DataFrame(
 	{
 		column1: [3, 6, 8],
-		column2: [3, 4, 5]
+		column2: [3, 4, 4]
 	},
 	['column1', 'column2']
 );
 
 data.set(df);
+it('test calculateAxis function', () =>{
+	const { container, component } = render(sut);
+	let [labels, counts] = component.calculateAxis('column1');
+	expect(labels.length).toBe(3);
+	expect(counts.length).toBe(3);
+	expect(labels[0]).toBe(3);
+	expect(counts[0]).toBe(1);
 
+	[labels, counts] = component.calculateAxis('column2');
+	expect(labels.length).toBe(2);
+	expect(counts.length).toBe(2);
+	expect(labels[1]).toBe(4);
+	expect(counts[1]).toBe(2);
+})
 it('2 selects exist', () => {
 	const { container } = render(sut);
 	const selectElements = container.querySelectorAll('select');
