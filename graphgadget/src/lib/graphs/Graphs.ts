@@ -1,5 +1,6 @@
 import Histogram from './histogram/Histogram.svelte';
 import Stem from './Stem/Stem.svelte';
+import Scatter from './scatter/Scatter.svelte';
 
 // type with the metadata of a graph
 export type GraphMeta = {
@@ -23,5 +24,11 @@ export const GraphMetas: GraphMeta[] = [
 		description: 'A stem description.',
 		img_src: 'histogram-img.png',
 		component: Stem
+	},
+	{
+		title: 'Scatter',
+		description: 'A scatter description.',
+		img_src: 'histogram-img.png',
+		component: Scatter
 	}
 ];
