@@ -3,6 +3,8 @@
 	import { Chart, type ChartConfiguration } from 'chart.js/auto';
 	import { afterUpdate, onMount, onDestroy } from 'svelte';
 	import { setColor } from '$lib/utils/CanvasUtils';
+	import PngButton from '$lib/shared-components/PNGButton.svelte';
+	import JpgButton from '$lib/shared-components/JPGButton.svelte';
 
 	let canvas: HTMLCanvasElement;
 	let chart: Chart;
@@ -98,8 +100,8 @@
 	<canvas data-testid="canvas-element" bind:this={canvas} />
 </div>
 
-<!-- <PngButton {chart} />          //from stem implementation
-<JpgButton {chart} /> -->
+<PngButton {chart} />
+<JpgButton {chart} />
 
 <style>
 	div > canvas {
