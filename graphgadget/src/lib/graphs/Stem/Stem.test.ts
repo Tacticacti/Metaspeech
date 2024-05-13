@@ -1,5 +1,5 @@
 import { it, expect } from 'vitest';
-import { render } from '@testing-library/svelte';
+import { render, screen } from '@testing-library/svelte';
 import sut from '$lib/graphs/Stem/Stem.svelte';
 import { data } from '$lib/Store';
 import userEvent from '@testing-library/user-event';
@@ -106,3 +106,9 @@ it('button gets clicked', async () => {
 	const expectedDiv = getByTestId('download-function-called');
 	expect(expectedDiv).to.exist;
 });
+
+it('if button is not clicked download is not called', () => {
+	render(sut)
+	const expectedDiv = screen.queryAllByTestId('download-function-called')
+	expect(expectedDiv).toHaveLength(0)
+})
