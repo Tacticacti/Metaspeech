@@ -6,17 +6,18 @@
 	// for testing purposes
 	let isDownloadCalled = false;
 
-	function downloadCanvasPNG() {
+	function downloadCanvasJPG() {
 		const link = document.createElement('a');
-		link.href = chart.toBase64Image();
-		link.download = 'graph_image.png';
+		const image = chart.toBase64Image('image/jpeg', 1.0);
+		link.href = image;
+		link.download = 'graph_image.jpg';
 		link.click();
 		isDownloadCalled = true;
 	}
 </script>
 
 <div>
-	<button on:click={downloadCanvasPNG}>PNG</button>
+	<button on:click={downloadCanvasJPG}>JPG</button>
 </div>
 
 {#if isDownloadCalled}

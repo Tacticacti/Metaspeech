@@ -90,13 +90,19 @@ it('clicking on option changes value of select 2', async () => {
 	expect(secondSelect.value).toEqual('column1');
 });
 
-it('button for downloading exists', () => {
+it('png button for downloading exists', () => {
 	const { getByText } = render(sut);
 	const button = getByText('PNG');
 	expect(button).to.exist;
 });
 
-it('button gets clicked', async () => {
+it('jpg button for downloading exists', () => {
+	const { getByText } = render(sut);
+	const button = getByText('JPG');
+	expect(button).to.exist;
+});
+
+it('png button gets clicked', async () => {
 	const user = userEvent.setup();
 	const { getByText, getByTestId } = render(sut);
 	const button = getByText('PNG');
@@ -107,8 +113,19 @@ it('button gets clicked', async () => {
 	expect(expectedDiv).to.exist;
 });
 
-it('if button is not clicked download is not called', () => {
-	render(sut)
-	const expectedDiv = screen.queryAllByTestId('download-function-called')
-	expect(expectedDiv).toHaveLength(0)
-})
+it('jpg button gets clicked', async () => {
+	const user = userEvent.setup();
+	const { getByText, getByTestId } = render(sut);
+	const button = getByText('JPG');
+
+	await user.click(button);
+
+	const expectedDiv = getByTestId('download-function-called');
+	expect(expectedDiv).to.exist;
+});
+
+it('if no button is not clicked download is not called', () => {
+	render(sut);
+	const expectedDiv = screen.queryAllByTestId('download-function-called');
+	expect(expectedDiv).toHaveLength(0);
+});

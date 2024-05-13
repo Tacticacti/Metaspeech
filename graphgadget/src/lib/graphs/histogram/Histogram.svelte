@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { data } from '$lib/Store';
 	import PngButton from '$lib/shared-components/PNGButton.svelte';
+	import JpgButton from '$lib/shared-components/JPGButton.svelte';
 	import { Chart, type ChartConfiguration } from 'chart.js/auto';
 	import { setColor } from '$lib/utils/CanvasUtils';
 	import { afterUpdate, onMount } from 'svelte';
@@ -90,6 +91,7 @@
 </div>
 
 <PngButton {chart} />
+<JpgButton {chart} />
 
 <style>
 	div > canvas {
