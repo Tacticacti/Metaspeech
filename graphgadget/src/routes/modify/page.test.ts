@@ -1,12 +1,13 @@
 import { describe, it, expect, vi } from 'vitest';
-import { render, fireEvent } from '@testing-library/svelte';
+import { render, fireEvent, act } from '@testing-library/svelte';
 import DataFrame from 'dataframe-js';
 import { data } from '$lib/Store';
 import sut from './+page.svelte';
 import { goto } from '$app/navigation';
 import '@testing-library/jest-dom';
+import { get } from 'svelte/store';
 
-vi.mock('$lib/tableview/TableView.svelte');
+vi.mock('$lib/importer/Importer.svelte');
 vi.mock('$app/navigation');
 
 describe('Modify', () => {
@@ -57,5 +58,101 @@ describe('Modify', () => {
 		data.set(df);
 		const { component } = render(sut);
 		expect(component).toBeTruthy();
+	});
+	it('should allow changing the column name', async () => {
+		const df = new DataFrame([{ a: 1, b: 2 }]);
+		data.set(df);
+		const { getByDisplayValue, component } = render(sut);
+
+		const input = getByDisplayValue('a');
+		await fireEvent.change(input, { target: { value: 'newName' } });
+
+		act(() => component.$set({}));
+
+		expect(getByDisplayValue('newName')).toBeInTheDocument();
+	});
+	it('should allow deleting a column', async () => {
+		const df = new DataFrame([{ a: 1, b: 2 }]);
+		data.set(df);
+		const { getByText, getAllByText } = render(sut);
+
+		const button = getAllByText('X');
+		await fireEvent.click(button[0]);
+		await fireEvent.click(getByText('Next'));
+
+		expect(get(data).toText()).toEqual('b\n2');
+	});
+	it('should reset the column name when left empty', async () => {
+		const df = new DataFrame([{ a: 1, b: 2 }]);
+		data.set(df);
+		const { getByDisplayValue, component } = render(sut);
+
+		const input = getByDisplayValue('a');
+		await fireEvent.change(input, { target: { value: '' } });
+
+		act(() => component.$set({}));
+
+		expect(getByDisplayValue('a')).toBeInTheDocument();
+	});
+	it('should reset the column name when left whitespace', async () => {
+		const df = new DataFrame([{ a: 1, b: 2 }]);
+		data.set(df);
+		const { getByDisplayValue, component } = render(sut);
+
+		const input = getByDisplayValue('a');
+		await fireEvent.change(input, { target: { value: '  ' } });
+
+		act(() => component.$set({}));
+
+		expect(getByDisplayValue('a')).toBeInTheDocument();
+	});
+	it('should reset the column name when same as other column', async () => {
+		const df = new DataFrame([{ a: 1, b: 2 }]);
+		data.set(df);
+		const { getByDisplayValue, component } = render(sut);
+
+		const input = getByDisplayValue('a');
+		await fireEvent.change(input, { target: { value: 'b' } });
+
+		await act(() => component.$set({}));
+
+		expect(getByDisplayValue('a')).toBeInTheDocument();
+	});
+	it('should be able to clean the data', async () => {
+		const df = new DataFrame([
+			{ a: 1, b: 2 },
+			{ a: 3, b: undefined }
+		]);
+		data.set(df);
+		const { getByText, component } = render(sut);
+
+		const cleanButton = getByText('Remove missing values');
+		expect(cleanButton).toBeInTheDocument();
+
+		await fireEvent.click(cleanButton);
+		await fireEvent.click(getByText('Next'));
+
+		await act(() => component.$set({}));
+
+		expect(get(data).toText()).toEqual('a;b\n1;2');
+	});
+	it('should be able to merge two DataFrames', async () => {
+		const df1 = new DataFrame([{ d: 4, e: 5 }]);
+		data.set(df1);
+		const { getByText, component, getByTestId } = render(sut);
+
+		await fireEvent.input(getByTestId('file-input'));
+
+		act(() => component.$set({}));
+
+		const mergeButton = getByText('row-wise merge');
+		expect(mergeButton).toBeInTheDocument();
+
+		await fireEvent.click(mergeButton);
+		await fireEvent.click(getByText('Next'));
+
+		await act(() => component.$set({}));
+
+		expect(get(data).toText()).toEqual('d;e;a;b;c\n4;5;1;2;3');
 	});
 });

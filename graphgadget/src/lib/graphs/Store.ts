@@ -1,8 +1,8 @@
-import { writable } from 'svelte/store';
+import { writable, type Writable } from 'svelte/store';
+import Histogram from './histogram/Histogram.svelte';
 //import Histogram from './histogram/Histogram.svelte';
 
-// Create a type that only accepts the values of StateEnum
-
+// why don't we use the GraphMeta type here?
 export const graph_name = writable('');
 export const graph_description = writable('');
-export const selected_graph = writable(null);
+export const selected_graph: Writable<ConstructorOfATypedSvelteComponent> = writable(Histogram);

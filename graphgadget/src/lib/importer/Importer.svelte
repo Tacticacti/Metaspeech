@@ -9,9 +9,12 @@
 	}>();
 
 	async function onInput(event: Event) {
+		// get file
 		const input = event.target as HTMLInputElement;
 		const file = input.files?.[0];
 		if (!file) return;
+
+		// parse file
 		const data = await Parse(file);
 		dispatch('input', data);
 	}
@@ -21,7 +24,7 @@
 	data-testid="input"
 	on:input={onInput}
 	type="file"
-	accept=".tsv, .xls, .xlsx"
+	accept=".tsv, .xls, .xlsx, .json, .csv, .txt"
 	id="import-data"
 	hidden
 />

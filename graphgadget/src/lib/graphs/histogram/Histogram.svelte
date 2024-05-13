@@ -8,31 +8,27 @@
 
 	const column_names = $data.listColumns();
 
+	// pre-select first column
 	let x_axis = column_names[0];
 
 	function calculateAxis(x_axis: string) {
+		// calculate the frequency of each unique value
 		let map = new Map<string, number>();
-		let arr: string[] = $data.toArray(x_axis);
+		const arr: string[] = $data.toArray(x_axis) as string[];
 		for (let i = 0; i < arr.length; i++) {
 			let val = map.get(arr[i]);
 
-			if (val == undefined) {
-				map.set(arr[i], 1);
-			} else {
-				map.set(arr[i], val + 1);
-			}
+			map.set(arr[i], val === undefined ? 1 : val + 1);
 		}
-		let xx_axis: string[] = [];
-		let y_axis: number[] = [];
-		map.forEach((value: number, key: string) => {
-			xx_axis.push(key);
-			y_axis.push(value);
-		});
 
-		return [xx_axis, y_axis];
+		// convert map to arrays
+		const labels: string[] = [...map.keys()];
+		let counts: number[] = [...map.values()];
+
+		return [labels, counts];
 	}
-	// setup chart after canvas is mounted
 
+	// setup chart with empty config after canvas is mounted
 	onMount(() => {
 		const cfg: ChartConfiguration = {
 			type: 'bar',
@@ -45,16 +41,15 @@
 		chart = new Chart(canvas, cfg);
 	});
 
+	// update chart data
 	afterUpdate(() => {
-		let t = calculateAxis(x_axis);
-		//console.log(t);
+		const [labels, counts] = calculateAxis(x_axis);
 
-		chart.data.labels = t[0];
+		chart.data.labels = labels;
 		chart.data.datasets = [
 			{
 				label: x_axis,
-				// @ts-expect-error There is some typescript error here
-				data: t[1],
+				data: counts as number[],
 				backgroundColor: 'rgba(51, 50, 200, 1)',
 				borderColor: 'rgba(255, 99, 132, 1)',
 				borderWidth: 1

@@ -1,4 +1,4 @@
-image: node:20.0.0
+image: mcr.microsoft.com/playwright:v1.44.0-jammy
 
 # cache: #  Parameter 'cache' to cache the installation files for your projects dependencies, for building faster
 #   paths:
@@ -40,7 +40,6 @@ test:
   stage: test
   script: 
     - cd graphgadget
-    - npx playwright install --with-deps
     - npm run test
   artifacts:
     reports:

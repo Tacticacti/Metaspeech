@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { data } from '$lib/Store';
-	import { Chart, type ChartConfiguration, type ChartOptions } from 'chart.js/auto';
+	import { Chart, type ChartConfiguration } from 'chart.js/auto';
 	import { afterUpdate, onMount, onDestroy } from 'svelte';
+	import { setColor } from '$lib/utils/CanvasUtils';
 
 	let canvas: HTMLCanvasElement;
 	let chart: Chart;
@@ -13,16 +14,6 @@
 
 	// for testing purposes
 	let isDownloadCalled = false;
-
-	// @ts-expect-error Not sure the type of chart (not Chart), ignored can be any type
-	function setColor(chart, ignored: string, options: ChartOptions) {
-		const { ctx } = chart;
-		ctx.save();
-		ctx.globalCompositeOperation = 'destination-over';
-		ctx.fillStyle = options.color || '#99ffff';
-		ctx.fillRect(0, 0, chart.width, chart.height);
-		ctx.restore();
-	}
 
 	// setup chart after canvas is mounted
 	onMount(() => {
