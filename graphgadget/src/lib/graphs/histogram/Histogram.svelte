@@ -12,11 +12,22 @@
 
 	const column_names = $data.listColumns() as string[];
 
-	//use zip!!
-	let x_axis_data: string[] = [];
+	$: x_axis_data = selectedParams.map((columnName) => $data.toArray(columnName))
+		.reduce((column1, column2) => cross_join(column1, column2), []);
 
-	// pre-select first column
 	let selectedParams: string[] = [];
+
+	function cross_join(array1: any[], array2: any[]): string[] {
+		let result: any[] = [];
+
+		for (const e1 of array1) {
+			for (const e2 of array2) {
+				result.push(`${e1}, ${e2}`);
+			}
+		}
+
+		return result;
+	}
 
 	export function calculateAxis() {
 		// calculate the frequency of each unique value
@@ -39,9 +50,6 @@
 		let map = new Map<number, number>();
 		const arr: number[] = x_axis_data.map(Number) as number[];
 
-		for (let i = 0; i < arr.length; i++) {
-			arr[i] = Number(arr[i]);
-		}
 		for (let i = 0; i < arr.length; i++) {
 			let val = map.get(arr[i]);
 
