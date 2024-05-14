@@ -5,19 +5,23 @@
 	import { Chart, type ChartConfiguration } from 'chart.js/auto';
 	import { setColor } from '$lib/utils/CanvasUtils';
 	import { afterUpdate, onMount } from 'svelte';
+	import ParameterSelector from '$lib/shared-components/ParameterSelector.svelte';
 
 	let canvas: HTMLCanvasElement;
 	let chart: Chart;
 
-	const column_names = $data.listColumns();
+	const column_names = $data.listColumns() as string[];
+
+	//use zip!!
+	let x_axis_data: string[] = [];
 
 	// pre-select first column
-	let x_axis = column_names[0];
+	let selectedParams: string[] = [];
 
-	export function calculateAxis(x_axis: string) {
+	export function calculateAxis() {
 		// calculate the frequency of each unique value
 		let map = new Map<string, number>();
-		const arr: string[] = $data.toArray(x_axis) as string[];
+		const arr: string[] = x_axis_data as string[];
 		for (let i = 0; i < arr.length; i++) {
 			let val = map.get(arr[i]);
 
@@ -30,10 +34,10 @@
 
 		return [labels, counts];
 	}
-	export function calculateNumberAxis(x_axis: string) {
+	export function calculateNumberAxis() {
 		// calculate the frequency of each unique value
 		let map = new Map<number, number>();
-		const arr: number[] = $data.toArray(x_axis) as number[];
+		const arr: number[] = x_axis_data.map(Number) as number[];
 
 		for (let i = 0; i < arr.length; i++) {
 			arr[i] = Number(arr[i]);
@@ -95,10 +99,10 @@
 	afterUpdate(() => {
 		let labels, counts;
 		//checks if the first entry is a number
-		if (!isNaN(+$data.toArray(x_axis)[0]) && typeof +$data.toArray(x_axis)[0] == 'number') {
-			[labels, counts] = calculateNumberAxis(x_axis);
+		if (!isNaN(+x_axis_data[0]) && typeof +x_axis_data[0] == 'number') {
+			[labels, counts] = calculateNumberAxis();
 		} else {
-			[labels, counts] = calculateAxis(x_axis);
+			[labels, counts] = calculateAxis();
 		}
 		chart.data.labels = labels;
 		chart.data.datasets = [
@@ -115,11 +119,7 @@
 	});
 </script>
 
-<select data-testid="first-select" bind:value={x_axis}>
-	{#each column_names as column}
-		<option value={column}>{column}</option>
-	{/each}
-</select>
+<ParameterSelector bind:selectedParams />
 
 <div>
 	<canvas data-testid="canvas-element" bind:this={canvas} />
