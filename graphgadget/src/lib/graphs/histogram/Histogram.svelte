@@ -95,7 +95,7 @@
 	afterUpdate(() => {
 		let labels, counts;
 		//checks if the first entry is a number
-		if (!isNaN(+$data.toArray(x_axis)[0]) && typeof +$data.toArray(x_axis)[0] == 'number') {
+		if (!isNaN(Number($data.toArray(x_axis)[0]))) {
 			[labels, counts] = calculateNumberAxis(x_axis);
 		} else {
 			[labels, counts] = calculateAxis(x_axis);
