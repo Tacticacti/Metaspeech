@@ -10,13 +10,19 @@
 	let canvas: HTMLCanvasElement;
 	let chart: Chart;
 
-	const column_names = $data.listColumns() as string[];
+	const columnNames = $data.listColumns() as string[];
 
-	$: x_axis_data = combinationOfParams(selectedParams);
+	const columnTypes = columnNames.map(name => {name: typeof($data.toArray(name)[0])});
+	// const columnTypes = $data.toDict().map((key, value) => )
+
+	$: xAxisData = combinationOfParams(selectedParams);
 
 	let selectedParams: string[] = [];
+	let calculationType: string;
+	let parameterType: string;
 
-	function crossJoin(array1: any[], array2: any[]): string[] {
+	export function crossJoin(array1: any[], array2: any[]): string[] {
+		//The cartesian product of two arrays
 		let result: any[] = [];
 
 		for (const e1 of array1) {
@@ -28,22 +34,46 @@
 		return result;
 	}
 
-	function combinationOfParams(params: string[]): string[] {
+	export function combinationOfParams(params: string[]): string[] {
+		//Get a matrix with all columns 
 		const arrayOfColumns: any[][] = selectedParams.map((columnName) => $data.toArray(columnName));
 
 		if (arrayOfColumns.length == 0) {
 			return [];
 		}
+
+		// Calculate the cross join of each column with all others
 		const initialValue = arrayOfColumns[0];
 
 		return arrayOfColumns.slice(1)
 			.reduce((column1, column2) => crossJoin(column1, column2), initialValue);
 	}
 
-	export function calculateAxis() {
-		// calculate the frequency of each unique value
+	export function calculateAxis(xAxis: string[], calculation: string, yAxisParam: string): [string[], number[]] {
+		// calculate the y-axis parameter of each unique x-axis value
 		let map = new Map<string, number>();
-		const arr: string[] = x_axis_data as string[];
+		const arr: string[] = xAxis as string[];
+
+		// Iterate all rows
+		for (const row of $data.toCollection(true)) {
+			// Aggregate all selected columns of that row in a comma-separated string
+			const xValues: string = selectedParams.map(paramName => row[paramName])
+				.reduce((val1, val2) => `${val1}, ${val2}`, "");
+			
+			// Get the current value in the map with that string as key
+			const currentNum: number | undefined = map.get(xValues);
+
+			// Increment is one if Frequency is selected (one entry)
+			let increment: number = 1;
+
+			if (yAxisParam != "Frequency") {
+				// Increment is the value of the selected y-axis parameter
+				increment = row[yAxisParam];
+			}
+
+			map.set(xValues, currentNum === undefined ? increment : currentNum + increment);
+
+		}
 		for (let i = 0; i < arr.length; i++) {
 			let val = map.get(arr[i]);
 
@@ -54,9 +84,16 @@
 		const labels: string[] = [...map.keys()];
 		let counts: number[] = [...map.values()];
 
+		if (calculation == "Mean") {
+			let means: number[] = counts.map(c => c / xAxis.length);
+			return [labels, means];
+		}
+
 		return [labels, counts];
 	}
-	export function calculateNumberAxis() {
+
+
+	export function calculateNumberAxis(x_axis_data: string[]) {
 		// calculate the frequency of each unique value
 		let map = new Map<number, number>();
 		const arr: number[] = x_axis_data.map(Number) as number[];
@@ -119,16 +156,17 @@
 		let labels, counts;
 		//checks if the first entry is a number
 
-		if (x_axis_data == undefined) {
+		if (xAxisData == undefined) {
 			// chart.clear(); 
 			return;
 		}
 
-		if (!isNaN(+x_axis_data[0]) && typeof +x_axis_data[0] == 'number') {
-			[labels, counts] = calculateNumberAxis();
-		} else {
-			[labels, counts] = calculateAxis();
-		}
+		[labels, counts] = calculateAxis(xAxisData, calculationType, parameterType);
+		// if (!isNaN(+xAxisData[0]) && typeof +xAxisData[0] == 'number') {
+		// 	[labels, counts] = calculateNumberAxis(xAxisData);
+		// } else {
+		// 	[labels, counts] = calculateAxis(xAxisData);
+		// }
 		chart.data.labels = labels;
 		chart.data.datasets = [
 			{
@@ -144,7 +182,7 @@
 	});
 </script>
 
-<ParameterSelector bind:selectedParams />
+<ParameterSelector bind:selectedParams bind:calculationType bind:parameterType/>
 
 <div>
 	<canvas data-testid="canvas-element" bind:this={canvas} />

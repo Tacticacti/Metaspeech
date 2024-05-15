@@ -1,16 +1,16 @@
 <script lang="ts">
     import { data } from '$lib/Store';
     
-    $: column_names = $data.listColumns() as string[];
+    $: columnNames = $data.listColumns() as string[];
 
     export let selectedParams: string[];
-    let calculationType = "Count";
-    let parameterType = "Frequency"
+    export let calculationType = "Count";
+    export let parameterType = "Frequency"
 
 </script>
 
 <p>Parameters on the x-axis</p>
-{#each column_names as column}
+{#each columnNames as column}
     <label>
         <input type="checkbox" name="params" value={column} bind:group={selectedParams} />
         {column}
@@ -26,7 +26,7 @@
 
 <select data-testid="select-y-axis-parameter" bind:value={parameterType}>
     <option value="Frequency">Frequency</option>
-    {#each column_names as column}
+    {#each columnNames as column}
         <option value={column}>{column}</option>
     {/each}
 </select>
