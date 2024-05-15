@@ -12,12 +12,11 @@
 
 	const column_names = $data.listColumns() as string[];
 
-	$: x_axis_data = selectedParams.map((columnName) => $data.toArray(columnName))
-		.reduce((column1, column2) => cross_join(column1, column2), []);
+	$: x_axis_data = combinationOfParams(selectedParams);
 
 	let selectedParams: string[] = [];
 
-	function cross_join(array1: any[], array2: any[]): string[] {
+	function crossJoin(array1: any[], array2: any[]): string[] {
 		let result: any[] = [];
 
 		for (const e1 of array1) {
@@ -27,6 +26,18 @@
 		}
 
 		return result;
+	}
+
+	function combinationOfParams(params: string[]): string[] {
+		const arrayOfColumns: any[][] = selectedParams.map((columnName) => $data.toArray(columnName));
+
+		if (arrayOfColumns.length == 0) {
+			return [];
+		}
+		const initialValue = arrayOfColumns[0];
+
+		return arrayOfColumns.slice(1)
+			.reduce((column1, column2) => crossJoin(column1, column2), initialValue);
 	}
 
 	export function calculateAxis() {
@@ -107,6 +118,12 @@
 	afterUpdate(() => {
 		let labels, counts;
 		//checks if the first entry is a number
+
+		if (x_axis_data == undefined) {
+			// chart.clear(); 
+			return;
+		}
+
 		if (!isNaN(+x_axis_data[0]) && typeof +x_axis_data[0] == 'number') {
 			[labels, counts] = calculateNumberAxis();
 		} else {
