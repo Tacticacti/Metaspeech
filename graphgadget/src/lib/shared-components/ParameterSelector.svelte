@@ -4,8 +4,8 @@
     $: columnNames = $data.listColumns() as string[];
 
     export let selectedParams: string[];
-    export let calculationType = "Count";
-    export let parameterType = "Frequency"
+    export let parameterType = "Absolute Frequency"
+    export let checkedMean = false;
 
 </script>
 
@@ -19,14 +19,17 @@
 
 <p>Parameter of the y-axis</p>
 
-<select data-testid="select-y-axis-calculation" bind:value={calculationType}>
-    <option value="Count">Count</option>
-    <option value="Mean">Mean</option>
-</select>
-
 <select data-testid="select-y-axis-parameter" bind:value={parameterType}>
-    <option value="Frequency">Frequency</option>
+    <option value="Absolute Frequency">Absolute Frequency</option>
+    <option value="Relative Frequency">Relative Frequency</option>
     {#each columnNames as column}
         <option value={column}>{column}</option>
     {/each}
 </select>
+
+{#if parameterType != "Absolute Frequency" && parameterType != "Relative Frequency"}
+    <label>
+        <input type="checkbox" name="mean" bind:checked={checkedMean} />
+        Mean
+    </label>
+{/if}
