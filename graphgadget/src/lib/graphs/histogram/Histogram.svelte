@@ -11,14 +11,14 @@
 	let chart: Chart;
 
 	const columnNames = $data.listColumns() as string[];
-
-	const columnTypes = columnNames.map(name => {name: typeof($data.toArray(name)[0])});
+	const columnTypes = new Map<string, string>(columnNames.map(name => [name, typeof($data.toArray(name)[0])]));
+	const numericColumnNames = columnNames.filter(name => columnTypes.get(name) === 'number')
 
 	$: xAxisData = combinationOfParams(selectedParams);
 
 	let selectedParams: string[] = [];
-	let checkedMean: boolean;
-	let parameterType: string;
+	let checkedMean = false;
+	let parameterType = "Absolute Frequency";
 
 	export function crossJoin(array1: any[], array2: any[]): string[] {
 		//The cartesian product of two arrays
@@ -36,7 +36,8 @@
 	export function combinationOfParams(params: string[]): string[] {
 		// Get an array of columns, where each column has the possible values for that parameter
 		// Set is used to eliminate duplicates
-		const arrayOfColumns: any[][] = selectedParams.map((columnName) => [...new Set($data.toArray(columnName))].sort());
+		const arrayOfColumns: any[][] = selectedParams.map((columnName) => [...new Set($data.toArray(columnName))]);
+		console.log(arrayOfColumns);
 
 		if (arrayOfColumns.length == 0) {
 			return [];
@@ -50,10 +51,8 @@
 	}
 
 	export function calculateAxis(xAxis: string[], checkedMean: boolean, yAxisParam: string): [string[], number[]] {
-		// calculate the y-axis parameter of each unique x-axis value
 		let mapFrequencies = new Map<string, number>();
 		let mapValues = new Map<string, number>();
-		const arr: string[] = xAxis as string[];
 		const dataRows = $data.toCollection();
 
 		// Iterate all rows
@@ -99,33 +98,23 @@
 		return [labels, values];
 	}
 
+	// Sorts two arrays based on the labels
+	export function sortParallelArrays(labels: string[], values: number[]): [string[], number[]] {
+		let combinedArray: [string, number][] = [];
+		for (let idx = 0; idx < labels.length; ++idx) {
+			combinedArray.push([labels[idx], values[idx]]);
+		}
+		combinedArray.sort((a, b) => a[0].localeCompare(b[0]));
 
-	export function calculateNumberAxis(x_axis_data: string[]) {
-		// calculate the frequency of each unique value
-		let map = new Map<number, number>();
-		const arr: number[] = x_axis_data.map(Number) as number[];
+		let newLabels: string[] = [];
+		let newValues: number[] = [];
 
-		for (let i = 0; i < arr.length; i++) {
-			let val = map.get(arr[i]);
-
-			map.set(arr[i], val === undefined ? 1 : val + 1);
+		for (const [lbl, val] of combinedArray) {
+			newLabels.push(lbl);
+			newValues.push(val);
 		}
 
-		const labels: number[] = [...map.keys()];
-		const min_val = Math.min(...labels);
-		const max_val = Math.max(...labels);
-
-		let sorted_labels: number[] = [];
-		let sorted_counts: number[] = [];
-		// fills the gaps with 0 and makes sure it is sorted
-		for (let i = min_val; i <= max_val; i++) {
-			let val = map.get(i);
-
-			sorted_counts.push(val === undefined ? 0 : val);
-			sorted_labels.push(i);
-		}
-
-		return [sorted_labels, sorted_counts];
+		return [newLabels, newValues];
 	}
 
 	// setup chart with empty config after canvas is mounted
@@ -161,19 +150,14 @@
 	// update chart data
 	afterUpdate(() => {
 		let labels, values;
-		//checks if the first entry is a number
 
 		if (xAxisData == undefined) {
-			// chart.clear(); 
 			return;
 		}
 
 		[labels, values] = calculateAxis(xAxisData, checkedMean, parameterType);
-		// if (!isNaN(+xAxisData[0]) && typeof +xAxisData[0] == 'number') {
-		// 	[labels, counts] = calculateNumberAxis(xAxisData);
-		// } else {
-		// 	[labels, counts] = calculateAxis(xAxisData);
-		// }
+		[labels, values] = sortParallelArrays(labels, values);
+	
 		chart.data.labels = labels;
 		chart.data.datasets = [
 			{
@@ -189,7 +173,7 @@
 	});
 </script>
 
-<ParameterSelector bind:selectedParams bind:checkedMean bind:parameterType/>
+<ParameterSelector {columnNames} {numericColumnNames} bind:selectedParams bind:checkedMean bind:parameterType/>
 
 <div>
 	<canvas data-testid="canvas-element" bind:this={canvas} />

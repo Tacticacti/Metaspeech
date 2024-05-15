@@ -1,11 +1,10 @@
 <script lang="ts">
-    import { data } from '$lib/Store';
-    
-    $: columnNames = $data.listColumns() as string[];
+    export let columnNames;
+    export let numericColumnNames;
 
     export let selectedParams: string[];
-    export let parameterType = "Absolute Frequency"
-    export let checkedMean = false;
+    export let parameterType: string;
+    export let checkedMean: boolean;
 
 </script>
 
@@ -22,7 +21,7 @@
 <select data-testid="select-y-axis-parameter" bind:value={parameterType}>
     <option value="Absolute Frequency">Absolute Frequency</option>
     <option value="Relative Frequency">Relative Frequency</option>
-    {#each columnNames as column}
+    {#each numericColumnNames as column}
         <option value={column}>{column}</option>
     {/each}
 </select>
