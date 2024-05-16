@@ -11,66 +11,46 @@
 	let chart: Chart;
 
 	const columnNames = $data.listColumns() as string[];
-	const columnTypes = new Map<string, string>(columnNames.map(name => [name, typeof($data.toArray(name)[0])]));
-	const numericColumnNames = columnNames.filter(name => columnTypes.get(name) === 'number')
-
-	$: xAxisData = combinationOfParams(selectedParams);
+	const columnTypes = new Map<string, string>(
+		columnNames.map((name) => [name, typeof $data.toArray(name)[0]])
+	);
+	const numericColumnNames = columnNames.filter((name) => columnTypes.get(name) === 'number');
 
 	let selectedParams: string[] = [];
 	let checkedMean = false;
-	let parameterType = "Absolute Frequency";
+	let parameterType = 'Absolute Frequency';
 
-	export function crossJoin(array1: any[], array2: any[]): string[] {
-		//The cartesian product of two arrays
-		let result: any[] = [];
-
-		for (const e1 of array1) {
-			for (const e2 of array2) {
-				result.push(`${e1}, ${e2}`);
-			}
-		}
-
-		return result;
-	}
-
-	export function combinationOfParams(params: string[]): string[] {
-		// Get an array of columns, where each column has the possible values for that parameter
-		// Set is used to eliminate duplicates
-		const arrayOfColumns: any[][] = selectedParams.map((columnName) => [...new Set($data.toArray(columnName))]);
-		console.log(arrayOfColumns);
-
-		if (arrayOfColumns.length == 0) {
-			return [];
-		}
-
-		// Calculate the cross join of each column with all others
-		const initialValue = arrayOfColumns[0];
-
-		return arrayOfColumns.slice(1)
-			.reduce((column1, column2) => crossJoin(column1, column2), initialValue);
-	}
-
-	export function calculateAxis(xAxis: string[], checkedMean: boolean, yAxisParam: string): [string[], number[]] {
+	export function calculateAxis(
+		/* eslint-disable @typescript-eslint/no-explicit-any */
+		dataRows: any[],
+		selectedParams: string[],
+		checkedMean: boolean,
+		yAxisParam: string
+	): [string[], number[]] {
 		let mapFrequencies = new Map<string, number>();
 		let mapValues = new Map<string, number>();
-		const dataRows = $data.toCollection();
 
 		// Iterate all rows
 		for (const row of dataRows) {
 			// Aggregate all selected columns of that row in a comma-separated string
 			// Used as key for the maps, basically represents a bar in the chart
-			const xValues: string = selectedParams.map(paramName => row[paramName]).join(", ");
-			
+			const xValues: string = selectedParams
+				.map((paramName) => row[paramName] === undefined ? "<empty>" : row[paramName])
+				.join(', ');
+
 			// Get the current frequency in the map with that string as key
 			const currentFrequency: number | undefined = mapFrequencies.get(xValues);
 			// Increment the frequency of that key
 			mapFrequencies.set(xValues, currentFrequency === undefined ? 1 : currentFrequency + 1);
 
-			if (yAxisParam != "Absolute Frequency" && yAxisParam != "Relative Frequency") {
+			if (yAxisParam != 'Absolute Frequency' && yAxisParam != 'Relative Frequency') {
 				// Need to increment value of the selected y-axis parameter
 				const valueIncrement = row[yAxisParam];
 				const currentValue = mapValues.get(xValues);
-				mapValues.set(xValues, currentValue === undefined ? valueIncrement : currentValue + valueIncrement);
+				mapValues.set(
+					xValues,
+					currentValue === undefined ? valueIncrement : currentValue + valueIncrement
+				);
 			}
 		}
 
@@ -78,14 +58,14 @@
 		const labels: string[] = [...mapFrequencies.keys()];
 		let frequencies: number[] = [...mapFrequencies.values()];
 
-		if (yAxisParam == "Absolute Frequency") {
+		if (yAxisParam == 'Absolute Frequency') {
 			return [labels, frequencies];
 		}
-		if (yAxisParam == "Relative Frequency") {
+		if (yAxisParam == 'Relative Frequency') {
 			const totalFrequency = dataRows.length;
-			return [labels, frequencies.map(f => f / totalFrequency)];
+			return [labels, frequencies.map((f) => f / totalFrequency)];
 		}
-		
+
 		const values: number[] = [...mapValues.values()];
 
 		if (checkedMean) {
@@ -151,13 +131,9 @@
 	afterUpdate(() => {
 		let labels, values;
 
-		if (xAxisData == undefined) {
-			return;
-		}
-
-		[labels, values] = calculateAxis(xAxisData, checkedMean, parameterType);
+		[labels, values] = calculateAxis($data.toCollection(), selectedParams, checkedMean, parameterType);
 		[labels, values] = sortParallelArrays(labels, values);
-	
+
 		chart.data.labels = labels;
 		chart.data.datasets = [
 			{
@@ -173,7 +149,13 @@
 	});
 </script>
 
-<ParameterSelector {columnNames} {numericColumnNames} bind:selectedParams bind:checkedMean bind:parameterType/>
+<ParameterSelector
+	{columnNames}
+	{numericColumnNames}
+	bind:selectedParams
+	bind:checkedMean
+	bind:parameterType
+/>
 
 <div>
 	<canvas data-testid="canvas-element" bind:this={canvas} />

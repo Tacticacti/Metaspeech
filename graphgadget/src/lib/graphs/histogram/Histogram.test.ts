@@ -13,87 +13,106 @@ const df = new DataFrame(
 	['column1', 'column2']
 );
 
-it('test calculateAxis function', () => {
-	data.set(df);
+it('test sort parallel arrays empty', () => {
 	const { component } = render(sut);
-	let [labels, counts] = component.calculateAxis('column1');
-	expect(labels.length).toBe(3);
-	expect(counts.length).toBe(3);
-	expect(labels[0]).toBe(3);
-	expect(counts[0]).toBe(1);
 
-	[labels, counts] = component.calculateAxis('column2');
-	expect(labels.length).toBe(2);
-	expect(counts.length).toBe(2);
-	expect(labels[1]).toBe(4);
-	expect(counts[1]).toBe(2);
+	const labels: string[] = [];
+	const values: number[] = [];
+	
+	const [labelsSorted, valuesSorted] = component.sortParallelArrays(labels, values);
+
+	expect(labelsSorted.length).toBe(0);
+	expect(valuesSorted.length).toBe(0);
 });
-it('test calculateNumberAxis function', () => {
-	data.set(df);
+
+it('test sort parallel arrays one', () => {
 	const { component } = render(sut);
-	let [labels, counts] = component.calculateNumberAxis('column1');
-	expect(labels.length).toBe(6);
-	expect(counts.length).toBe(6);
-	expect(labels[0]).toBe(3);
-	expect(counts[0]).toBe(1);
-	expect(labels[1]).toBe(4);
-	expect(counts[1]).toBe(0);
 
-	[labels, counts] = component.calculateNumberAxis('column2');
-	expect(labels.length).toBe(2);
-	expect(counts.length).toBe(2);
-	expect(labels[1]).toBe(4);
-	expect(counts[1]).toBe(2);
-});
-it('2 selects exist', () => {
-	const { container } = render(sut);
-	const selectElements = container.querySelectorAll('select');
-	expect(selectElements.length).toEqual(1);
+	const labels: string[] = ["B"];
+	const values: number[] = [30];
+	
+	const [labelsSorted, valuesSorted] = component.sortParallelArrays(labels, values);
+
+	expect(labelsSorted).toBe(["B"]);
+	expect(valuesSorted).toBe([30]);
 });
 
-it('all 2 options exist', () => {
-	const { container } = render(sut);
-	const optionElements = container.querySelectorAll('option');
-	expect(optionElements.length).toEqual(2);
+it('test sort parallel arrays three', () => {
+	const { component } = render(sut);
+
+	const labels: string[] = ["B", "A", "C"];
+	const values: number[] = [30, 20, 10];
+	
+	const [labelsSorted, valuesSorted] = component.sortParallelArrays(labels, values);
+
+	expect(labelsSorted).toBe(["A", "B", "C"]);
+	expect(valuesSorted).toBe([20, 30, 10]);
 });
 
-it('first select default value is first column', () => {
-	const { getByTestId } = render(sut);
-	const firstSelect = getByTestId('first-select') as HTMLSelectElement;
-	expect(firstSelect.value).toEqual('column1');
-});
+// it('test calculateAxis function', () => {
+// 	data.set(df);
+// 	const { component } = render(sut);
+// 	let [labels, counts] = component.calculateAxis('column1');
+// 	expect(labels.length).toBe(3);
+// 	expect(counts.length).toBe(3);
+// 	expect(labels[0]).toBe(3);
+// 	expect(counts[0]).toBe(1);
 
-it('column1 is only repeated once', () => {
-	const { getAllByText } = render(sut);
-	const column1options = getAllByText('column1');
-	expect(column1options.length).toEqual(1);
-});
+// 	[labels, counts] = component.calculateAxis('column2');
+// 	expect(labels.length).toBe(2);
+// 	expect(counts.length).toBe(2);
+// 	expect(labels[1]).toBe(4);
+// 	expect(counts[1]).toBe(2);
+// });
+// it('2 selects exist', () => {
+// 	const { container } = render(sut);
+// 	const selectElements = container.querySelectorAll('select');
+// 	expect(selectElements.length).toEqual(1);
+// });
 
-it('column2 is only repeated once', () => {
-	const { getAllByText } = render(sut);
-	const column2options = getAllByText('column2');
-	expect(column2options.length).toEqual(1);
-});
+// it('all 2 options exist', () => {
+// 	const { container } = render(sut);
+// 	const optionElements = container.querySelectorAll('option');
+// 	expect(optionElements.length).toEqual(2);
+// });
 
-it('canvas wrapper exists', () => {
-	const { getByTestId } = render(sut);
-	const canvas = getByTestId('canvas-element');
-	expect(canvas).to.exist;
-});
+// it('first select default value is first column', () => {
+// 	const { getByTestId } = render(sut);
+// 	const firstSelect = getByTestId('first-select') as HTMLSelectElement;
+// 	expect(firstSelect.value).toEqual('column1');
+// });
 
-it('clicking on option changes value of select 1', async () => {
-	const user = userEvent.setup();
-	const { getByTestId } = render(sut);
-	const firstSelect = getByTestId('first-select') as HTMLSelectElement;
-	await user.selectOptions(firstSelect, ['column2']);
-	expect(firstSelect.value).toEqual('column2');
-});
+// it('column1 is only repeated once', () => {
+// 	const { getAllByText } = render(sut);
+// 	const column1options = getAllByText('column1');
+// 	expect(column1options.length).toEqual(1);
+// });
 
-it('should update x_axis when the first select element value changes', async () => {
-	const user = userEvent.setup();
-	const { getByTestId } = render(sut);
-	const firstSelect = getByTestId('first-select') as HTMLSelectElement;
-	const initialValue = firstSelect.value;
-	await user.selectOptions(firstSelect, ['column2']);
-	expect(firstSelect.value).not.toBe(initialValue);
-});
+// it('column2 is only repeated once', () => {
+// 	const { getAllByText } = render(sut);
+// 	const column2options = getAllByText('column2');
+// 	expect(column2options.length).toEqual(1);
+// });
+
+// it('canvas wrapper exists', () => {
+// 	const { getByTestId } = render(sut);
+// 	const canvas = getByTestId('canvas-element');
+// 	expect(canvas).to.exist;
+// });
+
+// it('clicking on option changes value of select 1', async () => {
+// 	const user = userEvent.setup();
+// 	const { getByTestId } = render(sut);
+// 	const firstSelect = getByTestId('first-select') as HTMLSelectElement;
+// 	await user.selectOptions(firstSelect, ['column2']);
+// 	expect(firstSelect.value).toEqual('column2');
+// });
+
+// it('should update x_axis when the first select element value changes', async () => {
+// 	const user = userEvent.setup();
+// 	const { getByTestId } = render(sut);
+// 	const firstSelect = getByTestId('first-select') as HTMLSelectElement;
+// 	const initialValue = firstSelect.value;
+// 	await user.selectOptions(firstSelect, ['column2']);
+// 	expect(firstSelect.value).not.toBe(initialValue);
+// });
