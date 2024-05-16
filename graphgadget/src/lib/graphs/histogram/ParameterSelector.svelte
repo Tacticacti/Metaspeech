@@ -10,7 +10,13 @@
 <p>Parameters on the x-axis</p>
 {#each columnNames as column}
 	<label>
-		<input type="checkbox" name="params" value={column} bind:group={selectedParams} />
+		<input
+			type="checkbox"
+			data-testid="check-{column}"
+			name="params"
+			value={column}
+			bind:group={selectedParams}
+		/>
 		{column}
 	</label>
 {/each}
@@ -27,7 +33,7 @@
 
 {#if parameterType != 'Absolute Frequency' && parameterType != 'Relative Frequency'}
 	<label>
-		<input type="checkbox" name="mean" bind:checked={checkedMean} />
+		<input type="checkbox" data-testid="check-mean" name="mean" bind:checked={checkedMean} />
 		Mean
 	</label>
 {/if}
