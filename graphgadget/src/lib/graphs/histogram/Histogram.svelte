@@ -44,7 +44,7 @@
 			// Aggregate all selected columns of that row in a comma-separated string
 			// Used as key for the maps, basically represents a bar in the chart
 			const xValues: string = selectedParams
-				.map((paramName) => (row[paramName] === undefined ? '<empty>' : row[paramName]))
+				.map(paramName => row[paramName] ?? '<empty>')
 				.join(', ');
 
 			// Get the current frequency in the map with that string as key
