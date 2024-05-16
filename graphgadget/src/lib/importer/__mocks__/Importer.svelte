@@ -9,11 +9,17 @@
 	}>();
 
 	async function onInput() {
+		const preBundle: Bundle = {
+			input: new DataFrame([{ a: '5', b: '10', c: '15' }]),
+			filename: 'pretestfile'
+		};
+
 		const bundle: Bundle = {
 			input: new DataFrame([{ a: '1', b: '2', c: '3' }]),
 			filename: 'testfile'
 		};
 
+		dispatch('input', preBundle);
 		dispatch('input', bundle);
 	}
 </script>
