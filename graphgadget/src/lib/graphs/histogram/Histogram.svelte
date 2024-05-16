@@ -84,7 +84,41 @@
 		for (let idx = 0; idx < labels.length; ++idx) {
 			combinedArray.push([labels[idx], values[idx]]);
 		}
-		combinedArray.sort((a, b) => a[0].localeCompare(b[0]));
+
+		for(const param of selectedParams) {
+			if (columnTypes.get(param) === "number") {
+
+			} else {
+
+			}
+		}
+
+		combinedArray.sort((a, b) => {
+			const paramsA = a[0].split(", ");
+			const paramsB = b[0].split(", ");
+
+			for (let idx = 0; idx < paramsA.length; ++idx) {
+				let comparison = 0;
+
+				const [la, lb] = [paramsA[idx], paramsB[idx]];
+
+				if (!isNaN(+la) && !isNaN(+lb)) {
+					// Numeric field
+					comparison = (+la) - (+lb);
+				} else {
+					// String field
+					comparison = la.localeCompare(lb);
+				}
+				
+				if (comparison != 0) {
+					// If not equal, return number
+					return comparison;
+				}
+			}
+
+			// If all equal, they are equal
+			return 0;
+		});
 
 		let newLabels: string[] = [];
 		let newValues: number[] = [];
