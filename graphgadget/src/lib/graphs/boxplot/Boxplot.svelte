@@ -4,21 +4,34 @@
     import { BoxPlotController, BoxAndWiskers } from '@sgratzl/chartjs-chart-boxplot';
 
     Chart.register(BoxPlotController, BoxAndWiskers, LinearScale, CategoryScale);
-	import { afterUpdate, onMount, onDestroy } from 'svelte';
+	import { onMount, onDestroy } from 'svelte';
 	import { setColor } from '$lib/utils/CanvasUtils';
 	import PngButton from '$lib/shared-components/PNGButton.svelte';
 	import JpgButton from '$lib/shared-components/JPGButton.svelte';
-	import { isNumber } from 'dataframe-js/reusables';
+	import { isNumber } from 'chart.js/helpers';
 
 	let canvas: HTMLCanvasElement;
 	let chart: Chart;
 
 	const column_names = $data.listColumns();
 
-    let warnings = [];
+    let warnings: string[] = [];
 
 	// setup chart after canvas is mounted
 	onMount(() => {
+        const boxplotData = {
+        // define label tree
+        labels: getColumnNames(column_names),
+        datasets: [{
+            label: 'Dataset 1',
+            backgroundColor: 'rgba(255,0,0,0.5)',
+            borderColor: 'red',
+            borderWidth: 1,
+            outlierColor: '#999999',
+            padding: 0,
+            itemRadius: 5,
+            data: getColumnData(column_names)
+        }]};
 		const plugin = {
 			id: 'customCanvasBackgroundColor',
 			beforeDraw: setColor
@@ -26,10 +39,7 @@
 
 		const cfg: ChartConfiguration = {
 			type: 'boxplot',
-			data: {
-				labels: [],
-				datasets: []
-			},
+			data: boxplotData,
 
 			options: {
 				plugins: {
@@ -47,39 +57,23 @@
 		chart = new Chart(canvas, cfg);
 	});
 
-	// called when x_axis or y_axis changes
-	afterUpdate(() => {
-        const boxplotData = {
-        // define label tree
-        labels: getColumnNames(column_names),
-        datasets: [{
-            label: 'Dataset 1',
-            backgroundColor: 'rgba(255,0,0,0.5)',
-            borderColor: 'red',
-            borderWidth: 1,
-            outlierColor: '#999999',
-            padding: 0,
-            itemRadius: 5,
-            data: getColumnData(column_names)
-        }]};
-		chart.data = boxplotData;
-
-		chart.update();
-	});
-
 	onDestroy(() => {
 		if (chart) chart.destroy();
 	});
-    function getColumnNames(column_names: string[]){
+    export function getColumnNames(column_names: string[]){
         let ret: string[] = [];
+        warnings = [];
         for(let i = 0; i < column_names.length; i++){
             if(isNumber($data.toArray(column_names[i])[0])){
                 ret.push(column_names[i]);
             }
+            else{
+                warnings.push("Warning: Column "+ column_names[i] + " doesn't contain numbers!");
+            }
         }
         return ret;
     }
-    function getColumnData(column_names: string[]){
+    export function getColumnData(column_names: string[]){
         let ret: any[][] = [];
         for(let i = 0; i < column_names.length; i++){
             if(isNumber($data.toArray(column_names[i])[0])){
@@ -90,12 +84,11 @@
     }
 </script>
 
-<!-- <select data-testid="first-select" bind:value={x_axis}>
-	{#each column_names as column}
-		<option value={column}>{column}</option>
-	{/each}
-</select> -->
-
+<div>
+    {#each warnings as warning}
+        <div>{warning}</div>
+    {/each}
+</div>
 <div>
 	<canvas data-testid="canvas-element" bind:this={canvas} />
 </div>
