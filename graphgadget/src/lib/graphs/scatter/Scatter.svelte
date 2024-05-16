@@ -5,6 +5,7 @@
 	import { setColor } from '$lib/utils/CanvasUtils';
 	import PngButton from '$lib/shared-components/PNGButton.svelte';
 	import JpgButton from '$lib/shared-components/JPGButton.svelte';
+	import { isNumber } from 'chart.js/helpers';
 
 	let canvas: HTMLCanvasElement;
 	let chart: Chart;
@@ -49,14 +50,14 @@
 	// called when x_axis or y_axis changes
 	afterUpdate(() => {
 		//check if first element is not a number
-		if (isNaN(Number($data.toArray(x_axis)[0]))) {
+		if (!isNumber($data.toArray(x_axis)[0])) {
 			warnings[0] = 'Warning: x_axis is not a number!';
 			chart.clear();
 			return;
 		} else {
 			warnings[0] = '';
 		}
-		if (isNaN(Number($data.toArray(y_axis)[0]))) {
+		if (!isNumber($data.toArray(y_axis)[0])) {
 			warnings[1] = 'Warning: y_axis is not a number!';
 			chart.clear();
 			return;

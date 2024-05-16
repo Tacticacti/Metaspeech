@@ -8,6 +8,7 @@
 	import { setColor } from '$lib/utils/CanvasUtils';
 	import PngButton from '$lib/shared-components/PNGButton.svelte';
 	import JpgButton from '$lib/shared-components/JPGButton.svelte';
+	import { isNumber } from 'dataframe-js/reusables';
 
 	let canvas: HTMLCanvasElement;
 	let chart: Chart;
@@ -50,7 +51,7 @@
 	afterUpdate(() => {
         const boxplotData = {
         // define label tree
-        labels: column_names,
+        labels: getColumnNames(column_names),
         datasets: [{
             label: 'Dataset 1',
             backgroundColor: 'rgba(255,0,0,0.5)',
@@ -69,10 +70,21 @@
 	onDestroy(() => {
 		if (chart) chart.destroy();
 	});
+    function getColumnNames(column_names: string[]){
+        let ret: string[] = [];
+        for(let i = 0; i < column_names.length; i++){
+            if(isNumber($data.toArray(column_names[i])[0])){
+                ret.push(column_names[i]);
+            }
+        }
+        return ret;
+    }
     function getColumnData(column_names: string[]){
         let ret: any[][] = [];
         for(let i = 0; i < column_names.length; i++){
-            ret.push($data.toArray(column_names[i]));
+            if(isNumber($data.toArray(column_names[i])[0])){
+                ret.push($data.toArray(column_names[i]));
+            }
         }
         return ret;
     }
