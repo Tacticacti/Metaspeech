@@ -2,15 +2,17 @@ import { it, expect } from 'vitest';
 import { render } from '@testing-library/svelte';
 import sut from '$lib/graphs/histogram/Histogram.svelte';
 import { data } from '$lib/Store';
-import userEvent from '@testing-library/user-event';
 import DataFrame from 'dataframe-js';
 
 const df = new DataFrame(
 	{
-		column1: [3, 6, 8],
-		column2: [3, 4, 4]
+		id: [1, 2, 3, 4, 5, 6],
+		age: [33, 43, 14, 19, undefined, 87],
+		gender: ['M', 'F', 'M', 'M', 'F', 'F'],
+		cef: ['A1', 'B2', 'B1', 'A2', undefined, 'B2'],
+		duration: [100, 20, 200, 50, 10, 10]
 	},
-	['column1', 'column2']
+	['id', 'age', 'gender', 'cef', 'duration']
 );
 
 it('test sort parallel arrays empty', () => {
@@ -18,7 +20,7 @@ it('test sort parallel arrays empty', () => {
 
 	const labels: string[] = [];
 	const values: number[] = [];
-	
+
 	const [labelsSorted, valuesSorted] = component.sortParallelArrays(labels, values);
 
 	expect(labelsSorted.length).toBe(0);
@@ -28,91 +30,178 @@ it('test sort parallel arrays empty', () => {
 it('test sort parallel arrays one', () => {
 	const { component } = render(sut);
 
-	const labels: string[] = ["B"];
+	const labels: string[] = ['B'];
 	const values: number[] = [30];
-	
+
 	const [labelsSorted, valuesSorted] = component.sortParallelArrays(labels, values);
 
-	expect(labelsSorted).toBe(["B"]);
-	expect(valuesSorted).toBe([30]);
+	expect(labelsSorted).toStrictEqual(['B']);
+	expect(valuesSorted).toStrictEqual([30]);
 });
 
 it('test sort parallel arrays three', () => {
 	const { component } = render(sut);
 
-	const labels: string[] = ["B", "A", "C"];
+	const labels: string[] = ['B', 'A', 'C'];
 	const values: number[] = [30, 20, 10];
-	
+
 	const [labelsSorted, valuesSorted] = component.sortParallelArrays(labels, values);
 
-	expect(labelsSorted).toBe(["A", "B", "C"]);
-	expect(valuesSorted).toBe([20, 30, 10]);
+	expect(labelsSorted).toStrictEqual(['A', 'B', 'C']);
+	expect(valuesSorted).toStrictEqual([20, 30, 10]);
 });
 
-// it('test calculateAxis function', () => {
-// 	data.set(df);
-// 	const { component } = render(sut);
-// 	let [labels, counts] = component.calculateAxis('column1');
-// 	expect(labels.length).toBe(3);
-// 	expect(counts.length).toBe(3);
-// 	expect(labels[0]).toBe(3);
-// 	expect(counts[0]).toBe(1);
+it('test sort parallel arrays complex label', () => {
+	const { component } = render(sut);
 
-// 	[labels, counts] = component.calculateAxis('column2');
-// 	expect(labels.length).toBe(2);
-// 	expect(counts.length).toBe(2);
-// 	expect(labels[1]).toBe(4);
-// 	expect(counts[1]).toBe(2);
-// });
-// it('2 selects exist', () => {
-// 	const { container } = render(sut);
-// 	const selectElements = container.querySelectorAll('select');
-// 	expect(selectElements.length).toEqual(1);
-// });
+	const labels: string[] = ['10, A', '2, B', '2, C', '1, C'];
+	const values: number[] = [30, 20, 10, 40];
 
-// it('all 2 options exist', () => {
-// 	const { container } = render(sut);
-// 	const optionElements = container.querySelectorAll('option');
-// 	expect(optionElements.length).toEqual(2);
-// });
+	const [labelsSorted, valuesSorted] = component.sortParallelArrays(labels, values);
 
-// it('first select default value is first column', () => {
-// 	const { getByTestId } = render(sut);
-// 	const firstSelect = getByTestId('first-select') as HTMLSelectElement;
-// 	expect(firstSelect.value).toEqual('column1');
-// });
+	expect(labelsSorted).toStrictEqual(['1, C', '2, B', '2, C', '10, A']);
+	expect(valuesSorted).toStrictEqual([40, 20, 10, 30]);
+});
 
-// it('column1 is only repeated once', () => {
-// 	const { getAllByText } = render(sut);
-// 	const column1options = getAllByText('column1');
-// 	expect(column1options.length).toEqual(1);
-// });
+it('test sort parallel arrays complex label reversed', () => {
+	const { component } = render(sut);
 
-// it('column2 is only repeated once', () => {
-// 	const { getAllByText } = render(sut);
-// 	const column2options = getAllByText('column2');
-// 	expect(column2options.length).toEqual(1);
-// });
+	const labels: string[] = ['B, 2', 'A, 10', 'C, 2', 'C, 1'];
+	const values: number[] = [30, 20, 10, 40];
 
-// it('canvas wrapper exists', () => {
-// 	const { getByTestId } = render(sut);
-// 	const canvas = getByTestId('canvas-element');
-// 	expect(canvas).to.exist;
-// });
+	const [labelsSorted, valuesSorted] = component.sortParallelArrays(labels, values);
 
-// it('clicking on option changes value of select 1', async () => {
-// 	const user = userEvent.setup();
-// 	const { getByTestId } = render(sut);
-// 	const firstSelect = getByTestId('first-select') as HTMLSelectElement;
-// 	await user.selectOptions(firstSelect, ['column2']);
-// 	expect(firstSelect.value).toEqual('column2');
-// });
+	expect(labelsSorted).toStrictEqual(['A, 10', 'B, 2', 'C, 1', 'C, 2']);
+	expect(valuesSorted).toStrictEqual([20, 30, 40, 10]);
+});
 
-// it('should update x_axis when the first select element value changes', async () => {
-// 	const user = userEvent.setup();
-// 	const { getByTestId } = render(sut);
-// 	const firstSelect = getByTestId('first-select') as HTMLSelectElement;
-// 	const initialValue = firstSelect.value;
-// 	await user.selectOptions(firstSelect, ['column2']);
-// 	expect(firstSelect.value).not.toBe(initialValue);
-// });
+it('test sort parallel arrays complex label reversed equal elements', () => {
+	const { component } = render(sut);
+
+	const labels: string[] = ['B, 2', 'B, 2', 'C, 2', 'C, 1'];
+	const values: number[] = [30, 20, 10, 40];
+
+	const [labelsSorted, valuesSorted] = component.sortParallelArrays(labels, values);
+
+	expect(labelsSorted).toStrictEqual(['B, 2', 'B, 2', 'C, 1', 'C, 2']);
+	expect(valuesSorted).toStrictEqual([30, 20, 40, 10]);
+});
+
+it('canvas wrapper exists', () => {
+	const { getByTestId } = render(sut);
+	const canvas = getByTestId('canvas-element');
+	expect(canvas).to.exist;
+});
+
+it('test columnInfo simple', () => {
+	data.set(df);
+	const { component } = render(sut);
+
+	const columnNames = df.listColumns();
+	const numericCols = component.getNumericalColumns(columnNames);
+
+	expect(numericCols).toStrictEqual(['id', 'age', 'duration']);
+});
+
+it('test calculateAxis function empty', () => {
+	data.set(df);
+	const { component } = render(sut);
+
+	const dataRows = df.toCollection();
+	const selectedParams: string[] = [];
+	const checkedMean = false;
+	const yAxisParam = 'Absolute Frequency';
+
+	let [labels, values] = component.calculateAxis(dataRows, selectedParams, checkedMean, yAxisParam);
+
+	// This function has already been tested:
+	[labels, values] = component.sortParallelArrays(labels, values);
+
+	// F before M because sorted
+	expect(labels).toStrictEqual(['']);
+	expect(values).toStrictEqual([6]);
+});
+
+it('test calculateAxis function simple', () => {
+	data.set(df);
+	const { component } = render(sut);
+
+	const dataRows = df.toCollection();
+	const selectedParams = ['gender'];
+	const checkedMean = false;
+	const yAxisParam = 'Absolute Frequency';
+
+	let [labels, values] = component.calculateAxis(dataRows, selectedParams, checkedMean, yAxisParam);
+
+	// This function has already been tested:
+	[labels, values] = component.sortParallelArrays(labels, values);
+
+	// F before M because sorted
+	expect(labels).toStrictEqual(['F', 'M']);
+	expect(values).toStrictEqual([3, 3]);
+});
+
+it('test calculateAxis function simple relative', () => {
+	data.set(df);
+	const { component } = render(sut);
+
+	const dataRows = df.toCollection();
+	const selectedParams = ['gender'];
+	const checkedMean = false;
+	const yAxisParam = 'Relative Frequency';
+
+	let [labels, values] = component.calculateAxis(dataRows, selectedParams, checkedMean, yAxisParam);
+	[labels, values] = component.sortParallelArrays(labels, values);
+
+	expect(labels).toStrictEqual(['F', 'M']);
+	expect(values).toStrictEqual([1 / 2, 1 / 2]);
+});
+
+it('test calculateAxis function total age', () => {
+	data.set(df);
+	const { component } = render(sut);
+
+	const dataRows = df.toCollection();
+	const selectedParams = ['gender'];
+	const checkedMean = false;
+	const yAxisParam = 'age';
+
+	let [labels, values] = component.calculateAxis(dataRows, selectedParams, checkedMean, yAxisParam);
+	[labels, values] = component.sortParallelArrays(labels, values);
+
+	expect(labels).toStrictEqual(['F', 'M']);
+	expect(values).toStrictEqual([130, 66]);
+});
+
+it('test calculateAxis function average age', () => {
+	data.set(df);
+	const { component } = render(sut);
+
+	const dataRows = df.toCollection();
+	const selectedParams = ['gender'];
+	const checkedMean = true;
+	const yAxisParam = 'age';
+
+	let [labels, values] = component.calculateAxis(dataRows, selectedParams, checkedMean, yAxisParam);
+	[labels, values] = component.sortParallelArrays(labels, values);
+
+	expect(labels).toStrictEqual(['F', 'M']);
+	expect(values).toStrictEqual([65, 22]);
+});
+
+it('test calculateAxis function frequency of complex group', () => {
+	data.set(df);
+	const { component } = render(sut);
+
+	const dataRows = df.toCollection();
+	const selectedParams = ['gender', 'cef'];
+	const checkedMean = false;
+	const yAxisParam = 'Absolute Frequency';
+
+	let [labels, values] = component.calculateAxis(dataRows, selectedParams, checkedMean, yAxisParam);
+	[labels, values] = component.sortParallelArrays(labels, values);
+
+	// Doesn't return columns with empty count
+	expect(labels).toStrictEqual(['F, <empty>', 'F, B2', 'M, A1', 'M, A2', 'M, B1']);
+	expect(values).toStrictEqual([1, 2, 1, 1, 1]);
+});

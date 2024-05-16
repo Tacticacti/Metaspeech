@@ -5,20 +5,29 @@
 	import { Chart, type ChartConfiguration } from 'chart.js/auto';
 	import { setColor } from '$lib/utils/CanvasUtils';
 	import { afterUpdate, onMount } from 'svelte';
-	import ParameterSelector from '$lib/shared-components/ParameterSelector.svelte';
+	import ParameterSelector from '$lib/graphs/histogram/ParameterSelector.svelte';
 
 	let canvas: HTMLCanvasElement;
 	let chart: Chart;
 
 	const columnNames = $data.listColumns() as string[];
-	const columnTypes = new Map<string, string>(
-		columnNames.map((name) => [name, typeof $data.toArray(name)[0]])
-	);
-	const numericColumnNames = columnNames.filter((name) => columnTypes.get(name) === 'number');
+	const numericColumnNames = getNumericalColumns(columnNames);
 
 	let selectedParams: string[] = [];
 	let checkedMean = false;
 	let parameterType = 'Absolute Frequency';
+
+	export function getNumericalColumns(columnNames: string[]): string[] {
+		// TODO: find a better way to get the type,
+		// currently only looks at first element.
+		// Remember there can be undefined elements if not cleared
+		const columnTypes = new Map<string, string>(
+			columnNames.map((name) => [name, typeof $data.toArray(name)[0]])
+		);
+		const numericColumnNames = columnNames.filter((name) => columnTypes.get(name) === 'number');
+
+		return numericColumnNames;
+	}
 
 	export function calculateAxis(
 		/* eslint-disable @typescript-eslint/no-explicit-any */
@@ -35,7 +44,7 @@
 			// Aggregate all selected columns of that row in a comma-separated string
 			// Used as key for the maps, basically represents a bar in the chart
 			const xValues: string = selectedParams
-				.map((paramName) => row[paramName] === undefined ? "<empty>" : row[paramName])
+				.map((paramName) => (row[paramName] === undefined ? '<empty>' : row[paramName]))
 				.join(', ');
 
 			// Get the current frequency in the map with that string as key
@@ -46,11 +55,18 @@
 			if (yAxisParam != 'Absolute Frequency' && yAxisParam != 'Relative Frequency') {
 				// Need to increment value of the selected y-axis parameter
 				const valueIncrement = row[yAxisParam];
-				const currentValue = mapValues.get(xValues);
-				mapValues.set(
-					xValues,
-					currentValue === undefined ? valueIncrement : currentValue + valueIncrement
-				);
+
+				if (valueIncrement === undefined) {
+					// Skip this value entirely from the calculation
+					// So decrement its frequency (which cannot be null, or undefined)
+					mapFrequencies.set(xValues, mapFrequencies.get(xValues)! - 1);
+				} else {
+					const currentValue = mapValues.get(xValues);
+					mapValues.set(
+						xValues,
+						currentValue === undefined ? valueIncrement : currentValue + valueIncrement
+					);
+				}
 			}
 		}
 
@@ -85,17 +101,9 @@
 			combinedArray.push([labels[idx], values[idx]]);
 		}
 
-		for(const param of selectedParams) {
-			if (columnTypes.get(param) === "number") {
-
-			} else {
-
-			}
-		}
-
 		combinedArray.sort((a, b) => {
-			const paramsA = a[0].split(", ");
-			const paramsB = b[0].split(", ");
+			const paramsA = a[0].split(', ');
+			const paramsB = b[0].split(', ');
 
 			for (let idx = 0; idx < paramsA.length; ++idx) {
 				let comparison = 0;
@@ -104,12 +112,12 @@
 
 				if (!isNaN(+la) && !isNaN(+lb)) {
 					// Numeric field
-					comparison = (+la) - (+lb);
+					comparison = +la - +lb;
 				} else {
 					// String field
 					comparison = la.localeCompare(lb);
 				}
-				
+
 				if (comparison != 0) {
 					// If not equal, return number
 					return comparison;
@@ -165,7 +173,12 @@
 	afterUpdate(() => {
 		let labels, values;
 
-		[labels, values] = calculateAxis($data.toCollection(), selectedParams, checkedMean, parameterType);
+		[labels, values] = calculateAxis(
+			$data.toCollection(),
+			selectedParams,
+			checkedMean,
+			parameterType
+		);
 		[labels, values] = sortParallelArrays(labels, values);
 
 		chart.data.labels = labels;
