@@ -3,12 +3,11 @@ import { render, fireEvent, act } from '@testing-library/svelte';
 import DataFrame from 'dataframe-js';
 import { data } from '$lib/Store';
 import sut from './+page.svelte';
-import { goto } from '$app/navigation';
 import '@testing-library/jest-dom';
 import { get } from 'svelte/store';
 
 vi.mock('$lib/importer/Importer.svelte');
-vi.mock('$app/navigation');
+vi.mock('$lib/filtering/filter.svelte');
 
 describe('Modify', () => {
 	it('should render', () => {
@@ -17,10 +16,9 @@ describe('Modify', () => {
 	});
 	it('should have a button that directs to view', async () => {
 		const { getByText } = render(sut);
-		const button = getByText('Next');
-		expect(button).to.exist;
-		await fireEvent.click(button);
-		expect(goto).toHaveBeenCalledWith('/view');
+		const link = getByText('Next') as HTMLLinkElement;
+		expect(link).to.exist;
+		expect(link).toHaveAttribute('href', '/view');
 	});
 	it('should render a table with headers and rows based on provided data', async () => {
 		// Create a mock DataFrame
