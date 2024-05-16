@@ -22,8 +22,13 @@ it('1 selects exists, with options', () => {
 
 	const optionsOfSelect = container.querySelectorAll('option');
 
+	const optionNames: string[] = [];
+	for (const opt of optionsOfSelect) {
+		optionNames.push((opt as HTMLOptionElement).value);
+	}
+
 	// For each numeric column + Abs Freq + Rel Freq
-	expect(optionsOfSelect.length).toEqual(numericColumnNames.length + 2);
+	expect(optionNames).toEqual(['Absolute Frequency', 'Relative Frequency', ...numericColumnNames]);
 });
 
 it('1 checkbox for each column', () => {
@@ -37,7 +42,15 @@ it('1 checkbox for each column', () => {
 		}
 	});
 	const checkElements = container.querySelectorAll('input');
-	expect(checkElements.length).toEqual(columnNames.length);
+
+	const checkNames: string[] = [];
+	for (const opt of checkElements) {
+		checkNames.push((opt as HTMLInputElement).value);
+		expect((opt as HTMLInputElement).type).toEqual('checkbox');
+	}
+
+	// For each column
+	expect(checkNames).toEqual(columnNames);
 });
 
 it('Mean checkbox shows when something other than frequency selected', async () => {
@@ -55,12 +68,36 @@ it('Mean checkbox shows when something other than frequency selected', async () 
 	const select = getByTestId('select-y-axis-parameter') as HTMLSelectElement;
 	await user.selectOptions(select, ['age']);
 
-	const checkMean = getByTestId('check-mean');
+	const checkMean = getByTestId('check-mean') as HTMLInputElement;
+	expect(checkMean.type).toEqual('checkbox');
 	expect(checkMean).toBeVisible;
 	expect(select.value).toEqual('age');
 
 	const checkElements = container.querySelectorAll('input');
 	expect(checkElements.length).toEqual(columnNames.length + 1);
+});
+
+it('Mean checkbox reamains hidden when frequency selected', async () => {
+	const user = userEvent.setup();
+	const { container, getByTestId } = render(sut, {
+		props: {
+			columnNames: columnNames,
+			numericColumnNames: numericColumnNames,
+			selectedParams: [],
+			parameterType: 'Absolute Frequency',
+			checkedMean: false
+		}
+	});
+
+	const select = getByTestId('select-y-axis-parameter') as HTMLSelectElement;
+	await user.selectOptions(select, ['Absolute Frequency']);
+
+	let checkElements = container.querySelectorAll('input');
+	expect(checkElements.length).toEqual(columnNames.length);
+
+	await user.selectOptions(select, ['Relative Frequency']);
+	checkElements = container.querySelectorAll('input');
+	expect(checkElements.length).toEqual(columnNames.length);
 });
 
 it('Mean checkbox shows when something other than frequency selected', async () => {
