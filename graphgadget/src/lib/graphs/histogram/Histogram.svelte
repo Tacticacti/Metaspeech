@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { isNumber } from 'chart.js/helpers';
 	import { data } from '$lib/Store';
 	import PngButton from '$lib/shared-components/PNGButton.svelte';
 	import JpgButton from '$lib/shared-components/JPGButton.svelte';
@@ -95,7 +96,7 @@
 	afterUpdate(() => {
 		let labels, counts;
 		//checks if the first entry is a number
-		if (!isNaN(Number($data.toArray(x_axis)[0]))) {
+		if (isNumber($data.toArray(x_axis)[0])) {
 			[labels, counts] = calculateNumberAxis(x_axis);
 		} else {
 			[labels, counts] = calculateAxis(x_axis);
