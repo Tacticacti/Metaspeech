@@ -1,14 +1,20 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
 	import { DataFrame } from 'dataframe-js';
+	import type { Bundle } from '$lib/types';
 
 	// allows creating component events
 	const dispatch = createEventDispatcher<{
-		input: DataFrame;
+		input: Bundle;
 	}>();
 
 	async function onInput() {
-		dispatch('input', new DataFrame([{ a: '1', b: '2', c: '3' }]));
+		const bundle: Bundle = {
+			input: new DataFrame([{ a: '1', b: '2', c: '3' }]),
+			filename: 'testfile'
+		};
+
+		dispatch('input', bundle);
 	}
 </script>
 

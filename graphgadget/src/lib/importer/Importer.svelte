@@ -2,10 +2,11 @@
 	import { createEventDispatcher } from 'svelte';
 	import { Parse } from '$lib/importer/scripts/FileParser';
 	import { DataFrame } from 'dataframe-js';
+	import type { Bundle } from '$lib/types';
 
 	// allows creating component events
 	const dispatch = createEventDispatcher<{
-		input: DataFrame;
+		input: Bundle;
 	}>();
 
 	async function onInput(event: Event) {
@@ -15,8 +16,13 @@
 		if (!file) return;
 
 		// parse file
-		const data = await Parse(file);
-		dispatch('input', data);
+		const data: DataFrame = await Parse(file);
+		// dispatch('input', data);
+		const bundle = {
+			input: data,
+			filename: file.name
+		};
+		dispatch('input', bundle);
 	}
 </script>
 
