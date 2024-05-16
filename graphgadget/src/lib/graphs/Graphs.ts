@@ -44,7 +44,7 @@ export const GraphMetas: GraphMeta[] = [
 	{
 		title: 'Box plot',
 		description:
-			"In descriptive statistics, a box plot or boxplot is a type of chart often used in explanatory data analysis. Box plots visually show the distribution of numerical data and skewness by displaying the data quartiles (or percentiles) and averages.",
+			'In descriptive statistics, a box plot or boxplot is a type of chart often used in explanatory data analysis. Box plots visually show the distribution of numerical data and skewness by displaying the data quartiles (or percentiles) and averages.',
 		img_src: 'histogram-img.png',
 		component: Boxplot
 	}
