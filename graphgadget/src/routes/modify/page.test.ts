@@ -9,6 +9,10 @@ import { get } from 'svelte/store';
 vi.mock('$lib/importer/Importer.svelte');
 vi.mock('$lib/filtering/filter.svelte');
 
+beforeEach(() => {
+	vi.clearAllMocks();
+});
+
 describe('Modify', () => {
 	it('should render', () => {
 		const { container } = render(sut);
