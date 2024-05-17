@@ -8,51 +8,60 @@
 	let min: number = 0;
 	let max: number = 0;
 
-	$: isNumberColumn = $data.toArray(selectedColumn).every((v) => !isNaN(v));
+	$: isNumberColumn = !isNaN($data.getRow(0)?.get(selectedColumn));
 	$: useRange = isNumberColumn && useRangeChecked;
 
-	function filter(invert: boolean = false) {
+	function filter(useMatching: boolean) {
 		if (useRange) {
 			// range filter
 
 			console.log(min, max);
 
 			$data = $data.filter(
-				// @ts-expect-error dataframe bad typing
-				(row) => (row.get(selectedColumn) >= min && row.get(selectedColumn) <= max) == invert
+				// @ts-expect-error dataframe badly defined types
+				(row) => (row.get(selectedColumn) >= min && row.get(selectedColumn) <= max) !== useMatching
 			);
 			return;
 		}
 
-		// @ts-expect-error dataframe bad typing
-		$data = $data.filter((row) => (row.get(selectedColumn) === filterValue) === invert);
+		// @ts-expect-error dataframe badly defined types
+		$data = $data.filter((row) => (row.get(selectedColumn) == filterValue) !== useMatching);
 	}
 </script>
 
 <button on:click={() => (isOpen = !isOpen)}>Filter</button>
 
 {#if isOpen}
-	<select bind:value={selectedColumn}>
-		{#each $data.listColumns() as col}
-			<option value={col}>{col}</option>
-		{/each}
-	</select>
-	<div>
+	<div data-testid="filter-window">
+		<select bind:value={selectedColumn} data-testid="column-select">
+			{#each $data.listColumns() as col}
+				<option value={col}>{col}</option>
+			{/each}
+		</select>
 		{#if isNumberColumn}
 			<label>
 				Select Range
-				<input type="checkbox" bind:checked={useRangeChecked} />
+				<input type="checkbox" bind:checked={useRangeChecked} data-testid="userange-check" />
 			</label>
 		{/if}
 
 		{#if useRange}
-			<input type="number" placeholder="min" bind:value={min} />
-			<input type="number" placeholder="max" bind:value={max} />
+			<input type="number" placeholder="min" bind:value={min} data-testid="minrange-input" />
+			<input type="number" placeholder="max" bind:value={max} data-testid="maxrange-input" />
 		{:else}
-			<input type="text" placeholder="value to filter" bind:value={filterValue} />
+			<input
+				type="text"
+				placeholder="value to filter"
+				bind:value={filterValue}
+				data-testid="textfilter-input"
+			/>
 		{/if}
 
-		<button on:click={() => filter(false)}>Remove matching</button>
-		<button on:click={() => filter(true)}>Remove non-matching</button>
+		<button on:click={() => filter(true)} data-testid="remove-matching-button"
+			>Remove matching</button
+		>
+		<button on:click={() => filter(false)} data-testid="remove-nonmatching-button"
+			>Remove non-matching</button
+		>
 	</div>
 {/if}
