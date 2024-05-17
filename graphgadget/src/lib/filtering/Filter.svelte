@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { data } from '$lib/Store';
 	import { afterUpdate } from 'svelte';
+	import { isNumber } from 'chart.js/helpers';
 
 	let isOpen: boolean = false;
 
@@ -23,7 +24,7 @@
 
 		// if statement for when there are no columns
 		if (selectedColumn) {
-			isNumberColumn = !isNaN($data.getRow(0)?.get(selectedColumn));
+			isNumberColumn = isNumber($data.getRow(0)?.get(selectedColumn));
 		}
 	});
 

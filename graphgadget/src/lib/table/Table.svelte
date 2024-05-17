@@ -28,7 +28,7 @@
 		<tbody>
 			{#each rows as row}
 				<tr>
-					{#each row as cell (cell)}
+					{#each row as cell}
 						<td data-testid="{cell}-cell">{cell}</td>
 					{/each}
 				</tr>
