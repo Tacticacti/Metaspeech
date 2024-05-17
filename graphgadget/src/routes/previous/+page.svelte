@@ -85,4 +85,4 @@
 	<p>No previous data available.</p>
 {/if}
 
-<button on:click={clearCache}>Clear Cache</button>
+<button on:click={clearCache}>Clear Data</button>
