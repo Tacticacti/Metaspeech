@@ -11,14 +11,7 @@
 	export let parameterType: string = ABSOLUTE_FREQUENCY;
 	export let checkedMean: boolean = false;
 
-	let binSizes: number[] = [];
-	let size: number = 1;
-
-	for (const column of numericColumnNames) {
-		binSizes.push(1);
-	}
-
-	$: console.log(binSizes);
+	let binSizes: number[] = Array.from(numericColumnNames, _ => 1);
 	
 </script>
 
@@ -36,23 +29,22 @@
 	</label>
 {/each}
 
-{#each selectedParams as column}
-	{#if numericColumnNames.includes(column)}
+{#each numericColumnNames as column, i}
+	{#if selectedParams.includes(column)}
 		<br />
 		<label>
 			{column} Bin Size: 
 			<input 
 				type="number"
+				bind:value={binSizes[i]}
 				data-testid="number-bin-{column}"
-				value="1"
 				min="1"
 				max="1000"
-				bind:value={size}
 			/>
 			<input 
 				type="range"
+				bind:value={binSizes[i]}
 				data-testid="range-bin-{column}"
-				value="1"
 				min="1"
 				max="1000"
 			/>

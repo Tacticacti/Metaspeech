@@ -31,7 +31,7 @@ export function calculateAxis(
 
 		if (yAxisParam != ABSOLUTE_FREQUENCY && yAxisParam != RELATIVE_FREQUENCY) {
 			// Need to increment value of the selected y-axis parameter
-			const valueIncrement = row.get(yAxisParam);
+			const valueIncrement: number = +row.get(yAxisParam);
 
 			if (valueIncrement === undefined) {
 				// Skip this value entirely from the calculation
