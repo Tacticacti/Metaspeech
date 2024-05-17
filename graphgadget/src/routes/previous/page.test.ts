@@ -14,9 +14,9 @@ describe('No mocking has zero files saved', () => {
 		expect(heading).to.exist;
 	});
 
-	it('Expect clear cache button to be available', () => {
+	it('Expect clear data button to be available', () => {
 		const { getByText } = render(sut);
-		const button = getByText('Clear Cache');
+		const button = getByText('Clear Data');
 		expect(button).to.exist;
 	});
 });
@@ -81,9 +81,9 @@ describe('Deleting datasets', () => {
 		expect(firstFile).toBeNull();
 	});
 
-	it('Clearing cache should delete all entries', async () => {
+	it('Clearing data should delete all entries', async () => {
 		const { getByText } = render(sut);
-		const clearCache = getByText('Clear Cache');
+		const clearCache = getByText('Clear Data');
 
 		await fireEvent.click(clearCache);
 
