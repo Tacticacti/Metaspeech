@@ -4,12 +4,7 @@ export const ABSOLUTE_FREQUENCY: string = 'Absolute Frequency';
 export const RELATIVE_FREQUENCY: string = 'Relative Frequency';
 
 export function getNumericalColumns(columnNames: string[], row: Row): string[] {
-	const columnTypes = new Map<string, string>(
-		columnNames.map((name) => [name, typeof row.get(name)])
-	);
-	const numericColumnNames = columnNames.filter((name) => columnTypes.get(name) === 'number');
-
-	return numericColumnNames;
+	return columnNames.filter((name) => !isNaN(+row.get(name)));
 }
 
 export function calculateAxis(

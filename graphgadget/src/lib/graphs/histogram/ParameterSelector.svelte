@@ -1,15 +1,25 @@
 <script lang="ts">
-	export let columnNames;
-	export let numericColumnNames;
+	import {
+		ABSOLUTE_FREQUENCY,
+		RELATIVE_FREQUENCY
+	} from '$lib/graphs/histogram/HistogramController';
+
+	export let columnNames: string[];
+	export let numericColumnNames: string[];
 
 	export let selectedParams: string[] = [];
 	export let parameterType: string = ABSOLUTE_FREQUENCY;
 	export let checkedMean: boolean = false;
 
-	import {
-		ABSOLUTE_FREQUENCY,
-		RELATIVE_FREQUENCY
-	} from '$lib/graphs/histogram/HistogramController';
+	let binSizes: number[] = [];
+	let size: number = 1;
+
+	for (const column of numericColumnNames) {
+		binSizes.push(1);
+	}
+
+	$: console.log(binSizes);
+	
 </script>
 
 <p>Parameters on the x-axis</p>
@@ -24,6 +34,30 @@
 		/>
 		{column}
 	</label>
+{/each}
+
+{#each selectedParams as column}
+	{#if numericColumnNames.includes(column)}
+		<br />
+		<label>
+			{column} Bin Size: 
+			<input 
+				type="number"
+				data-testid="number-bin-{column}"
+				value="1"
+				min="1"
+				max="1000"
+				bind:value={size}
+			/>
+			<input 
+				type="range"
+				data-testid="range-bin-{column}"
+				value="1"
+				min="1"
+				max="1000"
+			/>
+		</label>
+	{/if}
 {/each}
 
 <p>Parameter of the y-axis</p>
