@@ -16,6 +16,7 @@
 	afterUpdate(() => {
 		const columns = $data.listColumns();
 
+		// pre-select a column
 		if (!selectedColumn || !columns.includes(selectedColumn)) {
 			selectedColumn = columns[0];
 		}
@@ -36,6 +37,7 @@
 			return;
 		}
 
+		// text filter
 		// @ts-expect-error dataframe badly defined types
 		$data = $data.filter((row) => (row.get(selectedColumn) == filterValue) !== useMatching);
 	}
