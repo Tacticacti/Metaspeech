@@ -25,6 +25,7 @@
 	let selectedParams: string[];
 	let checkedMean: boolean;
 	let parameterType: string;
+	let binSizes: number[];
 
 	// setup chart with empty config after canvas is mounted
 	onMount(() => {
@@ -64,7 +65,8 @@
 			$data.toCollection(true),
 			selectedParams,
 			checkedMean,
-			parameterType
+			parameterType,
+			binSizes
 		);
 		[labels, values] = sortParallelArrays(labels, values);
 
@@ -89,6 +91,7 @@
 	bind:selectedParams
 	bind:checkedMean
 	bind:parameterType
+	bind:binSizes
 />
 
 <div>

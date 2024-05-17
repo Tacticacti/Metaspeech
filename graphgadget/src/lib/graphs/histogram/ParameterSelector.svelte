@@ -1,7 +1,8 @@
 <script lang="ts">
 	import {
 		ABSOLUTE_FREQUENCY,
-		RELATIVE_FREQUENCY
+		RELATIVE_FREQUENCY,
+		type BinDictionary
 	} from '$lib/graphs/histogram/HistogramController';
 
 	export let columnNames: string[];
@@ -10,8 +11,11 @@
 	export let selectedParams: string[] = [];
 	export let parameterType: string = ABSOLUTE_FREQUENCY;
 	export let checkedMean: boolean = false;
+	export let binSizes: BinDictionary = {};
 
-	let binSizes: number[] = Array.from(numericColumnNames, _ => 1);
+	for (const column of numericColumnNames) {
+		binSizes[column] = 1;
+	}
 	
 </script>
 
@@ -29,21 +33,21 @@
 	</label>
 {/each}
 
-{#each numericColumnNames as column, i}
+{#each numericColumnNames as column}
 	{#if selectedParams.includes(column)}
 		<br />
 		<label>
 			{column} Bin Size: 
 			<input 
 				type="number"
-				bind:value={binSizes[i]}
+				bind:value={binSizes[column]}
 				data-testid="number-bin-{column}"
 				min="1"
 				max="1000"
 			/>
 			<input 
 				type="range"
-				bind:value={binSizes[i]}
+				bind:value={binSizes[column]}
 				data-testid="range-bin-{column}"
 				min="1"
 				max="1000"

@@ -1,5 +1,11 @@
 import { Row } from 'dataframe-js';
 
+// export type BinDictionary = {
+// 	[key: string]: number
+// }
+
+export type BinDictionary = Record<string, number>;
+
 export const ABSOLUTE_FREQUENCY: string = 'Absolute Frequency';
 export const RELATIVE_FREQUENCY: string = 'Relative Frequency';
 
@@ -7,11 +13,40 @@ export function getNumericalColumns(columnNames: string[], row: Row): string[] {
 	return columnNames.filter((name) => !isNaN(+row.get(name)));
 }
 
+function getParamLabel(paramName: string, row: Row, binSizes: BinDictionary): string {
+	const paramValue = row.get(paramName);
+
+	if (paramValue === undefined) {
+		return "<empty>";
+	}
+
+	const binSize = binSizes[paramName] ?? 1;
+
+	if (binSize === 1) {
+		return paramValue;
+	}
+
+	const paramNumberValue = +paramValue;
+
+	if (isNaN(paramNumberValue)) {
+		return paramValue;
+	}
+
+	// TODO: will this work with negative values?
+
+	const rangeGroup = Math.floor(paramNumberValue / binSize);
+	const lowerBound = rangeGroup * binSize;
+	const upperBound = (rangeGroup + 1) * binSize - 1;
+
+	return `[${lowerBound}, ${upperBound}]`;
+}
+
 export function calculateAxis(
 	dataRows: Row[],
 	selectedParams: string[],
 	checkedMean: boolean,
-	yAxisParam: string
+	yAxisParam: string,
+	binSizes: BinDictionary
 ): [string[], number[]] {
 	const mapFrequencies = new Map<string, number>();
 	const mapValues = new Map<string, number>();
@@ -21,7 +56,7 @@ export function calculateAxis(
 		// Aggregate all selected columns of that row in a comma-separated string
 		// Used as key for the maps, basically represents a bar in the chart
 		const xValues: string = selectedParams
-			.map((paramName) => row.get(paramName) ?? '<empty>')
+			.map((paramName) => getParamLabel(paramName, row, binSizes))
 			.join(', ');
 
 		// Get the current frequency in the map with that string as key
