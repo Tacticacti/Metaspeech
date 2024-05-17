@@ -5,6 +5,7 @@
 	import Table from '$lib/table/Table.svelte';
 	import { hasMissingValues, rowWiseMerge } from '$lib/utils/DataFrameUtils';
 	import DataFrame from 'dataframe-js';
+	import type { Bundle } from '$lib/types';
 
 	$: column_names = $data.listColumns() as string[];
 	$: missing_values = hasMissingValues($data);
@@ -17,8 +18,8 @@
 	}
 
 	let second_data: DataFrame;
-	function handleInput(event: CustomEvent<DataFrame>) {
-		second_data = event.detail;
+	function handleInput(event: CustomEvent<Bundle>) {
+		second_data = event.detail.input;
 	}
 
 	function handleRowWiseMerge() {
