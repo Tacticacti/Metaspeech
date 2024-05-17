@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { render, fireEvent, act } from '@testing-library/svelte';
+import { render, fireEvent } from '@testing-library/svelte';
 import DataFrame from 'dataframe-js';
 import { data } from '$lib/Store';
 import sut from './+page.svelte';
@@ -45,7 +45,6 @@ describe('missing values', () => {
 		expect(get(data).toText()).toEqual('a;b\n1;2');
 	});
 });
-
 
 describe('merging', () => {
 	it('should be able to index-merge two DataFrames', async () => {

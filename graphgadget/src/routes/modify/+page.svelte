@@ -40,28 +40,30 @@
 {#if missing_values.length !== 0}
 	<span>
 		<p>Warning: Missing values detected in: {columns_with_missing.join(', ')}</p>
-		<button on:click={removeMissingValues} data-testid="remove-missing-button" >Remove missing values</button>
+		<button on:click={removeMissingValues} data-testid="remove-missing-button"
+			>Remove missing values</button
+		>
 	</span>
 {/if}
 
-<a href="/view" data-testid="next-link" >Next</a>
+<a href="/view" data-testid="next-link">Next</a>
 
 <Importer on:input={handleInput} />
 
 {#if second_data}
-	<button on:click={handleRowWiseMerge} data-testid="merge-index-button" >Index merge</button>
-	<select bind:value={merge_col_1} data-testid="col1-select" >
+	<button on:click={handleRowWiseMerge} data-testid="merge-index-button">Index merge</button>
+	<select bind:value={merge_col_1} data-testid="col1-select">
 		{#each column_names as col}
 			<option value={col}>{col}</option>
 		{/each}
 	</select>
-	<select bind:value={merge_col_2} data-testid="col2-select" >
+	<select bind:value={merge_col_2} data-testid="col2-select">
 		{#each second_data.listColumns() as col}
 			<option value={col}>{col}</option>
 		{/each}
 	</select>
 	{#if merge_col_1 && merge_col_2}
-		<button on:click={joinColumns} data-testid="merge-keyed-button" >keyed merge</button>
+		<button on:click={joinColumns} data-testid="merge-keyed-button">keyed merge</button>
 	{/if}
 {/if}
 

@@ -3,21 +3,21 @@
 	import { afterUpdate } from 'svelte';
 
 	let isOpen: boolean = false;
-	
+
 	let filterValue: string = '';
 	let useRangeChecked: boolean = true;
 	let min: number = 0;
 	let max: number = 0;
 	let selectedColumn: string;
 	let isNumberColumn: boolean = false;
-	
+
 	$: useRange = isNumberColumn && useRangeChecked;
 
 	afterUpdate(() => {
 		const columns = $data.listColumns();
-		
+
 		if (!selectedColumn || !columns.includes(selectedColumn)) {
-			selectedColumn = columns[0];	
+			selectedColumn = columns[0];
 		}
 
 		// if statement for when there are no columns
