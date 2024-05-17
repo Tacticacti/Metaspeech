@@ -6,6 +6,9 @@
 	import { beforeUpdate } from 'svelte';
 	import DataFrame from 'dataframe-js';
 
+	/**
+	 * Will check if there is a dataframe in session storage and load it
+	 */
 	beforeUpdate(() => {
 		if (sessionStorage.getItem('current-df') !== null) {
 			var jsonData = sessionStorage.getItem('current-df');

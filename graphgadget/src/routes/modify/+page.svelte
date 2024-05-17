@@ -10,6 +10,7 @@
 	function handleClick() {
 		// write changes
 		unmodified.set(data);
+		// set the storage to the updated data
 		sessionStorage.setItem('current-df', JSON.stringify(data));
 		goto('/view');
 	}
@@ -22,6 +23,9 @@
 		(v) => column_names[v]
 	);
 
+	/**
+	 * Will check if there is a dataframe in session storage and load it
+	 */
 	beforeUpdate(() => {
 		if (sessionStorage.getItem('current-df') !== null) {
 			var jsonData = sessionStorage.getItem('current-df');
