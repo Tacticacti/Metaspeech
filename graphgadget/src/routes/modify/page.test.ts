@@ -10,6 +10,10 @@ import { get } from 'svelte/store';
 vi.mock('$lib/importer/Importer.svelte');
 vi.mock('$app/navigation');
 
+beforeEach(() => {
+	sessionStorage.clear();
+});
+
 describe('Modify', () => {
 	it('should render', () => {
 		const { container } = render(sut);

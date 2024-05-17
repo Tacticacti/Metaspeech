@@ -21,6 +21,7 @@
 		data.set(event.detail.input);
 
 		if (storeData) storeFile(filename);
+		sessionStorage.setItem('current-df', JSON.stringify($data));
 
 		goto('/modify');
 	}

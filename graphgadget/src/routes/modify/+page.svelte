@@ -5,10 +5,12 @@
 	import { hasMissingValues, rowWiseMerge } from '$lib/utils/DataFrameUtils';
 	import DataFrame from 'dataframe-js';
 	import type { Bundle } from '$lib/types';
+	import { beforeUpdate } from 'svelte';
 
 	function handleClick() {
 		// write changes
 		unmodified.set(data);
+		sessionStorage.setItem('current-df', JSON.stringify(data));
 		goto('/view');
 	}
 	let data = $unmodified;
@@ -19,6 +21,22 @@
 	$: columns_with_missing = [...new Set(missing_values.map((v) => v[1]))].map(
 		(v) => column_names[v]
 	);
+
+	beforeUpdate(() => {
+		if (sessionStorage.getItem('current-df') !== null) {
+			var jsonData = sessionStorage.getItem('current-df');
+			var parsed = jsonData ? JSON.parse(jsonData) : null;
+
+			if (parsed === null) return;
+
+			parsed = JSON.parse(parsed);
+
+			const df = new DataFrame(parsed);
+
+			unmodified.set(df);
+			data = $unmodified;
+		}
+	});
 
 	function columnValueChanged(event: Event, previousValue: string) {
 		const input = event.target as HTMLInputElement;
