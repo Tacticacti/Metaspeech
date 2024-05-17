@@ -27,6 +27,15 @@
 	function loadDataset(key: string) {
 		var jsonData = localStorage.getItem(key);
 		var parsed = jsonData ? JSON.parse(jsonData) : null;
+		// In the case decides to delete a dataset from console
+		if (parsed === null) {
+			var datasets = localStorage.getItem('datasets');
+			if (datasets === null) datasets = '[]';
+			storedDatasets = JSON.parse(datasets);
+			if (storedDatasets.includes(key)) deleteDataset(key);
+			alert('this dataset no longer exists');
+			return;
+		}
 		// Parse again because first time it returns a string
 		parsed = JSON.parse(parsed);
 
@@ -44,10 +53,6 @@
 	 */
 	function deleteDataset(key: string) {
 		const index = storedDatasets.indexOf(key);
-		if (index === -1) {
-			console.log('Dataset not found in array');
-			return;
-		}
 		localStorage.removeItem(key);
 		storedDatasets.splice(index, 1);
 		localStorage.setItem('datasets', JSON.stringify(storedDatasets));

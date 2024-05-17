@@ -26,7 +26,9 @@ describe('Mocking a saved file', () => {
 	vi.mock('$app/navigation');
 
 	beforeEach(async () => {
-		const { getByTestId } = render(helperSut);
+		const { getByTestId, getByLabelText } = render(helperSut);
+		const checkbox = getByLabelText('Store data in client side?');
+		await fireEvent.click(checkbox);
 		const input = getByTestId('file-input');
 		await fireEvent.input(input);
 	});
@@ -61,7 +63,9 @@ describe('Deleting datasets', () => {
 	vi.mock('$app/navigation');
 
 	beforeEach(async () => {
-		const { getByTestId } = render(helperSut);
+		const { getByTestId, getByLabelText } = render(helperSut);
+		const checkbox = getByLabelText('Store data in client side?');
+		await fireEvent.click(checkbox);
 		const input = getByTestId('file-input');
 		await fireEvent.input(input);
 	});
@@ -88,5 +92,28 @@ describe('Deleting datasets', () => {
 
 		const secondFile = screen.queryByText('testfile');
 		expect(secondFile).toBeNull();
+	});
+
+	it('If client deletes file from storage and click it, load nothing', async () => {
+		const { getByText } = render(sut);
+		localStorage.removeItem('pretestfile');
+
+		const firstFile = getByText('pretestfile');
+		await fireEvent.click(firstFile);
+
+		const firstFileNowRemoved = screen.queryByText('pretestfile');
+		expect(firstFileNowRemoved).toBeNull();
+	});
+
+	it('If client deletes file from storage and click it and also deletes it from list of stored, load nothing', async () => {
+		const { getByText } = render(sut);
+		localStorage.removeItem('pretestfile');
+		localStorage.removeItem('datasets');
+
+		const firstFile = getByText('pretestfile');
+		await fireEvent.click(firstFile);
+
+		const firstFileNowRemoved = screen.queryByText('pretestfile');
+		expect(firstFileNowRemoved).toBeNull();
 	});
 });
