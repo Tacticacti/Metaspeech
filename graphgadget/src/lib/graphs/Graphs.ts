@@ -2,6 +2,7 @@ import Histogram from './histogram/Histogram.svelte';
 import Stem from './Stem/Stem.svelte';
 import Scatter from './scatter/Scatter.svelte';
 import PieChart from './PieChart/PieChart.svelte';
+import Boxplot from './boxplot/Boxplot.svelte';
 
 // type with the metadata of a graph
 export type GraphMeta = {
@@ -39,5 +40,12 @@ export const GraphMetas: GraphMeta[] = [
 			"A pie chart is a circular statistical graphic that is divided into slices to illustrate numerical proportions. Each slice represents a category's contribution to the whole. Pie charts are ideal for showing relative sizes of data parts to the whole, making it easy to compare individual segments.",
 		img_src: 'pie-chart.png',
 		component: PieChart
+	},
+	{
+		title: 'Box plot',
+		description:
+			'In descriptive statistics, a box plot or boxplot is a type of chart often used in explanatory data analysis. Box plots visually show the distribution of numerical data and skewness by displaying the data quartiles (or percentiles) and averages.',
+		img_src: 'histogram-img.png',
+		component: Boxplot
 	}
 ];

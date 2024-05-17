@@ -4,6 +4,7 @@
 	import { goto } from '$app/navigation';
 	import { hasMissingValues, rowWiseMerge } from '$lib/utils/DataFrameUtils';
 	import DataFrame from 'dataframe-js';
+	import type { Bundle } from '$lib/types';
 
 	function handleClick() {
 		// write changes
@@ -47,8 +48,8 @@
 	}
 
 	let second_data: DataFrame;
-	function handleInput(event: CustomEvent<DataFrame>) {
-		second_data = event.detail;
+	function handleInput(event: CustomEvent<Bundle>) {
+		second_data = event.detail.input;
 	}
 
 	function handleRowWiseMerge() {

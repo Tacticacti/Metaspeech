@@ -3,6 +3,7 @@ import { afterEach, describe, it, expect, vi } from 'vitest';
 import sut from './Importer.svelte';
 import * as fileParserModule from './scripts/FileParser';
 import { DataFrame } from 'dataframe-js';
+import type { Bundle } from '$lib/types';
 
 // Mocking the file parser module to control its behavior
 vi.mock('./scripts/FileParser', () => ({
@@ -44,8 +45,8 @@ describe('Importer', () => {
 		});
 
 		// Prepare to capture the dispatched event using a Promise
-		const dispatched = new Promise((resolve) => {
-			component.$on('input', (event) => {
+		const dispatched = new Promise<Bundle>((resolve) => {
+			component.$on('input', (event: CustomEvent<Bundle>) => {
 				resolve(event.detail); // Capture the detail of the 'input' event when it is dispatched
 			});
 		});
@@ -60,8 +61,8 @@ describe('Importer', () => {
 		await new Promise((resolve) => setTimeout(resolve, 0));
 
 		// Check if the 'input' event was dispatched with the expected data, which should be a DataFrame instance
-		const result = await dispatched;
-		expect(result).toBeInstanceOf(DataFrame); // Verify that the result is indeed an instance of DataFrame
+		const result: Bundle = await dispatched;
+		expect(result.input).toBeInstanceOf(DataFrame); // Verify that the result is indeed an instance of DataFrame
 	});
 
 	it('should not call Parse if no file is selected', async () => {
