@@ -1,22 +1,34 @@
 <script lang="ts">
 	import { data } from '$lib/Store';
+	import { afterUpdate } from 'svelte';
 
 	let isOpen: boolean = false;
-	let selectedColumn: string = $data.listColumns()[0];
+	
 	let filterValue: string = '';
 	let useRangeChecked: boolean = true;
 	let min: number = 0;
 	let max: number = 0;
-
-	$: isNumberColumn = !isNaN($data.getRow(0)?.get(selectedColumn));
+	let selectedColumn: string;
+	let isNumberColumn: boolean = false;
+	
 	$: useRange = isNumberColumn && useRangeChecked;
+
+	afterUpdate(() => {
+		const columns = $data.listColumns();
+		
+		if (!selectedColumn || !columns.includes(selectedColumn)) {
+			selectedColumn = columns[0];	
+		}
+
+		// if statement for when there are no columns
+		if (selectedColumn) {
+			isNumberColumn = !isNaN($data.getRow(0)?.get(selectedColumn));
+		}
+	});
 
 	function filter(useMatching: boolean) {
 		if (useRange) {
 			// range filter
-
-			console.log(min, max);
-
 			$data = $data.filter(
 				// @ts-expect-error dataframe badly defined types
 				(row) => (row.get(selectedColumn) >= min && row.get(selectedColumn) <= max) !== useMatching
