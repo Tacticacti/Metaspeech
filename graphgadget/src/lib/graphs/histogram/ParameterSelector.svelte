@@ -16,7 +16,6 @@
 	for (const column of numericColumnNames) {
 		binSizes[column] = 1;
 	}
-	
 </script>
 
 <p>Parameters on the x-axis</p>
@@ -37,15 +36,15 @@
 	{#if selectedParams.includes(column)}
 		<br />
 		<label>
-			{column} Bin Size: 
-			<input 
+			{column} Bin Size:
+			<input
 				type="number"
 				bind:value={binSizes[column]}
 				data-testid="number-bin-{column}"
 				min="1"
 				max="1000"
 			/>
-			<input 
+			<input
 				type="range"
 				bind:value={binSizes[column]}
 				data-testid="range-bin-{column}"

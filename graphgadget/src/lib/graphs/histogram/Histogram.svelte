@@ -9,7 +9,8 @@
 	import {
 		getNumericalColumns,
 		calculateAxis,
-		sortParallelArrays
+		sortParallelArrays,
+		type BinDictionary
 	} from '$lib/graphs/histogram/HistogramController';
 
 	let canvas: HTMLCanvasElement;
@@ -25,7 +26,7 @@
 	let selectedParams: string[];
 	let checkedMean: boolean;
 	let parameterType: string;
-	let binSizes: number[];
+	let binSizes: BinDictionary;
 
 	// setup chart with empty config after canvas is mounted
 	onMount(() => {
