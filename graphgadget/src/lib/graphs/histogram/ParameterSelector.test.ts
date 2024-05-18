@@ -2,6 +2,7 @@ import { it, expect } from 'vitest';
 import { render } from '@testing-library/svelte';
 import sut from '$lib/graphs/histogram/ParameterSelector.svelte';
 import userEvent from '@testing-library/user-event';
+import { ABSOLUTE_FREQUENCY } from '$lib/graphs/histogram/HistogramController';
 
 const columnNames = ['id', 'age', 'gender', 'cef', 'duration'];
 const numericColumnNames = ['id', 'age', 'duration'];
@@ -12,13 +13,13 @@ it('1 selects exists, with options', () => {
 			columnNames: columnNames,
 			numericColumnNames: numericColumnNames,
 			selectedParams: [],
-			parameterType: 'Absolute Frequency',
+			parameterType: ABSOLUTE_FREQUENCY,
 			checkedMean: false
 		}
 	});
 	const selectElements = container.querySelectorAll('select');
 	expect(selectElements.length).toEqual(1);
-	expect(selectElements[0].value).toEqual('Absolute Frequency');
+	expect(selectElements[0].value).toEqual(ABSOLUTE_FREQUENCY);
 
 	const optionsOfSelect = container.querySelectorAll('option');
 
@@ -28,7 +29,7 @@ it('1 selects exists, with options', () => {
 	}
 
 	// For each numeric column + Abs Freq + Rel Freq
-	expect(optionNames).toEqual(['Absolute Frequency', 'Relative Frequency', ...numericColumnNames]);
+	expect(optionNames).toEqual([ABSOLUTE_FREQUENCY, 'Relative Frequency', ...numericColumnNames]);
 });
 
 it('1 checkbox for each column', () => {
@@ -37,7 +38,7 @@ it('1 checkbox for each column', () => {
 			columnNames: columnNames,
 			numericColumnNames: numericColumnNames,
 			selectedParams: [],
-			parameterType: 'Absolute Frequency',
+			parameterType: ABSOLUTE_FREQUENCY,
 			checkedMean: false
 		}
 	});
@@ -60,7 +61,7 @@ it('Mean checkbox shows when something other than frequency selected', async () 
 			columnNames: columnNames,
 			numericColumnNames: numericColumnNames,
 			selectedParams: [],
-			parameterType: 'Absolute Frequency',
+			parameterType: ABSOLUTE_FREQUENCY,
 			checkedMean: false
 		}
 	});
@@ -84,13 +85,13 @@ it('Mean checkbox reamains hidden when frequency selected', async () => {
 			columnNames: columnNames,
 			numericColumnNames: numericColumnNames,
 			selectedParams: [],
-			parameterType: 'Absolute Frequency',
+			parameterType: ABSOLUTE_FREQUENCY,
 			checkedMean: false
 		}
 	});
 
 	const select = getByTestId('select-y-axis-parameter') as HTMLSelectElement;
-	await user.selectOptions(select, ['Absolute Frequency']);
+	await user.selectOptions(select, [ABSOLUTE_FREQUENCY]);
 
 	let checkElements = container.querySelectorAll('input');
 	expect(checkElements.length).toEqual(columnNames.length);
@@ -107,7 +108,7 @@ it('Mean checkbox shows when something other than frequency selected', async () 
 			columnNames: columnNames,
 			numericColumnNames: numericColumnNames,
 			selectedParams: [],
-			parameterType: 'Absolute Frequency',
+			parameterType: ABSOLUTE_FREQUENCY,
 			checkedMean: false
 		}
 	});
@@ -128,7 +129,7 @@ it('numeric column is appears twice', () => {
 			columnNames: columnNames,
 			numericColumnNames: numericColumnNames,
 			selectedParams: [],
-			parameterType: 'Absolute Frequency',
+			parameterType: ABSOLUTE_FREQUENCY,
 			checkedMean: false
 		}
 	});
@@ -142,7 +143,7 @@ it('string column appears once', () => {
 			columnNames: columnNames,
 			numericColumnNames: numericColumnNames,
 			selectedParams: [],
-			parameterType: 'Absolute Frequency',
+			parameterType: ABSOLUTE_FREQUENCY,
 			checkedMean: false
 		}
 	});
@@ -157,7 +158,7 @@ it('clicking on option changes value of select', async () => {
 			columnNames: columnNames,
 			numericColumnNames: numericColumnNames,
 			selectedParams: [],
-			parameterType: 'Absolute Frequency',
+			parameterType: ABSOLUTE_FREQUENCY,
 			checkedMean: false
 		}
 	});
@@ -175,7 +176,7 @@ it('should update selectedParams when the checkboxes change', async () => {
 			columnNames: columnNames,
 			numericColumnNames: numericColumnNames,
 			selectedParams: selectedParams,
-			parameterType: 'Absolute Frequency',
+			parameterType: ABSOLUTE_FREQUENCY,
 			checkedMean: false
 		}
 	});
@@ -190,4 +191,36 @@ it('should update selectedParams when the checkboxes change', async () => {
 
 	//This assertion doesn't work, I don't know how to test it
 	// expect(selectedParams.length).toBe(2);
+});
+
+it('1 number and 1 range for each selected numeric column', () => {
+	const { container } = render(sut, {
+		props: {
+			columnNames: columnNames,
+			numericColumnNames: numericColumnNames,
+			selectedParams: ['gender', 'age', 'duration'],
+			parameterType: ABSOLUTE_FREQUENCY,
+			checkedMean: false
+		}
+	});
+
+	const selectedNumericColumns: string[] = ['age', 'duration'];
+	const inputElements = container.querySelectorAll('input');
+
+	const numberNames: string[] = [];
+	const rangeNames: string[] = [];
+
+	for (const input of inputElements) {
+		switch (input.type) {
+			case 'number':
+				numberNames.push(input.name);
+				break;
+			case 'range':
+				rangeNames.push(input.name);
+				break;
+		}
+	}
+
+	expect(numberNames).toEqual(selectedNumericColumns);
+	expect(rangeNames).toEqual(selectedNumericColumns);
 });

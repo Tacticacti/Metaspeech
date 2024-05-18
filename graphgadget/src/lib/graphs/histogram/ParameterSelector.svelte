@@ -41,6 +41,7 @@
 				type="number"
 				bind:value={binSizes[column]}
 				data-testid="number-bin-{column}"
+				name={column}
 				min="1"
 				max="1000"
 			/>
@@ -48,6 +49,7 @@
 				type="range"
 				bind:value={binSizes[column]}
 				data-testid="range-bin-{column}"
+				name={column}
 				min="1"
 				max="1000"
 			/>

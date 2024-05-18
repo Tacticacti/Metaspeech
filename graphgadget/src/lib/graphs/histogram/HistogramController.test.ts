@@ -7,7 +7,7 @@ import {
 	ABSOLUTE_FREQUENCY,
 	RELATIVE_FREQUENCY,
 	SEPARATION_PARAMETERS,
-	// SEPARATION_INTERVAL,
+	SEPARATION_INTERVAL,
 	EMPTY_ENTRY
 } from '$lib/graphs/histogram/HistogramController';
 import DataFrame from 'dataframe-js';
@@ -112,6 +112,26 @@ describe('sort parallel arrays tests', () => {
 			`C${SEPARATION_PARAMETERS}2`
 		]);
 		expect(valuesSorted).toStrictEqual([30, 20, 40, 10]);
+	});
+
+	it('test sort parallel arrays with binning intervals', () => {
+		const labels: string[] = [
+			`B${SEPARATION_PARAMETERS}[3${SEPARATION_INTERVAL}5]${SEPARATION_PARAMETERS}1`,
+			`B${SEPARATION_PARAMETERS}[2${SEPARATION_INTERVAL}4]${SEPARATION_PARAMETERS}2`,
+			`C${SEPARATION_PARAMETERS}[1${SEPARATION_INTERVAL}2]${SEPARATION_PARAMETERS}2`,
+			`C${SEPARATION_PARAMETERS}[1${SEPARATION_INTERVAL}2]${SEPARATION_PARAMETERS}1`
+		];
+		const values: number[] = [30, 20, 10, 40];
+
+		const [labelsSorted, valuesSorted] = sortParallelArrays(labels, values);
+
+		expect(labelsSorted).toStrictEqual([
+			`B${SEPARATION_PARAMETERS}[2${SEPARATION_INTERVAL}4]${SEPARATION_PARAMETERS}2`,
+			`B${SEPARATION_PARAMETERS}[3${SEPARATION_INTERVAL}5]${SEPARATION_PARAMETERS}1`,
+			`C${SEPARATION_PARAMETERS}[1${SEPARATION_INTERVAL}2]${SEPARATION_PARAMETERS}1`,
+			`C${SEPARATION_PARAMETERS}[1${SEPARATION_INTERVAL}2]${SEPARATION_PARAMETERS}2`
+		]);
+		expect(valuesSorted).toStrictEqual([20, 30, 40, 10]);
 	});
 });
 
@@ -236,7 +256,7 @@ describe('test calculate axis', () => {
 		const dataRows = df.toCollection(true);
 		const selectedParams = ['gender', 'cef'];
 		const checkedMean = false;
-		const yAxisParam = 'Absolute Frequency';
+		const yAxisParam = ABSOLUTE_FREQUENCY;
 		const binSizes: BinDictionary = {};
 
 		let [labels, values] = calculateAxis(
@@ -257,5 +277,62 @@ describe('test calculate axis', () => {
 			`M${SEPARATION_PARAMETERS}B1`
 		]);
 		expect(values).toStrictEqual([1, 2, 1, 1, 1]);
+	});
+
+	it('test calculateAxis function frequency with binning intervals', () => {
+		const dataRows = df.toCollection(true);
+		const selectedParams = ['gender', 'age'];
+		const checkedMean = false;
+		const yAxisParam = 'Absolute Frequency';
+		const binSizes: BinDictionary = {
+			age: 10
+			//[0, 9], [10, 19] etc.
+			//gender: ['M', 'F', 'M', 'M', 'F', 'F'],
+			//age: [33, 43, 14, 19, undefined, 87],
+			//so [10, 19] has 2, [30, 39] has 1, [40, 49] has 1,
+			//<empty> has 1, [80,89] has one
+		};
+
+		let [labels, values] = calculateAxis(
+			dataRows,
+			selectedParams,
+			checkedMean,
+			yAxisParam,
+			binSizes
+		);
+		[labels, values] = sortParallelArrays(labels, values);
+
+		expect(labels).toStrictEqual([
+			`F${SEPARATION_PARAMETERS}[40${SEPARATION_INTERVAL}49]`,
+			`F${SEPARATION_PARAMETERS}[80${SEPARATION_INTERVAL}89]`,
+			`F${SEPARATION_PARAMETERS}${EMPTY_ENTRY}`,
+			`M${SEPARATION_PARAMETERS}[10${SEPARATION_INTERVAL}19]`,
+			`M${SEPARATION_PARAMETERS}[30${SEPARATION_INTERVAL}39]`
+		]);
+		expect(values).toStrictEqual([1, 1, 1, 2, 1]);
+	});
+
+	it('test calculateAxis function with incorrect binning', () => {
+		const dataRows = df.toCollection(true);
+		const selectedParams = ['gender'];
+		const checkedMean = true;
+		const yAxisParam = 'age';
+		const binSizes: BinDictionary = {
+			gender: 10
+			// this should be ignored by the label
+		};
+
+		let [labels, values] = calculateAxis(
+			dataRows,
+			selectedParams,
+			checkedMean,
+			yAxisParam,
+			binSizes
+		);
+		[labels, values] = sortParallelArrays(labels, values);
+
+		expect(labels).toStrictEqual(['F', 'M']);
+		expect(values).toStrictEqual([65, 22]);
+		``;
 	});
 });
