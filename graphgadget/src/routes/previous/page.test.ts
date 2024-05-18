@@ -14,10 +14,20 @@ describe('No mocking has zero files saved', () => {
 		expect(heading).to.exist;
 	});
 
-	it('Expect clear cache button to be available', () => {
+	it('Expect clear data button to be available', () => {
 		const { getByText } = render(sut);
-		const button = getByText('Clear Cache');
+		const button = getByText('Clear Data');
 		expect(button).to.exist;
+	});
+
+	it('If there is nothing in local storage, nothing is shown', () => {
+		render(sut);
+
+		const file = screen.queryByText('X');
+		expect(file).toBeNull();
+
+		const list = screen.queryByRole('list');
+		expect(list).toBeNull();
 	});
 });
 
@@ -26,7 +36,9 @@ describe('Mocking a saved file', () => {
 	vi.mock('$app/navigation');
 
 	beforeEach(async () => {
-		const { getByTestId } = render(helperSut);
+		const { getByTestId, getByLabelText } = render(helperSut);
+		const checkbox = getByLabelText('Store data in client side?');
+		await fireEvent.click(checkbox);
 		const input = getByTestId('file-input');
 		await fireEvent.input(input);
 	});
@@ -61,7 +73,9 @@ describe('Deleting datasets', () => {
 	vi.mock('$app/navigation');
 
 	beforeEach(async () => {
-		const { getByTestId } = render(helperSut);
+		const { getByTestId, getByLabelText } = render(helperSut);
+		const checkbox = getByLabelText('Store data in client side?');
+		await fireEvent.click(checkbox);
 		const input = getByTestId('file-input');
 		await fireEvent.input(input);
 	});
@@ -77,9 +91,9 @@ describe('Deleting datasets', () => {
 		expect(firstFile).toBeNull();
 	});
 
-	it('Clearing cache should delete all entries', async () => {
+	it('Clearing data should delete all entries', async () => {
 		const { getByText } = render(sut);
-		const clearCache = getByText('Clear Cache');
+		const clearCache = getByText('Clear Data');
 
 		await fireEvent.click(clearCache);
 
@@ -88,5 +102,28 @@ describe('Deleting datasets', () => {
 
 		const secondFile = screen.queryByText('testfile');
 		expect(secondFile).toBeNull();
+	});
+
+	it('If client deletes file from storage and click it, load nothing', async () => {
+		const { getByText } = render(sut);
+		localStorage.removeItem('pretestfile');
+
+		const firstFile = getByText('pretestfile');
+		await fireEvent.click(firstFile);
+
+		const firstFileNowRemoved = screen.queryByText('pretestfile');
+		expect(firstFileNowRemoved).toBeNull();
+	});
+
+	it('If client deletes file from storage and click it and also deletes it from list of stored, load nothing', async () => {
+		const { getByText } = render(sut);
+		localStorage.removeItem('pretestfile');
+		localStorage.removeItem('datasets');
+
+		const firstFile = getByText('pretestfile');
+		await fireEvent.click(firstFile);
+
+		const firstFileNowRemoved = screen.queryByText('pretestfile');
+		expect(firstFileNowRemoved).toBeNull();
 	});
 });
