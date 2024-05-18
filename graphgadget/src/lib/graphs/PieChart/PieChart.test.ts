@@ -3,6 +3,7 @@ import PieChart from './PieChart.svelte';
 import { describe, it, expect } from 'vitest';
 import { data } from '$lib/Store';
 import { DataFrame } from 'dataframe-js';
+import userEvent from '@testing-library/user-event';
 
 // Mock the data store with a sample DataFrame
 const df = new DataFrame(
@@ -14,23 +15,18 @@ const df = new DataFrame(
 );
 
 describe('PieChart Component', () => {
-	it('should render the component', () => {
-		const { container } = render(PieChart);
-		expect(container).toBeTruthy();
-	});
+	let page: RenderResult;
 
-	it('should have a select element with column names', () => {
+	beforeEach(async () => {
 		data.set(df);
-		const { getByTestId } = render(PieChart);
-		const selectElement = getByTestId('first-select');
-		expect(selectElement).toBeInTheDocument();
-		expect(selectElement.childElementCount).toBe(df.listColumns().length);
+		page = render(PieChart);
+		const user = userEvent.setup();
+		await user.click(page.getByTestId('check-column1'));
+		await user.click(page.getByTestId('check-column2'));
 	});
 
-	it('should pre-select the first column', () => {
-		const { getByTestId } = render(PieChart);
-		const selectElement = getByTestId('first-select') as HTMLSelectElement;
-		expect(selectElement.value).toBe('column1');
+	it('should render the component', () => {
+		expect(page.container).toBeTruthy();
 	});
 });
 

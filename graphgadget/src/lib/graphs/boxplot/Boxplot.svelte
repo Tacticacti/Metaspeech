@@ -70,6 +70,7 @@
 	onDestroy(() => {
 		if (chart) chart.destroy();
 	});
+
 	export function getColumnData(column_names: string[]) {
 		let ret: string[][] = [];
 		for (let i = 0; i < column_names.length; i++) {

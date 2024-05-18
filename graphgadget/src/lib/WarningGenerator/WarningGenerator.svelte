@@ -20,7 +20,7 @@
 
 {#if needNumbers}
 	{#each nonNumericColumns as column}
-		<div>Warning: column {column} is not a number!</div>
+		<div data-testid="warning-{column}">Warning: column {column} is not a number!</div>
 	{/each}
 {/if}
 {#if columnsAreLimited && $selectedColumns.length > maxColumns}

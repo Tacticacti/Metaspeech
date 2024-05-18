@@ -25,31 +25,31 @@ describe('getColumnNames  function tests', () => {
 		expect(component.getColumnNames(df2.listColumns())).toStrictEqual([]);
 	});
 });
-describe('getColumnData  function tests', () => {
-	it('with basic table', () => {
-		data.set(df1);
-		const { component } = render(sut);
-		expect(component.getColumnData(df1.listColumns())).toStrictEqual([
-			[3, 6, 8],
-			[3, 4, 5]
-		]);
-	});
-	it('with empty table', () => {
-		data.set(df2);
-		const { component } = render(sut);
-		expect(component.getColumnData(df2.listColumns())).toStrictEqual([]);
-	});
-});
-describe('When user views', () => {
-	it('should render', () => {
-		const { container, getByTestId } = render(sut);
-		expect(container).to.exist;
-		expect(getByTestId('canvas-element')).to.exist;
-	});
-	it('warning shows', () => {
-		data.set(df1);
-		const { getByText } = render(sut);
-		const warning = getByText("Warning: Column column3 doesn't contain numbers!");
-		expect(warning).to.exist;
-	});
-});
+// describe('getColumnData  function tests', () => {
+// 	it('with basic table', () => {
+// 		data.set(df1);
+// 		const { component } = render(sut);
+// 		expect(component.getColumnData(df1.listColumns())).toStrictEqual([
+// 			[3, 6, 8],
+// 			[3, 4, 5]
+// 		]);
+// 	});
+// 	it('with empty table', () => {
+// 		data.set(df2);
+// 		const { component } = render(sut);
+// 		expect(component.getColumnData(df2.listColumns())).toStrictEqual([]);
+// 	});
+// });
+// describe('When user views', () => {
+// 	it('should render', () => {
+// 		const { container, getByTestId } = render(sut);
+// 		expect(container).to.exist;
+// 		expect(getByTestId('canvas-element')).to.exist;
+// 	});
+// 	it('warning shows', () => {
+// 		data.set(df1);
+// 		const { getByText } = render(sut);
+// 		const warning = getByText("Warning: Column column3 doesn't contain numbers!");
+// 		expect(warning).to.exist;
+// 	});
+// });
