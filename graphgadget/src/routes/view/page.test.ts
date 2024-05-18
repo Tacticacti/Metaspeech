@@ -24,6 +24,11 @@ describe('View', () => {
 		await user.click(stem);
 		expect(get(selected_graph)).toBe(Stem);
 	});
+	it('session storage cleared should still render', () => {
+		sessionStorage.clear();
+		const { container } = render(sut);
+		expect(container).to.exist;
+	});
 	// it('should have a select component', async () => {
 	// 	const { getByRole } = render(sut);
 	// 	const select = getByRole('combobox');
