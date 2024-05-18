@@ -10,10 +10,6 @@
 
 	let nonNumericColumns = getNonNumericalColumns($selectedColumns, $data);
 	afterUpdate(() => {
-		console.log(
-			'needNumbers: ' + needNumbers + ', limited: ' + columnsAreLimited + ', max: ' + maxColumns
-		);
-
 		nonNumericColumns = getNonNumericalColumns($selectedColumns, $data);
 	});
 </script>
