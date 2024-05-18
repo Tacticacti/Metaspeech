@@ -19,6 +19,16 @@ describe('No mocking has zero files saved', () => {
 		const button = getByText('Clear Data');
 		expect(button).to.exist;
 	});
+
+	it('If there is nothing in local storage, nothing is shown', () => {
+		render(sut);
+
+		const file = screen.queryByText('X');
+		expect(file).toBeNull();
+
+		const list = screen.queryByRole('list');
+		expect(list).toBeNull();
+	});
 });
 
 describe('Mocking a saved file', () => {

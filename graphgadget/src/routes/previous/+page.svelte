@@ -40,8 +40,9 @@
 		parsed = JSON.parse(parsed);
 
 		const df = new DataFrame(parsed);
-
 		data.set(df);
+		sessionStorage.setItem('current-df', JSON.stringify($data));
+
 		goto('/modify');
 	}
 
