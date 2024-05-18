@@ -2,6 +2,7 @@ import { it, expect, vi } from 'vitest';
 import DataFrame from 'dataframe-js';
 import { Parse, GetFileExtension } from './FileParser';
 import { ParseXls } from './XlsParser';
+import { UnsupportedFileError } from '../../../CustomErrors';
 
 // Function to create and write data to a TSV file
 function createTSVFile(data: string[][]) {
@@ -141,9 +142,13 @@ describe('Tests for Parse', () => {
 		const result = Parse(file);
 
 		expect(result).toBeInstanceOf(Promise);
-		result.catch((r) => {
-			expect(r).toBe('Unsupported file type found. Type found: image/png');
-		});
+
+		try {
+			await result;
+		} catch (error) {
+			expect(error).toBeInstanceOf(UnsupportedFileError);
+			expect(error.message).toBe('Unsupported file type found. Type found: image/png');
+		}
 	});
 
 	it('pass invalid name', async () => {
@@ -152,9 +157,12 @@ describe('Tests for Parse', () => {
 		const result = Parse(file);
 
 		expect(result).toBeInstanceOf(Promise);
-		result.catch((r) => {
-			expect(r).toBe('Unsupported file type found. Type found: nothing');
-		});
+		try {
+			await result;
+		} catch (error) {
+			expect(error).toBeInstanceOf(UnsupportedFileError);
+			expect(error.message).toBe('Unsupported file type found. Type found: nothing');
+		}
 	});
 
 	it('pass no file', async () => {
