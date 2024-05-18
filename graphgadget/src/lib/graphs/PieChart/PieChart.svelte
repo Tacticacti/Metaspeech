@@ -5,14 +5,14 @@
 	import { Chart, type ChartConfiguration } from 'chart.js/auto';
 	import { setColor } from '$lib/utils/CanvasUtils';
 	import { afterUpdate, onMount } from 'svelte';
+	import { selectedColumns } from '$lib/ColumnSelector/Store';
+	import ColumnSelector from '$lib/ColumnSelector/ColumnSelector.svelte';
+	import WarningGenerator from '$lib/WarningGenerator/WarningGenerator.svelte';
 
 	let canvas: HTMLCanvasElement;
 	let chart: Chart;
 
-	const column_names = $data.listColumns();
-
 	// Pre-select the first column
-	let x_axis = column_names[0];
 
 	export function calculateAxis(x_axis: string) {
 		try {
@@ -64,11 +64,11 @@
 
 	// Update chart data
 	afterUpdate(() => {
-		const [labels, counts] = calculateAxis(x_axis);
+		const [labels, counts] = calculateAxis($selectedColumns[0]);
 		chart.data.labels = labels;
 		chart.data.datasets = [
 			{
-				label: x_axis,
+				label: $selectedColumns[0],
 				data: counts as number[],
 				backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'],
 				hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40']
@@ -79,11 +79,8 @@
 	});
 </script>
 
-<select data-testid="first-select" bind:value={x_axis}>
-	{#each column_names as column}
-		<option value={column}>{column}</option>
-	{/each}
-</select>
+<ColumnSelector></ColumnSelector>
+<WarningGenerator needNumbers={true} columnsAreLimited={true} maxColumns={1}></WarningGenerator>
 
 <div>
 	<canvas data-testid="canvas-element" bind:this={canvas} />

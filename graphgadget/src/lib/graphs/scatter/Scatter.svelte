@@ -6,14 +6,15 @@
 	import PngButton from '$lib/shared-components/PNGButton.svelte';
 	import JpgButton from '$lib/shared-components/JPGButton.svelte';
 	import { isNumber } from 'chart.js/helpers';
+	import ColumnSelector from '$lib/ColumnSelector/ColumnSelector.svelte';
+	import WarningGenerator from '$lib/WarningGenerator/WarningGenerator.svelte';
+	import { selectedColumns } from '$lib/ColumnSelector/Store';
 
 	let canvas: HTMLCanvasElement;
 	let chart: Chart;
 
-	const column_names = $data.listColumns();
-
-	let x_axis = column_names[0];
-	let y_axis = column_names[1];
+	let x_axis = $selectedColumns[0];
+	let y_axis = $selectedColumns[1];
 
 	// first element is warning for x_axis, second element is warning for y_axis
 	let warnings: string[] = ['', ''];
@@ -83,19 +84,21 @@
 	});
 </script>
 
-<select data-testid="first-select" bind:value={x_axis}>
-	{#each column_names as column}
-		<option value={column}>{column}</option>
-	{/each}
-</select>
-<select data-testid="second-select" bind:value={y_axis}>
-	{#each column_names as column}
-		<option value={column}>{column}</option>
-	{/each}
-</select>
+<ColumnSelector></ColumnSelector>
+<WarningGenerator needNumbers={true} columnsAreLimited={false} maxColumns={100}></WarningGenerator>
 
-<div data-testid="x-axis-warning">{warnings[0]}</div>
-<div data-testid="y-axis-warning">{warnings[1]}</div>
+<div>
+	<select data-testid="first-select" bind:value={x_axis}>
+		{#each $selectedColumns as column}
+			<option value={column}>{column}</option>
+		{/each}
+	</select>
+	<select data-testid="second-select" bind:value={y_axis}>
+		{#each $selectedColumns as column}
+			<option value={column}>{column}</option>
+		{/each}
+	</select>
+</div>
 
 <div>
 	<canvas data-testid="canvas-element" bind:this={canvas} />
