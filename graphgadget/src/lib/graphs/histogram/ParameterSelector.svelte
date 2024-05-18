@@ -6,15 +6,15 @@
 	} from '$lib/graphs/histogram/HistogramController';
 
 	export let columnNames: string[];
-	export let numericColumnNames: string[];
+	export let numericColumns: [string, number][];
 
 	export let selectedParams: string[] = [];
 	export let parameterType: string = ABSOLUTE_FREQUENCY;
 	export let checkedMean: boolean = false;
 	export let binSizes: BinDictionary = {};
 
-	for (const column of numericColumnNames) {
-		binSizes[column] = 1;
+	for (const column of numericColumns) {
+		binSizes[column[0]] = 1;
 	}
 </script>
 
@@ -32,26 +32,26 @@
 	</label>
 {/each}
 
-{#each numericColumnNames as column}
-	{#if selectedParams.includes(column)}
+{#each numericColumns as column}
+	{#if selectedParams.includes(column[0])}
 		<br />
 		<label>
-			{column} Bin Size:
+			{column[0]} Bin Size:
 			<input
 				type="number"
-				bind:value={binSizes[column]}
-				data-testid="number-bin-{column}"
-				name={column}
+				bind:value={binSizes[column[0]]}
+				data-testid="number-bin-{column[0]}"
+				name={column[0]}
 				min="1"
-				max="1000"
+				max={Math.abs(column[1]) + 1}
 			/>
 			<input
 				type="range"
-				bind:value={binSizes[column]}
-				data-testid="range-bin-{column}"
-				name={column}
+				bind:value={binSizes[column[0]]}
+				data-testid="range-bin-{column[0]}"
+				name={column[0]}
 				min="1"
-				max="1000"
+				max={Math.abs(column[1]) + 1}
 			/>
 		</label>
 	{/if}
@@ -62,8 +62,8 @@
 <select data-testid="select-y-axis-parameter" bind:value={parameterType}>
 	<option value={ABSOLUTE_FREQUENCY}>{ABSOLUTE_FREQUENCY}</option>
 	<option value={RELATIVE_FREQUENCY}>{RELATIVE_FREQUENCY}</option>
-	{#each numericColumnNames as column}
-		<option value={column}>{column}</option>
+	{#each numericColumns as column}
+		<option value={column[0]}>{column[0]}</option>
 	{/each}
 </select>
 

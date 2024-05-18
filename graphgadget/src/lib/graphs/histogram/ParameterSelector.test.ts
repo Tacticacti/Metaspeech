@@ -2,16 +2,20 @@ import { it, expect } from 'vitest';
 import { render } from '@testing-library/svelte';
 import sut from '$lib/graphs/histogram/ParameterSelector.svelte';
 import userEvent from '@testing-library/user-event';
-import { ABSOLUTE_FREQUENCY } from '$lib/graphs/histogram/HistogramController';
+import { ABSOLUTE_FREQUENCY, RELATIVE_FREQUENCY } from '$lib/graphs/histogram/HistogramController';
 
 const columnNames = ['id', 'age', 'gender', 'cef', 'duration'];
-const numericColumnNames = ['id', 'age', 'duration'];
+const numericColumns: [string, number][] = [
+	['id', 6],
+	['age', 87],
+	['duration', -200]
+];
 
 it('1 selects exists, with options', () => {
 	const { container } = render(sut, {
 		props: {
 			columnNames: columnNames,
-			numericColumnNames: numericColumnNames,
+			numericColumns: numericColumns,
 			selectedParams: [],
 			parameterType: ABSOLUTE_FREQUENCY,
 			checkedMean: false
@@ -29,14 +33,18 @@ it('1 selects exists, with options', () => {
 	}
 
 	// For each numeric column + Abs Freq + Rel Freq
-	expect(optionNames).toEqual([ABSOLUTE_FREQUENCY, 'Relative Frequency', ...numericColumnNames]);
+	expect(optionNames).toEqual([
+		ABSOLUTE_FREQUENCY,
+		RELATIVE_FREQUENCY,
+		...numericColumns.map((c) => c[0])
+	]);
 });
 
 it('1 checkbox for each column', () => {
 	const { container } = render(sut, {
 		props: {
 			columnNames: columnNames,
-			numericColumnNames: numericColumnNames,
+			numericColumns: numericColumns,
 			selectedParams: [],
 			parameterType: ABSOLUTE_FREQUENCY,
 			checkedMean: false
@@ -59,7 +67,7 @@ it('Mean checkbox shows when something other than frequency selected', async () 
 	const { container, getByTestId } = render(sut, {
 		props: {
 			columnNames: columnNames,
-			numericColumnNames: numericColumnNames,
+			numericColumns: numericColumns,
 			selectedParams: [],
 			parameterType: ABSOLUTE_FREQUENCY,
 			checkedMean: false
@@ -83,7 +91,7 @@ it('Mean checkbox reamains hidden when frequency selected', async () => {
 	const { container, getByTestId } = render(sut, {
 		props: {
 			columnNames: columnNames,
-			numericColumnNames: numericColumnNames,
+			numericColumns: numericColumns,
 			selectedParams: [],
 			parameterType: ABSOLUTE_FREQUENCY,
 			checkedMean: false
@@ -96,7 +104,7 @@ it('Mean checkbox reamains hidden when frequency selected', async () => {
 	let checkElements = container.querySelectorAll('input');
 	expect(checkElements.length).toEqual(columnNames.length);
 
-	await user.selectOptions(select, ['Relative Frequency']);
+	await user.selectOptions(select, [RELATIVE_FREQUENCY]);
 	checkElements = container.querySelectorAll('input');
 	expect(checkElements.length).toEqual(columnNames.length);
 });
@@ -106,7 +114,7 @@ it('Mean checkbox shows when something other than frequency selected', async () 
 	const { container, getByTestId } = render(sut, {
 		props: {
 			columnNames: columnNames,
-			numericColumnNames: numericColumnNames,
+			numericColumns: numericColumns,
 			selectedParams: [],
 			parameterType: ABSOLUTE_FREQUENCY,
 			checkedMean: false
@@ -127,7 +135,7 @@ it('numeric column is appears twice', () => {
 	const { getAllByText } = render(sut, {
 		props: {
 			columnNames: columnNames,
-			numericColumnNames: numericColumnNames,
+			numericColumns: numericColumns,
 			selectedParams: [],
 			parameterType: ABSOLUTE_FREQUENCY,
 			checkedMean: false
@@ -141,7 +149,7 @@ it('string column appears once', () => {
 	const { getAllByText } = render(sut, {
 		props: {
 			columnNames: columnNames,
-			numericColumnNames: numericColumnNames,
+			numericColumns: numericColumns,
 			selectedParams: [],
 			parameterType: ABSOLUTE_FREQUENCY,
 			checkedMean: false
@@ -156,7 +164,7 @@ it('clicking on option changes value of select', async () => {
 	const { getByTestId } = render(sut, {
 		props: {
 			columnNames: columnNames,
-			numericColumnNames: numericColumnNames,
+			numericColumns: numericColumns,
 			selectedParams: [],
 			parameterType: ABSOLUTE_FREQUENCY,
 			checkedMean: false
@@ -174,7 +182,7 @@ it('should update selectedParams when the checkboxes change', async () => {
 	const { getByTestId } = render(sut, {
 		props: {
 			columnNames: columnNames,
-			numericColumnNames: numericColumnNames,
+			numericColumns: numericColumns,
 			selectedParams: selectedParams,
 			parameterType: ABSOLUTE_FREQUENCY,
 			checkedMean: false
@@ -197,7 +205,7 @@ it('1 number and 1 range for each selected numeric column', () => {
 	const { container } = render(sut, {
 		props: {
 			columnNames: columnNames,
-			numericColumnNames: numericColumnNames,
+			numericColumns: numericColumns,
 			selectedParams: ['gender', 'age', 'duration'],
 			parameterType: ABSOLUTE_FREQUENCY,
 			checkedMean: false
@@ -205,22 +213,29 @@ it('1 number and 1 range for each selected numeric column', () => {
 	});
 
 	const selectedNumericColumns: string[] = ['age', 'duration'];
+	const maxs = [88, 201];
 	const inputElements = container.querySelectorAll('input');
 
 	const numberNames: string[] = [];
 	const rangeNames: string[] = [];
+	const numberMaxs: number[] = [];
+	const rangeMaxs: number[] = [];
 
 	for (const input of inputElements) {
 		switch (input.type) {
 			case 'number':
 				numberNames.push(input.name);
+				numberMaxs.push(+input.max);
 				break;
 			case 'range':
 				rangeNames.push(input.name);
+				rangeMaxs.push(+input.max);
 				break;
 		}
 	}
 
 	expect(numberNames).toEqual(selectedNumericColumns);
 	expect(rangeNames).toEqual(selectedNumericColumns);
+	expect(numberMaxs).toEqual(maxs);
+	expect(rangeMaxs).toEqual(maxs);
 });

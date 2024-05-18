@@ -21,7 +21,7 @@
 	// TODO: find a better way to get the type,
 	// currently only looks at first row.
 	// Remember there can be undefined elements if not cleared
-	const numericColumnNames = getNumericalColumns(columnNames, $data.getRow(0));
+	const numericColumns = getNumericalColumns(columnNames, $data.toCollection(true));
 
 	let selectedParams: string[];
 	let checkedMean: boolean;
@@ -88,7 +88,7 @@
 
 <ParameterSelector
 	{columnNames}
-	{numericColumnNames}
+	{numericColumns}
 	bind:selectedParams
 	bind:checkedMean
 	bind:parameterType

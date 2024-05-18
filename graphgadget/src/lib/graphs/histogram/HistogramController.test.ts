@@ -138,9 +138,13 @@ describe('sort parallel arrays tests', () => {
 describe('test numerical columns', () => {
 	it('test columnInfo simple', () => {
 		const columnNames = df.listColumns();
-		const numericCols = getNumericalColumns(columnNames, df.getRow(0));
+		const numericCols = getNumericalColumns(columnNames, df.toCollection(true));
 
-		expect(numericCols).toStrictEqual(['id', 'age', 'duration']);
+		expect(numericCols).toStrictEqual([
+			['id', 6],
+			['age', 87],
+			['duration', 200]
+		]);
 	});
 });
 
