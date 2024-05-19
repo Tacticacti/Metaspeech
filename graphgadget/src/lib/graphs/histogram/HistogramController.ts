@@ -1,22 +1,115 @@
 import { Row } from 'dataframe-js';
 
+export type BinDictionary = Record<string, number>;
+
 export const ABSOLUTE_FREQUENCY: string = 'Absolute Frequency';
 export const RELATIVE_FREQUENCY: string = 'Relative Frequency';
+export const SEPARATION_PARAMETERS: string = '; ';
+export const SEPARATION_INTERVAL: string = ', ';
+export const EMPTY_ENTRY: string = '<empty>';
 
-export function getNumericalColumns(columnNames: string[], row: Row): string[] {
-	const columnTypes = new Map<string, string>(
-		columnNames.map((name) => [name, typeof row.get(name)])
-	);
-	const numericColumnNames = columnNames.filter((name) => columnTypes.get(name) === 'number');
+function getParamLabel(paramName: string, row: Row, binSizes: BinDictionary): string {
+	const paramValue = row.get(paramName);
 
-	return numericColumnNames;
+	if (paramValue === undefined) {
+		return EMPTY_ENTRY;
+	}
+
+	const binSize = binSizes[paramName] ?? 1;
+
+	if (binSize === 1) {
+		return paramValue;
+	}
+
+	const paramNumberValue = +paramValue;
+
+	if (isNaN(paramNumberValue)) {
+		return paramValue;
+	}
+
+	const rangeGroup = Math.floor(paramNumberValue / binSize);
+	const lowerBound = rangeGroup * binSize;
+	const upperBound = (rangeGroup + 1) * binSize - 1;
+
+	return `[${lowerBound}${SEPARATION_INTERVAL}${upperBound}]`;
+}
+
+function compareElementsOfCombinedArray(a: [string, number], b: [string, number]): number {
+	const paramsA = a[0].split(SEPARATION_PARAMETERS);
+	const paramsB = b[0].split(SEPARATION_PARAMETERS);
+	let comparison = 0;
+
+	// Loop will finish when it has read all parameters
+	// or when comparison is not zero (so one of them precedes the other)
+	for (let idx = 0; comparison == 0 && idx < paramsA.length; ++idx) {
+		const [labelA, labelB] = [paramsA[idx], paramsB[idx]];
+
+		if (!isNaN(+labelA) && !isNaN(+labelB)) {
+			// It is a numeric field
+			comparison = +labelA - +labelB;
+			continue;
+		}
+
+		if (labelA.startsWith('[') && labelB.startsWith('[')) {
+			// It is a bin interval in the format "[lower, upper]"
+
+			const lowerA = labelA.substring(1, labelA.indexOf(SEPARATION_INTERVAL));
+			const lowerB = labelB.substring(1, labelB.indexOf(SEPARATION_INTERVAL));
+
+			// It is enough to compare lower because if they are equal,
+			// this implies upper is equal as well (range is the same)
+			comparison = +lowerA - +lowerB;
+			continue;
+		}
+
+		// It is a string field
+		comparison = labelA.localeCompare(labelB);
+	}
+
+	// If all equal, 0
+	return comparison;
+}
+
+// returns array with numerical column names and their maximum value (for binning purposes)
+export function getNumericalColumns(columnNames: string[], rows: Row[]): [string, number][] {
+	const numericNamesAndMaxs: [string, number][] = [];
+
+	for (const column of columnNames) {
+		let maxValue = Number.MIN_VALUE;
+		let isNumeric: boolean = true;
+
+		for (const row of rows) {
+			const value = row.get(column);
+			if (value === undefined) {
+				continue;
+			}
+			const numericValue = +value;
+
+			if (isNaN(numericValue)) {
+				// if there is any string, column is not numeric
+				isNumeric = false;
+				break;
+			}
+
+			if (numericValue > maxValue) {
+				maxValue = numericValue;
+			}
+		}
+
+		if (isNumeric) {
+			numericNamesAndMaxs.push([column, maxValue]);
+		}
+	}
+
+	return numericNamesAndMaxs;
 }
 
 export function calculateAxis(
 	dataRows: Row[],
 	selectedParams: string[],
 	checkedMean: boolean,
-	yAxisParam: string
+	yAxisParam: string,
+	binSizes: BinDictionary
 ): [string[], number[]] {
 	const mapFrequencies = new Map<string, number>();
 	const mapValues = new Map<string, number>();
@@ -26,8 +119,8 @@ export function calculateAxis(
 		// Aggregate all selected columns of that row in a comma-separated string
 		// Used as key for the maps, basically represents a bar in the chart
 		const xValues: string = selectedParams
-			.map((paramName) => row.get(paramName) ?? '<empty>')
-			.join(', ');
+			.map((paramName) => getParamLabel(paramName, row, binSizes))
+			.join(SEPARATION_PARAMETERS);
 
 		// Get the current frequency in the map with that string as key
 		const currentFrequency: number | undefined = mapFrequencies.get(xValues);
@@ -36,9 +129,9 @@ export function calculateAxis(
 
 		if (yAxisParam != ABSOLUTE_FREQUENCY && yAxisParam != RELATIVE_FREQUENCY) {
 			// Need to increment value of the selected y-axis parameter
-			const valueIncrement = row.get(yAxisParam);
+			const valueIncrement: number = +row.get(yAxisParam);
 
-			if (valueIncrement === undefined) {
+			if (!valueIncrement) {
 				// Skip this value entirely from the calculation
 				// So decrement its frequency (which cannot be null, or undefined)
 				mapFrequencies.set(xValues, mapFrequencies.get(xValues)! - 1);
@@ -83,32 +176,7 @@ export function sortParallelArrays(labels: string[], values: number[]): [string[
 		combinedArray.push([labels[idx], values[idx]]);
 	}
 
-	combinedArray.sort((a, b) => {
-		const paramsA = a[0].split(', ');
-		const paramsB = b[0].split(', ');
-
-		for (let idx = 0; idx < paramsA.length; ++idx) {
-			let comparison = 0;
-
-			const [labelA, labelB] = [paramsA[idx], paramsB[idx]];
-
-			if (!isNaN(+labelA) && !isNaN(+labelB)) {
-				// Numeric field
-				comparison = +labelA - +labelB;
-			} else {
-				// String field
-				comparison = labelA.localeCompare(labelB);
-			}
-
-			if (comparison != 0) {
-				// If not equal, return number
-				return comparison;
-			}
-		}
-
-		// If all equal, they are equal
-		return 0;
-	});
+	combinedArray.sort(compareElementsOfCombinedArray);
 
 	const newLabels: string[] = [];
 	const newValues: number[] = [];

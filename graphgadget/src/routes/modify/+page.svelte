@@ -6,12 +6,29 @@
 	import { hasMissingValues, rowWiseMerge } from '$lib/utils/DataFrameUtils';
 	import DataFrame from 'dataframe-js';
 	import type { Bundle } from '$lib/types';
+	import { onMount } from 'svelte';
+	import { loadSession } from '$lib/utils/SessionLoad';
 
 	$: column_names = $data.listColumns() as string[];
 	$: missing_values = hasMissingValues($data);
 	$: columns_with_missing = [...new Set(missing_values.map((v) => v[1]))].map(
 		(v) => column_names[v]
 	);
+
+	let merge_col_1: string;
+	let merge_col_2: string;
+
+	/**
+	 * Will check if there is a dataframe in session storage and load it
+	 */
+	onMount(() => {
+		loadSession();
+	});
+
+	function handleClick() {
+		// set the storage to the updated data
+		sessionStorage.setItem('current-df', JSON.stringify($data));
+	}
 
 	function removeMissingValues() {
 		$data = $data.dropMissingValues(column_names);
@@ -33,9 +50,6 @@
 		}
 		$data = $data.join(renamed, merge_col_1);
 	}
-
-	let merge_col_1: string;
-	let merge_col_2: string;
 </script>
 
 {#if missing_values.length !== 0}
@@ -47,7 +61,7 @@
 	</span>
 {/if}
 
-<a href="/view" data-testid="next-link">Next</a>
+<a href="/view" on:click={handleClick} data-testid="next-link">Next</a>
 
 <Importer on:input={handleInput} />
 
