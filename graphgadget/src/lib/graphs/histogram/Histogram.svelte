@@ -19,9 +19,6 @@
 
 	const columnNames = $data.listColumns() as string[];
 
-	// TODO: find a better way to get the type,
-	// currently only looks at first row.
-	// Remember there can be undefined elements if not cleared
 	const numericColumns = getNumericalColumnsAndMax(columnNames, $data.toCollection(true));
 
 	let checkedMean: boolean;
