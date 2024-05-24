@@ -2,7 +2,13 @@ import { it, expect } from 'vitest';
 import {
 	getNumericalColumns,
 	calculateAxis,
-	sortParallelArrays
+	sortParallelArrays,
+	type BinDictionary,
+	ABSOLUTE_FREQUENCY,
+	RELATIVE_FREQUENCY,
+	SEPARATION_PARAMETERS,
+	SEPARATION_INTERVAL,
+	EMPTY_ENTRY
 } from '$lib/graphs/histogram/HistogramController';
 import DataFrame from 'dataframe-js';
 
@@ -17,155 +23,320 @@ const df = new DataFrame(
 	['id', 'age', 'gender', 'cef', 'duration']
 );
 
-it('test sort parallel arrays empty', () => {
-	const labels: string[] = [];
-	const values: number[] = [];
+describe('sort parallel arrays tests', () => {
+	it('test sort parallel arrays empty', () => {
+		const labels: string[] = [];
+		const values: number[] = [];
 
-	const [labelsSorted, valuesSorted] = sortParallelArrays(labels, values);
+		const [labelsSorted, valuesSorted] = sortParallelArrays(labels, values);
 
-	expect(labelsSorted.length).toBe(0);
-	expect(valuesSorted.length).toBe(0);
+		expect(labelsSorted.length).toBe(0);
+		expect(valuesSorted.length).toBe(0);
+	});
+
+	it('test sort parallel arrays one', () => {
+		const labels: string[] = ['B'];
+		const values: number[] = [30];
+
+		const [labelsSorted, valuesSorted] = sortParallelArrays(labels, values);
+
+		expect(labelsSorted).toStrictEqual(['B']);
+		expect(valuesSorted).toStrictEqual([30]);
+	});
+
+	it('test sort parallel arrays three', () => {
+		const labels: string[] = ['B', 'A', 'C'];
+		const values: number[] = [30, 20, 10];
+
+		const [labelsSorted, valuesSorted] = sortParallelArrays(labels, values);
+
+		expect(labelsSorted).toStrictEqual(['A', 'B', 'C']);
+		expect(valuesSorted).toStrictEqual([20, 30, 10]);
+	});
+
+	it('test sort parallel arrays complex label', () => {
+		const labels: string[] = [
+			`10${SEPARATION_PARAMETERS}A`,
+			`2${SEPARATION_PARAMETERS}B`,
+			`2${SEPARATION_PARAMETERS}C`,
+			`1${SEPARATION_PARAMETERS}C`
+		];
+		const values: number[] = [30, 20, 10, 40];
+
+		const [labelsSorted, valuesSorted] = sortParallelArrays(labels, values);
+
+		expect(labelsSorted).toStrictEqual([
+			`1${SEPARATION_PARAMETERS}C`,
+			`2${SEPARATION_PARAMETERS}B`,
+			`2${SEPARATION_PARAMETERS}C`,
+			`10${SEPARATION_PARAMETERS}A`
+		]);
+		expect(valuesSorted).toStrictEqual([40, 20, 10, 30]);
+	});
+
+	it('test sort parallel arrays complex label reversed', () => {
+		const labels: string[] = [
+			`B${SEPARATION_PARAMETERS}2`,
+			`A${SEPARATION_PARAMETERS}10`,
+			`C${SEPARATION_PARAMETERS}2`,
+			`C${SEPARATION_PARAMETERS}1`
+		];
+		const values: number[] = [30, 20, 10, 40];
+
+		const [labelsSorted, valuesSorted] = sortParallelArrays(labels, values);
+
+		expect(labelsSorted).toStrictEqual([
+			`A${SEPARATION_PARAMETERS}10`,
+			`B${SEPARATION_PARAMETERS}2`,
+			`C${SEPARATION_PARAMETERS}1`,
+			`C${SEPARATION_PARAMETERS}2`
+		]);
+		expect(valuesSorted).toStrictEqual([20, 30, 40, 10]);
+	});
+
+	it('test sort parallel arrays complex label reversed equal elements', () => {
+		const labels: string[] = [
+			`B${SEPARATION_PARAMETERS}2`,
+			`B${SEPARATION_PARAMETERS}2`,
+			`C${SEPARATION_PARAMETERS}2`,
+			`C${SEPARATION_PARAMETERS}1`
+		];
+		const values: number[] = [30, 20, 10, 40];
+
+		const [labelsSorted, valuesSorted] = sortParallelArrays(labels, values);
+
+		expect(labelsSorted).toStrictEqual([
+			`B${SEPARATION_PARAMETERS}2`,
+			`B${SEPARATION_PARAMETERS}2`,
+			`C${SEPARATION_PARAMETERS}1`,
+			`C${SEPARATION_PARAMETERS}2`
+		]);
+		expect(valuesSorted).toStrictEqual([30, 20, 40, 10]);
+	});
+
+	it('test sort parallel arrays with binning intervals', () => {
+		const labels: string[] = [
+			`B${SEPARATION_PARAMETERS}[3${SEPARATION_INTERVAL}5]${SEPARATION_PARAMETERS}1`,
+			`B${SEPARATION_PARAMETERS}[2${SEPARATION_INTERVAL}4]${SEPARATION_PARAMETERS}2`,
+			`C${SEPARATION_PARAMETERS}[1${SEPARATION_INTERVAL}2]${SEPARATION_PARAMETERS}2`,
+			`C${SEPARATION_PARAMETERS}[1${SEPARATION_INTERVAL}2]${SEPARATION_PARAMETERS}1`
+		];
+		const values: number[] = [30, 20, 10, 40];
+
+		const [labelsSorted, valuesSorted] = sortParallelArrays(labels, values);
+
+		expect(labelsSorted).toStrictEqual([
+			`B${SEPARATION_PARAMETERS}[2${SEPARATION_INTERVAL}4]${SEPARATION_PARAMETERS}2`,
+			`B${SEPARATION_PARAMETERS}[3${SEPARATION_INTERVAL}5]${SEPARATION_PARAMETERS}1`,
+			`C${SEPARATION_PARAMETERS}[1${SEPARATION_INTERVAL}2]${SEPARATION_PARAMETERS}1`,
+			`C${SEPARATION_PARAMETERS}[1${SEPARATION_INTERVAL}2]${SEPARATION_PARAMETERS}2`
+		]);
+		expect(valuesSorted).toStrictEqual([20, 30, 40, 10]);
+	});
 });
 
-it('test sort parallel arrays one', () => {
-	const labels: string[] = ['B'];
-	const values: number[] = [30];
+describe('test numerical columns', () => {
+	it('test columnInfo simple', () => {
+		const columnNames = df.listColumns();
+		const numericCols = getNumericalColumns(columnNames, df.toCollection(true));
 
-	const [labelsSorted, valuesSorted] = sortParallelArrays(labels, values);
-
-	expect(labelsSorted).toStrictEqual(['B']);
-	expect(valuesSorted).toStrictEqual([30]);
+		expect(numericCols).toStrictEqual([
+			['id', 6],
+			['age', 87],
+			['duration', 200]
+		]);
+	});
 });
 
-it('test sort parallel arrays three', () => {
-	const labels: string[] = ['B', 'A', 'C'];
-	const values: number[] = [30, 20, 10];
+describe('test calculate axis', () => {
+	it('test calculateAxis function empty', () => {
+		const dataRows = df.toCollection(true);
+		const selectedParams: string[] = [];
+		const checkedMean = false;
+		const yAxisParam = 'Absolute Frequency';
+		const binSizes: BinDictionary = {};
 
-	const [labelsSorted, valuesSorted] = sortParallelArrays(labels, values);
+		let [labels, values] = calculateAxis(
+			dataRows,
+			selectedParams,
+			checkedMean,
+			yAxisParam,
+			binSizes
+		);
 
-	expect(labelsSorted).toStrictEqual(['A', 'B', 'C']);
-	expect(valuesSorted).toStrictEqual([20, 30, 10]);
-});
+		// This function has already been tested:
+		[labels, values] = sortParallelArrays(labels, values);
 
-it('test sort parallel arrays complex label', () => {
-	const labels: string[] = ['10, A', '2, B', '2, C', '1, C'];
-	const values: number[] = [30, 20, 10, 40];
+		// F before M because sorted
+		expect(labels).toStrictEqual(['']);
+		expect(values).toStrictEqual([6]);
+	});
 
-	const [labelsSorted, valuesSorted] = sortParallelArrays(labels, values);
+	it('test calculateAxis function simple', () => {
+		const dataRows = df.toCollection(true);
+		const selectedParams = ['gender'];
+		const checkedMean = false;
+		const yAxisParam = ABSOLUTE_FREQUENCY;
+		const binSizes: BinDictionary = {};
 
-	expect(labelsSorted).toStrictEqual(['1, C', '2, B', '2, C', '10, A']);
-	expect(valuesSorted).toStrictEqual([40, 20, 10, 30]);
-});
+		let [labels, values] = calculateAxis(
+			dataRows,
+			selectedParams,
+			checkedMean,
+			yAxisParam,
+			binSizes
+		);
 
-it('test sort parallel arrays complex label reversed', () => {
-	const labels: string[] = ['B, 2', 'A, 10', 'C, 2', 'C, 1'];
-	const values: number[] = [30, 20, 10, 40];
+		// This function has already been tested:
+		[labels, values] = sortParallelArrays(labels, values);
 
-	const [labelsSorted, valuesSorted] = sortParallelArrays(labels, values);
+		// F before M because sorted
+		expect(labels).toStrictEqual(['F', 'M']);
+		expect(values).toStrictEqual([3, 3]);
+	});
 
-	expect(labelsSorted).toStrictEqual(['A, 10', 'B, 2', 'C, 1', 'C, 2']);
-	expect(valuesSorted).toStrictEqual([20, 30, 40, 10]);
-});
+	it('test calculateAxis function simple relative', () => {
+		const dataRows = df.toCollection(true);
+		const selectedParams = ['gender'];
+		const checkedMean = false;
+		const yAxisParam = RELATIVE_FREQUENCY;
+		const binSizes: BinDictionary = {};
 
-it('test sort parallel arrays complex label reversed equal elements', () => {
-	const labels: string[] = ['B, 2', 'B, 2', 'C, 2', 'C, 1'];
-	const values: number[] = [30, 20, 10, 40];
+		let [labels, values] = calculateAxis(
+			dataRows,
+			selectedParams,
+			checkedMean,
+			yAxisParam,
+			binSizes
+		);
+		[labels, values] = sortParallelArrays(labels, values);
 
-	const [labelsSorted, valuesSorted] = sortParallelArrays(labels, values);
+		expect(labels).toStrictEqual(['F', 'M']);
+		expect(values).toStrictEqual([1 / 2, 1 / 2]);
+	});
 
-	expect(labelsSorted).toStrictEqual(['B, 2', 'B, 2', 'C, 1', 'C, 2']);
-	expect(valuesSorted).toStrictEqual([30, 20, 40, 10]);
-});
+	it('test calculateAxis function total age', () => {
+		const dataRows = df.toCollection(true);
+		const selectedParams = ['gender'];
+		const checkedMean = false;
+		const yAxisParam = 'age';
+		const binSizes: BinDictionary = {};
 
-it('test columnInfo simple', () => {
-	const columnNames = df.listColumns();
-	const numericCols = getNumericalColumns(columnNames, df.getRow(0));
+		let [labels, values] = calculateAxis(
+			dataRows,
+			selectedParams,
+			checkedMean,
+			yAxisParam,
+			binSizes
+		);
+		[labels, values] = sortParallelArrays(labels, values);
 
-	expect(numericCols).toStrictEqual(['id', 'age', 'duration']);
-});
+		expect(labels).toStrictEqual(['F', 'M']);
+		expect(values).toStrictEqual([130, 66]);
+	});
 
-it('test calculateAxis function empty', () => {
-	const dataRows = df.toCollection(true);
-	const selectedParams: string[] = [];
-	const checkedMean = false;
-	const yAxisParam = 'Absolute Frequency';
+	it('test calculateAxis function average age', () => {
+		const dataRows = df.toCollection(true);
+		const selectedParams = ['gender'];
+		const checkedMean = true;
+		const yAxisParam = 'age';
+		const binSizes: BinDictionary = {};
 
-	let [labels, values] = calculateAxis(dataRows, selectedParams, checkedMean, yAxisParam);
+		let [labels, values] = calculateAxis(
+			dataRows,
+			selectedParams,
+			checkedMean,
+			yAxisParam,
+			binSizes
+		);
+		[labels, values] = sortParallelArrays(labels, values);
 
-	// This function has already been tested:
-	[labels, values] = sortParallelArrays(labels, values);
+		expect(labels).toStrictEqual(['F', 'M']);
+		expect(values).toStrictEqual([65, 22]);
+		``;
+	});
 
-	// F before M because sorted
-	expect(labels).toStrictEqual(['']);
-	expect(values).toStrictEqual([6]);
-});
+	it('test calculateAxis function frequency of complex group', () => {
+		const dataRows = df.toCollection(true);
+		const selectedParams = ['gender', 'cef'];
+		const checkedMean = false;
+		const yAxisParam = ABSOLUTE_FREQUENCY;
+		const binSizes: BinDictionary = {};
 
-it('test calculateAxis function simple', () => {
-	const dataRows = df.toCollection(true);
-	const selectedParams = ['gender'];
-	const checkedMean = false;
-	const yAxisParam = 'Absolute Frequency';
+		let [labels, values] = calculateAxis(
+			dataRows,
+			selectedParams,
+			checkedMean,
+			yAxisParam,
+			binSizes
+		);
+		[labels, values] = sortParallelArrays(labels, values);
 
-	let [labels, values] = calculateAxis(dataRows, selectedParams, checkedMean, yAxisParam);
+		// Doesn't return columns with empty count
+		expect(labels).toStrictEqual([
+			`F${SEPARATION_PARAMETERS}${EMPTY_ENTRY}`,
+			`F${SEPARATION_PARAMETERS}B2`,
+			`M${SEPARATION_PARAMETERS}A1`,
+			`M${SEPARATION_PARAMETERS}A2`,
+			`M${SEPARATION_PARAMETERS}B1`
+		]);
+		expect(values).toStrictEqual([1, 2, 1, 1, 1]);
+	});
 
-	// This function has already been tested:
-	[labels, values] = sortParallelArrays(labels, values);
+	it('test calculateAxis function frequency with binning intervals', () => {
+		const dataRows = df.toCollection(true);
+		const selectedParams = ['gender', 'age'];
+		const checkedMean = false;
+		const yAxisParam = 'Absolute Frequency';
+		const binSizes: BinDictionary = {
+			age: 10
+			//[0, 9], [10, 19] etc.
+			//gender: ['M', 'F', 'M', 'M', 'F', 'F'],
+			//age: [33, 43, 14, 19, undefined, 87],
+			//so [10, 19] has 2, [30, 39] has 1, [40, 49] has 1,
+			//<empty> has 1, [80,89] has one
+		};
 
-	// F before M because sorted
-	expect(labels).toStrictEqual(['F', 'M']);
-	expect(values).toStrictEqual([3, 3]);
-});
+		let [labels, values] = calculateAxis(
+			dataRows,
+			selectedParams,
+			checkedMean,
+			yAxisParam,
+			binSizes
+		);
+		[labels, values] = sortParallelArrays(labels, values);
 
-it('test calculateAxis function simple relative', () => {
-	const dataRows = df.toCollection(true);
-	const selectedParams = ['gender'];
-	const checkedMean = false;
-	const yAxisParam = 'Relative Frequency';
+		expect(labels).toStrictEqual([
+			`F${SEPARATION_PARAMETERS}[40${SEPARATION_INTERVAL}49]`,
+			`F${SEPARATION_PARAMETERS}[80${SEPARATION_INTERVAL}89]`,
+			`F${SEPARATION_PARAMETERS}${EMPTY_ENTRY}`,
+			`M${SEPARATION_PARAMETERS}[10${SEPARATION_INTERVAL}19]`,
+			`M${SEPARATION_PARAMETERS}[30${SEPARATION_INTERVAL}39]`
+		]);
+		expect(values).toStrictEqual([1, 1, 1, 2, 1]);
+	});
 
-	let [labels, values] = calculateAxis(dataRows, selectedParams, checkedMean, yAxisParam);
-	[labels, values] = sortParallelArrays(labels, values);
+	it('test calculateAxis function with incorrect binning', () => {
+		const dataRows = df.toCollection(true);
+		const selectedParams = ['gender'];
+		const checkedMean = true;
+		const yAxisParam = 'age';
+		const binSizes: BinDictionary = {
+			gender: 10
+			// this should be ignored by the label
+		};
 
-	expect(labels).toStrictEqual(['F', 'M']);
-	expect(values).toStrictEqual([1 / 2, 1 / 2]);
-});
+		let [labels, values] = calculateAxis(
+			dataRows,
+			selectedParams,
+			checkedMean,
+			yAxisParam,
+			binSizes
+		);
+		[labels, values] = sortParallelArrays(labels, values);
 
-it('test calculateAxis function total age', () => {
-	const dataRows = df.toCollection(true);
-	const selectedParams = ['gender'];
-	const checkedMean = false;
-	const yAxisParam = 'age';
-
-	let [labels, values] = calculateAxis(dataRows, selectedParams, checkedMean, yAxisParam);
-	[labels, values] = sortParallelArrays(labels, values);
-
-	expect(labels).toStrictEqual(['F', 'M']);
-	expect(values).toStrictEqual([130, 66]);
-});
-
-it('test calculateAxis function average age', () => {
-	const dataRows = df.toCollection(true);
-	const selectedParams = ['gender'];
-	const checkedMean = true;
-	const yAxisParam = 'age';
-
-	let [labels, values] = calculateAxis(dataRows, selectedParams, checkedMean, yAxisParam);
-	[labels, values] = sortParallelArrays(labels, values);
-
-	expect(labels).toStrictEqual(['F', 'M']);
-	expect(values).toStrictEqual([65, 22]);
-	``;
-});
-
-it('test calculateAxis function frequency of complex group', () => {
-	const dataRows = df.toCollection(true);
-	const selectedParams = ['gender', 'cef'];
-	const checkedMean = false;
-	const yAxisParam = 'Absolute Frequency';
-
-	let [labels, values] = calculateAxis(dataRows, selectedParams, checkedMean, yAxisParam);
-	[labels, values] = sortParallelArrays(labels, values);
-
-	// Doesn't return columns with empty count
-	expect(labels).toStrictEqual(['F, <empty>', 'F, B2', 'M, A1', 'M, A2', 'M, B1']);
-	expect(values).toStrictEqual([1, 2, 1, 1, 1]);
+		expect(labels).toStrictEqual(['F', 'M']);
+		expect(values).toStrictEqual([65, 22]);
+		``;
+	});
 });
