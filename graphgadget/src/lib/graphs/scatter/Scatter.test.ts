@@ -4,6 +4,7 @@ import sut from '$lib/graphs/scatter/Scatter.svelte';
 import { data } from '$lib/Store';
 import userEvent from '@testing-library/user-event';
 import DataFrame from 'dataframe-js';
+import { selectedColumns } from '$lib/ColumnSelector/Store';
 
 const df = new DataFrame(
 	{
@@ -19,11 +20,8 @@ describe('Stem tests', () => {
 	let page: RenderResult;
 	beforeEach(async () => {
 		data.set(df);
+		selectedColumns.set(['column1', 'column2', 'column3']);
 		page = render(sut);
-		const user = userEvent.setup();
-		await user.click(page.getByTestId('check-column1'));
-		await user.click(page.getByTestId('check-column2'));
-		await user.click(page.getByTestId('check-column3'));
 	});
 
 	it('2 selects exist', () => {
@@ -46,14 +44,14 @@ describe('Stem tests', () => {
 		expect(secondSelect.value).toEqual('column2');
 	});
 
-	it('First and second select have first column + from columnSelector', () => {
+	it('First and second select have first column', () => {
 		const column1options = page.getAllByText('column1');
-		expect(column1options.length).toEqual(2 + 1);
+		expect(column1options.length).toEqual(2);
 	});
 
-	it('First and second select have second column + from columnSelector', () => {
+	it('First and second select have second column', () => {
 		const column2options = page.getAllByText('column2');
-		expect(column2options.length).toEqual(2 + 1);
+		expect(column2options.length).toEqual(2);
 	});
 
 	it('canvas wrapper exists', () => {

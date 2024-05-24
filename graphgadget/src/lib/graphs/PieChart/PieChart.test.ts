@@ -3,7 +3,7 @@ import PieChart from './PieChart.svelte';
 import { describe, it, expect } from 'vitest';
 import { data } from '$lib/Store';
 import { DataFrame } from 'dataframe-js';
-import userEvent from '@testing-library/user-event';
+import { selectedColumns } from '$lib/ColumnSelector/Store';
 
 // Mock the data store with a sample DataFrame
 const df = new DataFrame(
@@ -19,10 +19,8 @@ describe('PieChart Component', () => {
 
 	beforeEach(async () => {
 		data.set(df);
+		selectedColumns.set(['column1', 'column2']);
 		page = render(PieChart);
-		const user = userEvent.setup();
-		await user.click(page.getByTestId('check-column1'));
-		await user.click(page.getByTestId('check-column2'));
 	});
 
 	it('should render the component', () => {

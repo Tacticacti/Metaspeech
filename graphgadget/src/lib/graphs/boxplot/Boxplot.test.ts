@@ -3,7 +3,7 @@ import sut from '$lib/graphs/boxplot/Boxplot.svelte';
 import { describe, it, expect } from 'vitest';
 import DataFrame from 'dataframe-js';
 import { data } from '$lib/Store';
-import userEvent from '@testing-library/user-event';
+import { selectedColumns } from '$lib/ColumnSelector/Store';
 
 const df1 = new DataFrame(
 	{
@@ -39,11 +39,8 @@ describe('When user views', () => {
 	});
 	it('warning shows', async () => {
 		data.set(df1);
+		selectedColumns.set(['column1', 'column2', 'column3']);
 		const { getByTestId } = render(sut);
-		const user = userEvent.setup();
-		await user.click(getByTestId('check-column1'));
-		await user.click(getByTestId('check-column2'));
-		await user.click(getByTestId('check-column3'));
 		const warning = getByTestId('warning-column3');
 		expect(warning).to.exist;
 	});

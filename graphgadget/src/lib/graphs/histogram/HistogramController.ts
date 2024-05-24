@@ -70,40 +70,6 @@ function compareElementsOfCombinedArray(a: [string, number], b: [string, number]
 	return comparison;
 }
 
-// returns array with numerical column names and their maximum value (for binning purposes)
-export function getNumericalColumns(columnNames: string[], rows: Row[]): [string, number][] {
-	const numericNamesAndMaxs: [string, number][] = [];
-
-	for (const column of columnNames) {
-		let maxValue = Number.MIN_VALUE;
-		let isNumeric: boolean = true;
-
-		for (const row of rows) {
-			const value = row.get(column);
-			if (value === undefined) {
-				continue;
-			}
-			const numericValue = +value;
-
-			if (isNaN(numericValue)) {
-				// if there is any string, column is not numeric
-				isNumeric = false;
-				break;
-			}
-
-			if (numericValue > maxValue) {
-				maxValue = numericValue;
-			}
-		}
-
-		if (isNumeric) {
-			numericNamesAndMaxs.push([column, maxValue]);
-		}
-	}
-
-	return numericNamesAndMaxs;
-}
-
 export function calculateAxis(
 	dataRows: Row[],
 	selectedParams: string[],

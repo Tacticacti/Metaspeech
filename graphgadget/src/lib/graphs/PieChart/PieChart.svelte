@@ -6,7 +6,6 @@
 	import { setColor } from '$lib/utils/CanvasUtils';
 	import { afterUpdate, onMount } from 'svelte';
 	import { selectedColumns } from '$lib/ColumnSelector/Store';
-	import ColumnSelector from '$lib/ColumnSelector/ColumnSelector.svelte';
 	import WarningGenerator from '$lib/WarningGenerator/WarningGenerator.svelte';
 
 	let canvas: HTMLCanvasElement;
@@ -79,7 +78,6 @@
 	});
 </script>
 
-<ColumnSelector></ColumnSelector>
 <WarningGenerator needNumbers={true} columnsAreLimited={true} maxColumns={1}></WarningGenerator>
 
 <div>
