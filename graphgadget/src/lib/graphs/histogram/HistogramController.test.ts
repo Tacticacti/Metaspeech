@@ -1,6 +1,5 @@
 import { it, expect } from 'vitest';
 import {
-	getNumericalColumns,
 	calculateAxis,
 	sortParallelArrays,
 	type BinDictionary,
@@ -132,19 +131,6 @@ describe('sort parallel arrays tests', () => {
 			`C${SEPARATION_PARAMETERS}[1${SEPARATION_INTERVAL}2]${SEPARATION_PARAMETERS}2`
 		]);
 		expect(valuesSorted).toStrictEqual([20, 30, 40, 10]);
-	});
-});
-
-describe('test numerical columns', () => {
-	it('test columnInfo simple', () => {
-		const columnNames = df.listColumns();
-		const numericCols = getNumericalColumns(columnNames, df.toCollection(true));
-
-		expect(numericCols).toStrictEqual([
-			['id', 6],
-			['age', 87],
-			['duration', 200]
-		]);
 	});
 });
 
