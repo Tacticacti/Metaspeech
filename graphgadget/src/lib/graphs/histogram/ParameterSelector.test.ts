@@ -3,6 +3,7 @@ import { render } from '@testing-library/svelte';
 import sut from '$lib/graphs/histogram/ParameterSelector.svelte';
 import userEvent from '@testing-library/user-event';
 import { ABSOLUTE_FREQUENCY, RELATIVE_FREQUENCY } from '$lib/graphs/histogram/HistogramController';
+import { selectedColumns } from '$lib/ColumnSelector/Store';
 
 const columnNames = ['id', 'age', 'gender', 'cef', 'duration'];
 const numericColumns: [string, number][] = [
@@ -16,7 +17,6 @@ it('1 selects exists, with options', () => {
 		props: {
 			columnNames: columnNames,
 			numericColumns: numericColumns,
-			selectedParams: [],
 			parameterType: ABSOLUTE_FREQUENCY,
 			checkedMean: false
 		}
@@ -40,35 +40,12 @@ it('1 selects exists, with options', () => {
 	]);
 });
 
-it('1 checkbox for each column', () => {
-	const { container } = render(sut, {
-		props: {
-			columnNames: columnNames,
-			numericColumns: numericColumns,
-			selectedParams: [],
-			parameterType: ABSOLUTE_FREQUENCY,
-			checkedMean: false
-		}
-	});
-	const checkElements = container.querySelectorAll('input');
-
-	const checkNames: string[] = [];
-	for (const opt of checkElements) {
-		checkNames.push((opt as HTMLInputElement).value);
-		expect((opt as HTMLInputElement).type).toEqual('checkbox');
-	}
-
-	// For each column
-	expect(checkNames).toEqual(columnNames);
-});
-
 it('Mean checkbox shows when something other than frequency selected', async () => {
 	const user = userEvent.setup();
 	const { container, getByTestId } = render(sut, {
 		props: {
 			columnNames: columnNames,
 			numericColumns: numericColumns,
-			selectedParams: [],
 			parameterType: ABSOLUTE_FREQUENCY,
 			checkedMean: false
 		}
@@ -83,7 +60,7 @@ it('Mean checkbox shows when something other than frequency selected', async () 
 	expect(select.value).toEqual('age');
 
 	const checkElements = container.querySelectorAll('input');
-	expect(checkElements.length).toEqual(columnNames.length + 1);
+	expect(checkElements.length).toEqual(1);
 });
 
 it('Mean checkbox reamains hidden when frequency selected', async () => {
@@ -92,7 +69,6 @@ it('Mean checkbox reamains hidden when frequency selected', async () => {
 		props: {
 			columnNames: columnNames,
 			numericColumns: numericColumns,
-			selectedParams: [],
 			parameterType: ABSOLUTE_FREQUENCY,
 			checkedMean: false
 		}
@@ -102,11 +78,11 @@ it('Mean checkbox reamains hidden when frequency selected', async () => {
 	await user.selectOptions(select, [ABSOLUTE_FREQUENCY]);
 
 	let checkElements = container.querySelectorAll('input');
-	expect(checkElements.length).toEqual(columnNames.length);
+	expect(checkElements.length).toEqual(0);
 
 	await user.selectOptions(select, [RELATIVE_FREQUENCY]);
 	checkElements = container.querySelectorAll('input');
-	expect(checkElements.length).toEqual(columnNames.length);
+	expect(checkElements.length).toEqual(0);
 });
 
 it('Mean checkbox shows when something other than frequency selected', async () => {
@@ -115,7 +91,6 @@ it('Mean checkbox shows when something other than frequency selected', async () 
 		props: {
 			columnNames: columnNames,
 			numericColumns: numericColumns,
-			selectedParams: [],
 			parameterType: ABSOLUTE_FREQUENCY,
 			checkedMean: false
 		}
@@ -128,35 +103,33 @@ it('Mean checkbox shows when something other than frequency selected', async () 
 	expect(checkMean).toBeVisible;
 
 	const checkElements = container.querySelectorAll('input');
-	expect(checkElements.length).toEqual(columnNames.length + 1);
+	expect(checkElements.length).toEqual(1);
 });
 
-it('numeric column is appears twice', () => {
+it('numeric column is appears once', () => {
 	const { getAllByText } = render(sut, {
 		props: {
 			columnNames: columnNames,
 			numericColumns: numericColumns,
-			selectedParams: [],
 			parameterType: ABSOLUTE_FREQUENCY,
 			checkedMean: false
 		}
 	});
 	const col = getAllByText('age');
-	expect(col.length).toEqual(2);
+	expect(col.length).toEqual(1);
 });
 
-it('string column appears once', () => {
-	const { getAllByText } = render(sut, {
+it('string column appears zero times', () => {
+	const { queryByText } = render(sut, {
 		props: {
 			columnNames: columnNames,
 			numericColumns: numericColumns,
-			selectedParams: [],
 			parameterType: ABSOLUTE_FREQUENCY,
 			checkedMean: false
 		}
 	});
-	const col = getAllByText('cef');
-	expect(col.length).toEqual(1);
+	const col = queryByText('cef');
+	expect(col).toBeNull();
 });
 
 it('clicking on option changes value of select', async () => {
@@ -165,7 +138,6 @@ it('clicking on option changes value of select', async () => {
 		props: {
 			columnNames: columnNames,
 			numericColumns: numericColumns,
-			selectedParams: [],
 			parameterType: ABSOLUTE_FREQUENCY,
 			checkedMean: false
 		}
@@ -176,37 +148,12 @@ it('clicking on option changes value of select', async () => {
 	expect(select.value).toEqual('id');
 });
 
-it('should update selectedParams when the checkboxes change', async () => {
-	const user = userEvent.setup();
-	const selectedParams: string[] = [];
-	const { getByTestId } = render(sut, {
-		props: {
-			columnNames: columnNames,
-			numericColumns: numericColumns,
-			selectedParams: selectedParams,
-			parameterType: ABSOLUTE_FREQUENCY,
-			checkedMean: false
-		}
-	});
-
-	expect(selectedParams.length).toBe(0);
-
-	const checkAge = getByTestId('check-age') as HTMLInputElement;
-	const checkCef = getByTestId('check-cef') as HTMLInputElement;
-
-	await user.click(checkAge);
-	await user.click(checkCef);
-
-	//This assertion doesn't work, I don't know how to test it
-	// expect(selectedParams.length).toBe(2);
-});
-
 it('1 number and 1 range for each selected numeric column', () => {
+	selectedColumns.set(['gender', 'age', 'duration']);
 	const { container } = render(sut, {
 		props: {
 			columnNames: columnNames,
 			numericColumns: numericColumns,
-			selectedParams: ['gender', 'age', 'duration'],
 			parameterType: ABSOLUTE_FREQUENCY,
 			checkedMean: false
 		}
@@ -239,3 +186,24 @@ it('1 number and 1 range for each selected numeric column', () => {
 	expect(numberMaxs).toEqual(maxs);
 	expect(rangeMaxs).toEqual(maxs);
 });
+
+// it('1 checkbox for each column', () => {
+// 	const { container } = render(sut, {
+// 		props: {
+// 			columnNames: columnNames,
+// 			numericColumns: numericColumns,
+// 			parameterType: ABSOLUTE_FREQUENCY,
+// 			checkedMean: false
+// 		}
+// 	});
+// 	const checkElements = container.querySelectorAll('input');
+
+// 	const checkNames: string[] = [];
+// 	for (const opt of checkElements) {
+// 		checkNames.push((opt as HTMLInputElement).value);
+// 		expect((opt as HTMLInputElement).type).toEqual('checkbox');
+// 	}
+
+// 	// For each column
+// 	expect(checkNames).toEqual(columnNames);
+// });

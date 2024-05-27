@@ -4,36 +4,22 @@
 	import { BoxPlotController, BoxAndWiskers } from '@sgratzl/chartjs-chart-boxplot';
 
 	Chart.register(BoxPlotController, BoxAndWiskers, LinearScale, CategoryScale);
-	import { onMount, onDestroy } from 'svelte';
+	import { onMount, onDestroy, afterUpdate } from 'svelte';
 	import { setColor } from '$lib/utils/CanvasUtils';
 	import PngButton from '$lib/shared-components/PNGButton.svelte';
 	import JpgButton from '$lib/shared-components/JPGButton.svelte';
-	import { isNumber } from 'chart.js/helpers';
+	import { selectedColumns } from '$lib/ColumnSelector/Store';
+	import WarningGenerator from '$lib/WarningGenerator/WarningGenerator.svelte';
 
 	let canvas: HTMLCanvasElement;
 	let chart: Chart;
-
-	const column_names = $data.listColumns();
-
-	let warnings: string[] = [];
 
 	// setup chart after canvas is mounted
 	onMount(() => {
 		const boxplotData = {
 			// define label tree
-			labels: getColumnNames(column_names),
-			datasets: [
-				{
-					label: 'Dataset 1',
-					backgroundColor: 'rgba(255,0,0,0.5)',
-					borderColor: 'red',
-					borderWidth: 1,
-					outlierColor: '#999999',
-					padding: 0,
-					itemRadius: 5,
-					data: getColumnData(column_names)
-				}
-			]
+			labels: [],
+			datasets: [{}]
 		};
 		const plugin = {
 			id: 'customCanvasBackgroundColor',
@@ -59,38 +45,42 @@
 
 		chart = new Chart(canvas, cfg);
 	});
+	afterUpdate(() => {
+		const boxplotData = {
+			// define label tree
+			labels: $selectedColumns,
+			datasets: [
+				{
+					label: 'Dataset 1',
+					backgroundColor: 'rgba(255,0,0,0.5)',
+					borderColor: 'red',
+					borderWidth: 1,
+					outlierColor: '#999999',
+					padding: 0,
+					itemRadius: 5,
+					data: getColumnData($selectedColumns)
+				}
+			]
+		};
+		chart.data = boxplotData;
+		chart.update();
+	});
 
 	onDestroy(() => {
 		if (chart) chart.destroy();
 	});
-	export function getColumnNames(column_names: string[]) {
-		let ret: string[] = [];
-		warnings = [];
-		for (let i = 0; i < column_names.length; i++) {
-			if (isNumber($data.toArray(column_names[i])[0])) {
-				ret.push(column_names[i]);
-			} else {
-				warnings.push('Warning: Column ' + column_names[i] + " doesn't contain numbers!");
-			}
-		}
-		return ret;
-	}
+
 	export function getColumnData(column_names: string[]) {
 		let ret: string[][] = [];
 		for (let i = 0; i < column_names.length; i++) {
-			if (isNumber($data.toArray(column_names[i])[0])) {
-				ret.push($data.toArray(column_names[i]));
-			}
+			ret.push($data.toArray(column_names[i]));
 		}
 		return ret;
 	}
 </script>
 
-<div>
-	{#each warnings as warning}
-		<div>{warning}</div>
-	{/each}
-</div>
+<WarningGenerator needNumbers={true} columnsAreLimited={false} maxColumns={100}></WarningGenerator>
+
 <div>
 	<canvas data-testid="canvas-element" bind:this={canvas} />
 </div>

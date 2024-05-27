@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { getNumericalColumnsAndMax } from '$lib/ColumnSelector/ColumnHelper';
 	import { data } from '$lib/Store';
 	import PngButton from '$lib/shared-components/PNGButton.svelte';
 	import JpgButton from '$lib/shared-components/JPGButton.svelte';
@@ -7,23 +8,19 @@
 	import { afterUpdate, onMount } from 'svelte';
 	import ParameterSelector from '$lib/graphs/histogram/ParameterSelector.svelte';
 	import {
-		getNumericalColumns,
 		calculateAxis,
 		sortParallelArrays,
 		type BinDictionary
 	} from '$lib/graphs/histogram/HistogramController';
+	import { selectedColumns } from '$lib/ColumnSelector/Store';
 
 	let canvas: HTMLCanvasElement;
 	let chart: Chart;
 
 	const columnNames = $data.listColumns() as string[];
 
-	// TODO: find a better way to get the type,
-	// currently only looks at first row.
-	// Remember there can be undefined elements if not cleared
-	const numericColumns = getNumericalColumns(columnNames, $data.toCollection(true));
+	const numericColumns = getNumericalColumnsAndMax(columnNames, $data.toCollection(true));
 
-	let selectedParams: string[];
 	let checkedMean: boolean;
 	let parameterType: string;
 	let binSizes: BinDictionary;
@@ -64,7 +61,7 @@
 
 		[labels, values] = calculateAxis(
 			$data.toCollection(true),
-			selectedParams,
+			$selectedColumns,
 			checkedMean,
 			parameterType,
 			binSizes
@@ -89,7 +86,6 @@
 <ParameterSelector
 	{columnNames}
 	{numericColumns}
-	bind:selectedParams
 	bind:checkedMean
 	bind:parameterType
 	bind:binSizes
