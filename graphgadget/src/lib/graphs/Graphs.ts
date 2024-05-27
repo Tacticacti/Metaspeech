@@ -3,6 +3,7 @@ import Stem from './Stem/Stem.svelte';
 import Scatter from './scatter/Scatter.svelte';
 import PieChart from './PieChart/PieChart.svelte';
 import Boxplot from './boxplot/Boxplot.svelte';
+import Table from './table/Table.svelte';
 
 // type with the metadata of a graph
 export type GraphMeta = {
@@ -47,5 +48,12 @@ export const GraphMetas: GraphMeta[] = [
 			'In descriptive statistics, a box plot or boxplot is a type of chart often used in explanatory data analysis. Box plots visually show the distribution of numerical data and skewness by displaying the data quartiles (or percentiles) and averages.',
 		img_src: 'histogram-img.png',
 		component: Boxplot
+	},
+	{
+		title: 'Table',
+		description:
+			'The table shows the data where rows have the subgroups and columns have the parameters to be shown for each subgroup.',
+		img_src: 'histogram-img.png',
+		component: Table
 	}
 ];
