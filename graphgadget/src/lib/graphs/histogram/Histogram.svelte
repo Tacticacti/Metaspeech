@@ -84,7 +84,6 @@
 </script>
 
 <ParameterSelector
-	{columnNames}
 	{numericColumns}
 	bind:checkedMean
 	bind:parameterType

@@ -1,6 +1,7 @@
 import { Row } from 'dataframe-js';
 
 export type BinDictionary = Record<string, number>;
+export type MapDictionary = Record<string, Map<string, [number, number]>>;
 
 export const ABSOLUTE_FREQUENCY: string = 'Absolute Frequency';
 export const RELATIVE_FREQUENCY: string = 'Relative Frequency';
@@ -11,7 +12,7 @@ export const EMPTY_ENTRY: string = '<empty>';
 function getParamLabel(paramName: string, row: Row, binSizes: BinDictionary): string {
 	const paramValue = row.get(paramName);
 
-	if (paramValue === undefined) {
+	if (paramValue === undefined || paramValue === null) {
 		return EMPTY_ENTRY;
 	}
 
@@ -70,15 +71,13 @@ function compareElementsOfCombinedArray(a: [string, number], b: [string, number]
 	return comparison;
 }
 
-export function calculateAxis(
+export function getFrequenciesAndValues(
 	dataRows: Row[],
 	selectedParams: string[],
-	checkedMean: boolean,
-	yAxisParam: string,
-	binSizes: BinDictionary
-): [string[], number[]] {
-	const mapFrequencies = new Map<string, number>();
-	const mapValues = new Map<string, number>();
+	yAxisParams: string[],
+	binSizes: BinDictionary): MapDictionary {
+
+	const maps: MapDictionary = {};
 
 	// Iterate all rows
 	for (const row of dataRows) {
@@ -88,32 +87,54 @@ export function calculateAxis(
 			.map((paramName) => getParamLabel(paramName, row, binSizes))
 			.join(SEPARATION_PARAMETERS);
 
-		// Get the current frequency in the map with that string as key
-		const currentFrequency: number | undefined = mapFrequencies.get(xValues);
-		// Increment the frequency of that key
-		mapFrequencies.set(xValues, currentFrequency === undefined ? 1 : currentFrequency + 1);
+		// For each y-axis parameter that is being calculated
+		for (const yParam of yAxisParams) {
+			let increment = 0;
+			if (yParam === ABSOLUTE_FREQUENCY || yParam === RELATIVE_FREQUENCY) {
+				// If frequency, value to increment is one (one row)
+				increment = 1;
+			} else {
+				// Otherwise value is the value of that attribute of the row
+				increment = +row.get(yParam);
 
-		if (yAxisParam != ABSOLUTE_FREQUENCY && yAxisParam != RELATIVE_FREQUENCY) {
-			// Need to increment value of the selected y-axis parameter
-			const valueIncrement: number = +row.get(yAxisParam);
-
-			if (!valueIncrement) {
-				// Skip this value entirely from the calculation
-				// So decrement its frequency (which cannot be null, or undefined)
-				mapFrequencies.set(xValues, mapFrequencies.get(xValues)! - 1);
-				continue;
+				if (isNaN(increment)) {
+					// Skip this value entirely from the calculation
+					continue;
+				}
 			}
-			const currentValue = mapValues.get(xValues);
-			mapValues.set(
-				xValues,
-				currentValue === undefined ? valueIncrement : currentValue + valueIncrement
-			);
+
+			if (maps[yParam] === undefined) {
+				maps[yParam] = new Map();
+			}
+
+			// Get the current value and frequency in the map with that string as key
+			// If entry does not exist, use zeros
+			const [labelValue, labelFrequency] = maps[yParam].get(xValues) ?? [0, 0];
+
+			// Increment the pair of value and frequency in the map
+			maps[yParam].set(xValues, [labelValue + increment, labelFrequency + 1]);
 		}
 	}
 
-	// convert map to arrays
-	const labels: string[] = [...mapFrequencies.keys()];
-	const frequencies: number[] = [...mapFrequencies.values()];
+	return maps;
+}
+
+export function calculateAxis(
+	dataRows: Row[],
+	selectedParams: string[],
+	checkedMean: boolean,
+	yAxisParam: string,
+	binSizes: BinDictionary
+): [string[], number[]] {
+	const maps = getFrequenciesAndValues(dataRows, selectedParams, [yAxisParam], binSizes);
+
+	// Get the map of that y-axis parameter
+	const yParamMap = maps[yAxisParam];
+
+	// Labels are the keys of the map
+	const labels: string[] = [...yParamMap.keys()];
+	// Frequencies are the second element of each pair stored as value of the map
+	const frequencies: number[] = [...yParamMap.values()].map(pair => pair[1]);
 
 	if (yAxisParam == ABSOLUTE_FREQUENCY) {
 		return [labels, frequencies];
@@ -123,7 +144,7 @@ export function calculateAxis(
 		return [labels, frequencies.map((f) => f / totalFrequency)];
 	}
 
-	const values: number[] = [...mapValues.values()];
+	const values: number[] = [...yParamMap.values()].map(pair => pair[0]);
 
 	if (checkedMean) {
 		// Calculate means of values
@@ -153,4 +174,18 @@ export function sortParallelArrays(labels: string[], values: number[]): [string[
 	}
 
 	return [newLabels, newValues];
+}
+
+// Gets columns and table data
+export function getTableData(maps: MapDictionary): [string[], string[][]] {
+	return [
+		["Name", "Email", "Phone Number"],
+		[
+			["John", "john@example.com", "(353) 01 222 3333"],
+			["Mark", "mark@gmail.com", "(01) 22 888 4444"],
+			["Eoin", "eoin@gmail.com", "0097 22 654 00033"],
+			["Sarah", "sarahcdd@gmail.com", "+322 876 1233"],
+			["Afshin", "afshin@mail.com", "(353) 22 87 8356"]
+		]
+	];
 }
