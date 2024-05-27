@@ -1,14 +1,15 @@
 <script lang="ts">
+	import { selectedColumns } from '$lib/ColumnSelector/Store';
 	import {
 		ABSOLUTE_FREQUENCY,
 		RELATIVE_FREQUENCY,
 		type BinDictionary
 	} from '$lib/graphs/histogram/HistogramController';
 
-	export let columnNames: string[];
+	//export let columnNames: string[];  						where is this used??
 	export let numericColumns: [string, number][];
 
-	export let selectedParams: string[] = [];
+	let selectedParams: string[] = $selectedColumns;
 	export let parameterType: string = ABSOLUTE_FREQUENCY;
 	export let checkedMean: boolean = false;
 	export let binSizes: BinDictionary = {};
@@ -17,20 +18,6 @@
 		binSizes[column[0]] = 1;
 	}
 </script>
-
-<p>Parameters on the x-axis</p>
-{#each columnNames as column}
-	<label>
-		<input
-			type="checkbox"
-			data-testid="check-{column}"
-			name="params"
-			value={column}
-			bind:group={selectedParams}
-		/>
-		{column}
-	</label>
-{/each}
 
 {#each numericColumns as column}
 	{#if selectedParams.includes(column[0])}

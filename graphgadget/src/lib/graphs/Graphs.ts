@@ -1,5 +1,4 @@
 import Histogram from './histogram/Histogram.svelte';
-import Stem from './Stem/Stem.svelte';
 import Scatter from './scatter/Scatter.svelte';
 import PieChart from './PieChart/PieChart.svelte';
 import Boxplot from './boxplot/Boxplot.svelte';
@@ -23,15 +22,9 @@ export const GraphMetas: GraphMeta[] = [
 		component: Histogram
 	},
 	{
-		title: 'Stem',
-		description:
-			'A stem plot (or stem-and-leaf plot) is a method of displaying quantitative data in a graphical format, similar to a histogram, to show its distribution. Each data value is split into a "stem" and a "leaf," with stems representing the leading digits and leaves representing the trailing digits.',
-		img_src: 'histogram-img.png',
-		component: Stem
-	},
-	{
 		title: 'Scatter',
-		description: 'A scatter description.',
+		description:
+			'A scatterplot shows the relationship between two quantitative variables measured for the same individuals. The values of one variable appear on the horizontal axis, and the values of the other variable appear on the vertical axis. Each individual in the data appears as a point on the graph.',
 		img_src: 'histogram-img.png',
 		component: Scatter
 	},
@@ -57,3 +50,10 @@ export const GraphMetas: GraphMeta[] = [
 		component: Table
 	}
 ];
+// {
+// 	title: 'Stem',
+// 	description:
+// 		'A stem plot (or stem-and-leaf plot) is a method of displaying quantitative data in a graphical format, similar to a histogram, to show its distribution. Each data value is split into a "stem" and a "leaf," with stems representing the leading digits and leaves representing the trailing digits.',
+// 	img_src: 'histogram-img.png',
+// 	component: Stem
+// }

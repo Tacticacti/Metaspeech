@@ -7,7 +7,8 @@ import Histogram from './histogram/Histogram.svelte';
 import { selected_graph, graph_name, graph_description } from './Store';
 import { get } from 'svelte/store';
 import PieChart from './PieChart/PieChart.svelte';
-import Stem from './Stem/Stem.svelte';
+import Scatter from './scatter/Scatter.svelte';
+import Boxplot from './boxplot/Boxplot.svelte';
 
 describe('When user views', () => {
 	it('should render', () => {
@@ -28,14 +29,14 @@ describe('When user views', () => {
 	});
 	it('should contain 3 graphs', async () => {
 		const { getByTestId } = render(sut, { graphs: GraphMetas });
-		const hist1 = getByTestId('Histogram');
-		const hist2 = getByTestId('Stem');
+		const hist = getByTestId('Histogram');
 		const scatter = getByTestId('Scatter');
 		const pie = getByTestId('Pie Chart');
-		expect(hist1).to.exist;
-		expect(hist2).to.exist;
+		const box = getByTestId('Box plot');
+		expect(hist).to.exist;
 		expect(scatter).to.exist;
 		expect(pie).to.exist;
+		expect(box).to.exist;
 	});
 });
 
@@ -55,23 +56,6 @@ describe('When user hovers', () => {
 		expect(getByTestId('name-chart').innerHTML).toEqual('Histogram');
 		expect(getByTestId('description-chart').innerHTML).toEqual(
 			'A histogram is a graphical representation of the distribution of numerical data. It groups data into bins and displays the frequency of data points in each bin using bars.'
-		);
-
-		await user.unhover(hist);
-
-		expect(getByTestId('name-chart').innerHTML).toEqual('');
-		expect(getByTestId('description-chart').innerHTML).toEqual('');
-	});
-	it('should describe stem', async () => {
-		const user = userEvent.setup();
-		const { getByTestId } = render(sut, { graphs: GraphMetas });
-
-		const hist = getByTestId('Stem');
-
-		await user.hover(hist);
-		expect(getByTestId('name-chart').innerHTML).toEqual('Stem');
-		expect(getByTestId('description-chart').innerHTML).toEqual(
-			'A stem plot (or stem-and-leaf plot) is a method of displaying quantitative data in a graphical format, similar to a histogram, to show its distribution. Each data value is split into a "stem" and a "leaf," with stems representing the leading digits and leaves representing the trailing digits.'
 		);
 
 		await user.unhover(hist);
@@ -101,6 +85,50 @@ describe('When user hovers', () => {
 		expect(getByTestId('name-chart').innerHTML).toEqual('');
 		expect(getByTestId('description-chart').innerHTML).toEqual('');
 	});
+	it('should describe scatter', async () => {
+		const user = userEvent.setup();
+		const { getByTestId } = render(sut, { graphs: GraphMetas });
+
+		const hist = getByTestId('Scatter');
+
+		await user.hover(hist);
+
+		expect(get(graph_name)).toBe('Scatter');
+		expect(get(graph_description)).toBe(
+			'A scatterplot shows the relationship between two quantitative variables measured for the same individuals. The values of one variable appear on the horizontal axis, and the values of the other variable appear on the vertical axis. Each individual in the data appears as a point on the graph.'
+		);
+		expect(getByTestId('name-chart').innerHTML).toEqual('Scatter');
+		expect(getByTestId('description-chart').innerHTML).toEqual(
+			'A scatterplot shows the relationship between two quantitative variables measured for the same individuals. The values of one variable appear on the horizontal axis, and the values of the other variable appear on the vertical axis. Each individual in the data appears as a point on the graph.'
+		);
+
+		await user.unhover(hist);
+
+		expect(getByTestId('name-chart').innerHTML).toEqual('');
+		expect(getByTestId('description-chart').innerHTML).toEqual('');
+	});
+	it('should describe boxplot', async () => {
+		const user = userEvent.setup();
+		const { getByTestId } = render(sut, { graphs: GraphMetas });
+
+		const pie = getByTestId('Box plot');
+
+		await user.hover(pie);
+
+		expect(get(graph_name)).toBe('Box plot');
+		expect(get(graph_description)).toBe(
+			'In descriptive statistics, a box plot or boxplot is a type of chart often used in explanatory data analysis. Box plots visually show the distribution of numerical data and skewness by displaying the data quartiles (or percentiles) and averages.'
+		);
+		expect(getByTestId('name-chart').innerHTML).toEqual('Box plot');
+		expect(getByTestId('description-chart').innerHTML).toEqual(
+			'In descriptive statistics, a box plot or boxplot is a type of chart often used in explanatory data analysis. Box plots visually show the distribution of numerical data and skewness by displaying the data quartiles (or percentiles) and averages.'
+		);
+
+		await user.unhover(pie);
+
+		expect(getByTestId('name-chart').innerHTML).toEqual('');
+		expect(getByTestId('description-chart').innerHTML).toEqual('');
+	});
 });
 
 describe('When user clicks', () => {
@@ -113,15 +141,6 @@ describe('When user clicks', () => {
 		await user.click(hist);
 		expect(get(selected_graph)).toBe(Histogram);
 	});
-	it('should display stem', async () => {
-		const user = userEvent.setup();
-		const { getByTestId } = render(sut, { graphs: GraphMetas });
-
-		const stem = getByTestId('Stem');
-
-		await user.click(stem);
-		expect(get(selected_graph)).toBe(Stem);
-	});
 	it('should display piechart', async () => {
 		const user = userEvent.setup();
 		const { getByTestId } = render(sut, { graphs: GraphMetas });
@@ -130,5 +149,23 @@ describe('When user clicks', () => {
 
 		await user.click(pie);
 		expect(get(selected_graph)).toBe(PieChart);
+	});
+	it('should display scatter', async () => {
+		const user = userEvent.setup();
+		const { getByTestId } = render(sut, { graphs: GraphMetas });
+
+		const pie = getByTestId('Scatter');
+
+		await user.click(pie);
+		expect(get(selected_graph)).toBe(Scatter);
+	});
+	it('should display boxplot', async () => {
+		const user = userEvent.setup();
+		const { getByTestId } = render(sut, { graphs: GraphMetas });
+
+		const pie = getByTestId('Box plot');
+
+		await user.click(pie);
+		expect(get(selected_graph)).toBe(Boxplot);
 	});
 });
