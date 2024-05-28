@@ -9,6 +9,14 @@ export const SEPARATION_PARAMETERS: string = '; ';
 export const SEPARATION_INTERVAL: string = ', ';
 export const EMPTY_ENTRY: string = '<empty>';
 
+/**
+ * Generates the label for a parameter considering whether it is binned or not
+ * @param paramName the name of the column
+ * @param row the current row of the table
+ * @param binSizes a dictionary that has the bin size for each parameter
+ * 
+ * @returns a label with the value of that column
+ */
 function getParamLabel(paramName: string, row: Row, binSizes: BinDictionary): string {
 	const paramValue = row.get(paramName);
 
@@ -35,6 +43,13 @@ function getParamLabel(paramName: string, row: Row, binSizes: BinDictionary): st
 	return `[${lowerBound}${SEPARATION_INTERVAL}${upperBound}]`;
 }
 
+/**
+ * Compares two elements, where each element is a pair with a label and a value.
+ * This function is used to sort the arrays of labels and values for the histogram
+ * @param a the first element
+ * @param b the second element
+ * @returns negative number if less than, positive number if greater than, zero if equal to
+ */
 function compareElementsOfCombinedArray(a: [string, number], b: [string, number]): number {
 	const paramsA = a[0].split(SEPARATION_PARAMETERS);
 	const paramsB = b[0].split(SEPARATION_PARAMETERS);
@@ -69,6 +84,23 @@ function compareElementsOfCombinedArray(a: [string, number], b: [string, number]
 
 	// If all equal, 0
 	return comparison;
+}
+
+function transpose(matrix: string[][]): string[][] {
+	const result: string[][] = [];
+	const m = matrix.length;
+	const n = matrix[0].length;
+
+	// Matrix is (m x n). Transpose is (n x m).
+
+	for (let i = 0; i < n; ++i) {
+		result.push([]);
+		for (let j = 0; j < m; ++j) {
+			result[i].push(matrix[j][i]);
+		}
+	}
+
+	return result;
 }
 
 export function getFrequenciesAndValues(
@@ -177,15 +209,36 @@ export function sortParallelArrays(labels: string[], values: number[]): [string[
 }
 
 // Gets columns and table data
-export function getTableData(maps: MapDictionary): [string[], string[][]] {
+export function getTableInfo(maps: MapDictionary, xColumns: string[], yColumns: string[]): [string[], string[][]] {
+	if (xColumns.length === 0 || yColumns.length === 0) {
+		return [[], []];
+	}
+	
+	// Get the labels from the map of the first selected y column
+	// (Any selected y column would do: they all have maps with labels as keys)
+	const labels: string[] = [...maps[yColumns[0]].keys()];
+
+	const listOfColumns: string[][] = [];
+
+	for (const ycol of yColumns) {
+		// For each y column selected, get its column values
+		const columnValues: number[] = [...maps[ycol].values()].map(pair => pair[0]);
+
+		// Sort column according to labels
+		const [sortedLabels, sortedColumnValues] = sortParallelArrays(labels, columnValues);
+
+		if (listOfColumns.length === 0) {
+			// If running loop for the first time, add sorted labels
+			listOfColumns.push(sortedLabels);
+		}
+
+		listOfColumns.push(sortedColumnValues.map(v => v+""));
+	}
+
+	const listOfRows = transpose(listOfColumns);
+
 	return [
-		["Name", "Email", "Phone Number"],
-		[
-			["John", "john@example.com", "(353) 01 222 3333"],
-			["Mark", "mark@gmail.com", "(01) 22 888 4444"],
-			["Eoin", "eoin@gmail.com", "0097 22 654 00033"],
-			["Sarah", "sarahcdd@gmail.com", "+322 876 1233"],
-			["Afshin", "afshin@mail.com", "(353) 22 87 8356"]
-		]
+		["Subgroup Label", ...yColumns],
+		listOfRows
 	];
 }

@@ -17,16 +17,25 @@
 	const columnNames = $data.listColumns() as string[];
 	const numericColumns = getNumericalColumnsAndMax(columnNames, $data.toCollection(true));
 	let displayColumns: string[] = [];
-	let binSizes: BinDictionary;
+	let binSizes: BinDictionary = {};
+
+	let grid: Grid;
 
 	$: maps = getFrequenciesAndValues($data.toCollection(true), $selectedColumns, displayColumns, binSizes);
-	$: [tableColumns, tableData] = getTableInfo(maps);
+	$: [tableColumns, tableData] = getTableInfo(maps, $selectedColumns, displayColumns);
+
+	onMount(() => {
+		grid = new Grid({
+			columns: [],
+			data: [],
+		}).render(tableWrapper);
+	});
 
 	afterUpdate(() => {
-		new Grid({
+		grid.updateConfig({
 			columns: tableColumns,
 			data: tableData
-			}).render(tableWrapper);
+		}).forceRender();
 	});
 </script>
 
@@ -56,16 +65,16 @@
 {/each}
 
 <p>Parameters on the y-axis</p>
-{#each columnNames as column}
+{#each numericColumns as column}
 	<label>
 		<input
 			type="checkbox"
-			data-testid="y-check-{column}"
+			data-testid="y-check-{column[0]}"
 			name="y-params"
-			value={column}
+			value={column[0]}
 			bind:group={displayColumns}
 		/>
-		{column}
+		{column[0]}
 	</label>
 {/each}
 
