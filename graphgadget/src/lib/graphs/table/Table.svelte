@@ -3,10 +3,10 @@
 	import { data } from '$lib/Store';
 	import { afterUpdate, onMount } from 'svelte';
 	import {
-		getFrequenciesAndValues,
 		getTableInfo,
 		type BinDictionary,
-		type MapDictionary
+		ABSOLUTE_FREQUENCY,
+		RELATIVE_FREQUENCY
 	} from '$lib/graphs/histogram/HistogramController';
 	import { Grid } from "gridjs";
 	import { selectedColumns } from '$lib/ColumnSelector/Store';
@@ -17,12 +17,12 @@
 	const columnNames = $data.listColumns() as string[];
 	const numericColumns = getNumericalColumnsAndMax(columnNames, $data.toCollection(true));
 	let displayColumns: string[] = [];
+	let columnsToMean: string[] = [];
 	let binSizes: BinDictionary = {};
 
 	let grid: Grid;
 
-	$: maps = getFrequenciesAndValues($data.toCollection(true), $selectedColumns, displayColumns, binSizes);
-	$: [tableColumns, tableData] = getTableInfo(maps, $selectedColumns, displayColumns);
+	$: [tableColumns, tableData] = getTableInfo($data.toCollection(true), $selectedColumns, displayColumns, binSizes);
 
 	onMount(() => {
 		grid = new Grid({
@@ -65,6 +65,26 @@
 {/each}
 
 <p>Parameters on the y-axis</p>
+<label>
+	<input
+		type="checkbox"
+		data-testid="y-check-absolute-frequency"
+		name="y-params"
+		value={ABSOLUTE_FREQUENCY}
+		bind:group={displayColumns}
+	/>
+	{ABSOLUTE_FREQUENCY}
+</label>
+<label>
+	<input
+		type="checkbox"
+		data-testid="y-check-relative-frequency"
+		name="y-params"
+		value={RELATIVE_FREQUENCY}
+		bind:group={displayColumns}
+	/>
+	{RELATIVE_FREQUENCY}
+</label>
 {#each numericColumns as column}
 	<label>
 		<input
@@ -76,6 +96,18 @@
 		/>
 		{column[0]}
 	</label>
+{/each}
+
+<br />
+{#each displayColumns as column}
+	<input
+		type="checkbox"
+		data-testid="y-check-mean-{column}"
+		name="y-params-mean"
+		value={column}
+		bind:group={columnsToMean}
+	/>
+	Mean {column}
 {/each}
 
 <div bind:this={tableWrapper}></div>

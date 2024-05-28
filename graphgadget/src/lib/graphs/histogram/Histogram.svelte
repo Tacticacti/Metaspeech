@@ -66,7 +66,6 @@
 			parameterType,
 			binSizes
 		);
-		[labels, values] = sortParallelArrays(labels, values);
 
 		chart.data.labels = labels;
 		chart.data.datasets = [

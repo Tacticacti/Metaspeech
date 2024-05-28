@@ -86,6 +86,11 @@ function compareElementsOfCombinedArray(a: [string, number], b: [string, number]
 	return comparison;
 }
 
+/**
+ * Transposes a 2d string array
+ * @param matrix the 2d array
+ * @returns the transpose of the matrix
+ */
 function transpose(matrix: string[][]): string[][] {
 	const result: string[][] = [];
 	const m = matrix.length;
@@ -103,6 +108,14 @@ function transpose(matrix: string[][]): string[][] {
 	return result;
 }
 
+/**
+ * Calculates and returns a map for each y-axis column. Each map stores labels as keys and the sum and frequency of that column
+ * @param dataRows all of the rows
+ * @param selectedParams the selected x-axis parameters to group by
+ * @param yAxisParams the selected y-axis parameters to display
+ * @param binSizes a bin dictionary storing the binning size for each parameter
+ * @returns map dictionary which stores one map for each parameter
+ */
 export function getFrequenciesAndValues(
 	dataRows: Row[],
 	selectedParams: string[],
@@ -151,6 +164,15 @@ export function getFrequenciesAndValues(
 	return maps;
 }
 
+/**
+ * Calculates the axis labels and the column values of a histogram
+ * @param dataRows the data rows
+ * @param selectedParams the selected params for subgrouping
+ * @param checkedMean whether the mean was checked for calculation or not
+ * @param yAxisParam the parameter to be shown in the y-axis
+ * @param binSizes the binning size of each parameter
+ * @returns an array with labels and an array with values of the y-axis for each label
+ */
 export function calculateAxis(
 	dataRows: Row[],
 	selectedParams: string[],
@@ -185,10 +207,16 @@ export function calculateAxis(
 		}
 	}
 
-	return [labels, values];
+	return sortParallelArrays(labels, values);
 }
 
-// Sorts two arrays based on the labels
+/**
+ * Sorts two arrays in parallel based on the labels
+ * @param labels the array of labels
+ * @param values the array of values
+ * @return the sorted arrays of labels and values
+ */
+
 export function sortParallelArrays(labels: string[], values: number[]): [string[], number[]] {
 	const combinedArray: [string, number][] = [];
 	for (let idx = 0; idx < labels.length; ++idx) {
@@ -208,11 +236,20 @@ export function sortParallelArrays(labels: string[], values: number[]): [string[
 	return [newLabels, newValues];
 }
 
-// Gets columns and table data
-export function getTableInfo(maps: MapDictionary, xColumns: string[], yColumns: string[]): [string[], string[][]] {
+/**
+ * Gets the table and column data for table visualization
+ * @param dataRows the data rows
+ * @param xColumns the columns selected for subgrouping
+ * @param yColumns the columns to be shown for each subgroup
+ * @param binSizes the binning size of each parameter
+ * @returns an array with the column names and a 2d array with the table values
+ */
+export function getTableInfo(dataRows: Row[], xColumns: string[], yColumns: string[], binSizes: BinDictionary): [string[], string[][]] {
 	if (xColumns.length === 0 || yColumns.length === 0) {
 		return [[], []];
 	}
+
+	const maps = getFrequenciesAndValues(dataRows, xColumns, yColumns, binSizes);
 	
 	// Get the labels from the map of the first selected y column
 	// (Any selected y column would do: they all have maps with labels as keys)
@@ -236,6 +273,8 @@ export function getTableInfo(maps: MapDictionary, xColumns: string[], yColumns: 
 	}
 
 	const listOfRows = transpose(listOfColumns);
+
+	// TODO make relative frequency work, and mean
 
 	return [
 		["Subgroup Label", ...yColumns],
