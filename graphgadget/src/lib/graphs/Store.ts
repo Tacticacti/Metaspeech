@@ -1,6 +1,5 @@
 import { writable, type Writable } from 'svelte/store';
 import Histogram from './histogram/Histogram.svelte';
-//import Histogram from './histogram/Histogram.svelte';
 
 // why don't we use the GraphMeta type here?
 export const graph_name = writable('');

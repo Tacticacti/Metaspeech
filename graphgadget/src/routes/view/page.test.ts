@@ -1,10 +1,8 @@
 import { render } from '@testing-library/svelte';
 import sut from './+page.svelte';
 import { describe, it, expect } from 'vitest';
-import Stem from '$lib/graphs/Stem/Stem.svelte';
 import { selected_graph } from '$lib/graphs/Store';
 import { get } from 'svelte/store';
-import userEvent from '@testing-library/user-event';
 import Histogram from '$lib/graphs/histogram/Histogram.svelte';
 
 describe('View', () => {
@@ -16,13 +14,10 @@ describe('View', () => {
 		render(sut);
 		expect(get(selected_graph)).toBe(Histogram);
 	});
-	it('click stem', async () => {
-		const user = userEvent.setup();
-		const { getByTestId } = render(sut);
-		const stem = getByTestId('Stem');
-
-		await user.click(stem);
-		expect(get(selected_graph)).toBe(Stem);
+	it('session storage cleared should still render', () => {
+		sessionStorage.clear();
+		const { container } = render(sut);
+		expect(container).to.exist;
 	});
 	// it('should have a select component', async () => {
 	// 	const { getByRole } = render(sut);

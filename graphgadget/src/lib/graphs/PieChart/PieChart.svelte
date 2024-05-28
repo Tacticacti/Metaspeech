@@ -1,31 +1,39 @@
 <script lang="ts">
-	import { getNumericalColumnsAndMax } from '$lib/ColumnSelector/ColumnHelper';
 	import { data } from '$lib/Store';
 	import PngButton from '$lib/shared-components/PNGButton.svelte';
 	import JpgButton from '$lib/shared-components/JPGButton.svelte';
 	import { Chart, type ChartConfiguration } from 'chart.js/auto';
 	import { setColor } from '$lib/utils/CanvasUtils';
 	import { afterUpdate, onMount } from 'svelte';
-	import ParameterSelector from '$lib/graphs/histogram/ParameterSelector.svelte';
-	import {
-		calculateAxis,
-		sortParallelArrays,
-		type BinDictionary
-	} from '$lib/graphs/histogram/HistogramController';
 	import { selectedColumns } from '$lib/ColumnSelector/Store';
+	import WarningGenerator from '$lib/WarningGenerator/WarningGenerator.svelte';
 
 	let canvas: HTMLCanvasElement;
 	let chart: Chart;
 
-	const columnNames = $data.listColumns() as string[];
+	// Pre-select the first column
 
-	const numericColumns = getNumericalColumnsAndMax(columnNames, $data.toCollection(true));
+	export function calculateAxis(x_axis: string) {
+		try {
+			// Calculate the frequency of each unique value
+			let map = new Map<string, number>();
+			const arr: string[] = $data.toArray(x_axis) as string[];
+			for (let i = 0; i < arr.length; i++) {
+				let val = map.get(arr[i]);
+				map.set(arr[i], val === undefined ? 1 : val + 1);
+			}
 
-	let checkedMean: boolean;
-	let parameterType: string;
-	let binSizes: BinDictionary;
+			// Convert map to arrays
+			const labels: string[] = [...map.keys()];
+			let counts: number[] = [...map.values()];
 
-	// setup chart with empty config after canvas is mounted
+			return [labels, counts];
+		} catch (NoSuchColumnError) {
+			return [[], []];
+		}
+	}
+
+	// Setup chart with empty config after canvas is mounted
 	onMount(() => {
 		const plugin = {
 			id: 'customCanvasBackgroundColor',
@@ -33,12 +41,11 @@
 		};
 
 		const cfg: ChartConfiguration = {
-			type: 'bar',
+			type: 'pie',
 			data: {
 				labels: [],
 				datasets: []
 			},
-
 			options: {
 				plugins: {
 					// @ts-expect-error Needs a specific type for plugin
@@ -47,7 +54,6 @@
 					}
 				}
 			},
-
 			// @ts-expect-error plugin needs a type same as above
 			plugins: [plugin]
 		};
@@ -55,27 +61,16 @@
 		chart = new Chart(canvas, cfg);
 	});
 
-	// update chart data
+	// Update chart data
 	afterUpdate(() => {
-		let labels, values;
-
-		[labels, values] = calculateAxis(
-			$data.toCollection(true),
-			$selectedColumns,
-			checkedMean,
-			parameterType,
-			binSizes
-		);
-		[labels, values] = sortParallelArrays(labels, values);
-
+		const [labels, counts] = calculateAxis($selectedColumns[0]);
 		chart.data.labels = labels;
 		chart.data.datasets = [
 			{
-				label: parameterType,
-				data: values as number[],
-				backgroundColor: 'rgba(51, 50, 200, 1)',
-				borderColor: 'rgba(255, 99, 132, 1)',
-				borderWidth: 1
+				label: $selectedColumns[0],
+				data: counts as number[],
+				backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'],
+				hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40']
 			}
 		];
 
@@ -83,13 +78,7 @@
 	});
 </script>
 
-<ParameterSelector
-	{columnNames}
-	{numericColumns}
-	bind:checkedMean
-	bind:parameterType
-	bind:binSizes
-/>
+<WarningGenerator needNumbers={false} columnsAreLimited={true} maxColumns={1}></WarningGenerator>
 
 <div>
 	<canvas data-testid="canvas-element" bind:this={canvas} />

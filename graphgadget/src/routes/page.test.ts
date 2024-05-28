@@ -16,7 +16,7 @@ describe('Start component', () => {
 		await fireEvent.input(input);
 
 		// Check that the data store is updated correctly
-		expect(get(data)).toEqual(new DataFrame([{ a: '1', b: '2', c: '3' }]));
+		expect(get(data).toText()).toEqual(new DataFrame([{ a: '1', b: '2', c: '3' }]).toText());
 		expect(goto).toHaveBeenCalledWith('/modify');
 	});
 });

@@ -1,56 +1,57 @@
 import { it, expect } from 'vitest';
-import { render, screen } from '@testing-library/svelte';
-import sut from '$lib/graphs/Stem/Stem.svelte';
+import { render } from '@testing-library/svelte';
+import sut from '$lib/graphs/scatter/Scatter.svelte';
 import { data } from '$lib/Store';
 import userEvent from '@testing-library/user-event';
 import DataFrame from 'dataframe-js';
-import type { RenderResult } from '@testing-library/svelte';
+import { selectedColumns } from '$lib/ColumnSelector/Store';
 
 const df = new DataFrame(
 	{
 		column1: [3, 6, 8],
-		column2: [3, 4, 5]
+		column2: [3, 4, 5],
+		column3: ['a', 'b', 'c']
 	},
-	['column1', 'column2']
+	['column1', 'column2', 'column3']
 );
 
-describe('Stem tests', () => {
+data.set(df);
+describe('Scatter tests', () => {
 	let page: RenderResult;
 	beforeEach(async () => {
 		data.set(df);
+		selectedColumns.set(['column1', 'column2', 'column3']);
 		page = render(sut);
-		const user = userEvent.setup();
-		await user.click(page.getByTestId('check-column1'));
-		await user.click(page.getByTestId('check-column2'));
 	});
-	it('2 selects exist', async () => {
+
+	it('2 selects exist', () => {
 		const selectElements = page.container.querySelectorAll('select');
 		expect(selectElements.length).toEqual(2);
 	});
 
-	it('all 4 options exist', () => {
+	it('all 6 options exist', () => {
 		const optionElements = page.container.querySelectorAll('option');
-		expect(optionElements.length).toEqual(4);
+		expect(optionElements.length).toEqual(6);
 	});
 
-	it('first select default value is empty string', () => {
+	it('first select default value is first column', () => {
 		const firstSelect = page.getByTestId('first-select') as HTMLSelectElement;
-		expect(firstSelect.value).toEqual('');
+		expect(firstSelect.value).toEqual('column1');
 	});
 
-	it('second select default value is empty string', () => {
+	it('second select default value is second column', () => {
 		const secondSelect = page.getByTestId('second-select') as HTMLSelectElement;
-		expect(secondSelect.value).toEqual('');
+		expect(secondSelect.value).toEqual('column2');
 	});
 
-	it('First and second select have first column + also from columnSelector', () => {
+	it('First and second select have first column', () => {
 		const column1options = page.getAllByText('column1');
-		expect(column1options.length).toEqual(2 + 1);
+		expect(column1options.length).toEqual(2);
 	});
 
-	it('First and second select have second column + also from columnSelector', () => {
+	it('First and second select have second column', () => {
 		const column2options = page.getAllByText('column2');
-		expect(column2options.length).toEqual(2 + 1);
+		expect(column2options.length).toEqual(2);
 	});
 
 	it('canvas wrapper exists', () => {
@@ -85,40 +86,5 @@ describe('Stem tests', () => {
 		const secondSelect = page.getByTestId('second-select') as HTMLSelectElement;
 		await user.selectOptions(secondSelect, ['column1']);
 		expect(secondSelect.value).toEqual('column1');
-	});
-
-	it('png button for downloading exists', () => {
-		const button = page.getByText('PNG');
-		expect(button).to.exist;
-	});
-
-	it('jpg button for downloading exists', () => {
-		const button = page.getByText('JPG');
-		expect(button).to.exist;
-	});
-
-	it('png button gets clicked', async () => {
-		const user = userEvent.setup();
-		const button = page.getByText('PNG');
-
-		await user.click(button);
-
-		const expectedDiv = page.getByTestId('download-function-called');
-		expect(expectedDiv).to.exist;
-	});
-
-	it('jpg button gets clicked', async () => {
-		const user = userEvent.setup();
-		const button = page.getByText('JPG');
-
-		await user.click(button);
-
-		const expectedDiv = page.getByTestId('download-function-called');
-		expect(expectedDiv).to.exist;
-	});
-
-	it('if no button is not clicked download is not called', () => {
-		const expectedDiv = screen.queryAllByTestId('download-function-called');
-		expect(expectedDiv).toHaveLength(0);
 	});
 });

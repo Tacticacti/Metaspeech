@@ -5,16 +5,15 @@
 	import { setColor } from '$lib/utils/CanvasUtils';
 	import PngButton from '$lib/shared-components/PNGButton.svelte';
 	import JpgButton from '$lib/shared-components/JPGButton.svelte';
-	import { selectedColumns } from '$lib/ColumnSelector/Store';
-	import ColumnSelector from '$lib/ColumnSelector/ColumnSelector.svelte';
 	import WarningGenerator from '$lib/WarningGenerator/WarningGenerator.svelte';
+	import { selectedColumns } from '$lib/ColumnSelector/Store';
 
 	let canvas: HTMLCanvasElement;
 	let chart: Chart;
 
-	let x_axis = undefined;
-	let y_axis = undefined;
-	// setup chart after canvas is mounted
+	let x_axis = $selectedColumns[0];
+	let y_axis = $selectedColumns[1];
+
 	onMount(() => {
 		const plugin = {
 			id: 'customCanvasBackgroundColor',
@@ -22,7 +21,7 @@
 		};
 
 		const cfg: ChartConfiguration = {
-			type: 'bar',
+			type: 'scatter',
 			data: {
 				labels: [],
 				datasets: []
@@ -65,7 +64,6 @@
 	});
 </script>
 
-<ColumnSelector></ColumnSelector>
 <WarningGenerator needNumbers={true} columnsAreLimited={false} maxColumns={100}></WarningGenerator>
 
 <div>
