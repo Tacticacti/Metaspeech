@@ -3,8 +3,6 @@
 	import { data } from '$lib/Store';
 	import { goto } from '$app/navigation';
 	import type { Bundle } from '$lib/types';
-	import { Alert } from 'flowbite-svelte';
-	import { Spinner } from 'flowbite-svelte';
 
 	let storeData = false;
 
@@ -50,15 +48,6 @@
 <main>
 	<h3 class="text-red-500">How it works</h3>
 	<h2>An intuitive way to visualize your speech metadata</h2>
-	<div>
-		<Alert color="blue">
-			<span class="font-medium">Info alert!</span>
-			Change a few things up and try submitting again.
-		</Alert>
-	</div>
-	<div>
-		<Spinner color="purple" />
-	</div>
 	<div>
 		<div>Upload your data as a TSV, JSON, XLS, or TXT in the correct format</div>
 		<div>Select which parameters and graph you want us to create</div>
