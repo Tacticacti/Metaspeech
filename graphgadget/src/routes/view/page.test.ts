@@ -1,27 +1,24 @@
-// import { render } from '@testing-library/svelte';
-// import sut from './+page.svelte';
+import { render } from '@testing-library/svelte';
+import sut from './+page.svelte';
 import { describe, it, expect } from 'vitest';
-// import { selected_graph } from '$lib/graphs/Store';
-// import { get } from 'svelte/store';
-// import Histogram from '$lib/graphs/histogram/Histogram.svelte';
+import { selected_graph } from '$lib/graphs/Store';
+import { get } from 'svelte/store';
+import Histogram from '$lib/graphs/histogram/Histogram.svelte';
 
 describe('View', () => {
-	it('stop', () => {
-		expect(1).toBe(1);
+	it('should render', () => {
+		const { container } = render(sut);
+		expect(container).to.exist;
 	});
-	// it('should render', () => {
-	// 	const { container } = render(sut);
-	// 	expect(container).to.exist;
-	// });
-	// it('should contain histogram', async () => {
-	// 	render(sut);
-	// 	expect(get(selected_graph)).toBe(Histogram);
-	// });
-	// it('session storage cleared should still render', () => {
-	// 	sessionStorage.clear();
-	// 	const { container } = render(sut);
-	// 	expect(container).to.exist;
-	// });
+	it('should contain histogram', async () => {
+		render(sut);
+		expect(get(selected_graph)).toBe(Histogram);
+	});
+	it('session storage cleared should still render', () => {
+		sessionStorage.clear();
+		const { container } = render(sut);
+		expect(container).to.exist;
+	});
 	// it('should have a select component', async () => {
 	// 	const { getByRole } = render(sut);
 	// 	const select = getByRole('combobox');
