@@ -1,4 +1,4 @@
-<script lang="ts">
+<!-- <script lang="ts">
 	import { type BinDictionary } from '$lib/ColumnSelector/Store';
 	import { selectedColumns } from '$lib/ColumnSelector/Store';
 	import { ABSOLUTE_FREQUENCY, RELATIVE_FREQUENCY } from '$lib/ColumnSelector/Store';
@@ -56,4 +56,4 @@
 		<input type="checkbox" data-testid="check-mean" name="mean" bind:checked={checkedMean} />
 		Mean
 	</label>
-{/if}
+{/if} -->

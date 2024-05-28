@@ -24,7 +24,7 @@
 	<label>
 		<input
 			type="checkbox"
-			data-testid="check-{column}"
+			data-testid="groupby-{column}"
 			name="params"
 			value={column}
 			bind:group={currentlySelectedColumns}
@@ -61,7 +61,7 @@
 	<label>
 		<input
 			type="checkbox"
-			data-testid="radio-{column}"
+			data-testid="select-{column}"
 			name="params"
 			value={column}
 			bind:group={currentlySelectedValues}
@@ -72,7 +72,7 @@
 <label>
 	<input
 		type="checkbox"
-		data-testid="radio-{ABSOLUTE_FREQUENCY}"
+		data-testid="select-{ABSOLUTE_FREQUENCY}"
 		name="params"
 		value={ABSOLUTE_FREQUENCY}
 		bind:group={currentlySelectedValues}
@@ -82,7 +82,7 @@
 <label>
 	<input
 		type="checkbox"
-		data-testid="radio-{RELATIVE_FREQUENCY}"
+		data-testid="select-{RELATIVE_FREQUENCY}"
 		name="params"
 		value={RELATIVE_FREQUENCY}
 		bind:group={currentlySelectedValues}
@@ -91,7 +91,7 @@
 </label>
 
 <div>
-	<button on:click={toggleMean}>
+	<button data-testid="checked-mean-button" on:click={toggleMean}>
 		{$checkedMean ? 'Disable mean' : 'Enable mean'}
 	  </button>
 </div>

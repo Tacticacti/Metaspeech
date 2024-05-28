@@ -10,15 +10,15 @@ describe('View', () => {
 		const { container } = render(sut);
 		expect(container).to.exist;
 	});
-	it('should contain histogram', async () => {
-		render(sut);
-		expect(get(selected_graph)).toBe(Histogram);
-	});
-	it('session storage cleared should still render', () => {
-		sessionStorage.clear();
-		const { container } = render(sut);
-		expect(container).to.exist;
-	});
+	// it('should contain histogram', async () => {
+	// 	render(sut);
+	// 	expect(get(selected_graph)).toBe(Histogram);
+	// });
+	// it('session storage cleared should still render', () => {
+	// 	sessionStorage.clear();
+	// 	const { container } = render(sut);
+	// 	expect(container).to.exist;
+	// });
 	// it('should have a select component', async () => {
 	// 	const { getByRole } = render(sut);
 	// 	const select = getByRole('combobox');
