@@ -93,6 +93,5 @@
 <div>
 	<button data-testid="checked-mean-button" on:click={toggleMean}>
 		{$checkedMean ? 'Disable mean' : 'Enable mean'}
-	  </button>
+	</button>
 </div>
-

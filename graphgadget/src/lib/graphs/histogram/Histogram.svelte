@@ -1,27 +1,21 @@
 <script lang="ts">
-	import { getNumericalColumnsAndMax } from '$lib/ColumnSelector/ColumnHelper';
 	import { data } from '$lib/Store';
 	import PngButton from '$lib/shared-components/PNGButton.svelte';
 	import JpgButton from '$lib/shared-components/JPGButton.svelte';
 	import { Chart, type ChartConfiguration } from 'chart.js/auto';
 	import { setColor } from '$lib/utils/CanvasUtils';
 	import { afterUpdate, onMount } from 'svelte';
+	import { calculateAxis, sortParallelArrays } from '$lib/graphs/histogram/HistogramController';
 	import {
-		calculateAxis,
-		sortParallelArrays
-	} from '$lib/graphs/histogram/HistogramController';
-	import { selectedColumns, checkedMean, selectedValues, binSizes } from '$lib/ColumnSelector/Store';
+		selectedColumns,
+		checkedMean,
+		selectedValues,
+		binSizes
+	} from '$lib/ColumnSelector/Store';
 	import WarningGenerator from '$lib/WarningGenerator/WarningGenerator.svelte';
 
 	let canvas: HTMLCanvasElement;
 	let chart: Chart;
-
-	const columnNames = $data.listColumns() as string[];
-
-	// TODO: find a better way to get the type,
-	// currently only looks at first row.
-	// Remember there can be undefined elements if not cleared
-	const numericColumns = getNumericalColumnsAndMax(columnNames, $data.toCollection(true));
 
 	// let checkedMean: boolean;
 	// let parameterType: string;
@@ -93,7 +87,13 @@
 	bind:parameterType
 	bind:binSizes
 /> -->
-<WarningGenerator needNumbers={false} columnsAreLimited={false} maxColumns={100} valuesAreLimited={true} maxValues={1}></WarningGenerator>
+<WarningGenerator
+	needNumbers={false}
+	columnsAreLimited={false}
+	maxColumns={100}
+	valuesAreLimited={true}
+	maxValues={1}
+></WarningGenerator>
 <div>
 	<canvas data-testid="canvas-element" bind:this={canvas} />
 </div>

@@ -1,4 +1,4 @@
-<script lang="ts">
+<!-- <script lang="ts">
 	import { data } from '$lib/Store';
 	import { Chart, type ChartConfiguration } from 'chart.js/auto';
 	import { afterUpdate, onMount, onDestroy } from 'svelte';
@@ -92,4 +92,4 @@
 	div > canvas {
 		width: 800px;
 	}
-</style>
+</style> -->

@@ -7,7 +7,11 @@ import {
 	EMPTY_ENTRY
 } from '$lib/graphs/histogram/HistogramController';
 import DataFrame from 'dataframe-js';
-import { ABSOLUTE_FREQUENCY, RELATIVE_FREQUENCY, type BinDictionary } from '$lib/ColumnSelector/Store';
+import {
+	ABSOLUTE_FREQUENCY,
+	RELATIVE_FREQUENCY,
+	type BinDictionary
+} from '$lib/ColumnSelector/Store';
 
 const df = new DataFrame(
 	{

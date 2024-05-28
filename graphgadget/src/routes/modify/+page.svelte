@@ -8,7 +8,6 @@
 	import type { Bundle } from '$lib/types';
 	import { onMount } from 'svelte';
 	import { loadSession } from '$lib/utils/SessionLoad';
-	import ColumnSelector from '$lib/ColumnSelector/ColumnSelector.svelte';
 
 	$: column_names = $data.listColumns() as string[];
 	$: missing_values = hasMissingValues($data);
@@ -84,6 +83,5 @@
 {/if}
 
 <Filter />
-
 
 <Table />

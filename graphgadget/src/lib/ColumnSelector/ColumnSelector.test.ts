@@ -230,4 +230,3 @@ describe('checkedMean button tests', () => {
 		expect(get(checkedMean)).toBe(false);
 	});
 });
-

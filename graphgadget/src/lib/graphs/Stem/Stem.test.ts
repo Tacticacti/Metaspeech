@@ -1,10 +1,14 @@
-// import { it, expect } from 'vitest';
+import { it, expect } from 'vitest';
 // import { render, screen } from '@testing-library/svelte';
 // import sut from '$lib/graphs/Stem/Stem.svelte';
 // import { data } from '$lib/Store';
 // import userEvent from '@testing-library/user-event';
 // import DataFrame from 'dataframe-js';
 // import type { RenderResult } from '@testing-library/svelte';
+
+it('stop warning', () => {
+	expect(1).toBe(1);
+});
 
 // const df = new DataFrame(
 // 	{

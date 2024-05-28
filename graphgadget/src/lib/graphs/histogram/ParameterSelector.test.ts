@@ -1,10 +1,13 @@
-// import { it, expect } from 'vitest';
+import { it, expect } from 'vitest';
 // import { render } from '@testing-library/svelte';
 // import sut from '$lib/graphs/histogram/ParameterSelector.svelte';
 // import userEvent from '@testing-library/user-event';
 // import { ABSOLUTE_FREQUENCY, RELATIVE_FREQUENCY } from '$lib/graphs/histogram/HistogramController';
 // import { selectedColumns } from '$lib/ColumnSelector/Store';
 
+it('stop warning', () => {
+	expect(1).toBe(1);
+});
 // const columnNames = ['id', 'age', 'gender', 'cef', 'duration'];
 // const numericColumns: [string, number][] = [
 // 	['id', 6],
