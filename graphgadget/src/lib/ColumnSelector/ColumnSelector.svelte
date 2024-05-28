@@ -57,16 +57,16 @@
 	{/if}
 {/each}
 <p>Select</p>
-{#each columnNames as column}
+{#each numericColumns as column}
 	<label>
 		<input
 			type="checkbox"
-			data-testid="select-{column}"
+			data-testid="select-{column[0]}"
 			name="params"
-			value={column}
+			value={column[0]}
 			bind:group={currentlySelectedValues}
 		/>
-		{column}
+		{column[0]}
 	</label>
 {/each}
 <label>
