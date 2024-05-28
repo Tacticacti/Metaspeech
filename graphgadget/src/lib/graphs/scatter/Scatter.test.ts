@@ -16,7 +16,7 @@ const df = new DataFrame(
 );
 
 data.set(df);
-describe('Stem tests', () => {
+describe('Scatter tests', () => {
 	let page: RenderResult;
 	beforeEach(async () => {
 		data.set(df);
