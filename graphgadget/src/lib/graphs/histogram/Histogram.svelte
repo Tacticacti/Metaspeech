@@ -10,7 +10,10 @@
 		selectedColumns,
 		checkedMean,
 		selectedValues,
-		binSizes
+		binSizes,
+
+		ABSOLUTE_FREQUENCY
+
 	} from '$lib/ColumnSelector/Store';
 	import WarningGenerator from '$lib/WarningGenerator/WarningGenerator.svelte';
 
@@ -23,6 +26,28 @@
 
 	// setup chart with empty config after canvas is mounted
 	onMount(() => {
+		if($selectedValues.length === 0){
+			$selectedValues = [ABSOLUTE_FREQUENCY];
+		}
+
+		let labels, values;
+		[labels, values] = calculateAxis(
+			$data.toCollection(true),
+			$selectedColumns,
+			$checkedMean,
+			$selectedValues[0],
+			$binSizes
+		);
+		[labels, values] = sortParallelArrays(labels, values);
+		let datasets = [
+			{
+				label: $selectedValues[0],
+				data: values as number[],
+				backgroundColor: 'rgba(51, 50, 200, 1)',
+				borderColor: 'rgba(255, 99, 132, 1)',
+				borderWidth: 1
+			}
+		];
 		const plugin = {
 			id: 'customCanvasBackgroundColor',
 			beforeDraw: setColor
@@ -31,8 +56,8 @@
 		const cfg: ChartConfiguration = {
 			type: 'bar',
 			data: {
-				labels: [],
-				datasets: []
+				labels: labels,
+				datasets: datasets
 			},
 
 			options: {
@@ -51,34 +76,7 @@
 		chart = new Chart(canvas, cfg);
 	});
 
-	// update chart data
-	afterUpdate(() => {
-		let labels, values;
-		console.log($selectedColumns);
-		[labels, values] = calculateAxis(
-			$data.toCollection(true),
-			$selectedColumns,
-			$checkedMean,
-			$selectedValues[0],
-			$binSizes
-		);
-		console.log(labels);
-		console.log(values);
-		[labels, values] = sortParallelArrays(labels, values);
-
-		chart.data.labels = labels;
-		chart.data.datasets = [
-			{
-				label: $selectedValues[0],
-				data: values as number[],
-				backgroundColor: 'rgba(51, 50, 200, 1)',
-				borderColor: 'rgba(255, 99, 132, 1)',
-				borderWidth: 1
-			}
-		];
-
-		chart.update();
-	});
+	
 </script>
 
 <!-- <ParameterSelector
