@@ -76,7 +76,6 @@ export function calculateAxis(
 	yAxisParam: string,
 	binSizes: BinDictionary
 ): [string[], number[]] {
-	console.log(yAxisParam);
 	const mapFrequencies = new Map<string, number>();
 	const mapValues = new Map<string, number>();
 

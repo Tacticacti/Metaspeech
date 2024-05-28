@@ -60,6 +60,7 @@
 	// update chart data
 	afterUpdate(() => {
 		let labels, values;
+		console.log($selectedColumns);
 		[labels, values] = calculateAxis(
 			$data.toCollection(true),
 			$selectedColumns,
@@ -67,6 +68,8 @@
 			$selectedValues[0],
 			$binSizes
 		);
+		console.log(labels);
+		console.log(values);
 		[labels, values] = sortParallelArrays(labels, values);
 
 		chart.data.labels = labels;
