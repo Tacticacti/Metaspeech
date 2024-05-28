@@ -4,16 +4,14 @@
 	import JpgButton from '$lib/shared-components/JPGButton.svelte';
 	import { Chart, type ChartConfiguration } from 'chart.js/auto';
 	import { setColor } from '$lib/utils/CanvasUtils';
-	import { afterUpdate, onMount } from 'svelte';
+	import { onMount } from 'svelte';
 	import { calculateAxis, sortParallelArrays } from '$lib/graphs/histogram/HistogramController';
 	import {
 		selectedColumns,
 		checkedMean,
 		selectedValues,
 		binSizes,
-
 		ABSOLUTE_FREQUENCY
-
 	} from '$lib/ColumnSelector/Store';
 	import WarningGenerator from '$lib/WarningGenerator/WarningGenerator.svelte';
 
@@ -26,7 +24,7 @@
 
 	// setup chart with empty config after canvas is mounted
 	onMount(() => {
-		if($selectedValues.length === 0){
+		if ($selectedValues.length === 0) {
 			$selectedValues = [ABSOLUTE_FREQUENCY];
 		}
 
@@ -75,8 +73,6 @@
 
 		chart = new Chart(canvas, cfg);
 	});
-
-	
 </script>
 
 <!-- <ParameterSelector

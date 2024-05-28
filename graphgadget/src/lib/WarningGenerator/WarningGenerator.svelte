@@ -20,12 +20,12 @@
 	{/each}
 {/if}
 {#if columnsAreLimited && $selectedColumns.length > maxColumns}
-	<div>
+	<div data-testid="groupby-limit">
 		Number of columns are limited. Limit: {maxColumns}. Number of selected columns: {$selectedColumns.length}
 	</div>
 {/if}
 {#if valuesAreLimited && $selectedValues.length > maxValues}
-	<div>
+	<div data-testid="select-limit">
 		Number of select values are limited. Limit: {maxValues}. Number of selected select values: {$selectedValues.length}
 	</div>
 {/if}
