@@ -6,13 +6,12 @@
 	import { Chart, type ChartConfiguration } from 'chart.js/auto';
 	import { setColor } from '$lib/utils/CanvasUtils';
 	import { afterUpdate, onMount } from 'svelte';
-	import ParameterSelector from '$lib/graphs/histogram/ParameterSelector.svelte';
 	import {
 		calculateAxis,
-		sortParallelArrays,
-		type BinDictionary
+		sortParallelArrays
 	} from '$lib/graphs/histogram/HistogramController';
-	import { selectedColumns } from '$lib/ColumnSelector/Store';
+	import { selectedColumns, checkedMean, selectedValues, binSizes } from '$lib/ColumnSelector/Store';
+	import WarningGenerator from '$lib/WarningGenerator/WarningGenerator.svelte';
 
 	let canvas: HTMLCanvasElement;
 	let chart: Chart;
@@ -24,9 +23,9 @@
 	// Remember there can be undefined elements if not cleared
 	const numericColumns = getNumericalColumnsAndMax(columnNames, $data.toCollection(true));
 
-	let checkedMean: boolean;
-	let parameterType: string;
-	let binSizes: BinDictionary;
+	// let checkedMean: boolean;
+	// let parameterType: string;
+	// let binSizes: BinDictionary;
 
 	// setup chart with empty config after canvas is mounted
 	onMount(() => {
@@ -61,20 +60,19 @@
 	// update chart data
 	afterUpdate(() => {
 		let labels, values;
-
 		[labels, values] = calculateAxis(
 			$data.toCollection(true),
 			$selectedColumns,
-			checkedMean,
-			parameterType,
-			binSizes
+			$checkedMean,
+			$selectedValues[0],
+			$binSizes
 		);
 		[labels, values] = sortParallelArrays(labels, values);
 
 		chart.data.labels = labels;
 		chart.data.datasets = [
 			{
-				label: parameterType,
+				label: $selectedValues[0],
 				data: values as number[],
 				backgroundColor: 'rgba(51, 50, 200, 1)',
 				borderColor: 'rgba(255, 99, 132, 1)',
@@ -86,14 +84,13 @@
 	});
 </script>
 
-<ParameterSelector
-	{columnNames}
+<!-- <ParameterSelector
 	{numericColumns}
 	bind:checkedMean
 	bind:parameterType
 	bind:binSizes
-/>
-
+/> -->
+<WarningGenerator needNumbers={false} columnsAreLimited={false} maxColumns={100} valuesAreLimited={true} maxValues={1}></WarningGenerator>
 <div>
 	<canvas data-testid="canvas-element" bind:this={canvas} />
 </div>

@@ -62,7 +62,7 @@
 	</span>
 {/if}
 
-<a href="/view" on:click={handleClick} data-testid="next-link">Next</a>
+<a href="/select" on:click={handleClick} data-testid="next-link">Next</a>
 
 <Importer on:input={handleInput} />
 
@@ -85,6 +85,5 @@
 
 <Filter />
 
-<ColumnSelector></ColumnSelector>
 
 <Table />

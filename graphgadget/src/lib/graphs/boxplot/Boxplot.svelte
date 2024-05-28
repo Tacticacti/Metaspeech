@@ -79,7 +79,7 @@
 	}
 </script>
 
-<WarningGenerator needNumbers={true} columnsAreLimited={false} maxColumns={100}></WarningGenerator>
+<WarningGenerator needNumbers={true} columnsAreLimited={false} maxColumns={100} valuesAreLimited={true} maxValues={1}></WarningGenerator>
 
 <div>
 	<canvas data-testid="canvas-element" bind:this={canvas} />

@@ -1,10 +1,7 @@
 <script lang="ts">
+	import { type BinDictionary } from '$lib/ColumnSelector/Store';
 	import { selectedColumns } from '$lib/ColumnSelector/Store';
-	import {
-		ABSOLUTE_FREQUENCY,
-		RELATIVE_FREQUENCY,
-		type BinDictionary
-	} from '$lib/graphs/histogram/HistogramController';
+	import { ABSOLUTE_FREQUENCY, RELATIVE_FREQUENCY } from '$lib/ColumnSelector/Store';
 
 	//export let columnNames: string[];  						where is this used??
 	export let numericColumns: [string, number][];
