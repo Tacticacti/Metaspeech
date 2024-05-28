@@ -9,6 +9,8 @@
 	import { onMount } from 'svelte';
 	import { loadSession } from '$lib/utils/SessionLoad';
 	import ColumnSelector from '$lib/ColumnSelector/ColumnSelector.svelte';
+	import { Navbar, NavBrand, NavLi, NavUl, NavHamburger } from 'flowbite-svelte';
+	import { Progressbar } from 'flowbite-svelte';
 
 	$: column_names = $data.listColumns() as string[];
 	$: missing_values = hasMissingValues($data);
@@ -53,38 +55,77 @@
 	}
 </script>
 
-{#if missing_values.length !== 0}
-	<span>
-		<p>Warning: Missing values detected in: {columns_with_missing.join(', ')}</p>
-		<button on:click={removeMissingValues} data-testid="remove-missing-button"
-			>Remove missing values</button
-		>
-	</span>
-{/if}
+<main class="bg-offwhite max-w-full">
+<!-- This creates a nav bar with the routes and their effects -->
+<div class="relative px-8">
+	<Navbar class="bg-darkblue text-blue-200 px-2 sm:px-4 py-2.5 fixed w-full z-20 top-0 start-0 border-b">
+		<NavBrand href='/'>
+		<img src="GraphGadgetNavLogo.svg" class="me-3 h-6 sm:h-9" alt="GG logo" />
+		<span class="self-center whitespace-nowrap text-xl font-semibold dark:text-white">Graph Gadget</span>
+		</NavBrand>
+		<NavHamburger />
+		<div>
+			<NavUl ulClass="flex flex-col p-4 mt-4 md:flex-row md:space-x-20 rtl:space-x-reverse md:mt-0 md:text-sm md:font-medium">
+				<NavLi class="text-blue-200 hover:text-darkblue md:text-blue-400 md:hover:text-blue-50" href="/" active={true}>HOME</NavLi>
+				<NavLi class="text-blue-200 hover:text-darkblue md:text-offwhite md:hover:text-offwhite font-bold" href="/modify">DATA</NavLi>
+				<NavLi class="text-blue-200 hover:text-darkblue md:text-blue-400 md:hover:text-blue-50" href="/view">PARAMETERS</NavLi>
+				<NavLi class="text-blue-200 hover:text-darkblue md:text-blue-400 md:hover:text-blue-50" href="/view">VISUALIZATIONS</NavLi>
+			</NavUl>
+			<div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+				<div class="bg-blue-400 h-2.5 rounded-full" style="width: 29%"></div>
+			</div>
+		</div>
+		<NavUl>
+			<NavLi class="text-blue-400 hover:text-blue-50" href="/modify">ABOUT US</NavLi>
+		</NavUl>
+	</Navbar>
+</div>
 
-<a href="/view" on:click={handleClick} data-testid="next-link">Next</a>
-
-<Importer on:input={handleInput} />
-
-{#if second_data}
-	<button on:click={handleRowWiseMerge} data-testid="merge-index-button">Index merge</button>
-	<select bind:value={merge_col_1} data-testid="col1-select">
-		{#each column_names as col}
-			<option value={col}>{col}</option>
-		{/each}
-	</select>
-	<select bind:value={merge_col_2} data-testid="col2-select">
-		{#each second_data.listColumns() as col}
-			<option value={col}>{col}</option>
-		{/each}
-	</select>
-	{#if merge_col_1 && merge_col_2}
-		<button on:click={joinColumns} data-testid="merge-keyed-button">keyed merge</button>
+<div class="flex justify-center pt-16 m-5 max-w-full">
+	{#if missing_values.length !== 0}
+		<span class="flex flex-col items-center">
+			<p class="mt-2 py-2 px-6 text-red-500 font-mono">Warning: Missing values detected in [{columns_with_missing.join(', ')}]</p>
+			<button class="mt-2 w-2/3 rounded-lg py-1 text-red-50 bg-red-400 font-bold hover:text-slate-300 hover:bg-red-500" on:click={removeMissingValues} data-testid="remove-missing-button">
+				Remove missing values
+			</button>
+		</span>
 	{/if}
-{/if}
+</div>
+	
+<div class="flex justify-between items-center p-5">
+	<Filter />
 
-<Filter />
+	<div class="flex items-center h-12">
+		<a href="/view" class="py-4 px-12 bg-darkblue text-offwhite font-bold rounded-lg" on:click={handleClick} data-testid="next-link">Next</a>
+	</div>
+</div>
+	
+<div>
+	{#if second_data}
+		<button on:click={handleRowWiseMerge} data-testid="merge-index-button">Index merge</button>
+		<select bind:value={merge_col_1} data-testid="col1-select">
+			{#each column_names as col}
+				<option value={col}>{col}</option>
+			{/each}
+		</select>
+		<select bind:value={merge_col_2} data-testid="col2-select">
+			{#each second_data.listColumns() as col}
+				<option value={col}>{col}</option>
+			{/each}
+		</select>
+		{#if merge_col_1 && merge_col_2}
+			<button on:click={joinColumns} data-testid="merge-keyed-button">keyed merge</button>
+		{/if}
+	{/if}
+</div>
 
-<ColumnSelector></ColumnSelector>
+<div>
+	<ColumnSelector />
+</div>
 
-<Table />
+<div class="flex">
+	<Table />
+	<Importer on:input={handleInput} />
+</div>
+</main>
+
