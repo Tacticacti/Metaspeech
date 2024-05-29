@@ -7,7 +7,7 @@ describe('View', () => {
 		const { container } = render(sut);
 		expect(container).to.exist;
 	});
-	it('should contain histogram', async () => {
+	it('should contain link to next page', async () => {
 		const { getByTestId } = render(sut);
 		const nextLink = getByTestId('next-link');
 
