@@ -77,7 +77,7 @@
 			background-color 0.3s ease;
 		text-align: center;
 		border: 1px solid #ccc;
-		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 	}
 
 	label:hover {

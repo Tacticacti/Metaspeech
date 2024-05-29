@@ -1,10 +1,14 @@
 <script lang="ts">
+	import { ArrowRightOutline } from 'flowbite-svelte-icons';
 	import Importer from '$lib/importer/Importer.svelte';
 	import { data } from '$lib/Store';
 	import { goto } from '$app/navigation';
 	import type { Bundle } from '$lib/types';
+	import { Footer, FooterBrand, FooterCopyright, Label, Checkbox, P, Span } from 'flowbite-svelte';
 
 	let storeData = false;
+	const APP_NAME = 'Graphgadget';
+	const COPYRIGHT_YEAR = 2024;
 
 	function storeFile(filename: string) {
 		var datasets = localStorage.getItem('datasets');
@@ -28,61 +32,58 @@
 </script>
 
 <svelte:head>
-	<title>Graph Gadget</title>
+	<title>{APP_NAME}</title>
 </svelte:head>
 
-<header class="header">
-	<h1 class="text-4xl font-bold">Graph Gadget</h1>
-	<p class="tagline">Your go-to tool for intuitive data visualization</p>
+<header class="bg-white py-5 text-center">
+	<img src="GraphGadgetHomeLogo.png" alt="Logo" class="w-72 mx-auto" />
 </header>
 
-<div class="buttons-container">
+<div class="flex justify-center gap-5 p-5 bg-darkblue">
 	<Importer on:input={handleInput} />
 	<button class="button" on:click={() => goto('/previous')}>Previous Data</button>
 </div>
 
-<div class="info-section">
+<div class="text-center mt-4 flex justify-center items-center">
+	<Label class="flex items-center space-x-2">
+		<Checkbox id="store-data" bind:checked={storeData} />
+		<Span>Store data on client side?</Span>
+	</Label>
+</div>
+
+<div class="p-5">
+	<h2 class="text-xl font-bold text-darkblue">Your go-to tool for intuitive data visualization</h2>
 	<h3 class="text-gray-500">How it works</h3>
-	<h2 class="text-xl font-bold">An intuitive way to visualize your data</h2>
-	<div class="flex justify-around">
-		<div class="info-box">
-			<p>Upload your data as a TSV, JSON, XLS, or TXT in the correct format.</p>
+	<div class="flex justify-around items-center flex-col md:flex-row">
+		<div class="bg-gray-200 p-5 m-2 rounded-lg shadow-md max-w-xs text-center">
+			<P>Upload your data as a TSV, JSON, XLS, or TXT in the correct format.</P>
 		</div>
-		<div class="info-box">
-			<p>Select which parameters and graph you want us to create.</p>
+		<ArrowRightOutline class="text-4xl text-darkblue m-2 md:m-0 transform md:rotate-0 rotate-90"
+			>&rarr;</ArrowRightOutline
+		>
+		<div class="bg-gray-200 p-5 m-2 rounded-lg shadow-md max-w-xs text-center">
+			<P>Select which parameters and graph you want us to create.</P>
 		</div>
-		<div class="info-box">
-			<p>Either look at your graph in the browser or download it as a JPEG or PNG.</p>
+		<ArrowRightOutline class="text-4xl text-darkblue m-2 md:m-0 transform md:rotate-0 rotate-90"
+			>&rarr;</ArrowRightOutline
+		>
+		<div class="bg-gray-200 p-5 m-2 rounded-lg shadow-md max-w-xs text-center">
+			<P>Either look at your graph in the browser or download it as a JPEG or PNG.</P>
 		</div>
 	</div>
 </div>
 
-<div class="text-center mt-4">
-	<input type="checkbox" id="store-data" bind:checked={storeData} class="mr-2 no-select" />
-	<label for="store-data" class="no-select">Store data on client side?</label>
+<div class="flex flex-col">
+	<Footer
+		footerType="logo"
+		class="bg-footer w-full bottom-0 left-0 right-0 border-none rounded-none"
+	>
+		<FooterBrand href="/" src="GraphGadgetHomeLogo.png" alt="Flowbite Logo" />
+		<FooterCopyright href="/" by={APP_NAME} year={COPYRIGHT_YEAR} />
+	</Footer>
 </div>
 
-<footer class="text-center mt-8">
-	<p>&copy; Graph Gadget 2024</p>
-</footer>
-
 <style>
-	.header {
-		background-color: #3d4f75;
-		padding: 20px;
-		text-align: center;
-		color: black;
-		background-color: white;
-	}
-
-	.buttons-container {
-		display: flex;
-		justify-content: center;
-		gap: 20px;
-		padding: 20px;
-		background-color: #3d4f75;
-	}
-
 	.button {
 		font-size: 16px;
 		font-weight: bold;
@@ -98,58 +99,11 @@
 			background-color 0.3s ease;
 		text-align: center;
 		border: 1px solid #ccc;
-		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 	}
 
 	.button:hover {
 		color: #007bff;
 		background-color: #e0e0e0;
-	}
-	.no-select {
-		user-select: none; /* Standard syntax */
-		-webkit-user-select: none; /* For WebKit (Safari, Chrome) */
-		-moz-user-select: none; /* For Firefox */
-		-ms-user-select: none; /* For Internet Explorer/Edge */
-	}
-
-	.info-section {
-		padding: 20px;
-	}
-
-	.info-box {
-		background-color: #e0e0e0;
-		padding: 20px;
-		margin: 10px;
-		border-radius: 10px;
-		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-		max-width: 300px;
-	}
-	h2 {
-		color: #3d4f75;
-	}
-	label {
-		font-size: 16px;
-		font-weight: bold;
-		color: #333;
-		margin: 10px 0;
-		padding: 20px;
-		display: inline-block;
-		background-color: #f9f9f9;
-		border-radius: 4px;
-		cursor: pointer;
-		transition:
-			color 0.3s ease,
-			background-color 0.3s ease;
-	}
-	@media (max-width: 768px) {
-		.flex {
-			flex-direction: column;
-			align-items: center;
-		}
-
-		.info-box {
-			max-width: 90%;
-			margin-bottom: 20px;
-		}
 	}
 </style>
