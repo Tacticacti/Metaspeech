@@ -123,6 +123,7 @@ export function getFrequenciesAndValues(
 	binSizes: BinDictionary): MapDictionary {
 
 	const maps: MapDictionary = {};
+	const totalFrequency = dataRows.length;
 
 	// Iterate all rows
 	for (const row of dataRows) {
@@ -135,9 +136,12 @@ export function getFrequenciesAndValues(
 		// For each y-axis parameter that is being calculated
 		for (const yParam of yAxisParams) {
 			let increment = 0;
-			if (yParam === ABSOLUTE_FREQUENCY || yParam === RELATIVE_FREQUENCY) {
-				// If frequency, value to increment is one (one row)
+			if (yParam === ABSOLUTE_FREQUENCY) {
+				// If abs frequency, value to increment is one (one row)
 				increment = 1;
+			} else if (yParam === RELATIVE_FREQUENCY) {
+				// Rel freq: divide by total frequency
+				increment = 1 / totalFrequency;
 			} else {
 				// Otherwise value is the value of that attribute of the row
 				increment = +row.get(yParam);
@@ -274,7 +278,7 @@ export function getTableInfo(dataRows: Row[], xColumns: string[], yColumns: stri
 
 	const listOfRows = transpose(listOfColumns);
 
-	// TODO make relative frequency work, and mean
+	// TODO make mean work
 
 	return [
 		["Subgroup Label", ...yColumns],
