@@ -8,7 +8,7 @@
 	import { setColor } from '$lib/utils/CanvasUtils';
 	import PngButton from '$lib/shared-components/PNGButton.svelte';
 	import JpgButton from '$lib/shared-components/JPGButton.svelte';
-	import { selectedColumns } from '$lib/ColumnSelector/Store';
+	import { selectedColumns } from '$lib/Store';
 	import WarningGenerator from '$lib/WarningGenerator/WarningGenerator.svelte';
 
 	let canvas: HTMLCanvasElement;
@@ -79,7 +79,13 @@
 	}
 </script>
 
-<WarningGenerator needNumbers={true} columnsAreLimited={false} maxColumns={100}></WarningGenerator>
+<WarningGenerator
+	needNumbers={true}
+	columnsAreLimited={false}
+	maxColumns={100}
+	valuesAreLimited={true}
+	maxValues={1}
+></WarningGenerator>
 
 <div>
 	<canvas data-testid="canvas-element" bind:this={canvas} />

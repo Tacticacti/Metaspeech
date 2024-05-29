@@ -8,7 +8,6 @@
 	import type { Bundle } from '$lib/types';
 	import { onMount } from 'svelte';
 	import { loadSession } from '$lib/utils/SessionLoad';
-	import ColumnSelector from '$lib/ColumnSelector/ColumnSelector.svelte';
 
 	$: column_names = $data.listColumns() as string[];
 	$: missing_values = hasMissingValues($data);
@@ -62,7 +61,7 @@
 	</span>
 {/if}
 
-<a href="/view" on:click={handleClick} data-testid="next-link">Next</a>
+<a href="/select" on:click={handleClick} data-testid="next-link">Next</a>
 
 <Importer on:input={handleInput} />
 
@@ -84,7 +83,5 @@
 {/if}
 
 <Filter />
-
-<ColumnSelector></ColumnSelector>
 
 <Table />

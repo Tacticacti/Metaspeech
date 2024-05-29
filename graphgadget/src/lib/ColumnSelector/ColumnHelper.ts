@@ -1,8 +1,6 @@
 import { Row } from 'dataframe-js';
 
-export const SelectorType = {
-	MULTI_SELECT: 'Multi_select'
-};
+// gets numerical columns and their maximum value
 export function getNumericalColumnsAndMax(columnNames: string[], rows: Row[]): [string, number][] {
 	const numericNamesAndMaxs: [string, number][] = [];
 
