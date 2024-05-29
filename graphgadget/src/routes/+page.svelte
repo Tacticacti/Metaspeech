@@ -35,7 +35,9 @@
 	<title>{APP_NAME}</title>
 </svelte:head>
 
-<header class="bg-white py-5 text-center">
+<main class="bg-offwhite">
+
+<header class="bg-offwhite py-5 text-center">
 	<img src="GraphGadgetHomeLogo.png" alt="Logo" class="w-72 mx-auto" />
 </header>
 
@@ -74,12 +76,14 @@
 <div class="flex flex-col">
 	<Footer
 		footerType="logo"
-		class="bg-footer w-full bottom-0 left-0 right-0 border-none rounded-none"
+		class="bg-darkblue w-full bottom-0 left-0 right-0 border-none rounded-none"
 	>
-		<FooterBrand href="/" src="GraphGadgetHomeLogo.png" alt="Flowbite Logo" />
+		<FooterBrand href="/" src="GraphGadgetNavLogo.svg" alt="Flowbite Logo" />
 		<FooterCopyright href="/" by={APP_NAME} year={COPYRIGHT_YEAR} />
 	</Footer>
 </div>
+
+</main>
 
 <style>
 	.button {

@@ -8,7 +8,6 @@ export default {
 		extend: {},
 		colors: {
 			darkblue: '#3D4F75',
-			footer: '#6988C9',
 			offwhite: '#F1F6F9'
 		}
 	},
