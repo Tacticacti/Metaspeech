@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+.nav-m0 > nav > div {
+    margin: 0px;
+    width: 100%;
+}

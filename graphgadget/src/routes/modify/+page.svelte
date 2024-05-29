@@ -54,10 +54,10 @@
 	}
 </script>
 
-<main class="bg-offwhite max-w-full">
+<main class="bg-offwhite max-w-full min-h-screen m-0">
 	<!-- This creates a nav bar with the routes and their effects -->
-	<div class="relative px-8">
-		<Navbar class="bg-darkblue text-blue-200 py-2.5 fixed w-full z-20 top-0 start-0 border-b">
+	<div class="relative px-8 nav-m0">
+		<Navbar class="bg-darkblue grid grid-cols-1 text-blue-200 py-2.5 fixed w-full max-w-full z-20 top-0 start-0 border-b">
 			<NavBrand href="/">
 				<img src="GraphGadgetNavLogo.svg" class="me-3 h-6 sm:h-9 pl-0" alt="GG logo" />
 				<span class="self-center whitespace-nowrap text-xl font-semibold dark:text-white"
@@ -91,7 +91,7 @@
 					<div class="bg-blue-400 h-2.5 rounded-full" style="width: 29%"></div>
 				</div>
 			</div>
-			<div class="ml-32"></div>
+			<div class="ml-24"></div>
 		</Navbar>
 	</div>
 
