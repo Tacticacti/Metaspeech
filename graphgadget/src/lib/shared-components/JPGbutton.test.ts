@@ -9,24 +9,10 @@ describe('download', () => {
 	beforeEach(async () => {
 		page = render(sut);
 	});
-	it('png button for downloading exists', () => {
-		const button = page.getByText('PNG');
-		expect(button).to.exist;
-	});
 
 	it('jpg button for downloading exists', () => {
 		const button = page.getByText('JPG');
 		expect(button).to.exist;
-	});
-
-	it('png button gets clicked', async () => {
-		const user = userEvent.setup();
-		const button = page.getByText('PNG');
-
-		await user.click(button);
-
-		const expectedDiv = page.getByTestId('download-function-called');
-		expect(expectedDiv).to.exist;
 	});
 
 	it('jpg button gets clicked', async () => {
