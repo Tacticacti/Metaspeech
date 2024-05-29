@@ -9,6 +9,12 @@ This is the project containing the web application that we will be developing.
 5. To run the website use "npm run preview". You can also use "npm run dev" if you dont want to build each time.
 6. When you are finished press 'q' to exit
 
+## styling
+We are using Tailwind and Flowbite for style component and other types of styling. Tailwind is used as an inline css enhancer and Flowbite provied svelte components for common things seen in websites such as a loading spinner.
+More information on this can be found in the following links.
+[Tailwind CSS](https://tailwindcss.com/)
+[Flowbite Svelte components](https://flowbite-svelte.com/)
+
 ## testing
 There are 2 main ways of testing.
 
