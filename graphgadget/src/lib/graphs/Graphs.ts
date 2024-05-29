@@ -1,6 +1,6 @@
 import Histogram from './histogram/Histogram.svelte';
 import Scatter from './scatter/Scatter.svelte';
-import PieChart from './PieChart/PieChart.svelte';
+import PieChart from './pie/PieChart.svelte';
 import Boxplot from './boxplot/Boxplot.svelte';
 import Table from './table/Table.svelte';
 

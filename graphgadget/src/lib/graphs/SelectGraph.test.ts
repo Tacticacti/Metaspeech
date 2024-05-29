@@ -1,12 +1,12 @@
 import { render } from '@testing-library/svelte';
-import sut from '$lib/graphs/Select-graph.svelte';
+import sut from '$lib/graphs/SelectGraph.svelte';
 import { describe, it, expect } from 'vitest';
 import { GraphMetas } from '$lib/graphs/Graphs';
 import userEvent from '@testing-library/user-event';
 import Histogram from './histogram/Histogram.svelte';
 import { selected_graph, graph_name, graph_description } from './Store';
 import { get } from 'svelte/store';
-import PieChart from './PieChart/PieChart.svelte';
+import PieChart from './pie/PieChart.svelte';
 import Scatter from './scatter/Scatter.svelte';
 import Boxplot from './boxplot/Boxplot.svelte';
 

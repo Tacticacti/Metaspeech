@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { beforeUpdate } from 'svelte';
 	import { loadSession } from '$lib/utils/SessionLoad';
-	import ColumnSelector from '$lib/ColumnSelector/ColumnSelector.svelte';
+	import ColumnSelector from '$lib/column-selector/ColumnSelector.svelte';
 
 	/**
 	 * Will check if there is a dataframe in session storage and load it

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { graph_name, graph_description } from './Store.js';
-	import GraphButton from './Select-graph-button.svelte';
+	import GraphButton from './SelectGraphButton.svelte';
 
 	export let graphs;
 </script>

@@ -14,7 +14,6 @@
 
 	let tableWrapper: HTMLDivElement;
 
-	const columnNames = $data.listColumns() as string[];
 	let columnsToMean: string[] = [];
 
 	let grid: Grid;
@@ -39,7 +38,6 @@
 
 <p>Parameters on the y-axis</p>
 
-<br />
 {#each $selectedValues as column}
 	<input
 		type="checkbox"

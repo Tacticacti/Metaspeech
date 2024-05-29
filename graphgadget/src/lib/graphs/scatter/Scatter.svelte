@@ -3,9 +3,9 @@
 	import { Chart, type ChartConfiguration } from 'chart.js/auto';
 	import { afterUpdate, onMount, onDestroy } from 'svelte';
 	import { setColor } from '$lib/utils/CanvasUtils';
-	import PngButton from '$lib/shared-components/PNGButton.svelte';
-	import JpgButton from '$lib/shared-components/JPGButton.svelte';
-	import WarningGenerator from '$lib/WarningGenerator/WarningGenerator.svelte';
+	import PngButton from '$lib/exporter/PNGButton.svelte';
+	import JpgButton from '$lib/exporter/JPGButton.svelte';
+	import WarningGenerator from '$lib/warning-generator/WarningGenerator.svelte';
 	import { selectedColumns } from '$lib/Store';
 
 	let canvas: HTMLCanvasElement;

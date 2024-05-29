@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { data } from '$lib/Store';
-	import PngButton from '$lib/shared-components/PNGButton.svelte';
-	import JpgButton from '$lib/shared-components/JPGButton.svelte';
+	import PngButton from '$lib/exporter/PNGButton.svelte';
+	import JpgButton from '$lib/exporter/JPGButton.svelte';
 	import { Chart, type ChartConfiguration } from 'chart.js/auto';
 	import { setColor } from '$lib/utils/CanvasUtils';
 	import { onMount } from 'svelte';
@@ -13,7 +13,7 @@
 		binSizes,
 		ABSOLUTE_FREQUENCY
 	} from '$lib/Store';
-	import WarningGenerator from '$lib/WarningGenerator/WarningGenerator.svelte';
+	import WarningGenerator from '$lib/warning-generator/WarningGenerator.svelte';
 
 	let canvas: HTMLCanvasElement;
 	let chart: Chart;
