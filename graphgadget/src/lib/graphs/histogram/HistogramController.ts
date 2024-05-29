@@ -1,10 +1,6 @@
 import { Row } from 'dataframe-js';
+import { type BinDictionary, type MapDictionary, ABSOLUTE_FREQUENCY, RELATIVE_FREQUENCY } from '$lib/Store';
 
-export type BinDictionary = Record<string, number>;
-export type MapDictionary = Record<string, Map<string, [number, number]>>;
-
-export const ABSOLUTE_FREQUENCY: string = 'Absolute Frequency';
-export const RELATIVE_FREQUENCY: string = 'Relative Frequency';
 export const SEPARATION_PARAMETERS: string = '; ';
 export const SEPARATION_INTERVAL: string = ', ';
 export const EMPTY_ENTRY: string = '<empty>';

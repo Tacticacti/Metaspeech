@@ -4,7 +4,7 @@ import sut from '$lib/graphs/scatter/Scatter.svelte';
 import { data } from '$lib/Store';
 import userEvent from '@testing-library/user-event';
 import DataFrame from 'dataframe-js';
-import { selectedColumns } from '$lib/ColumnSelector/Store';
+import { selectedColumns } from '$lib/Store';
 
 const df = new DataFrame(
 	{

@@ -46,7 +46,7 @@
 <input type="checkbox" id="store-data" bind:checked={storeData} />
 <label for="store-data">Store data in client side?</label>
 <main>
-	<h3>How it works</h3>
+	<h3 class="text-red-500">How it works</h3>
 	<h2>An intuitive way to visualize your speech metadata</h2>
 	<div>
 		<div>Upload your data as a TSV, JSON, XLS, or TXT in the correct format</div>
