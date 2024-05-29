@@ -3,7 +3,7 @@ import sut from '$lib/graphs/boxplot/Boxplot.svelte';
 import { describe, it, expect } from 'vitest';
 import DataFrame from 'dataframe-js';
 import { data } from '$lib/Store';
-import { selectedColumns } from '$lib/ColumnSelector/Store';
+import { selectedColumns } from '$lib/Store';
 
 const df1 = new DataFrame(
 	{
