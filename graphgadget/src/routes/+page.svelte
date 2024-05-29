@@ -36,53 +36,53 @@
 </svelte:head>
 
 <main class="bg-offwhite">
+	<header class="bg-offwhite py-5 text-center">
+		<img src="GraphGadgetHomeLogo.png" alt="Logo" class="w-72 mx-auto" />
+	</header>
 
-<header class="bg-offwhite py-5 text-center">
-	<img src="GraphGadgetHomeLogo.png" alt="Logo" class="w-72 mx-auto" />
-</header>
+	<div class="flex justify-center gap-5 p-5 bg-darkblue">
+		<Importer on:input={handleInput} />
+		<button class="button" on:click={() => goto('/previous')}>Previous Data</button>
+	</div>
 
-<div class="flex justify-center gap-5 p-5 bg-darkblue">
-	<Importer on:input={handleInput} />
-	<button class="button" on:click={() => goto('/previous')}>Previous Data</button>
-</div>
+	<div class="text-center mt-4 flex justify-center items-center">
+		<Label class="flex items-center space-x-2">
+			<Checkbox id="store-data" bind:checked={storeData} />
+			<Span>Store data on client side?</Span>
+		</Label>
+	</div>
 
-<div class="text-center mt-4 flex justify-center items-center">
-	<Label class="flex items-center space-x-2">
-		<Checkbox id="store-data" bind:checked={storeData} />
-		<Span>Store data on client side?</Span>
-	</Label>
-</div>
-
-<div class="p-5">
-	<h2 class="text-xl font-bold text-darkblue">Your go-to tool for intuitive data visualization</h2>
-	<h3 class="text-gray-500">How it works</h3>
-	<div class="flex justify-around items-center flex-col md:flex-row">
-		<div class="bg-gray-200 p-5 m-2 rounded-lg shadow-md max-w-xs text-center">
-			<P>Upload your data as a TSV, JSON, XLS, or TXT in the correct format.</P>
-		</div>
-		<ArrowRightOutline class="text-4xl text-darkblue m-2 md:m-0 transform md:rotate-0 rotate-90"
-		></ArrowRightOutline>
-		<div class="bg-gray-200 p-5 m-2 rounded-lg shadow-md max-w-xs text-center">
-			<P>Select which parameters and graph you want us to create.</P>
-		</div>
-		<ArrowRightOutline class="text-4xl text-darkblue m-2 md:m-0 transform md:rotate-0 rotate-90"
-		></ArrowRightOutline>
-		<div class="bg-gray-200 p-5 m-2 rounded-lg shadow-md max-w-xs text-center">
-			<P>Either look at your graph in the browser or download it as a JPEG or PNG.</P>
+	<div class="p-5">
+		<h2 class="text-xl font-bold text-darkblue">
+			Your go-to tool for intuitive data visualization
+		</h2>
+		<h3 class="text-gray-500">How it works</h3>
+		<div class="flex justify-around items-center flex-col md:flex-row">
+			<div class="bg-gray-200 p-5 m-2 rounded-lg shadow-md max-w-xs text-center">
+				<P>Upload your data as a TSV, JSON, XLS, or TXT in the correct format.</P>
+			</div>
+			<ArrowRightOutline class="text-4xl text-darkblue m-2 md:m-0 transform md:rotate-0 rotate-90"
+			></ArrowRightOutline>
+			<div class="bg-gray-200 p-5 m-2 rounded-lg shadow-md max-w-xs text-center">
+				<P>Select which parameters and graph you want us to create.</P>
+			</div>
+			<ArrowRightOutline class="text-4xl text-darkblue m-2 md:m-0 transform md:rotate-0 rotate-90"
+			></ArrowRightOutline>
+			<div class="bg-gray-200 p-5 m-2 rounded-lg shadow-md max-w-xs text-center">
+				<P>Either look at your graph in the browser or download it as a JPEG or PNG.</P>
+			</div>
 		</div>
 	</div>
-</div>
 
-<div class="flex flex-col">
-	<Footer
-		footerType="logo"
-		class="bg-darkblue w-full bottom-0 left-0 right-0 border-none rounded-none"
-	>
-		<FooterBrand href="/" src="GraphGadgetNavLogo.svg" alt="Flowbite Logo" />
-		<FooterCopyright href="/" by={APP_NAME} year={COPYRIGHT_YEAR} />
-	</Footer>
-</div>
-
+	<div class="flex flex-col">
+		<Footer
+			footerType="logo"
+			class="bg-darkblue w-full bottom-0 left-0 right-0 border-none rounded-none"
+		>
+			<FooterBrand href="/" src="GraphGadgetNavLogo.svg" alt="Flowbite Logo" />
+			<FooterCopyright href="/" by={APP_NAME} year={COPYRIGHT_YEAR} />
+		</Footer>
+	</div>
 </main>
 
 <style>
