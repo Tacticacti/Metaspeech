@@ -1,3 +1,14 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/**
+Everything created in this file is accesible from all components
+**/
+
+/* This will remove the margin from the nav bar so its not centered */
+.nav-m0 > nav > div {
+	margin: 0px;
+	width: 100%;
+	max-width: 100%;
+}

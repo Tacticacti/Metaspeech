@@ -7,12 +7,13 @@
 </script>
 
 {#if $data}
-	<table>
+	<table class="table-fixed w-full">
 		<thead>
 			<tr>
 				{#each columns as header (header)}
-					<th>
+					<th class="m-0">
 						<input
+							class="max-w-full"
 							type="text"
 							on:change={(e) => ctrl.columnValueChanged(e, header)}
 							value={header}
