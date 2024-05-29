@@ -59,14 +59,12 @@
 			<P>Upload your data as a TSV, JSON, XLS, or TXT in the correct format.</P>
 		</div>
 		<ArrowRightOutline class="text-4xl text-darkblue m-2 md:m-0 transform md:rotate-0 rotate-90"
-			>&rarr;</ArrowRightOutline
-		>
+		></ArrowRightOutline>
 		<div class="bg-gray-200 p-5 m-2 rounded-lg shadow-md max-w-xs text-center">
 			<P>Select which parameters and graph you want us to create.</P>
 		</div>
 		<ArrowRightOutline class="text-4xl text-darkblue m-2 md:m-0 transform md:rotate-0 rotate-90"
-			>&rarr;</ArrowRightOutline
-		>
+		></ArrowRightOutline>
 		<div class="bg-gray-200 p-5 m-2 rounded-lg shadow-md max-w-xs text-center">
 			<P>Either look at your graph in the browser or download it as a JPEG or PNG.</P>
 		</div>

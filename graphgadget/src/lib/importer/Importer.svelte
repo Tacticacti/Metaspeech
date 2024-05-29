@@ -48,7 +48,6 @@
 	}
 </script>
 
-<label for="import-data">Upload Data</label>
 <input
 	data-testid="input"
 	on:input={onInput}
@@ -57,6 +56,7 @@
 	id="import-data"
 	hidden
 />
+<label for="import-data">Upload Data</label>
 {#if $errorMessage}
 	<ErrorModal message={$errorMessage} on:close={closeModal} />
 {/if}
