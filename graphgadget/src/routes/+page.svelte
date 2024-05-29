@@ -66,7 +66,6 @@
 </footer>
 
 <style>
-	/* Custom styles to match the provided design */
 	.header {
 		background-color: #3d4f75;
 		padding: 20px;
@@ -93,11 +92,13 @@
 		background-color: #f9f9f9;
 		border-radius: 4px;
 		cursor: pointer;
-		transition: color 0.3s ease, background-color 0.3s ease;
+		transition:
+			color 0.3s ease,
+			background-color 0.3s ease;
 		text-align: center;
 		border: 1px solid #ccc;
 		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-		}
+	}
 
 	.button:hover {
 		color: #007bff;
@@ -109,7 +110,6 @@
 		-moz-user-select: none; /* For Firefox */
 		-ms-user-select: none; /* For Internet Explorer/Edge */
 	}
-
 
 	.info-section {
 		padding: 20px;
@@ -136,18 +136,19 @@
 		background-color: #f9f9f9;
 		border-radius: 4px;
 		cursor: pointer;
-		transition: color 0.3s ease, background-color 0.3s ease;
+		transition:
+			color 0.3s ease,
+			background-color 0.3s ease;
 	}
 	@media (max-width: 768px) {
-	.flex {
-		flex-direction: column;
-		align-items: center;
-	}
+		.flex {
+			flex-direction: column;
+			align-items: center;
+		}
 
-	.info-box {
-		max-width: 90%;
-		margin-bottom: 20px;
+		.info-box {
+			max-width: 90%;
+			margin-bottom: 20px;
+		}
 	}
-
-}
 </style>
