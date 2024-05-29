@@ -3,7 +3,7 @@ import PieChart from './PieChart.svelte';
 import { describe, it, expect } from 'vitest';
 import { data } from '$lib/Store';
 import { DataFrame } from 'dataframe-js';
-import { selectedColumns } from '$lib/ColumnSelector/Store';
+import { selectedColumns } from '$lib/Store';
 
 // Mock the data store with a sample DataFrame
 const df = new DataFrame(
