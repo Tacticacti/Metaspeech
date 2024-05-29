@@ -1,10 +1,9 @@
 <script lang="ts">
-	import { ArrowRightOutline } from 'flowbite-svelte-icons';
 	import Importer from '$lib/importer/Importer.svelte';
 	import { data } from '$lib/Store';
 	import { goto } from '$app/navigation';
 	import type { Bundle } from '$lib/types';
-	import { Footer, FooterBrand, FooterCopyright, Label, Checkbox, P, Span } from 'flowbite-svelte';
+	import { Footer, FooterBrand, FooterCopyright, Label, Checkbox } from 'flowbite-svelte';
 
 	let storeData = false;
 	const APP_NAME = 'Graphgadget';
@@ -48,7 +47,7 @@
 	<div class="text-center mt-4 flex justify-center items-center">
 		<Label class="flex items-center space-x-2">
 			<Checkbox id="store-data" bind:checked={storeData} />
-			<Span>Store data on client side?</Span>
+			<span>Store data on client side?</span>
 		</Label>
 	</div>
 
@@ -59,17 +58,15 @@
 		<h3 class="text-gray-500">How it works</h3>
 		<div class="flex justify-around items-center flex-col md:flex-row">
 			<div class="bg-gray-200 p-5 m-2 rounded-lg shadow-md max-w-xs text-center">
-				<P>Upload your data as a TSV, JSON, XLS, or TXT in the correct format.</P>
+				<p>Upload your data as a TSV, JSON, XLS, or TXT in the correct format.</p>
 			</div>
-			<ArrowRightOutline class="text-4xl text-darkblue m-2 md:m-0 transform md:rotate-0 rotate-90"
-			></ArrowRightOutline>
+			<p class="text-4xl text-darkblue m-2 md:m-0 transform md:rotate-0 rotate-90">&rarr;</p>
 			<div class="bg-gray-200 p-5 m-2 rounded-lg shadow-md max-w-xs text-center">
-				<P>Select which parameters and graph you want us to create.</P>
+				<p>Select which parameters and graph you want us to create.</p>
 			</div>
-			<ArrowRightOutline class="text-4xl text-darkblue m-2 md:m-0 transform md:rotate-0 rotate-90"
-			></ArrowRightOutline>
+			<p class="text-4xl text-darkblue m-2 md:m-0 transform md:rotate-0 rotate-90">&rarr;</p>
 			<div class="bg-gray-200 p-5 m-2 rounded-lg shadow-md max-w-xs text-center">
-				<P>Either look at your graph in the browser or download it as a JPEG or PNG.</P>
+				<p>Either look at your graph in the browser or download it as a JPEG or PNG.</p>
 			</div>
 		</div>
 	</div>
