@@ -8,7 +8,7 @@ export default {
 		extend: {},
 		colors: {
 			darkblue: '#3D4F75',
-			offwhite: "#F1F6F9"
+			offwhite: '#F1F6F9'
 		}
 	},
 	plugins: [require('flowbite/plugin')]
