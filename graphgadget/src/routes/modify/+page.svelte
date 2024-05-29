@@ -91,7 +91,7 @@
 					<div class="bg-blue-400 h-2.5 rounded-full" style="width: 29%"></div>
 				</div>
 			</div>
-			<div class="ml-24"></div>
+			<div class="ml-44"></div>
 		</Navbar>
 	</div>
 

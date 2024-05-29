@@ -11,4 +11,5 @@ Everything created in this file is accesible from all components
 .nav-m0 > nav > div {
     margin: 0px;
     width: 100%;
+    max-width: 100%;
 }
