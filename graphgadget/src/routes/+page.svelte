@@ -33,6 +33,7 @@
 
 <header class="header">
 	<h1 class="text-4xl font-bold">Graph Gadget</h1>
+	<p class="tagline">Your go-to tool for intuitive data visualization</p>
 </header>
 
 <div class="buttons-container">
