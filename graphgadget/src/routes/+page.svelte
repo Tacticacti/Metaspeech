@@ -57,8 +57,8 @@
 </div>
 
 <div class="text-center mt-4">
-	<input type="checkbox" id="store-data" bind:checked={storeData} class="mr-2" />
-	<label for="store-data">Store data in client side?</label>
+	<input type="checkbox" id="store-data" bind:checked={storeData} class="mr-2 no-select" />
+	<label for="store-data" class="no-select">Store data on client side?</label>
 </div>
 
 <footer class="text-center mt-8">
@@ -93,18 +93,23 @@
 		background-color: #f9f9f9;
 		border-radius: 4px;
 		cursor: pointer;
-		transition:
-			color 0.3s ease,
-			background-color 0.3s ease;
+		transition: color 0.3s ease, background-color 0.3s ease;
 		text-align: center;
 		border: 1px solid #ccc;
 		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-	}
+		}
 
 	.button:hover {
 		color: #007bff;
 		background-color: #e0e0e0;
 	}
+	.no-select {
+		user-select: none; /* Standard syntax */
+		-webkit-user-select: none; /* For WebKit (Safari, Chrome) */
+		-moz-user-select: none; /* For Firefox */
+		-ms-user-select: none; /* For Internet Explorer/Edge */
+	}
+
 
 	.info-section {
 		padding: 20px;
@@ -121,4 +126,28 @@
 	h2 {
 		color: #3d4f75;
 	}
+	label {
+		font-size: 16px;
+		font-weight: bold;
+		color: #333;
+		margin: 10px 0;
+		padding: 20px;
+		display: inline-block;
+		background-color: #f9f9f9;
+		border-radius: 4px;
+		cursor: pointer;
+		transition: color 0.3s ease, background-color 0.3s ease;
+	}
+	@media (max-width: 768px) {
+	.flex {
+		flex-direction: column;
+		align-items: center;
+	}
+
+	.info-box {
+		max-width: 90%;
+		margin-bottom: 20px;
+	}
+
+}
 </style>
