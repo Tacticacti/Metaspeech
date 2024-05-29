@@ -1,9 +1,15 @@
 <script lang="ts">
 	import { data } from '$lib/Store';
-	import { binSizes, checkedMean, selectedColumns, type BinDictionary } from './Store';
-	import { selectedValues } from './Store';
 	import { getNumericalColumnsAndMax } from './ColumnHelper';
-	import { ABSOLUTE_FREQUENCY, RELATIVE_FREQUENCY } from './Store';
+	import {
+		selectedColumns,
+		selectedValues,
+		type BinDictionary,
+		binSizes,
+		checkedMean,
+		ABSOLUTE_FREQUENCY,
+		RELATIVE_FREQUENCY
+	} from '$lib/Store';
 
 	let columnNames = $data.listColumns();
 	let numericColumns = getNumericalColumnsAndMax(columnNames, $data.toCollection(true));

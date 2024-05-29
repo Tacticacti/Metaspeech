@@ -5,7 +5,7 @@
 	import { Chart, type ChartConfiguration } from 'chart.js/auto';
 	import { setColor } from '$lib/utils/CanvasUtils';
 	import { afterUpdate, onMount } from 'svelte';
-	import { selectedColumns } from '$lib/ColumnSelector/Store';
+	import { selectedColumns } from '$lib/Store';
 	import WarningGenerator from '$lib/WarningGenerator/WarningGenerator.svelte';
 
 	let canvas: HTMLCanvasElement;

@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { selectedColumns, selectedValues } from './../ColumnSelector/Store';
 	import { getNonNumericalColumns } from '$lib/ColumnSelector/ColumnHelper';
 	import { data } from '$lib/Store.js';
+	import { selectedColumns, selectedValues } from '$lib/Store.js';
 
 	export let needNumbers: boolean;
 

@@ -12,7 +12,7 @@
 		selectedValues,
 		binSizes,
 		ABSOLUTE_FREQUENCY
-	} from '$lib/ColumnSelector/Store';
+	} from '$lib/Store';
 	import WarningGenerator from '$lib/WarningGenerator/WarningGenerator.svelte';
 
 	let canvas: HTMLCanvasElement;

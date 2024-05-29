@@ -1,6 +1,5 @@
 import { Row } from 'dataframe-js';
-import { type BinDictionary } from '$lib/ColumnSelector/Store';
-import { ABSOLUTE_FREQUENCY, RELATIVE_FREQUENCY } from '$lib/ColumnSelector/Store';
+import { type BinDictionary, ABSOLUTE_FREQUENCY, RELATIVE_FREQUENCY } from '$lib/Store';
 
 export const SEPARATION_PARAMETERS: string = '; ';
 export const SEPARATION_INTERVAL: string = ', ';

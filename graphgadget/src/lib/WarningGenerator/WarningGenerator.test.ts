@@ -1,6 +1,6 @@
 import DataFrame from 'dataframe-js';
 import WarningGenerator from './WarningGenerator.svelte';
-import { selectedColumns, selectedValues } from '$lib/ColumnSelector/Store';
+import { selectedColumns, selectedValues } from '$lib/Store';
 import { data } from '$lib/Store';
 import { render } from '@testing-library/svelte';
 

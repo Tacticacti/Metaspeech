@@ -6,7 +6,7 @@
 	import PngButton from '$lib/shared-components/PNGButton.svelte';
 	import JpgButton from '$lib/shared-components/JPGButton.svelte';
 	import WarningGenerator from '$lib/WarningGenerator/WarningGenerator.svelte';
-	import { selectedColumns } from '$lib/ColumnSelector/Store';
+	import { selectedColumns } from '$lib/Store';
 
 	let canvas: HTMLCanvasElement;
 	let chart: Chart;

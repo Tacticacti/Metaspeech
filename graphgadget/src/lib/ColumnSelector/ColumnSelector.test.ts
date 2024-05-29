@@ -4,7 +4,7 @@ import { describe, it, expect } from 'vitest';
 import DataFrame from 'dataframe-js';
 import { data } from '$lib/Store';
 import userEvent from '@testing-library/user-event';
-import { selectedColumns, selectedValues, binSizes, checkedMean } from './Store';
+import { selectedColumns, binSizes, selectedValues, checkedMean } from '$lib/Store';
 import { get } from 'svelte/store';
 
 const df1 = new DataFrame(
