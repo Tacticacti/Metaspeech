@@ -8,8 +8,7 @@
 	import type { Bundle } from '$lib/types';
 	import { onMount } from 'svelte';
 	import { loadSession } from '$lib/utils/SessionLoad';
-	import ColumnSelector from '$lib/ColumnSelector/ColumnSelector.svelte';
-	import { Navbar, NavBrand, NavLi, NavUl, NavHamburger } from 'flowbite-svelte';
+	import NavBar from '$lib/shared-components/NavBar.svelte';
 
 	$: column_names = $data.listColumns() as string[];
 	$: missing_values = hasMissingValues($data);
@@ -55,46 +54,7 @@
 </script>
 
 <main class="bg-offwhite max-w-full min-h-screen m-0">
-	<!-- This creates a nav bar with the routes and their effects -->
-	<div class="relative px-8 nav-m0">
-		<Navbar class="bg-darkblue grid grid-cols-1 text-blue-200 py-2.5 fixed w-full max-w-full z-20 top-0 start-0 border-b">
-			<NavBrand href="/">
-				<img src="GraphGadgetNavLogo.svg" class="me-3 h-6 sm:h-9 pl-0" alt="GG logo" />
-				<span class="self-center whitespace-nowrap text-xl font-semibold dark:text-white"
-					>Graph Gadget</span
-				>
-			</NavBrand>
-			<NavHamburger />
-			<div>
-				<NavUl
-					ulClass="flex flex-col p-4 mt-4 md:flex-row md:space-x-20 rtl:space-x-reverse md:mt-0 md:text-sm md:font-medium"
-				>
-					<NavLi
-						class="text-blue-200 hover:text-darkblue md:text-blue-400 md:hover:text-blue-50"
-						href="/"
-						active={true}>HOME</NavLi
-					>
-					<NavLi
-						class="text-blue-200 hover:text-darkblue md:text-offwhite md:hover:text-offwhite font-bold"
-						href="/modify">DATA</NavLi
-					>
-					<NavLi
-						class="text-blue-200 hover:text-darkblue md:text-blue-400 md:hover:text-blue-50"
-						href="/view">PARAMETERS</NavLi
-					>
-					<NavLi
-						class="text-blue-200 hover:text-darkblue md:text-blue-400 md:hover:text-blue-50"
-						href="/view">VISUALIZATIONS</NavLi
-					>
-				</NavUl>
-				<div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-					<div class="bg-blue-400 h-2.5 rounded-full" style="width: 29%"></div>
-				</div>
-			</div>
-			<div class="ml-44"></div>
-		</Navbar>
-	</div>
-
+	<NavBar currentPage={'modify'} />
 	<div class="flex justify-center pt-16 m-5 max-w-full">
 		{#if missing_values.length !== 0}
 			<span class="flex flex-col items-center">
@@ -114,12 +74,12 @@
 
 	<div class="flex justify-between items-center p-5">
 		<Filter />
-
 		<div
 			class="flex items-center justify-center max-w-32 max-h-14 py-4 px-12 bg-darkblue rounded-lg hover:bg-blue-900"
 		>
+			<!-- Given that it was implemented with an a link, right now you need to click on the words to go to next page -->
 			<a
-				href="/view"
+				href="/select"
 				class=" text-offwhite font-bold rounded-lg text-sm mr-4"
 				on:click={handleClick}
 				data-testid="next-link">Next</a
@@ -145,10 +105,6 @@
 				<button on:click={joinColumns} data-testid="merge-keyed-button">keyed merge</button>
 			{/if}
 		{/if}
-	</div>
-
-	<div>
-		<ColumnSelector />
 	</div>
 
 	<div class="flex">
