@@ -39,16 +39,19 @@
 		padding: 20px;
 		border: 1px solid #888;
 		width: 80%;
+		position: relative;
 	}
 
 	.close {
 		color: #aaa;
-		float: right;
 		font-size: 28px;
 		font-weight: bold;
 		background: none;
 		border: none;
 		cursor: pointer;
+		position: absolute;
+		top: 10px;
+		right: 20px;
 	}
 
 	.close:hover,
