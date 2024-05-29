@@ -15,7 +15,7 @@
 <div class="modal" data-testid="error-modal" style:display={visible ? 'block' : 'none'}>
 	<div class="modal-content flex justify-between items-center">
 		<p>{message}</p>
-		<CloseButton on:click={closeModal} class="close" data-testid='close-button'/>
+		<CloseButton on:click={closeModal} class="close" data-testid="close-button" />
 	</div>
 </div>
 
