@@ -57,11 +57,9 @@
 <main class="bg-offwhite max-w-full">
 	<!-- This creates a nav bar with the routes and their effects -->
 	<div class="relative px-8">
-		<Navbar
-			class="bg-darkblue text-blue-200 px-2 sm:px-4 py-2.5 fixed w-full z-20 top-0 start-0 border-b"
-		>
+		<Navbar class="bg-darkblue text-blue-200 py-2.5 fixed w-full z-20 top-0 start-0 border-b">
 			<NavBrand href="/">
-				<img src="GraphGadgetNavLogo.svg" class="me-3 h-6 sm:h-9" alt="GG logo" />
+				<img src="GraphGadgetNavLogo.svg" class="me-3 h-6 sm:h-9 pl-0" alt="GG logo" />
 				<span class="self-center whitespace-nowrap text-xl font-semibold dark:text-white"
 					>Graph Gadget</span
 				>
@@ -93,9 +91,7 @@
 					<div class="bg-blue-400 h-2.5 rounded-full" style="width: 29%"></div>
 				</div>
 			</div>
-			<NavUl>
-				<NavLi class="text-blue-400 hover:text-blue-50" href="/modify">ABOUT US</NavLi>
-			</NavUl>
+			<div class="ml-32"></div>
 		</Navbar>
 	</div>
 
@@ -128,7 +124,7 @@
 				on:click={handleClick}
 				data-testid="next-link">Next</a
 			>
-			<img src="nextstatic.png" class=" invert w-8 h-8" alt="Next icon" />
+			<img src="next.png" class=" invert w-8 h-8" alt="Next icon" />
 		</div>
 	</div>
 

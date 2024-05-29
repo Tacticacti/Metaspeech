@@ -49,7 +49,7 @@
 	class="max-w-32 max-h-14 py-4 px-12 font-bold rounded-lg bg-darkblue text-offwhite hover:bg-blue-900"
 	on:click={() => (isOpen = !isOpen)}
 >
-	<img src="filterstatic.png" class=" invert w-8 h-8 mr-4" alt="Filter icon" />
+	<img src="filter.png" class=" invert w-8 h-8 mr-4" alt="Filter icon" />
 	Filter
 </Button>
 
