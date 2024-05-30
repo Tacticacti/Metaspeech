@@ -10,6 +10,7 @@
 	import { loadSession } from '$lib/utils/SessionLoad';
 	import NavBar from '$lib/shared-components/NavBar.svelte';
 	import Footer from '$lib/shared-components/Footer.svelte';
+	import { APP_NAME } from '$lib/shared-components/shared-variables';
 
 	$: column_names = $data.listColumns() as string[];
 	$: missing_values = hasMissingValues($data);
@@ -53,6 +54,10 @@
 		$data = $data.join(renamed, merge_col_1);
 	}
 </script>
+
+<svelte:head>
+	<title>Data - {APP_NAME}</title>
+</svelte:head>
 
 <main class="bg-offwhite max-w-full min-h-screen m-0">
 	<NavBar currentPage={'modify'} />

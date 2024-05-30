@@ -6,9 +6,9 @@
 	import { goto } from '$app/navigation';
 	import type { Bundle } from '$lib/types';
 	import { Label, Checkbox } from 'flowbite-svelte';
+	import { APP_NAME } from '$lib/shared-components/shared-variables';
 
 	let storeData = false;
-	const APP_NAME = 'Graphgadget';
 
 	function storeFile(filename: string) {
 		var datasets = localStorage.getItem('datasets');
@@ -32,7 +32,7 @@
 </script>
 
 <svelte:head>
-	<title>{APP_NAME}</title>
+	<title>Home - {APP_NAME}</title>
 </svelte:head>
 
 <main class="bg-offwhite">

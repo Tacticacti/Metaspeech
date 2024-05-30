@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { Footer, FooterBrand, FooterCopyright } from 'flowbite-svelte';
-	const APP_NAME = 'Graphgadget';
-	const COPYRIGHT_YEAR = 2024;
+	import { APP_NAME, COPYRIGHT_YEAR } from './shared-variables';
 </script>
 
 <div class="flex flex-col">
