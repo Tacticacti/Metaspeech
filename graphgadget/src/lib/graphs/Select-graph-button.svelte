@@ -1,25 +1,16 @@
 <script lang="ts">
 	import { graph_name, graph_description, selected_graph } from './Store.js';
 	export let graph;
-	function handleMouseOut() {
-		$graph_name = '';
-		$graph_description = '';
-	}
 </script>
 
 <button
 	tabindex="0"
 	data-testid={graph.title}
 	class="s"
-	on:mouseover={() => {
-		$graph_name = graph.title;
-		$graph_description = graph.description;
-	}}
-	on:focus
-	on:blur
-	on:mouseout={handleMouseOut}
 	on:click={() => {
 		$selected_graph = graph.component;
+		$graph_name = graph.title;
+		$graph_description = graph.description;
 	}}
 >
 	<img src={graph.img_src} alt="graph img" />

@@ -5,61 +5,23 @@
 	export let graphs;
 </script>
 
-<div class="main-container">
-	<div class="right-container">
-		<div data-testid="name-chart" class="name-chart">
+<div
+	class="flex flex-col lg:flex-row justify-between items-start w-full p-5 border-2 border-red-500"
+>
+	<div class="flex flex-col items-start w-full lg:w-1/2 p-4 bg-aqua h-full">
+		<div data-testid="name-chart" class="p-2 font-bold text-lg">
 			{$graph_name}
 		</div>
-		<div data-testid="description-chart" class="description-chart">
+		<div data-testid="description-chart" class="p-2 overflow-auto" style="height: 6rem;">
 			{$graph_description}
 		</div>
 	</div>
-	<div class="left-container">
-		<h1 style="text-align:center;">Select a graph</h1>
-		<div class="t1">
-			<div class="r">
-				{#each graphs as item}
-					<GraphButton graph={item} />
-				{/each}
-			</div>
+	<div class="flex flex-col items-center w-full lg:w-1/2 p-4">
+		<h1 class="text-center mb-4">Select a graph</h1>
+		<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+			{#each graphs as item}
+				<GraphButton graph={item} />
+			{/each}
 		</div>
 	</div>
-	
 </div>
-
-<style>
-	.r {
-		padding: 10px;
-		display: flex;
-		flex-direction: row;
-		flex-wrap: wrap;
-		justify-content: space-around;
-	}
-	.t1 {
-		height: 80vh;
-		display: flex;
-		flex-direction: column;
-		flex-wrap: wrap;
-	}
-	.main-container {
-		height: 50vh;
-		border: 2px solid red;
-		display: flex;
-		flex-direction: row;
-		flex-wrap: wrap;
-		justify-content: space-around;
-	}
-	.right-container {
-		background-color: aqua;
-		width: 50vh;
-		height: 50vh;
-	}
-	.left-container {
-		width: 700px;
-		align-self: center;
-		display: flex;
-		flex-direction: column;
-		flex-wrap: wrap;
-		justify-content: space-around;
-	}
-</style>
