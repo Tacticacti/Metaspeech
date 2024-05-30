@@ -2,8 +2,13 @@ import { it, expect } from 'vitest';
 import {
 	calculateAxis,
 	sortParallelArrays,
+	isColumnFrequency,
+	getTableInfo,
+	nameWithSum,
+	nameWithMean,
 	SEPARATION_PARAMETERS,
 	SEPARATION_INTERVAL,
+	SUBGROUP_LABEL,
 	EMPTY_ENTRY
 } from '$lib/subgroup-controller/SubgroupController';
 import DataFrame from 'dataframe-js';
@@ -329,5 +334,138 @@ describe('test calculate axis', () => {
 
 		expect(labels).toStrictEqual(['F', 'M']);
 		expect(values).toStrictEqual([65, 22]);
+	});
+});
+
+describe('is column frequency', () => {
+	it('abs freq', () => {
+		expect(isColumnFrequency(ABSOLUTE_FREQUENCY)).toBe(true);
+	});
+	it('rel freq', () => {
+		expect(isColumnFrequency(RELATIVE_FREQUENCY)).toBe(true);
+	});
+	it('age', () => {
+		expect(isColumnFrequency('age')).toBe(false);
+	});
+	it('empty', () => {
+		expect(isColumnFrequency('')).toBe(false);
+	});
+	it(' not freq', () => {
+		expect(isColumnFrequency('Frequency')).toBe(false);
+	});
+});
+
+describe('get table info test', () => {
+	it('simple', () => {
+		const xColumns: string[] = ['gender'];
+		const yColumns: string[] = [ABSOLUTE_FREQUENCY];
+		const binSizes: BinDictionary = {};
+		const columnsToSum: string[] = [];
+		const columnsToMean: string[] = [];
+
+		const tableInfo = getTableInfo(
+			df.toCollection(true),
+			xColumns,
+			yColumns,
+			binSizes,
+			columnsToSum,
+			columnsToMean
+		);
+
+		expect(tableInfo).toEqual([
+			[SUBGROUP_LABEL, ABSOLUTE_FREQUENCY],
+			[
+				['F', '3'],
+				['M', '3']
+			]
+		]);
+	});
+
+	it('empty', () => {
+		const xColumns: string[] = [];
+		const yColumns: string[] = [];
+		const binSizes: BinDictionary = {};
+		const columnsToSum: string[] = [];
+		const columnsToMean: string[] = [];
+
+		const tableInfo = getTableInfo(
+			df.toCollection(true),
+			xColumns,
+			yColumns,
+			binSizes,
+			columnsToSum,
+			columnsToMean
+		);
+
+		expect(tableInfo).toEqual([[], []]);
+	});
+
+	it('age but not sum nor mean', () => {
+		const xColumns: string[] = ['gender'];
+		const yColumns: string[] = ['age'];
+		const binSizes: BinDictionary = {};
+		const columnsToSum: string[] = [];
+		const columnsToMean: string[] = [];
+
+		const tableInfo = getTableInfo(
+			df.toCollection(true),
+			xColumns,
+			yColumns,
+			binSizes,
+			columnsToSum,
+			columnsToMean
+		);
+
+		expect(tableInfo).toEqual([[SUBGROUP_LABEL], [['F'], ['M']]]);
+	});
+
+	it('age with sum', () => {
+		const xColumns: string[] = ['gender'];
+		const yColumns: string[] = ['age'];
+		const binSizes: BinDictionary = {};
+		const columnsToSum: string[] = ['age'];
+		const columnsToMean: string[] = [];
+
+		const tableInfo = getTableInfo(
+			df.toCollection(true),
+			xColumns,
+			yColumns,
+			binSizes,
+			columnsToSum,
+			columnsToMean
+		);
+
+		expect(tableInfo).toEqual([
+			[SUBGROUP_LABEL, nameWithSum('age')],
+			[
+				['F', '130'],
+				['M', '66']
+			]
+		]);
+	});
+
+	it('age with sum & mean', () => {
+		const xColumns: string[] = ['gender'];
+		const yColumns: string[] = ['age'];
+		const binSizes: BinDictionary = {};
+		const columnsToSum: string[] = ['age'];
+		const columnsToMean: string[] = ['age'];
+
+		const tableInfo = getTableInfo(
+			df.toCollection(true),
+			xColumns,
+			yColumns,
+			binSizes,
+			columnsToSum,
+			columnsToMean
+		);
+
+		expect(tableInfo).toEqual([
+			[SUBGROUP_LABEL, nameWithSum('age'), nameWithMean('age')],
+			[
+				['F', '130', '65'],
+				['M', '66', '22']
+			]
+		]);
 	});
 });

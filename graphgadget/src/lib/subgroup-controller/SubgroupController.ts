@@ -8,6 +8,7 @@ import {
 
 export const SEPARATION_PARAMETERS: string = '; ';
 export const SEPARATION_INTERVAL: string = ', ';
+export const SUBGROUP_LABEL: string = 'Subgroup Label';
 export const EMPTY_ENTRY: string = '<empty>';
 
 /**
@@ -117,7 +118,7 @@ function transpose(matrix: string[][]): string[][] {
  * @param binSizes a bin dictionary storing the binning size for each parameter
  * @returns map dictionary which stores one map for each parameter
  */
-export function getFrequenciesAndValues(
+function getFrequenciesAndValues(
 	dataRows: Row[],
 	selectedParams: string[],
 	yAxisParams: string[],
@@ -254,6 +255,24 @@ export function isColumnFrequency(column: string): boolean {
 }
 
 /**
+ * Returns the name of the column indicating that it is the sum
+ * @param column the column to get the sum
+ * @returns the name of the column with a sum
+ */
+export function nameWithSum(column: string): string {
+	return `${column} (Sum)`;
+}
+
+/**
+ * Returns the name of the column indicating that it is the mean
+ * @param column the column to get the mean
+ * @returns the name of the column with a mean
+ */
+export function nameWithMean(column: string): string {
+	return `${column} (Mean)`;
+}
+
+/**
  * Gets the table headers by including the sums, means and frequencies
  * @param yColumns the y columns to show, for each parameter and possibly frequencies included
  * @param columnsToSum the columns that should display as a sum
@@ -273,10 +292,10 @@ function getTableHeaders(
 			continue;
 		}
 		if (columnsToSum.includes(col)) {
-			tableHeaders.push(`${col} (Sum)`);
+			tableHeaders.push(nameWithSum(col));
 		}
 		if (columnsToMean.includes(col)) {
-			tableHeaders.push(`${col} (Mean)`);
+			tableHeaders.push(nameWithMean(col));
 		}
 	}
 
@@ -349,5 +368,5 @@ export function getTableInfo(
 	const listOfRows = transpose(listOfColumns);
 	const tableHeaders = getTableHeaders(yColumns, columnsToSum, columnsToMean);
 
-	return [['Subgroup Label', ...tableHeaders], listOfRows];
+	return [[SUBGROUP_LABEL, ...tableHeaders], listOfRows];
 }

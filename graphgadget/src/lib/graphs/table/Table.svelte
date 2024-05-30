@@ -42,7 +42,7 @@
 
 <StatisticsSelector bind:columnsToSum bind:columnsToMean bind:valuesNotFreq />
 
-<div bind:this={tableWrapper}></div>
+<div data-testid="div-element" bind:this={tableWrapper}></div>
 
 <style>
 </style>
