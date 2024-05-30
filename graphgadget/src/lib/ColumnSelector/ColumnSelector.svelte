@@ -98,21 +98,19 @@
 {/each}
 <p>Select</p>
 {#each availableForSelect as column}
-	{#if !currentlySelectedColumns.includes(column)}
-		<label>
-			<input
-				on:click={() => {
-					handleClickSelect(column);
-				}}
-				type="checkbox"
-				data-testid="select-{column}"
-				name="params"
-				value={column}
-				bind:group={currentlySelectedValues}
-			/>
-			{column}
-		</label>
-	{/if}
+	<label>
+		<input
+			on:click={() => {
+				handleClickSelect(column);
+			}}
+			type="checkbox"
+			data-testid="select-{column}"
+			name="params"
+			value={column}
+			bind:group={currentlySelectedValues}
+		/>
+		{column}
+	</label>
 {/each}
 <label>
 	<input
