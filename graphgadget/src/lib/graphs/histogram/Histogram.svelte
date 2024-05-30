@@ -5,7 +5,7 @@
 	import { Chart, type ChartConfiguration } from 'chart.js/auto';
 	import { setColor } from '$lib/utils/CanvasUtils';
 	import { onMount } from 'svelte';
-	import { calculateAxis, sortParallelArrays } from '$lib/graphs/histogram/HistogramController';
+	import { calculateAxis } from '$lib/graphs/histogram/HistogramController';
 	import {
 		selectedColumns,
 		checkedMean,
@@ -18,11 +18,6 @@
 	let canvas: HTMLCanvasElement;
 	let chart: Chart;
 
-	// let checkedMean: boolean;
-	// let parameterType: string;
-	// let binSizes: BinDictionary;
-
-	// setup chart with empty config after canvas is mounted
 	onMount(() => {
 		if ($selectedValues.length === 0) {
 			$selectedValues = [ABSOLUTE_FREQUENCY];

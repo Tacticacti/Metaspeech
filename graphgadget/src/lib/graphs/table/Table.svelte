@@ -11,14 +11,16 @@
 		binSizes
 	} from '$lib/Store';
 	import "gridjs/dist/theme/mermaid.css";
+	import StatisticsSelector from '$lib/statistics-selector/StatisticsSelector.svelte'
 
 	let tableWrapper: HTMLDivElement;
 
-	let columnsToMean: string[] = [];
+	let columnsToMean: string[];
+	let columnsToSum: string[];
 
 	let grid: Grid;
 
-	$: [tableColumns, tableData] = getTableInfo($data.toCollection(true), $selectedColumns, $selectedValues, $binSizes);
+	$: [tableColumns, tableData] = getTableInfo($data.toCollection(true), $selectedColumns, $selectedValues, $binSizes, columnsToSum, columnsToMean);
 
 	onMount(() => {
 		grid = new Grid({
@@ -35,19 +37,7 @@
 	});
 </script>
 
-
-<p>Parameters on the y-axis</p>
-
-{#each $selectedValues as column}
-	<input
-		type="checkbox"
-		data-testid="y-check-mean-{column}"
-		name="y-params-mean"
-		value={column}
-		bind:group={columnsToMean}
-	/>
-	Mean {column}
-{/each}
+<StatisticsSelector bind:columnsToSum bind:columnsToMean />
 
 <div bind:this={tableWrapper}></div>
 

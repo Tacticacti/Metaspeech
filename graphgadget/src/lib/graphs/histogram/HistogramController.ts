@@ -237,14 +237,51 @@ export function sortParallelArrays(labels: string[], values: number[]): [string[
 }
 
 /**
+ * Determines if a column is a frequency value, either absolute or relative
+ * @param column the column to check
+ * @returns true if it is a frequency, false otherwise
+ */
+export function columnIsFrequency(column: string): boolean {
+	return column === ABSOLUTE_FREQUENCY || column === RELATIVE_FREQUENCY;
+}
+
+/**
+ * Gets the table headers by including the sums, means and frequencies
+ * @param yColumns the y columns to show, for each parameter and possibly frequencies included
+ * @param columnsToSum the columns that should display as a sum
+ * @param columnsToMean the columns that should display as a mean
+ * @returns an array with the table headers, showing frequencies once, and other parameters as either sum, or mean, or both, or neither
+ */
+function getTableHeaders(yColumns: string[], columnsToSum: string[], columnsToMean: string[]): string[] {
+	const tableHeaders: string[] = [];
+
+	for (const col of yColumns) {
+		if (columnIsFrequency(col)) {
+			tableHeaders.push(col);
+			continue;
+		}
+		if (columnsToSum.includes(col)) {
+			tableHeaders.push(`${col} (Sum)`);
+		}
+		if (columnsToMean.includes(col)) {
+			tableHeaders.push(`${col} (Mean)`);
+		}
+	}
+
+	return tableHeaders;
+}
+
+/**
  * Gets the table and column data for table visualization
  * @param dataRows the data rows
  * @param xColumns the columns selected for subgrouping
  * @param yColumns the columns to be shown for each subgroup
  * @param binSizes the binning size of each parameter
+ * @param columnsToSum the columns that should display as a sum
+ * @param columnsToMean the columns that should display as a mean
  * @returns an array with the column names and a 2d array with the table values
  */
-export function getTableInfo(dataRows: Row[], xColumns: string[], yColumns: string[], binSizes: BinDictionary): [string[], string[][]] {
+export function getTableInfo(dataRows: Row[], xColumns: string[], yColumns: string[], binSizes: BinDictionary, columnsToSum: string[], columnsToMean: string[]): [string[], string[][]] {
 	if (xColumns.length === 0 || yColumns.length === 0) {
 		return [[], []];
 	}
@@ -260,24 +297,42 @@ export function getTableInfo(dataRows: Row[], xColumns: string[], yColumns: stri
 	for (const ycol of yColumns) {
 		// For each y column selected, get its column values
 		const columnValues: number[] = [...maps[ycol].values()].map(pair => pair[0]);
+		const columnFrequencies: number[] = [...maps[ycol].values()].map(pair => pair[1]);
 
 		// Sort column according to labels
 		const [sortedLabels, sortedColumnValues] = sortParallelArrays(labels, columnValues);
+		const [_, sortedColumnFrequencies] = sortParallelArrays(labels, columnFrequencies)
 
 		if (listOfColumns.length === 0) {
 			// If running loop for the first time, add sorted labels
 			listOfColumns.push(sortedLabels);
 		}
 
-		listOfColumns.push(sortedColumnValues.map(v => v+""));
+		if (columnIsFrequency(ycol)) {
+			// If it is a frequency, simply add
+			listOfColumns.push(sortedColumnValues.map(v => v+""));
+			continue;
+		}
+
+		if (columnsToSum.includes(ycol)) {
+			// Sum is already in the sorted values
+			listOfColumns.push(sortedColumnValues.map(v => v+""));
+		}
+		if (columnsToMean.includes(ycol)) {
+			// Calculate mean by dividing each sum by the subgroup's frequency
+			for (let idx = 0; idx < sortedColumnValues.length; ++idx) {
+				sortedColumnValues[idx] /= sortedColumnFrequencies[idx];
+			}
+			listOfColumns.push(sortedColumnValues.map(v => v+""));
+		}
+		
 	}
 
 	const listOfRows = transpose(listOfColumns);
-
-	// TODO make mean work
+	const tableHeaders = getTableHeaders(yColumns, columnsToSum, columnsToMean);
 
 	return [
-		["Subgroup Label", ...yColumns],
+		["Subgroup Label", ...tableHeaders],
 		listOfRows
 	];
 }
