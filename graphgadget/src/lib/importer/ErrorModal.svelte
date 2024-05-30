@@ -3,7 +3,7 @@
 	import { CloseButton } from 'flowbite-svelte';
 
 	/**
-	 * 
+	 *
 	 */
 	export let message: string;
 	export let visible = true;

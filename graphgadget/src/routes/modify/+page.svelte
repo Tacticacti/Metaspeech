@@ -118,7 +118,7 @@
 
 	<div class="flex">
 		<Table />
-		<Importer on:input={e => second_data = e.detail.input} />
+		<Importer on:input={(e) => (second_data = e.detail.input)} />
 	</div>
 	<Footer />
 </main>
