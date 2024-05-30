@@ -1,4 +1,5 @@
 <script lang="ts">
+	import NavBar from '$lib/shared-components/NavBar.svelte';
 	import Importer from '$lib/importer/Importer.svelte';
 	import { data } from '$lib/Store';
 	import { goto } from '$app/navigation';
@@ -35,7 +36,8 @@
 </svelte:head>
 
 <main class="bg-offwhite">
-	<header class="bg-offwhite py-5 text-center">
+	<NavBar currentPage={''} />
+	<header class="flex justify-center pt-16 m-5 max-w-full"> <!--  flex justify-center pt-16 m-5  -->
 		<img src="GraphGadgetHomeLogo.png" alt="Logo" class="w-72 mx-auto" />
 	</header>
 
