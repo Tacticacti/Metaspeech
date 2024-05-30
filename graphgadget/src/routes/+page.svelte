@@ -5,9 +5,7 @@
 	import { data } from '$lib/Store';
 	import { goto } from '$app/navigation';
 	import type { Bundle } from '$lib/types';
-	import {Label, Checkbox } from 'flowbite-svelte';
-
-
+	import { Label, Checkbox } from 'flowbite-svelte';
 
 	let storeData = false;
 	const APP_NAME = 'Graphgadget';
@@ -75,7 +73,6 @@
 		</div>
 	</div>
 	<Footer />
-
 </main>
 
 <style>
