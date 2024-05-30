@@ -96,6 +96,9 @@ describe('Deleting datasets', () => {
 	});
 
 	it('Clearing data should delete all entries', async () => {
+		// This makes sure that confirm is clicked when deleting files prompt appears
+		global.confirm = vi.fn(() => true);
+		
 		const { getByText } = render(sut);
 		const clearCache = getByText('Clear Data');
 
