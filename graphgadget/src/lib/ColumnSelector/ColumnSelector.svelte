@@ -20,8 +20,16 @@
 	$: selectedValues.set(currentlySelectedValues);
 	$: binSizes.set(currentBinSizes);
 
+	$: availableForSelect = columnNames.filter(columnName => (!$selectedColumns.includes(columnName) && numericColumns.map(n => n[0]).includes(columnName)));
+
+
 	function toggleMean() {
 		$checkedMean = !$checkedMean;
+	}
+	function handleClick(){
+		console.log('happens');
+		
+		$selectedValues = [];
 	}
 </script>
 
@@ -29,6 +37,7 @@
 {#each columnNames as column}
 	<label>
 		<input
+			on:click={handleClick}
 			type="checkbox"
 			data-testid="groupby-{column}"
 			name="params"
@@ -63,17 +72,19 @@
 	{/if}
 {/each}
 <p>Select</p>
-{#each numericColumns as column}
-	<label>
-		<input
-			type="checkbox"
-			data-testid="select-{column[0]}"
-			name="params"
-			value={column[0]}
-			bind:group={currentlySelectedValues}
-		/>
-		{column[0]}
-	</label>
+{#each availableForSelect as column}
+	{#if !currentlySelectedColumns.includes(column)}
+		<label>
+			<input
+				type="checkbox"
+				data-testid="select-{column}"
+				name="params"
+				value={column[0]}
+				bind:group={currentlySelectedValues}
+			/>
+			{column}
+		</label>
+	{/if}
 {/each}
 <label>
 	<input
