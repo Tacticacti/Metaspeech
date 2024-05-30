@@ -1,6 +1,6 @@
 <script lang="ts">
+	import { APP_NAME, COPYRIGHT_YEAR } from '$lib/Store';
 	import { Footer, FooterBrand, FooterCopyright } from 'flowbite-svelte';
-	import { APP_NAME, COPYRIGHT_YEAR } from './shared-variables';
 </script>
 
 <div class="flex flex-col">

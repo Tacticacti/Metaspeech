@@ -1,6 +1,6 @@
 <script lang="ts">
+	import { APP_NAME } from '$lib/Store';
 	import { Navbar, NavBrand, NavLi, NavUl, NavHamburger } from 'flowbite-svelte';
-	import { APP_NAME } from './shared-variables';
 
 	// current page is route
 	export let currentPage: string = '';

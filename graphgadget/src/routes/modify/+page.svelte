@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Filter from '$lib/filtering/Filter.svelte';
 	import Importer from '$lib/importer/Importer.svelte';
-	import { data } from '$lib/Store';
+	import { APP_NAME, data } from '$lib/Store';
 	import Table from '$lib/table/Table.svelte';
 	import { hasMissingValues, rowWiseMerge } from '$lib/utils/DataFrameUtils';
 	import DataFrame from 'dataframe-js';
@@ -10,7 +10,6 @@
 	import { loadSession } from '$lib/utils/SessionLoad';
 	import NavBar from '$lib/shared-components/NavBar.svelte';
 	import Footer from '$lib/shared-components/Footer.svelte';
-	import { APP_NAME } from '$lib/shared-components/shared-variables';
 
 	$: column_names = $data.listColumns() as string[];
 	$: missing_values = hasMissingValues($data);

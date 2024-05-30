@@ -2,11 +2,10 @@
 	import NavBar from '$lib/shared-components/NavBar.svelte';
 	import Footer from '$lib/shared-components/Footer.svelte';
 	import Importer from '$lib/importer/Importer.svelte';
-	import { data } from '$lib/Store';
+	import { APP_NAME, data } from '$lib/Store';
 	import { goto } from '$app/navigation';
 	import type { Bundle } from '$lib/types';
 	import { Label, Checkbox } from 'flowbite-svelte';
-	import { APP_NAME } from '$lib/shared-components/shared-variables';
 
 	let storeData = false;
 

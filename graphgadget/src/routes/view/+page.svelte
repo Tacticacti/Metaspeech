@@ -5,7 +5,7 @@
 	import { beforeUpdate } from 'svelte';
 	import { loadSession } from '$lib/utils/SessionLoad';
 	import NavBar from '$lib/shared-components/NavBar.svelte';
-	import { APP_NAME } from '$lib/shared-components/shared-variables';
+	import { APP_NAME } from '$lib/Store';
 
 	/**
 	 * Will check if there is a dataframe in session storage and load it
