@@ -1,14 +1,16 @@
 <script lang="ts">
 	import NavBar from '$lib/shared-components/NavBar.svelte';
+	import Footer from '$lib/shared-components/Footer.svelte';
 	import Importer from '$lib/importer/Importer.svelte';
 	import { data } from '$lib/Store';
 	import { goto } from '$app/navigation';
 	import type { Bundle } from '$lib/types';
-	import { Footer, FooterBrand, FooterCopyright, Label, Checkbox } from 'flowbite-svelte';
+	import {Label, Checkbox } from 'flowbite-svelte';
+
+
 
 	let storeData = false;
 	const APP_NAME = 'Graphgadget';
-	const COPYRIGHT_YEAR = 2024;
 
 	function storeFile(filename: string) {
 		var datasets = localStorage.getItem('datasets');
@@ -37,7 +39,7 @@
 
 <main class="bg-offwhite">
 	<NavBar currentPage={''} />
-	<header class="flex justify-center pt-16 m-5 max-w-full"> <!--  flex justify-center pt-16 m-5  -->
+	<header class="flex justify-center pt-16 m-5 max-w-full">
 		<img src="GraphGadgetHomeLogo.png" alt="Logo" class="w-72 mx-auto" />
 	</header>
 
@@ -72,16 +74,8 @@
 			</div>
 		</div>
 	</div>
+	<Footer />
 
-	<div class="flex flex-col">
-		<Footer
-			footerType="logo"
-			class="bg-darkblue w-full bottom-0 left-0 right-0 border-none rounded-none"
-		>
-			<FooterBrand href="/" src="GraphGadgetNavLogo.svg" alt="Flowbite Logo" />
-			<FooterCopyright href="/" by={APP_NAME} year={COPYRIGHT_YEAR} />
-		</Footer>
-	</div>
 </main>
 
 <style>
