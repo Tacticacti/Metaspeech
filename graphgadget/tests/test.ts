@@ -1,8 +1,8 @@
 import { test, expect } from '@playwright/test';
 
-test('should render', async () => {
-	// await page.goto('/');
+test('should render', async ({ page }) => {
+	await page.goto('/');
 	//get file input
-	// const input = await page.waitForSelector('input[type=file]', { timeout: 50000 });
-	expect(true).toBeTruthy;
+	const input = await page.$('input[type=file]');
+	expect(input).not.toBeNull;
 });
