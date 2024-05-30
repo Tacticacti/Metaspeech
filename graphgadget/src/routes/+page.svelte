@@ -1,14 +1,14 @@
 <script lang="ts">
-	import { ArrowRightOutline } from 'flowbite-svelte-icons';
+	import NavBar from '$lib/shared-components/NavBar.svelte';
+	import Footer from '$lib/shared-components/Footer.svelte';
 	import Importer from '$lib/importer/Importer.svelte';
 	import { data } from '$lib/Store';
 	import { goto } from '$app/navigation';
 	import type { Bundle } from '$lib/types';
-	import { Footer, FooterBrand, FooterCopyright, Label, Checkbox, P, Span } from 'flowbite-svelte';
+	import { Label, Checkbox } from 'flowbite-svelte';
 
 	let storeData = false;
 	const APP_NAME = 'Graphgadget';
-	const COPYRIGHT_YEAR = 2024;
 
 	function storeFile(filename: string) {
 		var datasets = localStorage.getItem('datasets');
@@ -36,8 +36,9 @@
 </svelte:head>
 
 <main class="bg-offwhite">
-	<header class="bg-offwhite py-5 text-center">
-		<img src="GraphGadgetHomeLogo.png" alt="Logo" class="w-72 mx-auto" />
+	<NavBar currentPage={''} />
+	<header class="flex justify-center pt-16 m-5 max-w-full">
+		<img src="GraphGadgetHomeLogo.png" alt="Logo" class="w-[12.5rem] mx-auto" />
 	</header>
 
 	<div class="flex justify-center gap-5 p-5 bg-darkblue">
@@ -48,7 +49,7 @@
 	<div class="text-center mt-4 flex justify-center items-center">
 		<Label class="flex items-center space-x-2">
 			<Checkbox id="store-data" bind:checked={storeData} />
-			<Span>Store data on client side?</Span>
+			<span>Keep session saved (client only)</span>
 		</Label>
 	</div>
 
@@ -59,30 +60,19 @@
 		<h3 class="text-gray-500">How it works</h3>
 		<div class="flex justify-around items-center flex-col md:flex-row">
 			<div class="bg-gray-200 p-5 m-2 rounded-lg shadow-md max-w-xs text-center">
-				<P>Upload your data as a TSV, JSON, XLS, or TXT in the correct format.</P>
+				<p>Upload your data as a TSV, JSON, XLS, or TXT in the correct format.</p>
 			</div>
-			<ArrowRightOutline class="text-4xl text-darkblue m-2 md:m-0 transform md:rotate-0 rotate-90"
-			></ArrowRightOutline>
+			<p class="text-4xl text-darkblue m-2 md:m-0 transform md:rotate-0 rotate-90">&rarr;</p>
 			<div class="bg-gray-200 p-5 m-2 rounded-lg shadow-md max-w-xs text-center">
-				<P>Select which parameters and graph you want us to create.</P>
+				<p>Select which parameters and graph you want us to create.</p>
 			</div>
-			<ArrowRightOutline class="text-4xl text-darkblue m-2 md:m-0 transform md:rotate-0 rotate-90"
-			></ArrowRightOutline>
+			<p class="text-4xl text-darkblue m-2 md:m-0 transform md:rotate-0 rotate-90">&rarr;</p>
 			<div class="bg-gray-200 p-5 m-2 rounded-lg shadow-md max-w-xs text-center">
-				<P>Either look at your graph in the browser or download it as a JPEG or PNG.</P>
+				<p>Either look at your graph in the browser or download it as a JPEG or PNG.</p>
 			</div>
 		</div>
 	</div>
-
-	<div class="flex flex-col">
-		<Footer
-			footerType="logo"
-			class="bg-darkblue w-full bottom-0 left-0 right-0 border-none rounded-none"
-		>
-			<FooterBrand href="/" src="GraphGadgetNavLogo.svg" alt="Flowbite Logo" />
-			<FooterCopyright href="/" by={APP_NAME} year={COPYRIGHT_YEAR} />
-		</Footer>
-	</div>
+	<Footer />
 </main>
 
 <style>
