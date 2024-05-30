@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { afterUpdate, onMount } from 'svelte';
-	import { getTableInfo, isColumnFrequency } from '$lib/graphs/histogram/HistogramController';
+	import { getTableInfo, isColumnFrequency } from '$lib/subgroup-controller/SubgroupController';
 	import { Grid } from 'gridjs';
 	import { data, selectedColumns, selectedValues, binSizes } from '$lib/Store';
 	import 'gridjs/dist/theme/mermaid.css';

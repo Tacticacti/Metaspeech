@@ -5,7 +5,7 @@ import {
 	SEPARATION_PARAMETERS,
 	SEPARATION_INTERVAL,
 	EMPTY_ENTRY
-} from '$lib/graphs/histogram/HistogramController';
+} from '$lib/subgroup-controller/SubgroupController';
 import DataFrame from 'dataframe-js';
 import { ABSOLUTE_FREQUENCY, RELATIVE_FREQUENCY, type BinDictionary } from '$lib/Store';
 
@@ -60,7 +60,6 @@ describe('sort parallel arrays tests', () => {
 		expect(labelsSorted).toStrictEqual(['F', 'M']);
 		expect(valuesSorted).toStrictEqual([3, 3]);
 	});
-
 
 	it('test sort parallel arrays three', () => {
 		const labels: string[] = ['B', 'A', 'C'];
@@ -181,7 +180,7 @@ describe('test calculate axis', () => {
 		const yAxisParam = ABSOLUTE_FREQUENCY;
 		const binSizes: BinDictionary = {};
 
-		let [labels, values] = calculateAxis(
+		const [labels, values] = calculateAxis(
 			dataRows,
 			selectedParams,
 			checkedMean,

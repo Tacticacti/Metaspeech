@@ -5,7 +5,7 @@
 	import { Chart, type ChartConfiguration } from 'chart.js/auto';
 	import { setColor } from '$lib/utils/CanvasUtils';
 	import { onMount } from 'svelte';
-	import { calculateAxis } from '$lib/graphs/histogram/HistogramController';
+	import { calculateAxis } from '$lib/subgroup-controller/SubgroupController';
 	import {
 		selectedColumns,
 		checkedMean,

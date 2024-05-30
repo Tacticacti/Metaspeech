@@ -188,7 +188,7 @@ export function calculateAxis(
 	const maps = getFrequenciesAndValues(dataRows, selectedParams, [yAxisParam], binSizes);
 
 	// Get the map of that y-axis parameter
-	const yParamMap: Map<string, [number,number]> = maps[yAxisParam] ?? new Map();
+	const yParamMap: Map<string, [number, number]> = maps[yAxisParam] ?? new Map();
 
 	// Labels are the keys of the map
 	const labels: string[] = [...yParamMap.keys()];
@@ -200,7 +200,10 @@ export function calculateAxis(
 	}
 	if (yAxisParam == RELATIVE_FREQUENCY) {
 		const totalFrequency = dataRows.length;
-		return sortParallelArrays(labels, frequencies.map((f) => f / totalFrequency));
+		return sortParallelArrays(
+			labels,
+			frequencies.map((f) => f / totalFrequency)
+		);
 	}
 
 	const values: number[] = [...yParamMap.values()].map((pair) => pair[0]);
