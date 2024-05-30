@@ -21,7 +21,7 @@
 	$: binSizes.set(currentBinSizes);
 
 	/**
-	 * Toggle the mean checkbox
+	 * Toggle the usage of mean
 	 */
 	function toggleMean() {
 		$checkedMean = !$checkedMean;
