@@ -8,6 +8,13 @@ export const SEPARATION_PARAMETERS: string = '; ';
 export const SEPARATION_INTERVAL: string = ', ';
 export const EMPTY_ENTRY: string = '<empty>';
 
+/**
+ * Generates a label for a parameter in a row. {value} for non-numeric fields, [lower, upper] for numeric fields if the binSize is greater than 1.
+ * @param paramName The name of the parameter to generate a label for.
+ * @param row The row to generate the label for.
+ * @param binSizes The bin sizes for the parameters.
+ * @returns The label for the parameter.
+ */
 function getParamLabel(paramName: string, row: Row, binSizes: BinDictionary): string {
 	const paramValue = row.get(paramName);
 
@@ -34,6 +41,13 @@ function getParamLabel(paramName: string, row: Row, binSizes: BinDictionary): st
 	return `[${lowerBound}${SEPARATION_INTERVAL}${upperBound}]`;
 }
 
+/**
+ * Sorts the elements of the combined array. The combined array is an array of tuples where the first element is the label and the second element is the value.
+ * Some of the labels are in the format of "[lower, upper]" where lower and upper are the min and max of a range.
+ * @param a The first element to compare.
+ * @param b The second element to compare.
+ * @returns The comparison of the two elements.
+ */
 function compareElementsOfCombinedArray(a: [string, number], b: [string, number]): number {
 	const paramsA = a[0].split(SEPARATION_PARAMETERS);
 	const paramsB = b[0].split(SEPARATION_PARAMETERS);
@@ -70,6 +84,15 @@ function compareElementsOfCombinedArray(a: [string, number], b: [string, number]
 	return comparison;
 }
 
+/**
+ * Calculates the labels and values for the x-axis and y-axis of the histogram.
+ * @param dataRows The rows of data to calculate the histogram for.
+ * @param selectedParams The parameters to calculate the histogram for.
+ * @param checkedMean Whether to calculate the mean of the values.
+ * @param yAxisParam The parameter to calculate the y-axis for.
+ * @param binSizes The bin sizes for the parameters.
+ * @returns The labels and values for the x-axis and y-axis of the histogram.
+ */
 export function calculateAxis(
 	dataRows: Row[],
 	selectedParams: string[],
@@ -135,7 +158,12 @@ export function calculateAxis(
 	return [labels, values];
 }
 
-// Sorts two arrays based on the labels
+/**
+ * Sorts the labels and values in parallel.
+ * @param labels The labels to sort.
+ * @param values The values to sort.
+ * @returns The sorted labels and values.
+ */
 export function sortParallelArrays(labels: string[], values: number[]): [string[], number[]] {
 	const combinedArray: [string, number][] = [];
 	for (let idx = 0; idx < labels.length; ++idx) {

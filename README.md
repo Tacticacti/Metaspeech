@@ -18,12 +18,12 @@ Graph Gadget is a website that visualizes, primarily but not limited to, speech 
 [![Tailwind css](https://img.shields.io/badge/Tailwind_CSS-06B6D4?logo=tailwindcss&labelColor=gray)](https://tailwindcss.com/)
 
 ## Contents
-1. [⚡ Getting started](#⚡-getting-started)
-2. [🔗 Useful links](#🔗-useful-links)
-3. [🏗️ Project structure](#🏗️-project-structure)
-4. [🎨 Styling](#🎨-styling)
-5. [🧪 Testing](#🧪-testing)
-6. [ℹ️ About us](#ℹ️-about-us)
+1. [**⚡ Getting started**](#⚡-getting-started)
+2. [**🔗 Useful links**](#🔗-useful-links)
+3. [**🏗️ Project structure**](#🏗️-project-structure)
+4. [**🎨 Styling**](#🎨-styling)
+5. [**🧪 Testing**](#🧪-testing)
+6. [**ℹ️ About us**](#ℹ️-about-us)
 
 ## ⚡ Getting started
 
@@ -88,7 +88,7 @@ We are using  and  for styling components and other types of styling. Tailwind i
 The project uses 2 different methods of testing frameworks for testing: unit tests and E2E tests. 
 
 ### Unit tests 
-For unit tests we used:
+For unit tests we use:
 [![Vitest](https://img.shields.io/badge/Vitest-6E9F18?logo=Vitest&labelColor=gray)](https://vitest.dev/)
 
 A unit test is a block of code that verifies the accuracy of a smaller, isolated block of application code, typically a function or method. The unit test is designed to check that the block of code runs as expected, according to the developer's theoretical logic behind it. - [Amazon](https://aws.amazon.com/what-is/unit-testing/#:~:text=A%20unit%20test%20is%20a,developer's%20theoretical%20logic%20behind%20it.)
@@ -101,7 +101,7 @@ For end-to-end tests we use:
 
 End-to-end (E2E) testing is a Software testing methodology to test a functional and data application flow consisting of several sub-systems working together from start to end. - [Microsoft](https://microsoft.github.io/code-with-engineering-playbook/automated-testing/e2e-testing/)
 
-These can be found in the `/graphgadget/tests` folder.
+E2E tests can be found in the `/graphgadget/tests` folder.
 
 ## ℹ️ About us
 This project was a part of the TU Delft 2023/2024 Software Project. The following people were a part of this project:

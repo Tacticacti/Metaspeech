@@ -2,7 +2,13 @@
 	import { data } from '$lib/Store';
 	import * as ctrl from './TableController';
 
+	/**
+	 * The columns of the data
+	 */
 	$: columns = $data?.listColumns() as string[];
+	/**
+	 * The rows of the data
+	 */
 	$: rows = $data?.toArray() as unknown[][];
 </script>
 

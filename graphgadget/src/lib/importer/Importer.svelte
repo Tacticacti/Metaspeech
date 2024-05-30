@@ -12,7 +12,9 @@
 		input: Bundle;
 	}>();
 
-	// Store for managing error messages
+	/**
+	 * Error message to display to the user
+	 */
 	export const errorMessage = writable<string | null>(null);
 
 	async function onInput(event: Event) {

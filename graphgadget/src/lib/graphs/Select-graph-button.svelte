@@ -1,6 +1,10 @@
 <script lang="ts">
 	import { graph_name, graph_description, selected_graph } from './Store.js';
 	export let graph;
+
+	/**
+	 * Handle mouse out event
+	 */
 	function handleMouseOut() {
 		$graph_name = '';
 		$graph_description = '';

@@ -6,6 +6,9 @@
 	// for testing purposes
 	let isDownloadCalled = false;
 
+	/**
+	 * Download the canvas as a JPG image
+	 */
 	function downloadCanvasJPG() {
 		const link = document.createElement('a');
 		const image = chart.toBase64Image('image/jpeg', 1.0);

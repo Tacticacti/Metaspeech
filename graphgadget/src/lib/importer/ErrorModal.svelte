@@ -1,10 +1,16 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
 
+	/**
+	 * 
+	 */
 	export let message: string;
 
 	const dispatch = createEventDispatcher();
 
+	/**
+	 * Close the modal
+	 */
 	function closeModal() {
 		dispatch('close');
 	}

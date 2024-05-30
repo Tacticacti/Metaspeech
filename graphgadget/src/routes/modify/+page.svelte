@@ -26,24 +26,33 @@
 		loadSession();
 	});
 
+	/**
+	 * Saves the data to the session storage
+	 */
 	function handleClick() {
 		// set the storage to the updated data
 		sessionStorage.setItem('current-df', JSON.stringify($data));
 	}
 
+	/**
+	 * Removes rows from data that miss values
+	 */
 	function removeMissingValues() {
 		$data = $data.dropMissingValues(column_names);
 	}
 
 	let second_data: DataFrame;
-	function handleInput(event: CustomEvent<Bundle>) {
-		second_data = event.detail.input;
-	}
 
+	/**
+	 * Merges the dataframes row-wise, i.e. joins them based on the index
+	 */
 	function handleRowWiseMerge() {
 		$data = rowWiseMerge($data, second_data);
 	}
 
+	/**
+	 * Merges the dataframes based on the selected columns
+	 */
 	function joinColumns() {
 		let renamed = second_data;
 		if (merge_col_1 !== merge_col_2) {
@@ -64,7 +73,7 @@
 
 <a href="/view" on:click={handleClick} data-testid="next-link">Next</a>
 
-<Importer on:input={handleInput} />
+<Importer on:input={e => second_data = e.detail.input} />
 
 {#if second_data}
 	<button on:click={handleRowWiseMerge} data-testid="merge-index-button">Index merge</button>
