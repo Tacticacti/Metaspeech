@@ -87,13 +87,15 @@ We are using  and  for styling components and other types of styling. Tailwind i
 ## 🧪 Testing
 The project uses 2 different methods of testing frameworks for testing: unit tests and E2E tests. 
 
-### Unit tests 
-For unit tests we use:
+### Unit tests & Integration tests
+For unit and integration tests we use:
 [![Vitest](https://img.shields.io/badge/Vitest-6E9F18?logo=Vitest&labelColor=gray)](https://vitest.dev/)
 
 A unit test is a block of code that verifies the accuracy of a smaller, isolated block of application code, typically a function or method. The unit test is designed to check that the block of code runs as expected, according to the developer's theoretical logic behind it. - [Amazon](https://aws.amazon.com/what-is/unit-testing/#:~:text=A%20unit%20test%20is%20a,developer's%20theoretical%20logic%20behind%20it.)
 
-Unit tests can be found troughout the project, they can be identified by their extension: `.test.ts`. In some cases a `.help.ts` file can be found along side it. Suc files contain helper functions to find specific elements or perform common actions like clicking a button. 
+Integration testing is a type of software testing where components of the software are gradually integrated and then tested as a unified group. Usually, these components are already working well individually, but they may break when integrated with other components. - [katalon](https://katalon.com/resources-center/blog/integration-testing)
+
+Unit and integration tests can be found throughout the project, they can be identified by their extension: `.test.ts`. In some cases a `.help.ts` file can be found along side it. Suc files contain helper functions to find specific elements or perform common actions like clicking a button. 
 
 ### E2E tests
 For end-to-end tests we use: 
