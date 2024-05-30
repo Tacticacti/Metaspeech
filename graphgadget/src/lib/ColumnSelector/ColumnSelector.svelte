@@ -20,24 +20,49 @@
 	$: selectedValues.set(currentlySelectedValues);
 	$: binSizes.set(currentBinSizes);
 
-	$: availableForSelect = columnNames.filter(columnName => (!$selectedColumns.includes(columnName) && numericColumns.map(n => n[0]).includes(columnName)));
-
+	/**
+	 * column names available for select: if not in selected columns and is a numeric column
+	 */
+	$: availableForSelect = columnNames.filter(
+		(columnName) =>
+			!currentlySelectedColumns.includes(columnName) &&
+			numericColumns.map((n) => n[0]).includes(columnName)
+	);
+	/**
+	 * column names available for groupby: if not in selected values
+	 */
+	$: availableForGroupby = columnNames.filter(
+		(columnName) => !currentlySelectedValues.includes(columnName)
+	);
 
 	function toggleMean() {
 		$checkedMean = !$checkedMean;
 	}
-	function handleClick(){
-		console.log('happens');
-		
-		$selectedValues = [];
+	/**
+	 *
+	 * @param name: name of the column
+	 * removes the column from selectedValues if it is selected in groupby
+	 */
+	function handleClickGroupBy(name: string) {
+		currentlySelectedValues.filter((n) => n !== name);
+	}
+	/**
+	 *
+	 * @param name: name of the column
+	 * removes the column from selectedColumns if it is selected in select
+	 */
+	function handleClickSelect(name: string) {
+		currentlySelectedValues.filter((n) => n !== name);
 	}
 </script>
 
 <p>Group by</p>
-{#each columnNames as column}
+{#each availableForGroupby as column}
 	<label>
 		<input
-			on:click={handleClick}
+			on:click={() => {
+				handleClickGroupBy(column);
+			}}
 			type="checkbox"
 			data-testid="groupby-{column}"
 			name="params"
@@ -76,10 +101,13 @@
 	{#if !currentlySelectedColumns.includes(column)}
 		<label>
 			<input
+				on:click={() => {
+					handleClickSelect(column);
+				}}
 				type="checkbox"
 				data-testid="select-{column}"
 				name="params"
-				value={column[0]}
+				value={column}
 				bind:group={currentlySelectedValues}
 			/>
 			{column}

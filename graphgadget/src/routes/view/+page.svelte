@@ -10,7 +10,7 @@
 	 */
 	beforeUpdate(() => {
 		console.log($selectedValues);
-		
+
 		loadSession();
 	});
 </script>

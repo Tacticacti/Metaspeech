@@ -15,7 +15,6 @@ const df1 = new DataFrame(
 	},
 	['column1', 'column2', 'column3']
 );
-
 describe('ColumnSelector tests', () => {
 	it('basic render', () => {
 		const { container } = render(sut);
@@ -196,6 +195,47 @@ describe('select tests', () => {
 		await user.click(column2Button);
 
 		expect(get(selectedValues)).toStrictEqual([]);
+	});
+});
+describe('groupby and select tests', () => {
+	it('clicking column in groupby removes column from select', async () => {
+		data.set(df1);
+		const user = userEvent.setup();
+
+		const { getByTestId, queryByTestId } = render(sut);
+
+		const column1groupby = getByTestId('groupby-column1');
+
+		expect(getByTestId('select-column1')).to.exist;
+
+		await user.click(column1groupby);
+
+		expect(queryByTestId('select-column1')).not.toBeInTheDocument();
+	});
+	it('clicking column1, column3 in groupby and clicking column2 in select, column2 is not in groupby and column3, column1 are checked', async () => {
+		data.set(df1);
+		const user = userEvent.setup();
+
+		const page = render(sut);
+
+		const column1groupby = page.getByTestId('groupby-column1');
+		const column3groupby = page.getByTestId('groupby-column3');
+
+		expect(page.getByTestId('select-column1')).to.exist;
+		expect(page.getByTestId('groupby-column2')).to.exist;
+		expect(page.queryByTestId('select-column3')).not.toBeInTheDocument();
+
+		await user.click(column1groupby);
+		await user.click(column3groupby);
+
+		const column2select = page.getByTestId('select-column2');
+		await user.click(column2select);
+
+		expect(page.queryByTestId('select-column1')).not.toBeInTheDocument();
+		expect(page.queryByTestId('groupby-column2')).not.toBeInTheDocument();
+
+		expect(get(selectedColumns)).toStrictEqual(['column1', 'column3']);
+		expect(get(selectedValues)).toStrictEqual(['column2']);
 	});
 });
 describe('checkedMean button tests', () => {
