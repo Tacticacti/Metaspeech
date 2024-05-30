@@ -3,10 +3,9 @@
 	import { Chart, type ChartConfiguration } from 'chart.js/auto';
 	import { afterUpdate, onMount, onDestroy } from 'svelte';
 	import { setColor } from '$lib/utils/CanvasUtils';
-	import PngButton from '$lib/shared-components/PNGButton.svelte';
-	import JpgButton from '$lib/shared-components/JPGButton.svelte';
 	import WarningGenerator from '$lib/WarningGenerator/WarningGenerator.svelte';
 	import { selectedColumns } from '$lib/Store';
+	import Export from '../Export.svelte';
 
 	let canvas: HTMLCanvasElement;
 	let chart: Chart;
@@ -85,12 +84,10 @@
 	</select>
 </div>
 
-<div>
-	<canvas data-testid="canvas-element" bind:this={canvas} />
+<div class="flex flex-col items-center">
+	<canvas data-testid="canvas-element" bind:this={canvas} class="mb-4" />
+	<Export {chart} />
 </div>
-
-<PngButton {chart} />
-<JpgButton {chart} />
 
 <style>
 	div > canvas {

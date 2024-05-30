@@ -6,6 +6,7 @@
 	import { loadSession } from '$lib/utils/SessionLoad';
 	import NavBar from '$lib/shared-components/NavBar.svelte';
 	import { APP_NAME } from '$lib/Store';
+	import Footer from '$lib/shared-components/Footer.svelte';
 
 	/**
 	 * Will check if there is a dataframe in session storage and load it
@@ -30,4 +31,5 @@
 			</div>
 		{/if}
 	</div>
+	<Footer />
 </main>
