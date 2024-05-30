@@ -5,7 +5,6 @@ Graph Gadget is a website that visualizes, primarily but not limited to, speech 
 ![main statement coverage](https://gitlab.ewi.tudelft.nl/cse2000-software-project/2023-2024/cluster-s/15a/code/badges/main/coverage.svg?key_text=main+statement+coverage&key_width=157)
 ![main pipeline](https://gitlab.ewi.tudelft.nl/cse2000-software-project/2023-2024/cluster-s/15a/code/badges/main/pipeline.svg?ignore_skipped=true&key_text=main+pipeline&key_width=90)
 
-
 ## Getting started
 
 To run the project you need to follow the following steps:
@@ -62,22 +61,22 @@ The project is structured as follows:
     - [Documents repository](https://gitlab.ewi.tudelft.nl/cse2000-software-project/2023-2024/cluster-s/15a/documents)
 
 - **Related reports and documents:**
-    - [Report](https://www.overleaf.com/3294929372phcbcjzgxsqg#4af51f)
-    - [Code of Conduct](https://www.overleaf.com/6212343596rpkcsdzvxvqh#74f42f)
-    - [Project Plan](https://www.overleaf.com/4843161939vfjxtkknvvvw#fdf6cb)
+    - [Report](https://www.overleaf.com/read/fbvcpsjggszz#a44e80)
+    - [Code of Conduct](https://www.overleaf.com/read/thygttdrhczt#3f911d)
+    - [Project Plan](https://www.overleaf.com/read/fccvwktkrjtt#d315f0)
 
 ## About us
 This project was a part of the TU Delft 2023/2024 Software Project.
 
 It was developed by:
 
-| Name | Student id | Email |
-| ------ | ------ | ----- |
-| Boris Annink | 5591147 | B.R.M.Annink@student.tudelft.nl |
-| Edward Oh |        | J.Oh-2@student.tudelft.nl |
-| Emīls Dzintars |        | E.Dzintars@student.tudelft.nl |
-| Mateo Nasse |        | M.A.Nasse@student.tudelft.nl |
-| Pedro Gomes Moreira |        | P.GomesMoreira@student.tudelft.nl |
+| Name | Email |
+| ------ | ----- |
+| Boris Annink | B.R.M.Annink@student.tudelft.nl |
+| Edward Oh | J.Oh-2@student.tudelft.nl |
+| Emīls Dzintars | E.Dzintars@student.tudelft.nl |
+| Mateo Nasse | M.A.Nasse@student.tudelft.nl |
+| Pedro Gomes Moreira | P.GomesMoreira@student.tudelft.nl |
 
 The project was guided by:
 
