@@ -1,5 +1,9 @@
 <script lang="ts">
 	import { graph_name, graph_description, selected_graph } from './Store.js';
+
+	/**
+	 * Graph object
+	 */
 	export let graph;
 
 	/**

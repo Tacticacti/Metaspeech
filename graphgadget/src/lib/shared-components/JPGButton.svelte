@@ -1,6 +1,9 @@
 <script lang="ts">
 	import { Chart } from 'chart.js/auto';
 
+	/**
+	 * Chart object
+	 */
 	export let chart: Chart;
 
 	// for testing purposes

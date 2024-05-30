@@ -17,6 +17,10 @@
 	 */
 	export const errorMessage = writable<string | null>(null);
 
+	/**
+	 * Handle the input event by parsing the file and dispatching the input event
+	 * @param event The input event
+	 */
 	async function onInput(event: Event) {
 		// Clear any previous error messages
 		errorMessage.set(null);

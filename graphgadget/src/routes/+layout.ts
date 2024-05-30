@@ -1,2 +1,5 @@
-// This can be false if you're using a fallback (i.e. SPA mode)
+/**
+ * Whether to prerender the application or not.
+ * Since we are creating a static site, we want to prerender the application.
+ */
 export const prerender = true;

@@ -3,12 +3,27 @@
 	import { data } from '$lib/Store.js';
 	import { selectedColumns, selectedValues } from '$lib/Store.js';
 
+	/**
+	 * Whether the columns should be numbers
+	 */
 	export let needNumbers: boolean;
 
+	/**
+	 * Whether the columns amount of columns selected is limited
+	 */
 	export let columnsAreLimited: boolean;
+	/**
+	 * The limit of columns
+	 */
 	export let maxColumns: number;
 
+	/**
+	 * Whether the amount of selected values is limited
+	 */
 	export let valuesAreLimited: boolean;
+	/**
+	 * The limit of selected values
+	 */
 	export let maxValues: number;
 
 	let nonNumericColumns = getNonNumericalColumns($selectedColumns, $data.toCollection(true));

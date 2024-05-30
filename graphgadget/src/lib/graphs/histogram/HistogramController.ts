@@ -1,8 +1,17 @@
 import { Row } from 'dataframe-js';
 import { type BinDictionary, ABSOLUTE_FREQUENCY, RELATIVE_FREQUENCY } from '$lib/Store';
 
+/**
+ * The separator for parameters in a label.
+ */
 export const SEPARATION_PARAMETERS: string = '; ';
+/**
+ * The separator for the lower and upper bounds of a bin interval.
+ */
 export const SEPARATION_INTERVAL: string = ', ';
+/**
+ * The label for an empty entry.
+ */
 export const EMPTY_ENTRY: string = '<empty>';
 
 /**
