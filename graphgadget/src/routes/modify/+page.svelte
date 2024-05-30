@@ -9,6 +9,7 @@
 	import { onMount } from 'svelte';
 	import { loadSession } from '$lib/utils/SessionLoad';
 	import NavBar from '$lib/shared-components/NavBar.svelte';
+	import Footer from '$lib/shared-components/Footer.svelte';
 
 	$: column_names = $data.listColumns() as string[];
 	$: missing_values = hasMissingValues($data);
@@ -111,4 +112,5 @@
 		<Table />
 		<Importer on:input={handleInput} />
 	</div>
+	<Footer />
 </main>
