@@ -64,7 +64,6 @@
 	});
 </script>
 
-
 <WarningGenerator
 	needNumbers={true}
 	columnsAreLimited={false}
