@@ -42,7 +42,12 @@
 
 	<div class="flex justify-center gap-5 p-5 bg-darkblue">
 		<Importer on:input={handleInput} />
-		<button class="button" on:click={() => goto('/previous')}>Previous Data</button>
+		<button
+			class="text-lg font-bold text-gray-800 my-2 py-2 px-4 inline-block bg-gray-100 rounded-lg cursor-pointer transition-colors duration-300 ease-in-out border border-gray-300 shadow-md hover:text-blue-500 hover:bg-gray-200"
+			on:click={() => goto('/previous')}
+		>
+			Previous Data
+		</button>
 	</div>
 
 	<div class="text-center mt-4 flex justify-center items-center">
@@ -73,28 +78,3 @@
 	</div>
 	<Footer />
 </main>
-
-<style>
-	.button {
-		font-size: 16px;
-		font-weight: bold;
-		color: #333;
-		margin: 10px 0;
-		padding: 10px 20px;
-		display: inline-block;
-		background-color: #f9f9f9;
-		border-radius: 4px;
-		cursor: pointer;
-		transition:
-			color 0.3s ease,
-			background-color 0.3s ease;
-		text-align: center;
-		border: 1px solid #ccc;
-		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-	}
-
-	.button:hover {
-		color: #007bff;
-		background-color: #e0e0e0;
-	}
-</style>
