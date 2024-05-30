@@ -41,6 +41,27 @@ describe('sort parallel arrays tests', () => {
 		expect(valuesSorted).toStrictEqual([30]);
 	});
 
+	it('sanity check', () => {
+		const labels: string[] = ['M', 'F'];
+		const values: number[] = [3, 3];
+
+		const [labelsSorted, valuesSorted] = sortParallelArrays(labels, values);
+
+		expect(labelsSorted).toStrictEqual(['F', 'M']);
+		expect(valuesSorted).toStrictEqual([3, 3]);
+	});
+
+	it('sanity check 2', () => {
+		const labels: string[] = ['F', 'M'];
+		const values: number[] = [3, 3];
+
+		const [labelsSorted, valuesSorted] = sortParallelArrays(labels, values);
+
+		expect(labelsSorted).toStrictEqual(['F', 'M']);
+		expect(valuesSorted).toStrictEqual([3, 3]);
+	});
+
+
 	it('test sort parallel arrays three', () => {
 		const labels: string[] = ['B', 'A', 'C'];
 		const values: number[] = [30, 20, 10];
@@ -140,16 +161,13 @@ describe('test calculate axis', () => {
 		const yAxisParam = 'Absolute Frequency';
 		const binSizes: BinDictionary = {};
 
-		let [labels, values] = calculateAxis(
+		const [labels, values] = calculateAxis(
 			dataRows,
 			selectedParams,
 			checkedMean,
 			yAxisParam,
 			binSizes
 		);
-
-		// This function has already been tested:
-		[labels, values] = sortParallelArrays(labels, values);
 
 		// F before M because sorted
 		expect(labels).toStrictEqual(['']);
@@ -171,11 +189,8 @@ describe('test calculate axis', () => {
 			binSizes
 		);
 
-		// This function has already been tested:
-		[labels, values] = sortParallelArrays(labels, values);
-
 		// F before M because sorted
-		expect(labels).toStrictEqual(['F', 'M']);
+		expect(labels).toStrictEqual(['M', 'F']);
 		expect(values).toStrictEqual([3, 3]);
 	});
 
@@ -186,14 +201,13 @@ describe('test calculate axis', () => {
 		const yAxisParam = RELATIVE_FREQUENCY;
 		const binSizes: BinDictionary = {};
 
-		let [labels, values] = calculateAxis(
+		const [labels, values] = calculateAxis(
 			dataRows,
 			selectedParams,
 			checkedMean,
 			yAxisParam,
 			binSizes
 		);
-		[labels, values] = sortParallelArrays(labels, values);
 
 		expect(labels).toStrictEqual(['F', 'M']);
 		expect(values).toStrictEqual([1 / 2, 1 / 2]);
@@ -206,14 +220,13 @@ describe('test calculate axis', () => {
 		const yAxisParam = 'age';
 		const binSizes: BinDictionary = {};
 
-		let [labels, values] = calculateAxis(
+		const [labels, values] = calculateAxis(
 			dataRows,
 			selectedParams,
 			checkedMean,
 			yAxisParam,
 			binSizes
 		);
-		[labels, values] = sortParallelArrays(labels, values);
 
 		expect(labels).toStrictEqual(['F', 'M']);
 		expect(values).toStrictEqual([130, 66]);
@@ -226,14 +239,13 @@ describe('test calculate axis', () => {
 		const yAxisParam = 'age';
 		const binSizes: BinDictionary = {};
 
-		let [labels, values] = calculateAxis(
+		const [labels, values] = calculateAxis(
 			dataRows,
 			selectedParams,
 			checkedMean,
 			yAxisParam,
 			binSizes
 		);
-		[labels, values] = sortParallelArrays(labels, values);
 
 		expect(labels).toStrictEqual(['F', 'M']);
 		expect(values).toStrictEqual([65, 22]);
@@ -247,14 +259,13 @@ describe('test calculate axis', () => {
 		const yAxisParam = ABSOLUTE_FREQUENCY;
 		const binSizes: BinDictionary = {};
 
-		let [labels, values] = calculateAxis(
+		const [labels, values] = calculateAxis(
 			dataRows,
 			selectedParams,
 			checkedMean,
 			yAxisParam,
 			binSizes
 		);
-		[labels, values] = sortParallelArrays(labels, values);
 
 		// Doesn't return columns with empty count
 		expect(labels).toStrictEqual([
@@ -281,14 +292,13 @@ describe('test calculate axis', () => {
 			//<empty> has 1, [80,89] has one
 		};
 
-		let [labels, values] = calculateAxis(
+		const [labels, values] = calculateAxis(
 			dataRows,
 			selectedParams,
 			checkedMean,
 			yAxisParam,
 			binSizes
 		);
-		[labels, values] = sortParallelArrays(labels, values);
 
 		expect(labels).toStrictEqual([
 			`F${SEPARATION_PARAMETERS}[40${SEPARATION_INTERVAL}49]`,
@@ -310,17 +320,15 @@ describe('test calculate axis', () => {
 			// this should be ignored by the label
 		};
 
-		let [labels, values] = calculateAxis(
+		const [labels, values] = calculateAxis(
 			dataRows,
 			selectedParams,
 			checkedMean,
 			yAxisParam,
 			binSizes
 		);
-		[labels, values] = sortParallelArrays(labels, values);
 
 		expect(labels).toStrictEqual(['F', 'M']);
 		expect(values).toStrictEqual([65, 22]);
-		``;
 	});
 });

@@ -1,5 +1,10 @@
 import { Row } from 'dataframe-js';
-import { type BinDictionary, type MapDictionary, ABSOLUTE_FREQUENCY, RELATIVE_FREQUENCY } from '$lib/Store';
+import {
+	type BinDictionary,
+	type MapDictionary,
+	ABSOLUTE_FREQUENCY,
+	RELATIVE_FREQUENCY
+} from '$lib/Store';
 
 export const SEPARATION_PARAMETERS: string = '; ';
 export const SEPARATION_INTERVAL: string = ', ';
@@ -10,7 +15,7 @@ export const EMPTY_ENTRY: string = '<empty>';
  * @param paramName the name of the column
  * @param row the current row of the table
  * @param binSizes a dictionary that has the bin size for each parameter
- * 
+ *
  * @returns a label with the value of that column
  */
 function getParamLabel(paramName: string, row: Row, binSizes: BinDictionary): string {
@@ -116,8 +121,8 @@ export function getFrequenciesAndValues(
 	dataRows: Row[],
 	selectedParams: string[],
 	yAxisParams: string[],
-	binSizes: BinDictionary): MapDictionary {
-
+	binSizes: BinDictionary
+): MapDictionary {
 	const maps: MapDictionary = {};
 	const totalFrequency = dataRows.length;
 
@@ -183,12 +188,12 @@ export function calculateAxis(
 	const maps = getFrequenciesAndValues(dataRows, selectedParams, [yAxisParam], binSizes);
 
 	// Get the map of that y-axis parameter
-	const yParamMap = maps[yAxisParam];
+	const yParamMap: Map<string, [number,number]> = maps[yAxisParam] ?? new Map();
 
 	// Labels are the keys of the map
 	const labels: string[] = [...yParamMap.keys()];
 	// Frequencies are the second element of each pair stored as value of the map
-	const frequencies: number[] = [...yParamMap.values()].map(pair => pair[1]);
+	const frequencies: number[] = [...yParamMap.values()].map((pair) => pair[1]);
 
 	if (yAxisParam == ABSOLUTE_FREQUENCY) {
 		return [labels, frequencies];
@@ -198,7 +203,7 @@ export function calculateAxis(
 		return [labels, frequencies.map((f) => f / totalFrequency)];
 	}
 
-	const values: number[] = [...yParamMap.values()].map(pair => pair[0]);
+	const values: number[] = [...yParamMap.values()].map((pair) => pair[0]);
 
 	if (checkedMean) {
 		// Calculate means of values
@@ -252,7 +257,11 @@ export function isColumnFrequency(column: string): boolean {
  * @param columnsToMean the columns that should display as a mean
  * @returns an array with the table headers, showing frequencies once, and other parameters as either sum, or mean, or both, or neither
  */
-function getTableHeaders(yColumns: string[], columnsToSum: string[], columnsToMean: string[]): string[] {
+function getTableHeaders(
+	yColumns: string[],
+	columnsToSum: string[],
+	columnsToMean: string[]
+): string[] {
 	const tableHeaders: string[] = [];
 
 	for (const col of yColumns) {
@@ -281,13 +290,20 @@ function getTableHeaders(yColumns: string[], columnsToSum: string[], columnsToMe
  * @param columnsToMean the columns that should display as a mean
  * @returns an array with the column names and a 2d array with the table values
  */
-export function getTableInfo(dataRows: Row[], xColumns: string[], yColumns: string[], binSizes: BinDictionary, columnsToSum: string[], columnsToMean: string[]): [string[], string[][]] {
+export function getTableInfo(
+	dataRows: Row[],
+	xColumns: string[],
+	yColumns: string[],
+	binSizes: BinDictionary,
+	columnsToSum: string[],
+	columnsToMean: string[]
+): [string[], string[][]] {
 	if (xColumns.length === 0 || yColumns.length === 0) {
 		return [[], []];
 	}
 
 	const maps = getFrequenciesAndValues(dataRows, xColumns, yColumns, binSizes);
-	
+
 	// Get the labels from the map of the first selected y column
 	// (Any selected y column would do: they all have maps with labels as keys)
 	const labels: string[] = [...maps[yColumns[0]].keys()];
@@ -296,12 +312,12 @@ export function getTableInfo(dataRows: Row[], xColumns: string[], yColumns: stri
 
 	for (const ycol of yColumns) {
 		// For each y column selected, get its column values
-		const columnValues: number[] = [...maps[ycol].values()].map(pair => pair[0]);
-		const columnFrequencies: number[] = [...maps[ycol].values()].map(pair => pair[1]);
+		const columnValues: number[] = [...maps[ycol].values()].map((pair) => pair[0]);
+		const columnFrequencies: number[] = [...maps[ycol].values()].map((pair) => pair[1]);
 
 		// Sort column according to labels
 		const [sortedLabels, sortedColumnValues] = sortParallelArrays(labels, columnValues);
-		const [_, sortedColumnFrequencies] = sortParallelArrays(labels, columnFrequencies)
+		const [, sortedColumnFrequencies] = sortParallelArrays(labels, columnFrequencies);
 
 		if (listOfColumns.length === 0) {
 			// If running loop for the first time, add sorted labels
@@ -310,29 +326,25 @@ export function getTableInfo(dataRows: Row[], xColumns: string[], yColumns: stri
 
 		if (isColumnFrequency(ycol)) {
 			// If it is a frequency, simply add
-			listOfColumns.push(sortedColumnValues.map(v => v+""));
+			listOfColumns.push(sortedColumnValues.map((v) => v + ''));
 			continue;
 		}
 
 		if (columnsToSum.includes(ycol)) {
 			// Sum is already in the sorted values
-			listOfColumns.push(sortedColumnValues.map(v => v+""));
+			listOfColumns.push(sortedColumnValues.map((v) => v + ''));
 		}
 		if (columnsToMean.includes(ycol)) {
 			// Calculate mean by dividing each sum by the subgroup's frequency
 			for (let idx = 0; idx < sortedColumnValues.length; ++idx) {
 				sortedColumnValues[idx] /= sortedColumnFrequencies[idx];
 			}
-			listOfColumns.push(sortedColumnValues.map(v => v+""));
+			listOfColumns.push(sortedColumnValues.map((v) => v + ''));
 		}
-		
 	}
 
 	const listOfRows = transpose(listOfColumns);
 	const tableHeaders = getTableHeaders(yColumns, columnsToSum, columnsToMean);
 
-	return [
-		["Subgroup Label", ...tableHeaders],
-		listOfRows
-	];
+	return [['Subgroup Label', ...tableHeaders], listOfRows];
 }

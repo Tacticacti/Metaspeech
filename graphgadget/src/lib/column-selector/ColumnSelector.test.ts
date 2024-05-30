@@ -1,5 +1,5 @@
 import { render } from '@testing-library/svelte';
-import sut from '$lib/ColumnSelector/ColumnSelector.svelte';
+import sut from '$lib/column-selector/ColumnSelector.svelte';
 import { describe, it, expect } from 'vitest';
 import DataFrame from 'dataframe-js';
 import { data } from '$lib/Store';
