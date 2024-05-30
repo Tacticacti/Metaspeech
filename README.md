@@ -68,24 +68,20 @@ The project is structured as follows:
 ## About us
 This project was a part of the TU Delft 2023/2024 Software Project.
 
-It was developed by:
-
-| Name | Email |
-| ------ | ----- |
-| Boris Annink | B.R.M.Annink@student.tudelft.nl |
-| Edward Oh | J.Oh-2@student.tudelft.nl |
-| Emīls Dzintars | E.Dzintars@student.tudelft.nl |
-| Mateo Nasse | M.A.Nasse@student.tudelft.nl |
-| Pedro Gomes Moreira | P.GomesMoreira@student.tudelft.nl |
-
-The project was guided by:
+The following people were a part of this project:
 
 | Role | Name | Email |
 | ------ | ------ | -- |
 | Client | Odette Scharenborg | O.E.Scharenborg@tudelft.nl |
 | Client | Tanvina Patel | T.B.Patel@tudelft.nl |
-| TA | Timur Oberhuber | T.Oberhuber@student.tudelft.nl |
 | Coach | Thomas Durieux | Thomas.Durieux@tudelft.nl |
+| Developer | Boris Annink | B.R.M.Annink@student.tudelft.nl |
+| Developer | Edward Oh | J.Oh-2@student.tudelft.nl |
+| Developer | Emīls Dzintars | E.Dzintars@student.tudelft.nl |
+| Developer | Mateo Nasse | M.A.Nasse@student.tudelft.nl |
+| Developer | Pedro Gomes Moreira | P.GomesMoreira@student.tudelft.nl |
+| TA | Timur Oberhuber | T.Oberhuber@student.tudelft.nl |
+
 
 ## Styling
 We are using Tailwind and Flowbite for style component and other types of styling. Tailwind is used as an inline css enhancer and Flowbite provied svelte components for common things seen in websites such as a loading spinner.
