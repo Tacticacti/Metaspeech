@@ -241,7 +241,7 @@ export function sortParallelArrays(labels: string[], values: number[]): [string[
  * @param column the column to check
  * @returns true if it is a frequency, false otherwise
  */
-export function columnIsFrequency(column: string): boolean {
+export function isColumnFrequency(column: string): boolean {
 	return column === ABSOLUTE_FREQUENCY || column === RELATIVE_FREQUENCY;
 }
 
@@ -256,7 +256,7 @@ function getTableHeaders(yColumns: string[], columnsToSum: string[], columnsToMe
 	const tableHeaders: string[] = [];
 
 	for (const col of yColumns) {
-		if (columnIsFrequency(col)) {
+		if (isColumnFrequency(col)) {
 			tableHeaders.push(col);
 			continue;
 		}
@@ -308,7 +308,7 @@ export function getTableInfo(dataRows: Row[], xColumns: string[], yColumns: stri
 			listOfColumns.push(sortedLabels);
 		}
 
-		if (columnIsFrequency(ycol)) {
+		if (isColumnFrequency(ycol)) {
 			// If it is a frequency, simply add
 			listOfColumns.push(sortedColumnValues.map(v => v+""));
 			continue;

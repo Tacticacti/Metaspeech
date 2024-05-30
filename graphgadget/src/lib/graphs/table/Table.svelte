@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { afterUpdate, onMount } from 'svelte';
 	import {
-		getTableInfo
+		getTableInfo,
+		isColumnFrequency
 	} from '$lib/graphs/histogram/HistogramController';
 	import { Grid } from "gridjs";
 	import { 
@@ -15,8 +16,9 @@
 
 	let tableWrapper: HTMLDivElement;
 
-	let columnsToMean: string[];
-	let columnsToSum: string[];
+	let valuesNotFreq : string[] = $selectedValues.filter(v => !isColumnFrequency(v));
+	let columnsToMean: string[] = valuesNotFreq;
+	let columnsToSum: string[] = [];
 
 	let grid: Grid;
 
@@ -37,7 +39,7 @@
 	});
 </script>
 
-<StatisticsSelector bind:columnsToSum bind:columnsToMean />
+<StatisticsSelector bind:columnsToSum bind:columnsToMean bind:valuesNotFreq />
 
 <div bind:this={tableWrapper}></div>
 

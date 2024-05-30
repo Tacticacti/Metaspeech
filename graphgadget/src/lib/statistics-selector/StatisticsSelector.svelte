@@ -1,15 +1,7 @@
 <script lang="ts">
-    import { 
-        selectedValues
-    } from '$lib/Store';
-
-    import {
-        columnIsFrequency
-    } from '$lib/graphs/histogram/HistogramController'
-
-    let valuesNotFreq : string[] = $selectedValues.filter(v => !columnIsFrequency(v));
-    export let columnsToSum: string[] = valuesNotFreq;
-    export let columnsToMean: string[] = [];
+    export let valuesNotFreq: string[];
+    export let columnsToSum: string[];
+    export let columnsToMean: string[];
 
 </script>
 
