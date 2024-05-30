@@ -4,7 +4,7 @@
 	import { onMount } from 'svelte';
 	// @ts-expect-error Ill curse daily ts until this is fixed
 	import { goto } from '$app/navigation';
-	import { Button } from 'flowbite-svelte';
+	import { Button, Tooltip } from 'flowbite-svelte';
 
 	var storedDatasets: string[] = [];
 
@@ -78,6 +78,14 @@
 		<Button href="/" class="bg-darkblue rounded-xl ml-4 mt-4 hover:bg-blue-800">
 			<img src="next.png" alt="go back arrow" class="rotate-180 w-8 invert">
 		</Button>
+	</div>
+
+	<div class="absolute top-0 right-0 flex">
+		<div id="ext-ref" class="mr-24 mt-12 size-0"></div>
+		<Button id="ref-left"><img src="info.svg" alt="info icon" class="h-12"></Button>
+		<Tooltip reference="#ext-ref" triggeredBy="[id^='ref-']" placement="bottom" class="w-64 text-sm font-light bg-gray-600 opacity-90">
+			We respect your privacy. All saved data is only stored on the client side <span class="font-bold">only</span> and can be removed at any point.
+		</Tooltip>
 	</div>
 
 	<div class="flex flex-col align-top items-center w-[80%] pt-8">
