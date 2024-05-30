@@ -87,3 +87,18 @@ The project was guided by:
 | Client | Tanvina Patel | T.B.Patel@tudelft.nl |
 | TA | Timur Oberhuber | T.Oberhuber@student.tudelft.nl |
 | Coach | Thomas Durieux | Thomas.Durieux@tudelft.nl |
+
+## Styling
+We are using Tailwind and Flowbite for style component and other types of styling. Tailwind is used as an inline css enhancer and Flowbite provied svelte components for common things seen in websites such as a loading spinner.
+More information on this can be found in the following links.
+[Tailwind CSS](https://tailwindcss.com/)
+[Flowbite Svelte components](https://flowbite-svelte.com/)
+
+## Testing
+There are 2 main ways of testing.
+
+The first is with vitest. These are files in "graphgadget/src" that end with the extension: .test.ts . These tests are meant for unit tests.
+
+The second method is via playwright, which allows system tests. These are found in the "graphgadget/tests" directory. 
+
+To run the test you can use the command "npm run test"
