@@ -37,8 +37,8 @@
 
 <main class="bg-offwhite">
 	<NavBar currentPage={''} />
-	<header class="flex justify-center pt-16 m-5 max-w-full">
-		<img src="GraphGadgetHomeLogo.png" alt="Logo" class="w-[12.5rem] mx-auto" />
+	<header class="flex justify-center pt-16 m-5 max-w-full mt-8">
+		<img src="GraphGadgetHomeLogo.png" alt="Logo" class="w-[11rem] mx-auto" />
 	</header>
 
 	<div class="flex justify-center gap-5 p-5 bg-darkblue">

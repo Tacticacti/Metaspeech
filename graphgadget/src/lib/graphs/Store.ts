@@ -5,3 +5,4 @@ import Histogram from './histogram/Histogram.svelte';
 export const graph_name = writable('');
 export const graph_description = writable('');
 export const selected_graph: Writable<ConstructorOfATypedSvelteComponent> = writable(Histogram);
+

@@ -7,6 +7,7 @@
 	let isDownloadCalled = false;
 
 	function downloadCanvasPNG() {
+		console.log(chart);
 		const link = document.createElement('a');
 		link.href = chart.toBase64Image();
 		link.download = 'graph_image.png';
