@@ -67,7 +67,7 @@
 	 * and empty list
 	 */
 	function clearCache() {
-		if (confirm('Are you sure you wanto delete all stored files?') === true) {
+		if (confirm('Are you sure you want to delete all stored files?') === true) {
 			storedDatasets = [];
 			localStorage.clear();
 			localStorage.setItem('datasets', JSON.stringify(storedDatasets));
