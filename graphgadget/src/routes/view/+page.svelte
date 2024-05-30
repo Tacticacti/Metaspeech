@@ -29,6 +29,10 @@
 			<div class="mt-5 w-full flex justify-center">
 				<svelte:component this={$selected_graph} />
 			</div>
+		{:else}
+			<div class="mt-5 w-full h-96 flex justify-center">
+				<p class="text-lg text-gray-600">Please select a graph to display.</p>
+			</div>
 		{/if}
 	</div>
 	<Footer />
