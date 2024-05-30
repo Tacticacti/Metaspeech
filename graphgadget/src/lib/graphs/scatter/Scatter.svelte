@@ -70,27 +70,33 @@
 	valuesAreLimited={true}
 	maxValues={1}
 ></WarningGenerator>
-
-<div>
-	<select data-testid="first-select" bind:value={x_axis}>
-		{#each $selectedColumns as column}
-			<option value={column}>{column}</option>
-		{/each}
-	</select>
-	<select data-testid="second-select" bind:value={y_axis}>
-		{#each $selectedColumns as column}
-			<option value={column}>{column}</option>
-		{/each}
-	</select>
-</div>
-
-<div class="flex flex-col items-center">
-	<canvas data-testid="canvas-element" bind:this={canvas} class="mb-4" />
+<div class="flex flex-col items-center w-full">
+	<div class="mb-4 flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4">
+		<select
+			data-testid="first-select"
+			bind:value={x_axis}
+			class="p-2 border border-gray-300 rounded-md"
+		>
+			{#each $selectedColumns as column}
+				<option value={column}>{column}</option>
+			{/each}
+		</select>
+		<select
+			data-testid="second-select"
+			bind:value={y_axis}
+			class="p-2 border border-gray-300 rounded-md"
+		>
+			{#each $selectedColumns as column}
+				<option value={column}>{column}</option>
+			{/each}
+		</select>
+	</div>
+	<canvas data-testid="canvas-element" bind:this={canvas} class="mb-4 w-800" />
 	<Export {chart} />
 </div>
 
 <style>
-	div > canvas {
+	.w-800 {
 		width: 800px;
 	}
 </style>
