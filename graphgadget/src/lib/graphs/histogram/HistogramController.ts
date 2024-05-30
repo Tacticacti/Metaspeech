@@ -196,11 +196,11 @@ export function calculateAxis(
 	const frequencies: number[] = [...yParamMap.values()].map((pair) => pair[1]);
 
 	if (yAxisParam == ABSOLUTE_FREQUENCY) {
-		return [labels, frequencies];
+		return sortParallelArrays(labels, frequencies);
 	}
 	if (yAxisParam == RELATIVE_FREQUENCY) {
 		const totalFrequency = dataRows.length;
-		return [labels, frequencies.map((f) => f / totalFrequency)];
+		return sortParallelArrays(labels, frequencies.map((f) => f / totalFrequency));
 	}
 
 	const values: number[] = [...yParamMap.values()].map((pair) => pair[0]);

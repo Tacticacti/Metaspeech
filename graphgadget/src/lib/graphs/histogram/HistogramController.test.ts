@@ -190,7 +190,7 @@ describe('test calculate axis', () => {
 		);
 
 		// F before M because sorted
-		expect(labels).toStrictEqual(['M', 'F']);
+		expect(labels).toStrictEqual(['F', 'M']);
 		expect(values).toStrictEqual([3, 3]);
 	});
 
