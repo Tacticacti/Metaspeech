@@ -6,7 +6,7 @@
 	import PngButton from '$lib/shared-components/PNGButton.svelte';
 	import JpgButton from '$lib/shared-components/JPGButton.svelte';
 	import WarningGenerator from '$lib/WarningGenerator/WarningGenerator.svelte';
-	import { selectedColumns } from '$lib/ColumnSelector/Store';
+	import { selectedColumns } from '$lib/Store';
 
 	let canvas: HTMLCanvasElement;
 	let chart: Chart;
@@ -64,7 +64,13 @@
 	});
 </script>
 
-<WarningGenerator needNumbers={true} columnsAreLimited={false} maxColumns={100}></WarningGenerator>
+<WarningGenerator
+	needNumbers={true}
+	columnsAreLimited={false}
+	maxColumns={100}
+	valuesAreLimited={true}
+	maxValues={1}
+></WarningGenerator>
 
 <div>
 	<select data-testid="first-select" bind:value={x_axis}>

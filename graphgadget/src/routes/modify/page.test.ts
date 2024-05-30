@@ -21,12 +21,12 @@ it('should render', () => {
 	expect(container).toBeDefined();
 });
 
-it('should have a link that directs to view', async () => {
+it('should have a link that directs to select', async () => {
 	const r = render(sut);
 
 	const link = h.getNextLink(r);
 	expect(link).toBeDefined();
-	expect(link).toHaveAttribute('href', '/view');
+	expect(link).toHaveAttribute('href', '/select');
 });
 
 describe('missing values', () => {

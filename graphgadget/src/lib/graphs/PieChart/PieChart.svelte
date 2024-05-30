@@ -5,7 +5,7 @@
 	import { Chart, type ChartConfiguration } from 'chart.js/auto';
 	import { setColor } from '$lib/utils/CanvasUtils';
 	import { afterUpdate, onMount } from 'svelte';
-	import { selectedColumns } from '$lib/ColumnSelector/Store';
+	import { selectedColumns } from '$lib/Store';
 	import WarningGenerator from '$lib/WarningGenerator/WarningGenerator.svelte';
 
 	let canvas: HTMLCanvasElement;
@@ -81,7 +81,13 @@
 	});
 </script>
 
-<WarningGenerator needNumbers={false} columnsAreLimited={true} maxColumns={1}></WarningGenerator>
+<WarningGenerator
+	needNumbers={false}
+	columnsAreLimited={true}
+	maxColumns={1}
+	valuesAreLimited={true}
+	maxValues={1}
+></WarningGenerator>
 
 <div>
 	<canvas data-testid="canvas-element" bind:this={canvas} />

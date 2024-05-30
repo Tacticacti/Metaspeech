@@ -2,14 +2,12 @@ import { it, expect } from 'vitest';
 import {
 	calculateAxis,
 	sortParallelArrays,
-	type BinDictionary,
-	ABSOLUTE_FREQUENCY,
-	RELATIVE_FREQUENCY,
 	SEPARATION_PARAMETERS,
 	SEPARATION_INTERVAL,
 	EMPTY_ENTRY
 } from '$lib/graphs/histogram/HistogramController';
 import DataFrame from 'dataframe-js';
+import { ABSOLUTE_FREQUENCY, RELATIVE_FREQUENCY, type BinDictionary } from '$lib/Store';
 
 const df = new DataFrame(
 	{
