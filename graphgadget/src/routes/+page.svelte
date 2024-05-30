@@ -49,7 +49,7 @@
 	<div class="text-center mt-4 flex justify-center items-center">
 		<Label class="flex items-center space-x-2">
 			<Checkbox id="store-data" bind:checked={storeData} />
-			<span>Store data on client side?</span>
+			<span>Keep session saved (client only)</span>
 		</Label>
 	</div>
 

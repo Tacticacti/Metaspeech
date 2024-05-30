@@ -8,7 +8,7 @@ import { data } from '$lib/Store';
 import DataFrame from 'dataframe-js';
 
 // Constant for text that user sees when they want to store their current input.
-const STORE_DATA_MSG = 'Store data on client side?';
+const STORE_DATA_MSG = 'Keep session saved (client only)';
 
 describe('No mocking has zero files saved', () => {
 	it('Expect no data heading to be available', () => {

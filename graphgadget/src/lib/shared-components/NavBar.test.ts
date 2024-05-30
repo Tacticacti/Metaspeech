@@ -128,7 +128,7 @@ describe('check currentPage conditions', () => {
 		const { container } = render(sut, { currentPage: '' });
 		const home = getByText(container, 'HOME');
 		checkButtonClass(home, true);
-		
+
 		const { container: rootContainer } = render(sut, { currentPage: '/' });
 		const homeRoot = getByText(rootContainer, 'HOME');
 		checkButtonClass(homeRoot, true);
