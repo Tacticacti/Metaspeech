@@ -15,7 +15,7 @@
 		<div data-testid="name-chart" class="p-2 font-bold text-lg">
 			{$graph_name}
 		</div>
-		<div data-testid="description-chart" class="p-2 overflow-auto" style="height: 6rem;">
+		<div data-testid="description-chart" class="p-2" style="height: 6rem;">
 			{$graph_description}
 		</div>
 	</div>
@@ -25,6 +25,7 @@
 			{#each graphs as item}
 				<GraphButton graph={item} />
 			{/each}
+
 		</div>
 	</div>
 </div>
