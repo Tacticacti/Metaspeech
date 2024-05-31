@@ -67,7 +67,7 @@
 	 * and empty list
 	 */
 	function clearCache() {
-		if (confirm('Are you sure you want to delete all stored files?') === false) return
+		if (confirm('Are you sure you want to delete all stored files?') === false) return;
 		storedDatasets = [];
 		localStorage.clear();
 		localStorage.setItem('datasets', JSON.stringify(storedDatasets));
@@ -94,8 +94,8 @@
 				class="w-64 text-sm font-light bg-gray-600 opacity-90"
 				data-testid="info-bubble"
 			>
-				We respect your privacy. All saved data is stored on the client side <span
-					class="font-bold">only</span
+				We respect your privacy. All saved data is stored on the client side <span class="font-bold"
+					>only</span
 				> and can be removed at any point.
 			</Tooltip>
 		</div>
