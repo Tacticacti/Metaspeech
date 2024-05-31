@@ -18,9 +18,9 @@ export class DataFrame {
 	 * @param columns The names of the columns.
 	 * @param rows The rows of the DataFrame.
 	 */
-	constructor(columns: string[], rows: DataType[][]) {
-		this.columnMetas = this._columnMetas = writable<ColumnMeta[]>(getColumnMetas(columns, rows));
-		this.rows = this._rows = writable<DataType[][]>(rows);
+	constructor() {
+		this.columnMetas = this._columnMetas = writable<ColumnMeta[]>([]);
+		this.rows = this._rows = writable<DataType[][]>([]);
 	}
 
 	/**
@@ -43,12 +43,11 @@ export class DataFrame {
 
 	/**
 	 * Get an array of values from a column.
-	 * @param column The name of the column.
+	 * @param column The index of the column.
 	 * @returns An array of values from the column.
 	 */
-	getColumnValues(column: string): DataType[] {
-		const columnIndex = get(this.columnMetas).findIndex((c) => c.name === column);
-		return selectIndex(get(this.rows), columnIndex);
+	selectColumn(column: number): DataType[] {
+		return selectIndex(get(this.rows), column);
 	}
 
 	/**
@@ -71,7 +70,7 @@ export class DataFrame {
 	 * Group rows and aggregate values to make a new DataFrame.
 	 * @param groupBy A list of functions that take a row and return a string key.
 	 * @param select A list of functions that take a bucket of rows and return the aggregated value.
-	 * @param includeGroupColumn Whether to include the 'group' column in the new DataFrame, consisting of an array of the generated keys by the groupers (json).
+	 * @param includeGroupColumn Whether to include the 'groups' column in the new DataFrame, consisting of an array of the generated keys by the groupers (json).
 	 */
 	groupBy(groupBy: Grouper[], select: Aggregator[], includeGroupColumn: boolean = false) {
 		const rows = get(this.rows);
@@ -148,11 +147,11 @@ export class DataFrame {
 	 * Get the DataFrame as a DataFrameLike.
 	 * @returns The DataFrame as a DataFrameLike.
 	 */
-	get(){
+	get() {
 		return {
 			columns: get(this.columnMetas).map((c) => c.name),
 			rows: get(this.rows)
-		}
+		};
 	}
 
 	/**
@@ -160,8 +159,11 @@ export class DataFrame {
 	 * @param df The DataFrame to set.
 	 */
 	set(df: DataFrameLike) {
-		this._columnMetas.set(getColumnMetas(df.columns, df.rows));
-		this._rows.set(df.rows);
+		const cols = df.columns ?? [];
+		const rows = df.rows ?? [];
+
+		this._columnMetas.set(getColumnMetas(cols, rows));
+		this._rows.set(rows);
 	}
 }
 
@@ -309,8 +311,8 @@ export function fromText(
 	columnDelimiter: string = ',',
 	rowDelimiter: string = '\n'
 ): DataFrameLike {
-	const rows = text.split(rowDelimiter).map((row) => row.split(columnDelimiter));
-	const columns = rows.shift()!;
+	const rows = text.split(rowDelimiter).map((row) => row.split(columnDelimiter).map(toDataType));
+	const columns = rows.shift()! as string[];
 
 	return {
 		columns: columns,
@@ -347,11 +349,9 @@ export function fromObjects(collection: { [i: string]: unknown }[]): DataFrameLi
  * @returns A DataFrame.
  */
 function toDataType(value: unknown): DataType {
+	if (typeof value === 'string' && value.trim() === '') return undefined;
 	if (isNumeric(value)) return Number(value);
-	if (typeof value === 'string') {
-		value = value.trim();
-		return value === '' ? undefined : (value as string);
-	}
+	if (typeof value === 'string') return value.trim();
 	return undefined;
 }
 
