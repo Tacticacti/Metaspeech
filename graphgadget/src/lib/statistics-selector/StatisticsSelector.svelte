@@ -1,6 +1,16 @@
 <script lang="ts">
+	/**
+	 * The selected values to show, excluding frequencies (absolute and relative)
+	 * Because frequencies do not have mean or sum
+	 */
 	export let valuesNotFreq: string[];
+	/**
+	 * The columns selected to show the sum
+	 */
 	export let columnsToSum: string[];
+	/**
+	 * The columns selected to show the mean
+	 */
 	export let columnsToMean: string[];
 </script>
 
