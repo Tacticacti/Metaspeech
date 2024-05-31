@@ -103,7 +103,7 @@
 		<div class="flex flex-col align-top items-center w-[80%] pt-8">
 			<div class="min-w-full flex flex-col items-center">
 				<h1 class="text-darkblue text-2xl font-semibold mb-4">Previous Data</h1>
-				<h2 class="text-darkblue text-lg font-semibold mb-8">Click on a file to use it</h2>
+				<h2 class="text-darkblue text-lg font-semibold mb-8">Click on a file to use it.</h2>
 				<div class="bg-darkblue min-w-[80%] h-[4px] mb-8 rounded-full"></div>
 			</div>
 
