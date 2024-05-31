@@ -20,18 +20,18 @@
 	<title>Visualisations - {APP_NAME}</title>
 </svelte:head>
 
-<main class="bg-offwhite">
+<main class="bg-lightblue">
 	<NavBar currentPage={'view'} />
 	<div class="flex flex-col justify-center pt-16 m-5 max-w-full items-center">
 		<Grapher graphs={GraphMetas}></Grapher>
 
 		{#if $selected_graph}
-			<div class="mt-5 w-full flex justify-center">
+			<div class="mt-5 w-full flex justify-center mt-5">
 				<svelte:component this={$selected_graph} />
 			</div>
 		{:else}
 			<div class="mt-5 w-full h-96 flex justify-center">
-				<p class="text-lg text-gray-600">Please select a graph to display.</p>
+				<p class="text-lg text-white">Please select a graph to display.</p>
 			</div>
 		{/if}
 	</div>

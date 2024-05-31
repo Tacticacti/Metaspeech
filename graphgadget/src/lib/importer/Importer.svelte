@@ -66,7 +66,7 @@
 	class="text-lg font-bold text-gray-800 my-2 py-2 px-4 inline-block bg-gray-100 rounded-lg cursor-pointer transition-colors duration-300 ease-in-out border border-gray-300 shadow-md hover:text-blue-500 hover:bg-gray-200"
 	for="import-data"
 >
-	Upload Data
+	Select Data
 </label>
 {#if $errorMessage}
 	<ErrorModal message={$errorMessage} on:close={closeModal} />
