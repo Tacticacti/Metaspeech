@@ -1,3 +1,25 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/**
+Everything created in this file is accesible from all components
+**/
+
+/* This will remove the margin from the nav bar so its not centered */
+.nav-m0 > nav > div {
+	margin: 0px;
+	width: 100%;
+	max-width: 100%;
+}
+
+/* For Webkit-based browsers (Chrome, Safari and Opera) */
+.scrollbar-hide::-webkit-scrollbar {
+	display: none;
+}
+
+/* For IE, Edge and Firefox */
+.scrollbar-hide {
+	-ms-overflow-style: none; /* IE and Edge */
+	scrollbar-width: none; /* Firefox */
+}

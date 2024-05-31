@@ -2,14 +2,14 @@
 	import { data } from '$lib/Store';
 	import { Chart, type ChartConfiguration, LinearScale, CategoryScale } from 'chart.js';
 	import { BoxPlotController, BoxAndWiskers } from '@sgratzl/chartjs-chart-boxplot';
-
-	Chart.register(BoxPlotController, BoxAndWiskers, LinearScale, CategoryScale);
 	import { onMount, onDestroy, afterUpdate } from 'svelte';
 	import { setColor } from '$lib/utils/CanvasUtils';
 	import PngButton from '$lib/exporter/PNGButton.svelte';
 	import JpgButton from '$lib/exporter/JPGButton.svelte';
 	import { selectedColumns } from '$lib/Store';
 	import WarningGenerator from '$lib/warning-generator/WarningGenerator.svelte';
+
+	Chart.register(BoxPlotController, BoxAndWiskers, LinearScale, CategoryScale);
 
 	let canvas: HTMLCanvasElement;
 	let chart: Chart;

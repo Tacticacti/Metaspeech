@@ -1,21 +1,30 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
+	import { CloseButton } from 'flowbite-svelte';
 
+	/**
+	 * The error message to display in the modal
+	 */
 	export let message: string;
+	/**
+	 * Whether the modal is visible
+	 */
+	export let visible = true;
 
 	const dispatch = createEventDispatcher();
 
+	/**
+	 * Close the modal
+	 */
 	function closeModal() {
 		dispatch('close');
 	}
 </script>
 
-<div class="modal" data-testid="error-modal">
-	<div class="modal-content">
-		<button class="close" on:click={closeModal} aria-label="Close" data-testid="close-button"
-			>&times;</button
-		>
+<div class="modal" data-testid="error-modal" style:display={visible ? 'block' : 'none'}>
+	<div class="modal-content flex justify-between items-center">
 		<p>{message}</p>
+		<CloseButton on:click={closeModal} class="close" data-testid="close-button" />
 	</div>
 </div>
 
@@ -39,21 +48,9 @@
 		padding: 20px;
 		border: 1px solid #888;
 		width: 80%;
-	}
-
-	.close {
-		color: #aaa;
-		float: right;
-		font-size: 28px;
-		font-weight: bold;
-		background: none;
-		border: none;
-		cursor: pointer;
-	}
-
-	.close:hover,
-	.close:focus {
-		color: black;
-		text-decoration: none;
+		position: relative;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
 	}
 </style>

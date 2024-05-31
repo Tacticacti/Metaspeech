@@ -1,6 +1,11 @@
 import { Row } from 'dataframe-js';
 
-// gets numerical columns and their maximum value
+/**
+ * Finds the columns that are numerical and their max values.
+ * @param columnNames The names of the columns to check.
+ * @param rows The rows to check.
+ * @returns An array of tuples where the first element is the column name and the second element is the max value of that column.
+ */
 export function getNumericalColumnsAndMax(columnNames: string[], rows: Row[]): [string, number][] {
 	const numericNamesAndMaxs: [string, number][] = [];
 
@@ -33,6 +38,13 @@ export function getNumericalColumnsAndMax(columnNames: string[], rows: Row[]): [
 
 	return numericNamesAndMaxs;
 }
+
+/**
+ * Finds the columns that are numerical.
+ * @param columnNames The names of the columns to check.
+ * @param rows The rows to check.
+ * @returns An array of column names that are numerical.
+ */
 export function getNumericalColumns(columnNames: string[], rows: Row[]): string[] {
 	const numericNames: string[] = [];
 
@@ -60,6 +72,13 @@ export function getNumericalColumns(columnNames: string[], rows: Row[]): string[
 
 	return numericNames;
 }
+
+/**
+ * Finds the columns that are non-numerical.
+ * @param columnNames the names of the columns to check.
+ * @param rows the rows to check.
+ * @returns an array of column names that are non-numerical.
+ */
 export function getNonNumericalColumns(columnNames: string[], rows: Row[]): string[] {
 	const NonNumericNames: string[] = [];
 

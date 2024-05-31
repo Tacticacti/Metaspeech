@@ -6,6 +6,10 @@ import { goto } from '$app/navigation';
 import { get } from 'svelte/store';
 import { data } from '$lib/Store';
 import DataFrame from 'dataframe-js';
+import userEvent from '@testing-library/user-event';
+
+// Constant for text that user sees when they want to store their current input.
+const STORE_DATA_MSG = 'Keep session saved (client only)';
 
 describe('No mocking has zero files saved', () => {
 	it('Expect no data heading to be available', () => {
@@ -37,7 +41,7 @@ describe('Mocking a saved file', () => {
 
 	beforeEach(async () => {
 		const { getByTestId, getByLabelText } = render(helperSut);
-		const checkbox = getByLabelText('Store data in client side?');
+		const checkbox = getByLabelText(STORE_DATA_MSG);
 		await fireEvent.click(checkbox);
 		const input = getByTestId('file-input');
 		await fireEvent.input(input);
@@ -74,7 +78,7 @@ describe('Deleting datasets', () => {
 
 	beforeEach(async () => {
 		const { getByTestId, getByLabelText } = render(helperSut);
-		const checkbox = getByLabelText('Store data in client side?');
+		const checkbox = getByLabelText(STORE_DATA_MSG);
 		await fireEvent.click(checkbox);
 		const input = getByTestId('file-input');
 		await fireEvent.input(input);
@@ -92,6 +96,9 @@ describe('Deleting datasets', () => {
 	});
 
 	it('Clearing data should delete all entries', async () => {
+		// This makes sure that confirm is clicked when deleting files prompt appears
+		global.confirm = vi.fn(() => true);
+
 		const { getByText } = render(sut);
 		const clearCache = getByText('Clear Data');
 
@@ -125,5 +132,17 @@ describe('Deleting datasets', () => {
 
 		const firstFileNowRemoved = screen.queryByText('pretestfile');
 		expect(firstFileNowRemoved).toBeNull();
+	});
+});
+
+describe('info icon hover', () => {
+	it('Bubble appears when hovering over info icon', async () => {
+		const { getByTestId } = render(sut);
+		const user = userEvent.setup();
+		const icon = getByTestId('info-icon');
+		await user.hover(icon);
+
+		const bubble = getByTestId('info-bubble');
+		expect(bubble).to.exist;
 	});
 });

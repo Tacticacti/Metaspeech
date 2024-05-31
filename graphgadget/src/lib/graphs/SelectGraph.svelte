@@ -2,6 +2,9 @@
 	import { graph_name, graph_description } from './Store.js';
 	import GraphButton from './SelectGraphButton.svelte';
 
+	/**
+	 * Graph object
+	 */
 	export let graphs;
 </script>
 

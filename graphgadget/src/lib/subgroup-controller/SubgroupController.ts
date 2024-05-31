@@ -6,18 +6,32 @@ import {
 	RELATIVE_FREQUENCY
 } from '$lib/Store';
 
+/**
+ * The separator for parameters in a label.
+ */
 export const SEPARATION_PARAMETERS: string = '; ';
+
+/**
+ * The separator for the lower and upper bounds of a bin interval.
+ */
 export const SEPARATION_INTERVAL: string = ', ';
+
+/**
+ * The column header of the subgroup labels
+ */
 export const SUBGROUP_LABEL: string = 'Subgroup Label';
+
+/**
+ * The label for an empty entry.
+ */
 export const EMPTY_ENTRY: string = '(empty)';
 
 /**
- * Generates the label for a parameter considering whether it is binned or not
- * @param paramName the name of the column
- * @param row the current row of the table
- * @param binSizes a dictionary that has the bin size for each parameter
- *
- * @returns a label with the value of that column
+ * Generates a label for a parameter in a row. {value} for non-numeric fields, [lower, upper] for numeric fields if the binSize is greater than 1.
+ * @param paramName The name of the parameter to generate a label for.
+ * @param row The row to generate the label for.
+ * @param binSizes The bin sizes for the parameters.
+ * @returns The label for the parameter.
  */
 function getParamLabel(paramName: string, row: Row, binSizes: BinDictionary): string {
 	const paramValue = row.get(paramName);
@@ -46,11 +60,11 @@ function getParamLabel(paramName: string, row: Row, binSizes: BinDictionary): st
 }
 
 /**
- * Compares two elements, where each element is a pair with a label and a value.
- * This function is used to sort the arrays of labels and values for the histogram
- * @param a the first element
- * @param b the second element
- * @returns negative number if less than, positive number if greater than, zero if equal to
+ * Compares the elements of the combined array. The combined array is an array of tuples where the first element is the label and the second element is the value.
+ * Some of the labels are in the format of "[lower, upper]" where lower and upper are the min and max of a range.
+ * @param a The first element to compare.
+ * @param b The second element to compare.
+ * @returns The comparison of the two elements.
  */
 function compareElementsOfCombinedArray(a: [string, number], b: [string, number]): number {
 	const paramsA = a[0].split(SEPARATION_PARAMETERS);
