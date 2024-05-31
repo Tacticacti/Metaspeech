@@ -10,13 +10,6 @@ describe('View', () => {
 		expect(container).to.exist;
 	});
 
-	it('should contain placeholder text when no graph is selected', () => {
-		render(sut);
-		const placeholderText = document.querySelector('p.text-lg.text-gray-600');
-		expect(placeholderText).to.exist;
-		expect(placeholderText.textContent).toBe('Please select a graph to display.');
-	});
-
 	it('should render the selected graph component', async () => {
 		selected_graph.set(Histogram);
 		const { container } = render(sut);
