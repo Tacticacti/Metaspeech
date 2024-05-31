@@ -39,17 +39,17 @@
 		$checkedMean = !$checkedMean;
 	}
 	/**
-	 *
+	 *	removes the column from selectedValues if it is selected in groupby
 	 * @param name: name of the column
-	 * removes the column from selectedValues if it is selected in groupby
+	 * no return value
 	 */
 	function handleClickGroupBy(name: string) {
 		currentlySelectedValues.filter((n) => n !== name);
 	}
 	/**
-	 *
-	 * @param name: name of the column
 	 * removes the column from selectedColumns if it is selected in select
+	 * @param name: name of the column
+	 * no return value
 	 */
 	function handleClickSelect(name: string) {
 		currentlySelectedValues.filter((n) => n !== name);
