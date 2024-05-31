@@ -42,7 +42,7 @@
 		chart = new Chart(canvas, cfg);
 	});
 
-	// called when x_axis or y_axis changes
+	// called when  x_axis or y_axis changes
 	afterUpdate(() => {
 		chart.data.labels = $data.toArray(x_axis);
 		chart.data.datasets = [
