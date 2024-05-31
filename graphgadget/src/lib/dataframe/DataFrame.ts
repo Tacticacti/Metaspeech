@@ -56,8 +56,8 @@ export class DataFrame {
 	 * @param index The index of the column to delete.
 	 */
 	deleteColumn(index: number) {
-		let columnMetas = get(this.columnMetas);
-		let rows = get(this.rows);
+		const columnMetas = get(this.columnMetas);
+		const rows = get(this.rows);
 
 		if (index === -1) return;
 
@@ -74,14 +74,14 @@ export class DataFrame {
 	 * @param includeGroupColumn Whether to include the 'group' column in the new DataFrame, consisting of an array of the generated keys by the groupers (json).
 	 */
 	groupBy(groupBy: Grouper[], select: Aggregator[], includeGroupColumn: boolean = false) {
-		let rows = get(this.rows);
+		const rows = get(this.rows);
 
 		if (includeGroupColumn) select.unshift(GroupKey(groupBy));
 
 		// make buckets for each group
 		const map = new Map<string, DataType[][]>();
 		for (const row of rows) {
-			let key = JSON.stringify(groupBy.map((fn) => fn(row)));
+			const key = JSON.stringify(groupBy.map((fn) => fn(row)));
 			map.has(key) ? map.get(key)!.push(row) : map.set(key, [row]);
 		}
 

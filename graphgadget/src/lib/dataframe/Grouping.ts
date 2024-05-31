@@ -1,4 +1,4 @@
-import type { Grouper, Aggregator, DataType } from './DataFrame';
+import type { Grouper, Aggregator } from './DataFrame';
 
 // #region Grouping
 
@@ -21,7 +21,7 @@ export function Bins(index: number, size: number): Grouper {
 	return (row) => {
 		const value = row[index] as number;
 		const binIndex = Math.floor(value / size);
-		return JSON.stringify([binIndex * size, binIndex * size + size - 1]);
+		return binIndex.toString();
 	};
 }
 
