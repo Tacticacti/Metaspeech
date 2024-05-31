@@ -6,6 +6,7 @@
 	import 'gridjs/dist/theme/mermaid.css';
 	import StatisticsSelector from '$lib/statistics-selector/StatisticsSelector.svelte';
 	import TsvExporter from '$lib/exporter/TSVExporter.svelte';
+	import LatexExporter from '$lib/exporter/LatexExporter.svelte';
 
 	let tableWrapper: HTMLDivElement;
 
@@ -46,6 +47,7 @@
 <div data-testid="div-element" bind:this={tableWrapper}></div>
 
 <TsvExporter tableInfo={[tableColumns, tableData]} />
+<LatexExporter tableInfo={[tableColumns, tableData]} />
 
 <style>
 </style>

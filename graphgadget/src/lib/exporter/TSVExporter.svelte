@@ -24,9 +24,9 @@
 </script>
 
 <div>
-	<button on:click={downloadTableTSV}>TSV</button>
+	<button data-testid="btn-download-tsv" on:click={downloadTableTSV}>TSV</button>
 </div>
 
 {#if isDownloadCalled}
-	<div data-testid="download-function-called"></div>
+	<div data-testid="tsv-download-function-called"></div>
 {/if}

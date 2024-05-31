@@ -9,7 +9,7 @@ import {
 export const SEPARATION_PARAMETERS: string = '; ';
 export const SEPARATION_INTERVAL: string = ', ';
 export const SUBGROUP_LABEL: string = 'Subgroup Label';
-export const EMPTY_ENTRY: string = '<empty>';
+export const EMPTY_ENTRY: string = '(empty)';
 
 /**
  * Generates the label for a parameter considering whether it is binned or not
