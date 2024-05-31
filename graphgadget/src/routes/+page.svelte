@@ -9,6 +9,10 @@
 
 	let storeData = false;
 
+	/**
+	 * Stores the data in the local storage
+	 * @param filename the name of the file to store
+	 */
 	function storeFile(filename: string) {
 		var datasets = localStorage.getItem('datasets');
 		if (datasets === null) datasets = '[]';
@@ -19,6 +23,11 @@
 		localStorage.setItem(filename, JSON.stringify($data));
 	}
 
+	/**
+	 * Handles the input event from the Importer component
+	 * Stores the data in the store and redirects to the modify page
+	 * @param event the event containing the data
+	 */
 	function handleInput(event: CustomEvent<Bundle>) {
 		const filename = event.detail.filename;
 		data.set(event.detail.input);

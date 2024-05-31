@@ -2,7 +2,9 @@
 	import { APP_NAME } from '$lib/Store';
 	import { Navbar, NavBrand, NavLi, NavUl, NavHamburger } from 'flowbite-svelte';
 
-	// current page is route
+	/**
+	 * Current page (route)
+	 */
 	export let currentPage: string = '';
 </script>
 

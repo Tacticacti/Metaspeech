@@ -10,9 +10,12 @@
 	let canvas: HTMLCanvasElement;
 	let chart: Chart;
 
-	// Pre-select the first column
-
-	export function calculateAxis(x_axis: string) {
+	/**
+	 * Calculate the frequency of each unique value in the x-axis column
+	 * @param x_axis the column to calculate the frequency of
+	 * @returns a tuple of two arrays, the first containing the unique values and the second containing the frequency of each value
+	 */
+	export function calculateAxis(x_axis: string): [string[], number[]] {
 		try {
 			// Calculate the frequency of each unique value
 			let map = new Map<string, number>();
