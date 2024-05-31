@@ -3,8 +3,8 @@
 	import { Chart, type ChartConfiguration } from 'chart.js/auto';
 	import { afterUpdate, onMount, onDestroy } from 'svelte';
 	import { setColor } from '$lib/utils/CanvasUtils';
-	import PngButton from '$lib/exporter/PNGButton.svelte';
-	import JpgButton from '$lib/exporter/JPGButton.svelte';
+	import PngButton from '$lib/exporter/png/PNGButton.svelte';
+	import JpgButton from '$lib/exporter/jpg/JPGButton.svelte';
 	import WarningGenerator from '$lib/warning-generator/WarningGenerator.svelte';
 	import { selectedColumns } from '$lib/Store';
 

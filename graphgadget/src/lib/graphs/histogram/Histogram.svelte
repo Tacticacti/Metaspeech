@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { data } from '$lib/Store';
-	import PngButton from '$lib/exporter/PNGButton.svelte';
-	import JpgButton from '$lib/exporter/JPGButton.svelte';
+	import PngButton from '$lib/exporter/png/PNGButton.svelte';
+	import JpgButton from '$lib/exporter/jpg/JPGButton.svelte';
 	import { Chart, type ChartConfiguration } from 'chart.js/auto';
 	import { setColor } from '$lib/utils/CanvasUtils';
 	import { onMount } from 'svelte';

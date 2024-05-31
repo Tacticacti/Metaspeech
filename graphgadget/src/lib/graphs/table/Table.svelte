@@ -5,8 +5,8 @@
 	import { data, selectedColumns, selectedValues, binSizes } from '$lib/Store';
 	import 'gridjs/dist/theme/mermaid.css';
 	import StatisticsSelector from '$lib/statistics-selector/StatisticsSelector.svelte';
-	import TsvExporter from '$lib/exporter/TSVExporter.svelte';
-	import LatexExporter from '$lib/exporter/LatexExporter.svelte';
+	import TsvExporter from '$lib/exporter/tsv/TSVExporter.svelte';
+	import LatexExporter from '$lib/exporter/latex/LatexExporter.svelte';
 
 	let tableWrapper: HTMLDivElement;
 
