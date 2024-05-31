@@ -114,9 +114,10 @@ This project was a part of the TU Delft 2023/2024 Software Project. The followin
 | Client   | Odette Scharenborg | O.E.Scharenborg@tudelft.nl |
 | Client   | Tanvina Patel      | T.B.Patel@tudelft.nl       |
 | Coach    | Thomas Durieux     | Thomas.Durieux@tudelft.nl  |
+| TA       | Timur Oberhuber    | T.Oberhuber@student.tudelft.nl |
 | Developer| Boris Annink       | B.R.M.Annink@student.tudelft.nl |
 | Developer| Edward Oh          | J.Oh-2@student.tudelft.nl   |
 | Developer| Emīls Dzintars     | E.Dzintars@student.tudelft.nl |
 | Developer| Mateo Nasse        | M.A.Nasse@student.tudelft.nl |
 | Developer| Pedro Gomes Moreira| P.GomesMoreira@student.tudelft.nl |
-| TA       | Timur Oberhuber    | T.Oberhuber@student.tudelft.nl |
+
