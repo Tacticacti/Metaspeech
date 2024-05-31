@@ -2,11 +2,20 @@
 	import { createEventDispatcher } from 'svelte';
 	import { CloseButton } from 'flowbite-svelte';
 
+	/**
+	 * The error message to display in the modal
+	 */
 	export let message: string;
+	/**
+	 * Whether the modal is visible
+	 */
 	export let visible = true;
 
 	const dispatch = createEventDispatcher();
 
+	/**
+	 * Close the modal
+	 */
 	function closeModal() {
 		dispatch('close');
 	}

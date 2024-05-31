@@ -35,6 +35,9 @@
 		(columnName) => !currentlySelectedValues.includes(columnName)
 	);
 
+	/**
+	 * Toggle the usage of mean
+	 */
 	function toggleMean() {
 		$checkedMean = !$checkedMean;
 	}
