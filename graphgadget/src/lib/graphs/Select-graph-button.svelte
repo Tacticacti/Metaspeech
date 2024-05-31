@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { graph_name, graph_description, selected_graph } from './Store.js';
-	import { writable } from 'svelte/store';
 
 	/**
 	 * Graph object
@@ -22,8 +21,8 @@
 		$graph_description = graph.description;
 	}}
 	on:mouseout={() => {
-		$graph_name = "";
-		$graph_description = "";
+		$graph_name = '';
+		$graph_description = '';
 	}}
 	on:blur
 	on:focus
