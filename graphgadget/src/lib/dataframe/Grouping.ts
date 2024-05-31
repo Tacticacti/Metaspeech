@@ -44,14 +44,13 @@ export function Count(name: string): Aggregator {
 /**
  * Calculates the percentage of a column in a bucket. It will produce results between 0 and 1.
  * @param name The name of the new column.
- * @param index The index of the column to calculate the percentage of.
  * @param total The total value to calculate the percentage of.
  * @returns An Aggregator.
  */
-export function Percent(name: string, index: number, total: number): Aggregator {
+export function Percent(name: string, total: number): Aggregator {
 	return {
 		name,
-		fn: (bucket) => bucket.reduce((sum, row) => sum + (row[index] as number), 0) / total
+		fn: (bucket) => bucket.length / total
 	};
 }
 
