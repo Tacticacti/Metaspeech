@@ -20,6 +20,9 @@
 	$: selectedValues.set(currentlySelectedValues);
 	$: binSizes.set(currentBinSizes);
 
+	/**
+	 * Toggle the usage of mean
+	 */
 	function toggleMean() {
 		$checkedMean = !$checkedMean;
 	}

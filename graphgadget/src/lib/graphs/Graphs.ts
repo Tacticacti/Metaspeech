@@ -3,7 +3,9 @@ import Scatter from './scatter/Scatter.svelte';
 import PieChart from './PieChart/PieChart.svelte';
 import Boxplot from './boxplot/Boxplot.svelte';
 
-// type with the metadata of a graph
+/**
+ * A type that represents the metadata of a graph.
+ */
 export type GraphMeta = {
 	title: string;
 	description: string;
@@ -11,7 +13,9 @@ export type GraphMeta = {
 	component: ConstructorOfATypedSvelteComponent;
 };
 
-// the graphs we support as options
+/**
+ * The metadata of the graphs that can be displayed.
+ */
 export const GraphMetas: GraphMeta[] = [
 	{
 		title: 'Histogram',
@@ -42,10 +46,3 @@ export const GraphMetas: GraphMeta[] = [
 		component: Boxplot
 	}
 ];
-// {
-// 	title: 'Stem',
-// 	description:
-// 		'A stem plot (or stem-and-leaf plot) is a method of displaying quantitative data in a graphical format, similar to a histogram, to show its distribution. Each data value is split into a "stem" and a "leaf," with stems representing the leading digits and leaves representing the trailing digits.',
-// 	img_src: 'histogram-img.png',
-// 	component: Stem
-// }

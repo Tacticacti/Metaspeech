@@ -1,11 +1,17 @@
 <script lang="ts">
 	import { Chart } from 'chart.js/auto';
 
+	/**
+	 * Chart object
+	 */
 	export let chart: Chart;
 
 	// for testing purposes
 	let isDownloadCalled = false;
 
+	/**
+	 * Download the canvas as a PNG image
+	 */
 	function downloadCanvasPNG() {
 		const link = document.createElement('a');
 		link.href = chart.toBase64Image();
