@@ -98,7 +98,7 @@ export class DataFrame {
 	}
 
 	/**
-	 * Join two DataFrames on a column.
+	 * Left join two DataFrames on a column.
 	 * @param df The DataFrame to join with.
 	 * @param col1 The index of the column to join on in the first DataFrame.
 	 * @param col2 The index of the column to join on in the second DataFrame.
@@ -142,6 +142,17 @@ export class DataFrame {
 	forceStoreUpdate() {
 		this._columnMetas.set(get(this.columnMetas));
 		this._rows.set(get(this.rows));
+	}
+
+	/**
+	 * Get the DataFrame as a DataFrameLike.
+	 * @returns The DataFrame as a DataFrameLike.
+	 */
+	get(){
+		return {
+			columns: get(this.columnMetas).map((c) => c.name),
+			rows: get(this.rows)
+		}
 	}
 
 	/**
