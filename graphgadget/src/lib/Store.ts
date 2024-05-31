@@ -8,6 +8,7 @@ export const data = writable<DataFrame>(new DataFrame([], []));
 
 export type BinDictionary = Record<string, number>;
 export type MapDictionary = Record<string, Map<string, [number, number]>>;
+export type TableInfo = [string[], string[][]];
 
 export const ABSOLUTE_FREQUENCY: string = 'Absolute Frequency';
 export const RELATIVE_FREQUENCY: string = 'Relative Frequency';
