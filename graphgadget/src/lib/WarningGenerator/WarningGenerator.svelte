@@ -12,7 +12,6 @@
 	export let maxValues: number;
 
 	let nonNumericColumns = getNonNumericalColumns($selectedColumns, $data.toCollection(true));
-	$: _selectedColumns = $selectedColumns;
 </script>
 
 {#if needNumbers}
@@ -20,7 +19,7 @@
 		<div data-testid="warning-{column}">Warning: column {column} is not a number!</div>
 	{/each}
 {/if}
-{#if columnsAreLimited && _selectedColumns.length > maxColumns}
+{#if columnsAreLimited && $selectedColumns.length > maxColumns}
 	<div data-testid="groupby-limit">
 		Number of columns are limited. Limit: {maxColumns}. Number of selected columns: {$selectedColumns.length}
 	</div>
