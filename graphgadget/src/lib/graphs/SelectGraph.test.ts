@@ -5,9 +5,6 @@ import { GraphMetas } from '$lib/graphs/Graphs';
 import userEvent from '@testing-library/user-event';
 import { graph_name, graph_description } from './Store';
 import { get } from 'svelte/store';
-import PieChart from './pie/PieChart.svelte';
-import Scatter from './scatter/Scatter.svelte';
-import Boxplot from './boxplot/Boxplot.svelte';
 
 describe('When user views', () => {
 	it('should render', () => {

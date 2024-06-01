@@ -12,7 +12,7 @@
 		ABSOLUTE_FREQUENCY
 	} from '$lib/Store';
 	import WarningGenerator from '$lib/warning-generator/WarningGenerator.svelte';
-	import Export from '../Export.svelte';
+	import Export from '$lib/graphs/GraphImageExport.svelte';
 
 	let canvas: HTMLCanvasElement;
 	let chart: Chart;

@@ -4,10 +4,9 @@
 	import { BoxPlotController, BoxAndWiskers } from '@sgratzl/chartjs-chart-boxplot';
 	import { onMount, onDestroy, afterUpdate } from 'svelte';
 	import { setColor } from '$lib/utils/CanvasUtils';
-	import PngButton from '$lib/exporter/png/PNGButton.svelte';
-	import JpgButton from '$lib/exporter/jpg/JPGButton.svelte';
 	import { selectedColumns } from '$lib/Store';
 	import WarningGenerator from '$lib/warning-generator/WarningGenerator.svelte';
+	import Export from '$lib/graphs/GraphImageExport.svelte';
 
 	Chart.register(BoxPlotController, BoxAndWiskers, LinearScale, CategoryScale);
 
