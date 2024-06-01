@@ -15,12 +15,12 @@
 
 {#if $data}
 	<Table shadow striped={true} divClass="!overflow-scroll !h-full">
-		<TableHead theadClass="sticky top-0">
+		<TableHead theadClass="sticky top-0 bg-offwhite">
 			{#each columns as header (header)}
 				<TableHeadCell class="!p-0">
-					<div class="flex">
+					<div class="flex max-w-48">
 						<input
-						class="bg-darkblue max-w-32 overflow-x-scroll hover:bg-lightblue text-offwhite rounded-l-md"
+						class="bg-darkblue overflow-x-scroll hover:bg-lightblue text-offwhite rounded-l-md"
 						type="text"
 						on:change={(e) => ctrl.columnValueChanged(e, header)}
 						value={header}
@@ -38,7 +38,7 @@
 			{#each rows as row}
 				<TableBodyRow>
 					{#each row as cell}
-						<TableBodyCell class="p-4 w-4 border" data-testid="{cell}-cell">
+						<TableBodyCell class="p-4 border" data-testid="{cell}-cell">
 							{cell}
 						</TableBodyCell>
 					{/each}
