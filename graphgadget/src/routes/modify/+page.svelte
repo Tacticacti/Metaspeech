@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Filter from '$lib/filtering/Filter.svelte';
 	import Importer from '$lib/importer/Importer.svelte';
-	import { data } from '$lib/Store';
+	import { APP_NAME, data } from '$lib/Store';
 	import Table from '$lib/table/Table.svelte';
 	import { hasMissingValues, rowWiseMerge } from '$lib/utils/DataFrameUtils';
 	import DataFrame from 'dataframe-js';
@@ -61,6 +61,10 @@
 		$data = $data.join(renamed, merge_col_1);
 	}
 </script>
+
+<svelte:head>
+	<title>Data - {APP_NAME}</title>
+</svelte:head>
 
 <main class="bg-offwhite max-w-full min-h-screen m-0">
 	<NavBar currentPage={'modify'} />

@@ -4,10 +4,9 @@
 	import { BoxPlotController, BoxAndWiskers } from '@sgratzl/chartjs-chart-boxplot';
 	import { onMount, onDestroy, afterUpdate } from 'svelte';
 	import { setColor } from '$lib/utils/CanvasUtils';
-	import PngButton from '$lib/shared-components/PNGButton.svelte';
-	import JpgButton from '$lib/shared-components/JPGButton.svelte';
 	import { selectedColumns } from '$lib/Store';
 	import WarningGenerator from '$lib/WarningGenerator/WarningGenerator.svelte';
+	import Export from '../Export.svelte';
 
 	Chart.register(BoxPlotController, BoxAndWiskers, LinearScale, CategoryScale);
 
@@ -87,12 +86,10 @@
 	maxValues={1}
 ></WarningGenerator>
 
-<div>
-	<canvas data-testid="canvas-element" bind:this={canvas} />
+<div class="flex flex-col items-center">
+	<canvas data-testid="canvas-element" bind:this={canvas} class="mb-4" />
+	<Export {chart} />
 </div>
-
-<PngButton {chart} />
-<JpgButton {chart} />
 
 <style>
 	div > canvas {

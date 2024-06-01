@@ -23,7 +23,12 @@
 </script>
 
 <div>
-	<button on:click={downloadCanvasJPG}>JPG</button>
+	<button
+		class="text-lg font-bold text-gray-800 my-2 py-2 px-4 inline-block bg-gray-100 rounded-lg cursor-pointer transition-colors duration-300 ease-in-out border border-gray-300 shadow-md hover:text-blue-500 hover:bg-gray-200"
+		on:click={downloadCanvasJPG}
+	>
+		JPG
+	</button>
 </div>
 
 {#if isDownloadCalled}
