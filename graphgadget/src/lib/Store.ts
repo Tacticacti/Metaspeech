@@ -1,6 +1,10 @@
 import { writable } from 'svelte/store';
 import { DataFrame } from 'dataframe-js';
 
+// Name for the application and other shared metadata
+export const APP_NAME = 'GraphGadget';
+export const COPYRIGHT_YEAR = 2024;
+
 /**
  * The data store for the application.
  */

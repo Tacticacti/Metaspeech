@@ -8,6 +8,7 @@ export default {
 		extend: {},
 		colors: {
 			darkblue: '#3D4F75',
+			lightblue: '#637290',
 			offwhite: '#F1F6F9'
 		}
 	},

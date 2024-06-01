@@ -5,48 +5,28 @@
 	 * Graph object
 	 */
 	export let graph;
-
-	/**
-	 * Handle mouse out event
-	 */
-	function handleMouseOut() {
-		$graph_name = '';
-		$graph_description = '';
-	}
 </script>
 
 <button
 	tabindex="0"
 	data-testid={graph.title}
-	class="s"
+	class="w-52 h-12 p-1 border border-gray-400 rounded-md flex flex-row flex-wrap justify-around hover:bg-gray-300"
+	on:click={() => {
+		$selected_graph = graph.component;
+		$graph_name = graph.title;
+		$graph_description = graph.description;
+	}}
 	on:mouseover={() => {
 		$graph_name = graph.title;
 		$graph_description = graph.description;
 	}}
-	on:focus
-	on:blur
-	on:mouseout={handleMouseOut}
-	on:click={() => {
-		$selected_graph = graph.component;
+	on:mouseout={() => {
+		$graph_name = '';
+		$graph_description = '';
 	}}
+	on:blur
+	on:focus
 >
-	<img src={graph.img_src} alt="graph img" />
-	<div style="align-self:center; font-size: 20px; font-weight: bold;">{graph.title}</div>
+	<img src={graph.img_src} alt="graph img" class="self-center" />
+	<div class="self-center text-lg font-bold">{graph.title}</div>
 </button>
-
-<style>
-	.s:hover {
-		background-color: gray;
-	}
-	.s {
-		width: 200px;
-		height: 50px;
-		padding: 5px;
-		border: 1px solid gray;
-		border-radius: 5px;
-		display: flex;
-		flex-direction: row;
-		flex-wrap: wrap;
-		justify-content: space-around;
-	}
-</style>

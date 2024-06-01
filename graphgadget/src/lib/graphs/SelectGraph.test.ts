@@ -3,8 +3,7 @@ import sut from '$lib/graphs/SelectGraph.svelte';
 import { describe, it, expect } from 'vitest';
 import { GraphMetas } from '$lib/graphs/Graphs';
 import userEvent from '@testing-library/user-event';
-import Histogram from './histogram/Histogram.svelte';
-import { selected_graph, graph_name, graph_description } from './Store';
+import { graph_name, graph_description } from './Store';
 import { get } from 'svelte/store';
 import PieChart from './pie/PieChart.svelte';
 import Scatter from './scatter/Scatter.svelte';
@@ -40,14 +39,14 @@ describe('When user views', () => {
 	});
 });
 
-describe('When user hovers', () => {
+describe('When user clicks', () => {
 	it('should describe histogram', async () => {
 		const user = userEvent.setup();
 		const { getByTestId } = render(sut, { graphs: GraphMetas });
 
 		const hist = getByTestId('Histogram');
 
-		await user.hover(hist);
+		await user.click(hist);
 
 		expect(get(graph_name)).toBe('Histogram');
 		expect(get(graph_description)).toBe(
@@ -57,11 +56,6 @@ describe('When user hovers', () => {
 		expect(getByTestId('description-chart').innerHTML).toEqual(
 			'A histogram is a graphical representation of the distribution of numerical data. It groups data into bins and displays the frequency of data points in each bin using bars.'
 		);
-
-		await user.unhover(hist);
-
-		expect(getByTestId('name-chart').innerHTML).toEqual('');
-		expect(getByTestId('description-chart').innerHTML).toEqual('');
 	});
 	it('should describe pie chart', async () => {
 		const user = userEvent.setup();
@@ -69,7 +63,7 @@ describe('When user hovers', () => {
 
 		const pie = getByTestId('Pie Chart');
 
-		await user.hover(pie);
+		await user.click(pie);
 
 		expect(get(graph_name)).toBe('Pie Chart');
 		expect(get(graph_description)).toBe(
@@ -79,11 +73,6 @@ describe('When user hovers', () => {
 		expect(getByTestId('description-chart').innerHTML).toEqual(
 			"A pie chart is a circular statistical graphic that is divided into slices to illustrate numerical proportions. Each slice represents a category's contribution to the whole. Pie charts are ideal for showing relative sizes of data parts to the whole, making it easy to compare individual segments."
 		);
-
-		await user.unhover(pie);
-
-		expect(getByTestId('name-chart').innerHTML).toEqual('');
-		expect(getByTestId('description-chart').innerHTML).toEqual('');
 	});
 	it('should describe scatter', async () => {
 		const user = userEvent.setup();
@@ -91,7 +80,7 @@ describe('When user hovers', () => {
 
 		const hist = getByTestId('Scatter');
 
-		await user.hover(hist);
+		await user.click(hist);
 
 		expect(get(graph_name)).toBe('Scatter');
 		expect(get(graph_description)).toBe(
@@ -101,11 +90,6 @@ describe('When user hovers', () => {
 		expect(getByTestId('description-chart').innerHTML).toEqual(
 			'A scatterplot shows the relationship between two quantitative variables measured for the same individuals. The values of one variable appear on the horizontal axis, and the values of the other variable appear on the vertical axis. Each individual in the data appears as a point on the graph.'
 		);
-
-		await user.unhover(hist);
-
-		expect(getByTestId('name-chart').innerHTML).toEqual('');
-		expect(getByTestId('description-chart').innerHTML).toEqual('');
 	});
 	it('should describe boxplot', async () => {
 		const user = userEvent.setup();
@@ -113,7 +97,7 @@ describe('When user hovers', () => {
 
 		const pie = getByTestId('Box plot');
 
-		await user.hover(pie);
+		await user.click(pie);
 
 		expect(get(graph_name)).toBe('Box plot');
 		expect(get(graph_description)).toBe(
@@ -123,49 +107,5 @@ describe('When user hovers', () => {
 		expect(getByTestId('description-chart').innerHTML).toEqual(
 			'In descriptive statistics, a box plot or boxplot is a type of chart often used in explanatory data analysis. Box plots visually show the distribution of numerical data and skewness by displaying the data quartiles (or percentiles) and averages.'
 		);
-
-		await user.unhover(pie);
-
-		expect(getByTestId('name-chart').innerHTML).toEqual('');
-		expect(getByTestId('description-chart').innerHTML).toEqual('');
-	});
-});
-
-describe('When user clicks', () => {
-	it('should display histogram', async () => {
-		const user = userEvent.setup();
-		const { getByTestId } = render(sut, { graphs: GraphMetas });
-
-		const hist = getByTestId('Histogram');
-
-		await user.click(hist);
-		expect(get(selected_graph)).toBe(Histogram);
-	});
-	it('should display piechart', async () => {
-		const user = userEvent.setup();
-		const { getByTestId } = render(sut, { graphs: GraphMetas });
-
-		const pie = getByTestId('Pie Chart');
-
-		await user.click(pie);
-		expect(get(selected_graph)).toBe(PieChart);
-	});
-	it('should display scatter', async () => {
-		const user = userEvent.setup();
-		const { getByTestId } = render(sut, { graphs: GraphMetas });
-
-		const pie = getByTestId('Scatter');
-
-		await user.click(pie);
-		expect(get(selected_graph)).toBe(Scatter);
-	});
-	it('should display boxplot', async () => {
-		const user = userEvent.setup();
-		const { getByTestId } = render(sut, { graphs: GraphMetas });
-
-		const pie = getByTestId('Box plot');
-
-		await user.click(pie);
-		expect(get(selected_graph)).toBe(Boxplot);
 	});
 });

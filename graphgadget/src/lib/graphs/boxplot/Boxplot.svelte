@@ -87,12 +87,10 @@
 	maxValues={1}
 ></WarningGenerator>
 
-<div>
-	<canvas data-testid="canvas-element" bind:this={canvas} />
+<div class="flex flex-col items-center">
+	<canvas data-testid="canvas-element" bind:this={canvas} class="mb-4" />
+	<Export {chart} />
 </div>
-
-<PngButton {chart} />
-<JpgButton {chart} />
 
 <style>
 	div > canvas {
