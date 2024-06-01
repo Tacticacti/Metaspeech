@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { data } from '$lib/Store';
+	import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell } from 'flowbite-svelte';
 	import * as ctrl from './TableController';
 
 	/**
@@ -13,33 +14,36 @@
 </script>
 
 {#if $data}
-	<table class="table-fixed w-full">
-		<thead>
-			<tr>
-				{#each columns as header (header)}
-					<th class="m-0">
+	<Table shadow striped={true} divClass="!overflow-scroll !h-full">
+		<TableHead theadClass="sticky top-0">
+			{#each columns as header (header)}
+				<TableHeadCell class="!p-0">
+					<div class="flex">
 						<input
-							class="max-w-full"
-							type="text"
-							on:change={(e) => ctrl.columnValueChanged(e, header)}
-							value={header}
-							data-testid="header-{header}-input"
+						class="bg-darkblue max-w-32 overflow-x-scroll hover:bg-lightblue text-offwhite rounded-l-md"
+						type="text"
+						on:change={(e) => ctrl.columnValueChanged(e, header)}
+						value={header}
+						data-testid="header-{header}-input"
 						/>
-						<button on:click={() => ctrl.removeColumn(header)} data-testid="header-{header}-delete"
-							>X</button
+						<button class="px-4 bg-red-400 text-offwhite hover:bg-red-500 rounded-r-md" on:click={() => ctrl.removeColumn(header)} data-testid="header-{header}-delete"
+							>X
+						</button
 						>
-					</th>
-				{/each}
-			</tr>
-		</thead>
-		<tbody>
-			{#each rows as row}
-				<tr>
-					{#each row as cell}
-						<td data-testid="{cell}-cell">{cell}</td>
-					{/each}
-				</tr>
+					</div>
+				</TableHeadCell>
 			{/each}
-		</tbody>
-	</table>
+		</TableHead>
+		<TableBody>
+			{#each rows as row}
+				<TableBodyRow>
+					{#each row as cell}
+						<TableBodyCell class="p-4 w-4 border" data-testid="{cell}-cell">
+							{cell}
+						</TableBodyCell>
+					{/each}
+				</TableBodyRow>
+			{/each}
+		</TableBody>
+	</Table>
 {/if}
