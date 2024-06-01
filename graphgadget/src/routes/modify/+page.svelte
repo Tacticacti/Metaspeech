@@ -86,7 +86,7 @@
 				</span>
 			{/if}
 		</div>
-	
+
 		<div class="flex justify-between items-center p-5">
 			<Filter />
 			<div
@@ -97,13 +97,14 @@
 					href="/select"
 					class=" text-offwhite font-bold rounded-lg text-sm mx-4"
 					on:click={handleClick}
-					data-testid="next-link">
+					data-testid="next-link"
+				>
 					Next
 					<img src="next.png" class=" invert w-8 h-8 ml-4" alt="Next icon" />
 				</Button>
 			</div>
 		</div>
-	
+
 		<div>
 			{#if second_data}
 				<button on:click={handleRowWiseMerge} data-testid="merge-index-button">Index merge</button>
@@ -122,13 +123,13 @@
 				{/if}
 			{/if}
 		</div>
-	
+
 		<div class="flex items-center justify-center content-between h-[60%] px-24">
 			<div class="h-full w-full p-4">
 				<Table />
 			</div>
 			<div class="ml-10">
-				<Importer on:input={(e) => (second_data = e.detail.input)}/>
+				<Importer on:input={(e) => (second_data = e.detail.input)} />
 			</div>
 		</div>
 	</div>

@@ -3,6 +3,7 @@ import WarningGenerator from './WarningGenerator.svelte';
 import { selectedColumns, selectedValues } from '$lib/Store';
 import { data } from '$lib/Store';
 import { render } from '@testing-library/svelte';
+import { it, describe, expect } from 'vitest';
 
 const df1 = new DataFrame(
 	{
@@ -60,7 +61,7 @@ describe('warning generator for groupby ', () => {
 		});
 		expect(queryByTestId('warning-column1')).not.toBeInTheDocument();
 		expect(getByTestId('warning-column2')).to.exist;
-		expect(getByTestId('warning-column2').innerHTML).toBe(
+		expect(getByTestId('warning-column2').innerHTML.trim()).toBe(
 			'Warning: column column2 is not a number!'
 		);
 	});
@@ -82,11 +83,11 @@ describe('warning generator for groupby ', () => {
 			maxValues: 100
 		});
 		expect(getByTestId('warning-column1')).to.exist;
-		expect(getByTestId('warning-column1').innerHTML).toBe(
+		expect(getByTestId('warning-column1').innerHTML.trim()).toBe(
 			'Warning: column column1 is not a number!'
 		);
 		expect(getByTestId('warning-column2')).to.exist;
-		expect(getByTestId('warning-column2').innerHTML).toBe(
+		expect(getByTestId('warning-column2').innerHTML.trim()).toBe(
 			'Warning: column column2 is not a number!'
 		);
 	});

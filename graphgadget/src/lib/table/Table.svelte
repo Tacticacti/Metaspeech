@@ -1,6 +1,13 @@
 <script lang="ts">
 	import { data } from '$lib/Store';
-	import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell } from 'flowbite-svelte';
+	import {
+		Table,
+		TableBody,
+		TableBodyCell,
+		TableBodyRow,
+		TableHead,
+		TableHeadCell
+	} from 'flowbite-svelte';
 	import * as ctrl from './TableController';
 
 	/**
@@ -20,16 +27,18 @@
 				<TableHeadCell class="!p-0">
 					<div class="flex max-w-48">
 						<input
-						class="bg-darkblue overflow-x-scroll hover:bg-lightblue text-offwhite rounded-l-md"
-						type="text"
-						on:change={(e) => ctrl.columnValueChanged(e, header)}
-						value={header}
-						data-testid="header-{header}-input"
+							class="bg-darkblue overflow-x-scroll hover:bg-lightblue text-offwhite rounded-l-md"
+							type="text"
+							on:change={(e) => ctrl.columnValueChanged(e, header)}
+							value={header}
+							data-testid="header-{header}-input"
 						/>
-						<button class="px-4 bg-red-400 text-offwhite hover:bg-red-500 rounded-r-md" on:click={() => ctrl.removeColumn(header)} data-testid="header-{header}-delete"
+						<button
+							class="px-4 bg-red-400 text-offwhite hover:bg-red-500 rounded-r-md"
+							on:click={() => ctrl.removeColumn(header)}
+							data-testid="header-{header}-delete"
 							>X
-						</button
-						>
+						</button>
 					</div>
 				</TableHeadCell>
 			{/each}
