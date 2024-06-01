@@ -9,6 +9,7 @@
 	import { loadSession } from '$lib/utils/SessionLoad';
 	import NavBar from '$lib/shared-components/NavBar.svelte';
 	import Footer from '$lib/shared-components/Footer.svelte';
+	import { Button } from 'flowbite-svelte';
 
 	$: column_names = $data.listColumns() as string[];
 	$: missing_values = hasMissingValues($data);
@@ -92,13 +93,14 @@
 				class="flex items-center justify-center max-w-32 max-h-14 py-4 px-12 bg-darkblue rounded-lg hover:bg-blue-900"
 			>
 				<!-- Given that it was implemented with an a link, right now you need to click on the words to go to next page -->
-				<a
+				<Button
 					href="/select"
-					class=" text-offwhite font-bold rounded-lg text-sm mr-4"
+					class=" text-offwhite font-bold rounded-lg text-sm mx-4"
 					on:click={handleClick}
-					data-testid="next-link">Next</a
-				>
-				<img src="next.png" class=" invert w-8 h-8" alt="Next icon" />
+					data-testid="next-link">
+					Next
+					<img src="next.png" class=" invert w-8 h-8 ml-4" alt="Next icon" />
+				</Button>
 			</div>
 		</div>
 	
