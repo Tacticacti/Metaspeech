@@ -1,6 +1,6 @@
 <script lang="ts">
-	import PngButton from '$lib/shared-components/PNGButton.svelte';
-	import JpgButton from '$lib/shared-components/JPGButton.svelte';
+	import PngButton from '$lib/exporter/png/PNGButton.svelte';
+	import JpgButton from '$lib/exporter/jpg/JPGButton.svelte';
 	export let chart;
 </script>
 
