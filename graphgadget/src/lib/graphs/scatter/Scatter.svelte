@@ -4,14 +4,14 @@
 	import { afterUpdate, onMount, onDestroy } from 'svelte';
 	import { setColor } from '$lib/utils/CanvasUtils';
 	import WarningGenerator from '$lib/warning-generator/WarningGenerator.svelte';
-	import { selectedColumns } from '$lib/Store';
+	import { selectedColumns, selectedValues } from '$lib/Store';
 	import Export from '$lib/graphs/GraphImageExport.svelte';
 
 	let canvas: HTMLCanvasElement;
 	let chart: Chart;
 
 	let x_axis = $selectedColumns[0];
-	let y_axis = $selectedColumns[1];
+	let y_axis = $selectedValues[0];
 
 	onMount(() => {
 		const plugin = {
@@ -44,6 +44,9 @@
 
 	// called when  x_axis or y_axis changes
 	afterUpdate(() => {
+		console.log($selectedColumns)
+		console.log("x " + x_axis)
+		console.log("y " + y_axis)
 		chart.data.labels = $data.toArray(x_axis);
 		chart.data.datasets = [
 			{
@@ -86,8 +89,8 @@
 			bind:value={y_axis}
 			class="p-2 border border-gray-300 rounded-md"
 		>
-			{#each $selectedColumns as column}
-				<option value={column}>{column}</option>
+			{#each $selectedValues as value}
+				<option value={value}>{value}</option>
 			{/each}
 		</select>
 	</div>

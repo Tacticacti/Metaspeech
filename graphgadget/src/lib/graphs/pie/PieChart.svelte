@@ -52,7 +52,7 @@
 				plugins: {
 					// @ts-expect-error Needs a specific type for plugin
 					customCanvasBackgroundColor: {
-						color: 'pink'
+						color: 'white'
 					},
 					title: {
 						display: true,
