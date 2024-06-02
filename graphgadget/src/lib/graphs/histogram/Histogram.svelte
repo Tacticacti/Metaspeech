@@ -55,9 +55,27 @@
 				plugins: {
 					// @ts-expect-error Needs a specific type for plugin
 					customCanvasBackgroundColor: {
-						color: 'pink'
+						color: 'white'
+					},
+					title: {
+						display: true,
+						text: $selectedValues[0] + ' x ' + ($selectedColumns.length > 1 ? '(' + $selectedColumns.join(', ') + ')' : $selectedColumns[0])
 					}
-				}
+				},
+				scales: {
+					x: {
+						title: {
+							display: true,
+							text: $selectedColumns.length > 1 ? 'Group: (' + $selectedColumns.join(', ') + ')' : $selectedColumns[0]
+						}
+					},
+					y: {
+						title: {
+							display: true,
+							text: $selectedValues[0]
+						}
+					}
+				}				
 			},
 
 			// @ts-expect-error plugin needs a type same as above
