@@ -5,8 +5,8 @@
 	import { onMount, onDestroy, afterUpdate } from 'svelte';
 	import { setColor } from '$lib/utils/CanvasUtils';
 	import { selectedColumns } from '$lib/Store';
-	import WarningGenerator from '$lib/WarningGenerator/WarningGenerator.svelte';
-	import Export from '../Export.svelte';
+	import WarningGenerator from '$lib/warning-generator/WarningGenerator.svelte';
+	import Export from '$lib/graphs/GraphImageExport.svelte';
 
 	Chart.register(BoxPlotController, BoxAndWiskers, LinearScale, CategoryScale);
 

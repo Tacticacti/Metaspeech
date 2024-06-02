@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { selectedValues } from '$lib/Store';
 	import { selected_graph } from '$lib/graphs/Store';
-	import Grapher from '$lib/graphs/Select-graph.svelte';
+	import Grapher from '$lib/graphs/SelectGraph.svelte';
 	import { GraphMetas } from '$lib/graphs/Graphs';
 	import { beforeUpdate } from 'svelte';
 	import { loadSession } from '$lib/utils/SessionLoad';
@@ -28,7 +28,7 @@
 		<Grapher graphs={GraphMetas}></Grapher>
 
 		{#if $selected_graph}
-			<div class="mt-5 w-full flex justify-center mt-5">
+			<div class="mt-5 w-full flex justify-center">
 				<svelte:component this={$selected_graph} />
 			</div>
 		{:else}

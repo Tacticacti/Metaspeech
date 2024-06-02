@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { getNonNumericalColumns } from '$lib/ColumnSelector/ColumnHelper';
+	import { getNonNumericalColumns } from '$lib/column-selector/ColumnHelper';
 	import { data } from '$lib/Store.js';
 	import { selectedColumns, selectedValues } from '$lib/Store.js';
 

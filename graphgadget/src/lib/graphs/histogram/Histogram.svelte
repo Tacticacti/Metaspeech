@@ -3,7 +3,7 @@
 	import { Chart, type ChartConfiguration } from 'chart.js/auto';
 	import { setColor } from '$lib/utils/CanvasUtils';
 	import { onMount } from 'svelte';
-	import { calculateAxis, sortParallelArrays } from '$lib/graphs/histogram/HistogramController';
+	import { calculateAxis } from '$lib/subgroup-controller/SubgroupController';
 	import {
 		selectedColumns,
 		checkedMean,
@@ -11,17 +11,12 @@
 		binSizes,
 		ABSOLUTE_FREQUENCY
 	} from '$lib/Store';
-	import WarningGenerator from '$lib/WarningGenerator/WarningGenerator.svelte';
-	import Export from '../Export.svelte';
+	import WarningGenerator from '$lib/warning-generator/WarningGenerator.svelte';
+	import Export from '$lib/graphs/GraphImageExport.svelte';
 
 	let canvas: HTMLCanvasElement;
 	let chart: Chart;
 
-	// let checkedMean: boolean;
-	// let parameterType: string;
-	// let binSizes: BinDictionary;
-
-	// setup chart with empty config after canvas is mounted
 	onMount(() => {
 		if ($selectedValues.length === 0) {
 			$selectedValues = [ABSOLUTE_FREQUENCY];
@@ -35,7 +30,6 @@
 			$selectedValues[0],
 			$binSizes
 		);
-		[labels, values] = sortParallelArrays(labels, values);
 		let datasets = [
 			{
 				label: $selectedValues[0],
