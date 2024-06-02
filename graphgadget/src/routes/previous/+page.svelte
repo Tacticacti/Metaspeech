@@ -6,6 +6,8 @@
 	import { goto } from '$app/navigation';
 	import { Button, Tooltip } from 'flowbite-svelte';
 	import Footer from '$lib/shared-components/Footer.svelte';
+	import nextImg from '$lib/static/next.png'
+	import info from '$lib/static/info.svg'
 
 	var storedDatasets: string[] = [];
 
@@ -78,14 +80,14 @@
 	<div class="bg-offwhite min-h-screen max-h-screen flex justify-center">
 		<div class="absolute top-0 left-0">
 			<Button href="/" class="bg-darkblue rounded-xl ml-4 mt-4 hover:bg-blue-800">
-				<img src="next.png" alt="go back arrow" class="rotate-180 w-8 invert" />
+				<img src={nextImg} alt="go back arrow" class="rotate-180 w-8 invert" />
 			</Button>
 		</div>
 
 		<div class="absolute top-0 right-0 flex">
 			<div id="ext-ref" class="mr-24 mt-12 size-0"></div>
 			<Button id="ref-left"
-				><img src="info.svg" alt="info icon" class="h-12" data-testid="info-icon" /></Button
+				><img src={info} alt="info icon" class="h-12" data-testid="info-icon" /></Button
 			>
 			<Tooltip
 				reference="#ext-ref"

@@ -6,6 +6,7 @@
 	import { goto } from '$app/navigation';
 	import type { Bundle } from '$lib/types';
 	import { Label, Checkbox } from 'flowbite-svelte';
+	import logo from '$lib/static/GraphGadgetHomeLogo.svg'
 
 	let storeData = false;
 
@@ -47,7 +48,7 @@
 	<div class="bg-offwhite min-h-screen max-h-screen flex flex-col justify-around">
 		<NavBar currentPage={''} />
 		<header class="flex justify-center max-w-full align-middle">
-			<img src="GraphGadgetHomeLogo.png" alt="Logo" class="w-[25%] mx-auto pt-24" />
+			<img src={logo} alt="Logo" class="w-[25%] mx-auto pt-24" />
 		</header>
 
 		<div class="flex justify-center gap-5 p-5 bg-darkblue">

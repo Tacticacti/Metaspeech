@@ -10,6 +10,7 @@
 	import NavBar from '$lib/shared-components/NavBar.svelte';
 	import Footer from '$lib/shared-components/Footer.svelte';
 	import { Button } from 'flowbite-svelte';
+	import nextImg from '$lib/static/next.png'
 
 	$: column_names = $data.listColumns() as string[];
 	$: missing_values = hasMissingValues($data);
@@ -90,17 +91,19 @@
 		<div class="flex justify-between items-center p-5">
 			<Filter />
 			<div
-				class="flex items-center justify-center max-w-32 max-h-14 py-4 px-12 bg-darkblue rounded-lg hover:bg-blue-900"
+				class="flex items-center justify-center max-w-32 max-h-14 h-full w-full bg-darkblue rounded-lg hover:bg-blue-900"
 			>
 				<!-- Given that it was implemented with an a link, right now you need to click on the words to go to next page -->
 				<Button
 					href="/select"
-					class=" text-offwhite font-bold rounded-lg text-sm mx-4"
+					class=" text-offwhite font-bold rounded-lg text-sm w-full"
 					on:click={handleClick}
 					data-testid="next-link"
 				>
-					Next
-					<img src="next.png" class=" invert w-8 h-8 ml-4" alt="Next icon" />
+					<div class="flex justify-center items-center">
+						Next
+						<img src={nextImg} class=" invert w-8 h-8 ml-4" alt="Next icon" />
+					</div>
 				</Button>
 			</div>
 		</div>
