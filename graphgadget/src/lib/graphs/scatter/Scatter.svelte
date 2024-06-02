@@ -31,6 +31,24 @@
 					// @ts-expect-error Needs a specific type for plugin
 					customCanvasBackgroundColor: {
 						color: 'lightgreen'
+					},
+					title: {
+						display: true,
+						text: y_axis + ' x ' + x_axis
+					}
+				},
+				scales: {
+					x: {
+						title: {
+							display: true,
+							text: x_axis
+						}
+					},
+					y: {
+						title: {
+							display: true,
+							text: y_axis
+						}
 					}
 				}
 			},
@@ -57,6 +75,32 @@
 				borderWidth: 1
 			}
 		];
+	chart.config.options = {
+			plugins: {
+				// @ts-expect-error Needs a specific type for plugin
+				customCanvasBackgroundColor: {
+					color: 'lightgreen'
+				},
+				title: {
+					display: true,
+					text: y_axis + ' x ' + x_axis
+				}
+			},
+			scales: {
+					x: {
+						title: {
+							display: true,
+							text: x_axis
+						}
+					},
+					y: {
+						title: {
+							display: true,
+							text: y_axis
+						}
+					}
+				}
+		}
 
 		chart.update();
 	});
