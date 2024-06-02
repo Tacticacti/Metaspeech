@@ -81,8 +81,8 @@
 		];
 
 		chart.update();
-		console.log("lab "+labels)
-		console.log("counts "+counts)
+		console.log('lab ' + labels);
+		console.log('counts ' + counts);
 	});
 </script>
 

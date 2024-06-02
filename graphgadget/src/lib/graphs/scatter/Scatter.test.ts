@@ -22,7 +22,7 @@ describe('Scatter tests', () => {
 	beforeEach(async () => {
 		data.set(df);
 		selectedColumns.set(['column1', 'column2']);
-		selectedValues.set(['column3', 'column4'])
+		selectedValues.set(['column3', 'column4']);
 		page = render(sut);
 	});
 

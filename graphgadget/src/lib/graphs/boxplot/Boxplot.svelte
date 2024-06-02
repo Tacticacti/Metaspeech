@@ -37,9 +37,9 @@
 					},
 					title: {
 						display: true,
-						text: 'Boxplot of (' +  $selectedColumns.join(", ") + ')'
+						text: 'Boxplot of (' + $selectedColumns.join(', ') + ')'
 					}
-				},
+				}
 			},
 
 			// @ts-expect-error plugin needs a type same as above

@@ -62,9 +62,9 @@
 
 	// called when  x_axis or y_axis changes
 	afterUpdate(() => {
-		console.log($selectedColumns)
-		console.log("x " + x_axis)
-		console.log("y " + y_axis)
+		console.log($selectedColumns);
+		console.log('x ' + x_axis);
+		console.log('y ' + y_axis);
 		chart.data.labels = $data.toArray(x_axis);
 		chart.data.datasets = [
 			{
@@ -75,7 +75,7 @@
 				borderWidth: 1
 			}
 		];
-	chart.config.options = {
+		chart.config.options = {
 			plugins: {
 				// @ts-expect-error Needs a specific type for plugin
 				customCanvasBackgroundColor: {
@@ -87,20 +87,20 @@
 				}
 			},
 			scales: {
-					x: {
-						title: {
-							display: true,
-							text: x_axis
-						}
-					},
-					y: {
-						title: {
-							display: true,
-							text: y_axis
-						}
+				x: {
+					title: {
+						display: true,
+						text: x_axis
+					}
+				},
+				y: {
+					title: {
+						display: true,
+						text: y_axis
 					}
 				}
-		}
+			}
+		};
 
 		chart.update();
 	});
@@ -134,7 +134,7 @@
 			class="p-2 border border-gray-300 rounded-md"
 		>
 			{#each $selectedValues as value}
-				<option value={value}>{value}</option>
+				<option {value}>{value}</option>
 			{/each}
 		</select>
 	</div>
