@@ -54,7 +54,7 @@ export const GraphMetas: GraphMeta[] = [
 		title: 'Table',
 		description:
 			'The table shows the data where rows have the subgroups and columns have the parameters to be shown for each subgroup.',
-		img_src: 'histogram.png',
+		img_src: histogramImg,
 		component: Table
 	}
 ];
