@@ -30,7 +30,7 @@
 				plugins: {
 					// @ts-expect-error Needs a specific type for plugin
 					customCanvasBackgroundColor: {
-						color: 'lightgreen'
+						color: 'white'
 					},
 					title: {
 						display: true,
@@ -79,7 +79,7 @@
 			plugins: {
 				// @ts-expect-error Needs a specific type for plugin
 				customCanvasBackgroundColor: {
-					color: 'lightgreen'
+					color: 'white'
 				},
 				title: {
 					display: true,

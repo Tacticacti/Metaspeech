@@ -1,5 +1,5 @@
 import { it, expect } from 'vitest';
-import { render } from '@testing-library/svelte';
+import { render, type RenderResult } from '@testing-library/svelte';
 import sut from '$lib/graphs/scatter/Scatter.svelte';
 import { data, selectedValues } from '$lib/Store';
 import userEvent from '@testing-library/user-event';
