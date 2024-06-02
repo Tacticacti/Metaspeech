@@ -6,8 +6,8 @@
 	import { goto } from '$app/navigation';
 	import { Button, Tooltip } from 'flowbite-svelte';
 	import Footer from '$lib/shared-components/Footer.svelte';
-	import nextImg from '$lib/static/next.png'
-	import info from '$lib/static/info.svg'
+	import nextImg from '$lib/static/next.png';
+	import info from '$lib/static/info.svg';
 
 	var storedDatasets: string[] = [];
 

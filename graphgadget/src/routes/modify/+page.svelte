@@ -10,7 +10,7 @@
 	import NavBar from '$lib/shared-components/NavBar.svelte';
 	import Footer from '$lib/shared-components/Footer.svelte';
 	import { Button } from 'flowbite-svelte';
-	import nextImg from '$lib/static/next.png'
+	import nextImg from '$lib/static/next.png';
 
 	$: column_names = $data.listColumns() as string[];
 	$: missing_values = hasMissingValues($data);

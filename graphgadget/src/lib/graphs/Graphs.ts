@@ -2,10 +2,10 @@ import Histogram from './histogram/Histogram.svelte';
 import Scatter from './scatter/Scatter.svelte';
 import PieChart from './PieChart/PieChart.svelte';
 import Boxplot from './boxplot/Boxplot.svelte';
-import pieImg from '$lib/static/pieChart.png'
-import scatterImg from '$lib/static/scatterPlot.png'
-import histogramImg from '$lib/static/histogram.png'
-import boxplotImg from '$lib/static/boxPlot.png'
+import pieImg from '$lib/static/pieChart.png';
+import scatterImg from '$lib/static/scatterPlot.png';
+import histogramImg from '$lib/static/histogram.png';
+import boxplotImg from '$lib/static/boxPlot.png';
 
 /**
  * A type that represents the metadata of a graph.

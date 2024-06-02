@@ -6,7 +6,7 @@
 	import { goto } from '$app/navigation';
 	import type { Bundle } from '$lib/types';
 	import { Label, Checkbox } from 'flowbite-svelte';
-	import logo from '$lib/static/GraphGadgetHomeLogo.svg'
+	import logo from '$lib/static/GraphGadgetHomeLogo.svg';
 
 	let storeData = false;
 

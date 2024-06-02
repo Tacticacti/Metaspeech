@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { APP_NAME } from '$lib/Store';
 	import { Navbar, NavBrand, NavLi, NavUl, NavHamburger } from 'flowbite-svelte';
-	import logo from '$lib/static/GraphGadgetNavLogo.svg'
+	import logo from '$lib/static/GraphGadgetNavLogo.svg';
 
 	/**
 	 * Current page (route)

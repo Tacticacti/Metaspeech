@@ -3,7 +3,7 @@
 	import { afterUpdate } from 'svelte';
 	import { isNumber } from 'chart.js/helpers';
 	import { Button, Checkbox, Input, Select } from 'flowbite-svelte';
-	import filterImg from '$lib/static/filter.png'
+	import filterImg from '$lib/static/filter.png';
 
 	let isOpen: boolean = false;
 

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { APP_NAME, COPYRIGHT_YEAR } from '$lib/Store';
 	import { Footer, FooterBrand, FooterCopyright } from 'flowbite-svelte';
-	import logo from '$lib/static/GraphGadgetNavLogo.svg'
+	import logo from '$lib/static/GraphGadgetNavLogo.svg';
 </script>
 
 <div class="flex flex-col">
