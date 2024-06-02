@@ -1,7 +1,7 @@
 import { get } from 'svelte/store';
 import { DataFrame, fromFile, fromObjects, fromText } from './DataFrame';
 import { describe, it, expect } from 'vitest';
-import { Count, Specific } from './Grouping';
+import { Count, Mean, Specific, Min, Max, Var, Std, Median, Percent, Sum, Bins } from './Grouping';
 
 describe('importing a DataFrame', () => {
 	it('should import a DataFrame from a file', async () => {
@@ -79,6 +79,18 @@ describe('importing a DataFrame', () => {
 			]
 		});
 	});
+
+    it('should replace undefined columns with empty string', () => {
+        const df = fromText(',b\n1,2\n3,4');
+            
+        expect(df).toEqual({
+            columns: ['', 'b'],
+            rows: [
+                [1, 2],
+                [3, 4]
+            ]
+        });
+    });
 
 	it('should import a DataFrame with missing values (text)', () => {
 		const df = fromText('a,b\n1,2\n3');
@@ -362,4 +374,78 @@ describe('DataFrame grouping and aggregating', () => {
 			]
 		});
 	});
+
+    it('should be able to do the aggregations', () => {
+        const df = new DataFrame();
+        df.set({
+            columns: ['a', 'b'],
+            rows: [
+                [1, 2],
+                [1, 4],
+                [2, 6],
+                [2, 8],
+                [2, 10],
+                [3, 12],
+                [3, 14],
+                [3, 16]
+            ]
+        });
+        df.groupBy([Specific(0)], [Count('count'), Percent('percent', get(df.rows).length), Mean('mean', 1), Min('min', 1), Max('max', 1), Median('median', 1), Std('std', 1), Var('var', 1), Sum('sum', 1)]);
+        expect(df.get()).toEqual({
+            columns: ['count', 'percent', 'mean', 'min', 'max', 'median', 'std', 'var', 'sum'],
+            rows: [
+                [2, 0.25, 3, 2, 4, 3, 1, 1, 6],
+                [3, 0.375, 8, 6, 10, 8, 1.632993161855452, 2.6666666666666665, 24],
+                [3, 0.375, 14, 12, 16, 14, 1.632993161855452, 2.6666666666666665, 42]
+            ]
+        });
+    });
+
+    it('should replace undefined with empty string for specific grouping', () => {
+        const df = new DataFrame();
+        df.set({
+            columns: ['a', 'b'],
+            rows: [
+                [1, 2],
+                [undefined, 4],
+                [2, 6],
+                [undefined, 8]
+            ]
+        });
+        df.groupBy([Specific(0)], [Count('count')], true);
+        expect(df.get()).toEqual({
+            columns: ['groups', 'count'],
+            rows: [
+                [JSON.stringify(['1']), 1],
+                [JSON.stringify(['']), 2],
+                [JSON.stringify(['2']), 1]
+            ]
+        });
+    });
+
+    it('should be able to group by bins', () => {
+        const df = new DataFrame();
+        df.set({
+            columns: ['a', 'b'],
+            rows: [
+                [1, 2],
+                [1, 4],
+                [2, 6],
+                [2, 8],
+                [2, 10],
+                [3, 12],
+                [3, 14],
+                [3, 16]
+            ]
+        });
+
+        df.groupBy([Bins(0, 2)], [Count('count')], true);
+        expect(df.get()).toEqual({
+            columns: ['groups', 'count'],
+            rows: [
+                [JSON.stringify(['0']), 2],
+                [JSON.stringify(['1']), 6],
+            ]
+        });
+    });
 });

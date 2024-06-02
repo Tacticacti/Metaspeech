@@ -312,7 +312,8 @@ export function fromText(
 	rowDelimiter: string = '\n'
 ): DataFrameLike {
 	const rows = text.split(rowDelimiter).map((row) => row.split(columnDelimiter).map(toDataType));
-	const columns = rows.shift()! as string[];
+
+	const columns = rows.shift()!.map(c => c?.toString() ?? ''); // maybe a different way to handle undefined
 
 	return {
 		columns: columns,
