@@ -62,9 +62,6 @@
 
 	// called when  x_axis or y_axis changes
 	afterUpdate(() => {
-		console.log($selectedColumns);
-		console.log('x ' + x_axis);
-		console.log('y ' + y_axis);
 		chart.data.labels = $data.toArray(x_axis);
 		chart.data.datasets = [
 			{
