@@ -59,12 +59,16 @@
 					},
 					title: {
 						display: true,
+						// Checks if there are colums selected, if not then this is just Absolute Frequency
+						// Else the title is the values x group of columns
 						text:
-							$selectedValues[0] +
-							' x ' +
-							($selectedColumns.length > 1
-								? '(' + $selectedColumns.join(', ') + ')'
-								: $selectedColumns[0])
+							$selectedColumns.length === 0
+								? 'Absolute Frequency'
+								: $selectedValues[0] +
+									' x ' +
+									($selectedColumns.length > 1
+										? '(' + $selectedColumns.join(', ') + ')'
+										: $selectedColumns[0])
 					}
 				},
 				scales: {
