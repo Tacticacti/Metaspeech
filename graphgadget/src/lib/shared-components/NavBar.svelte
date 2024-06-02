@@ -1,7 +1,10 @@
 <script lang="ts">
+	import { APP_NAME } from '$lib/Store';
 	import { Navbar, NavBrand, NavLi, NavUl, NavHamburger } from 'flowbite-svelte';
 
-	// current page is route
+	/**
+	 * Current page (route)
+	 */
 	export let currentPage: string = '';
 </script>
 
@@ -13,7 +16,7 @@
 		<NavBrand href="/">
 			<img src="GraphGadgetNavLogo.svg" class="me-3 h-6 sm:h-9 pl-0" alt="GG logo" />
 			<span class="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
-				Graph Gadget
+				{APP_NAME}
 			</span>
 		</NavBrand>
 		<NavHamburger />

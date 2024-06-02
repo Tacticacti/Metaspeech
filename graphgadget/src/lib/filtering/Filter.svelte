@@ -29,6 +29,10 @@
 		}
 	});
 
+	/**
+	 * Filter the data based on the selected column and the filter value
+	 * @param useMatching if true, remove rows that match the filter value. if false, remove rows that do not match the filter value.
+	 */
 	function filter(useMatching: boolean) {
 		if (useRange) {
 			// range filter

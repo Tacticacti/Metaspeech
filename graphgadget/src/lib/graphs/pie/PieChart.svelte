@@ -1,19 +1,21 @@
 <script lang="ts">
 	import { data } from '$lib/Store';
-	import PngButton from '$lib/shared-components/PNGButton.svelte';
-	import JpgButton from '$lib/shared-components/JPGButton.svelte';
 	import { Chart, type ChartConfiguration } from 'chart.js/auto';
 	import { setColor } from '$lib/utils/CanvasUtils';
 	import { afterUpdate, onMount } from 'svelte';
 	import { selectedColumns } from '$lib/Store';
-	import WarningGenerator from '$lib/WarningGenerator/WarningGenerator.svelte';
+	import WarningGenerator from '$lib/warning-generator/WarningGenerator.svelte';
+	import Export from '$lib/graphs/GraphImageExport.svelte';
 
 	let canvas: HTMLCanvasElement;
 	let chart: Chart;
 
-	// Pre-select the first column
-
-	export function calculateAxis(x_axis: string) {
+	/**
+	 * Calculate the frequency of each unique value in the x-axis column
+	 * @param x_axis the column to calculate the frequency of
+	 * @returns a tuple of two arrays, the first containing the unique values and the second containing the frequency of each value
+	 */
+	export function calculateAxis(x_axis: string): [string[], number[]] {
 		try {
 			// Calculate the frequency of each unique value
 			let map = new Map<string, number>();
@@ -86,15 +88,13 @@
 	maxValues={1}
 ></WarningGenerator>
 
-<div>
-	<canvas data-testid="canvas-element" bind:this={canvas} />
+<div class="flex flex-col items-center">
+	<canvas data-testid="canvas-element" bind:this={canvas} class="mb-4" />
+	<Export {chart} />
 </div>
 
-<PngButton {chart} />
-<JpgButton {chart} />
-
 <style>
-	div > canvas {
+	canvas {
 		width: 800px;
 	}
 </style>
