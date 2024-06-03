@@ -1,5 +1,7 @@
 <script lang="ts">
+	import { APP_NAME } from '$lib/Store';
 	import { Navbar, NavBrand, NavLi, NavUl, NavHamburger } from 'flowbite-svelte';
+	import logo from '$lib/static/GraphGadgetNavLogo.svg';
 
 	/**
 	 * Current page (route)
@@ -13,9 +15,9 @@
 		class="bg-darkblue grid grid-cols-1 text-blue-200 py-2.5 fixed w-full max-w-full z-20 top-0 start-0 border-b"
 	>
 		<NavBrand href="/">
-			<img src="GraphGadgetNavLogo.svg" class="me-3 h-6 sm:h-9 pl-0" alt="GG logo" />
+			<img src={logo} class="me-3 h-6 sm:h-9 pl-0" alt="GG logo" />
 			<span class="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
-				Graph Gadget
+				{APP_NAME}
 			</span>
 		</NavBrand>
 		<NavHamburger />

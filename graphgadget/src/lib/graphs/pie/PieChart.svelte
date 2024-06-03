@@ -1,12 +1,11 @@
 <script lang="ts">
 	import { data } from '$lib/Store';
-	import PngButton from '$lib/shared-components/PNGButton.svelte';
-	import JpgButton from '$lib/shared-components/JPGButton.svelte';
 	import { Chart, type ChartConfiguration } from 'chart.js/auto';
 	import { setColor } from '$lib/utils/CanvasUtils';
 	import { afterUpdate, onMount } from 'svelte';
 	import { selectedColumns } from '$lib/Store';
-	import WarningGenerator from '$lib/WarningGenerator/WarningGenerator.svelte';
+	import WarningGenerator from '$lib/warning-generator/WarningGenerator.svelte';
+	import Export from '$lib/graphs/GraphImageExport.svelte';
 
 	let canvas: HTMLCanvasElement;
 	let chart: Chart;
@@ -53,7 +52,11 @@
 				plugins: {
 					// @ts-expect-error Needs a specific type for plugin
 					customCanvasBackgroundColor: {
-						color: 'pink'
+						color: 'white'
+					},
+					title: {
+						display: true,
+						text: 'Frequency of ' + $selectedColumns[0]
 					}
 				}
 			},
@@ -70,7 +73,7 @@
 		chart.data.labels = labels;
 		chart.data.datasets = [
 			{
-				label: $selectedColumns[0],
+				label: 'Frequency',
 				data: counts as number[],
 				backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'],
 				hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40']
@@ -78,6 +81,8 @@
 		];
 
 		chart.update();
+		console.log('lab ' + labels);
+		console.log('counts ' + counts);
 	});
 </script>
 
@@ -89,15 +94,13 @@
 	maxValues={1}
 ></WarningGenerator>
 
-<div>
-	<canvas data-testid="canvas-element" bind:this={canvas} />
+<div class="flex flex-col items-center">
+	<canvas data-testid="canvas-element" bind:this={canvas} class="mb-4" />
+	<Export {chart} />
 </div>
 
-<PngButton {chart} />
-<JpgButton {chart} />
-
 <style>
-	div > canvas {
+	canvas {
 		width: 800px;
 	}
 </style>

@@ -1,11 +1,9 @@
 <script lang="ts">
 	import { data } from '$lib/Store';
-	import PngButton from '$lib/shared-components/PNGButton.svelte';
-	import JpgButton from '$lib/shared-components/JPGButton.svelte';
 	import { Chart, type ChartConfiguration } from 'chart.js/auto';
 	import { setColor } from '$lib/utils/CanvasUtils';
 	import { onMount } from 'svelte';
-	import { calculateAxis, sortParallelArrays } from '$lib/graphs/histogram/HistogramController';
+	import { calculateAxis } from '$lib/subgroup-controller/SubgroupController';
 	import {
 		selectedColumns,
 		checkedMean,
@@ -13,16 +11,12 @@
 		binSizes,
 		ABSOLUTE_FREQUENCY
 	} from '$lib/Store';
-	import WarningGenerator from '$lib/WarningGenerator/WarningGenerator.svelte';
+	import WarningGenerator from '$lib/warning-generator/WarningGenerator.svelte';
+	import Export from '$lib/graphs/GraphImageExport.svelte';
 
 	let canvas: HTMLCanvasElement;
 	let chart: Chart;
 
-	// let checkedMean: boolean;
-	// let parameterType: string;
-	// let binSizes: BinDictionary;
-
-	// setup chart with empty config after canvas is mounted
 	onMount(() => {
 		if ($selectedValues.length === 0) {
 			$selectedValues = [ABSOLUTE_FREQUENCY];
@@ -36,7 +30,6 @@
 			$selectedValues[0],
 			$binSizes
 		);
-		[labels, values] = sortParallelArrays(labels, values);
 		let datasets = [
 			{
 				label: $selectedValues[0],
@@ -62,7 +55,37 @@
 				plugins: {
 					// @ts-expect-error Needs a specific type for plugin
 					customCanvasBackgroundColor: {
-						color: 'pink'
+						color: 'white'
+					},
+					title: {
+						display: true,
+						// Checks if there are colums selected, if not then this is just Absolute Frequency
+						// Else the title is the values x group of columns
+						text:
+							$selectedColumns.length === 0
+								? 'Absolute Frequency'
+								: $selectedValues[0] +
+									' x ' +
+									($selectedColumns.length > 1
+										? '(' + $selectedColumns.join(', ') + ')'
+										: $selectedColumns[0])
+					}
+				},
+				scales: {
+					x: {
+						title: {
+							display: true,
+							text:
+								$selectedColumns.length > 1
+									? 'Group: (' + $selectedColumns.join(', ') + ')'
+									: $selectedColumns[0]
+						}
+					},
+					y: {
+						title: {
+							display: true,
+							text: $selectedValues[0]
+						}
 					}
 				}
 			},
@@ -88,12 +111,11 @@
 	valuesAreLimited={true}
 	maxValues={1}
 ></WarningGenerator>
-<div>
-	<canvas data-testid="canvas-element" bind:this={canvas} />
-</div>
 
-<PngButton {chart} />
-<JpgButton {chart} />
+<div class="flex flex-col items-center">
+	<canvas data-testid="canvas-element" bind:this={canvas} class="mb-4" />
+	<Export {chart} />
+</div>
 
 <style>
 	div > canvas {
