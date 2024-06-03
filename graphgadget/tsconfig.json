@@ -10,7 +10,7 @@
 		"sourceMap": true,
 		"strict": true,
 		"moduleResolution": "bundler",
-		"types": ["jest"]
+		"types": ["jest", "vite/client", "@sveltejs/kit"]
 	},
 	"include": [
 		"src/**/*", // Ensure this covers source files

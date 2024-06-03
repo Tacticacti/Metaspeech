@@ -28,7 +28,7 @@
 		<Grapher graphs={GraphMetas}></Grapher>
 
 		{#if $selected_graph}
-			<div class="mt-5 w-full flex justify-center mt-5">
+			<div class="mt-5 w-full flex justify-center">
 				<svelte:component this={$selected_graph} />
 			</div>
 		{:else}

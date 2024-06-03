@@ -3,6 +3,7 @@
 	import { afterUpdate } from 'svelte';
 	import { isNumber } from 'chart.js/helpers';
 	import { Button, Checkbox, Input, Select } from 'flowbite-svelte';
+	import filterImg from '$lib/static/filter.png';
 
 	let isOpen: boolean = false;
 
@@ -53,7 +54,7 @@
 	class="max-w-32 max-h-14 py-4 px-12 font-bold rounded-lg bg-darkblue text-offwhite hover:bg-blue-900"
 	on:click={() => (isOpen = !isOpen)}
 >
-	<img src="filter.png" class=" invert w-8 h-8 mr-4" alt="Filter icon" />
+	<img src={filterImg} class=" invert w-8 h-8 mr-4" alt="Filter icon" />
 	Filter
 </Button>
 

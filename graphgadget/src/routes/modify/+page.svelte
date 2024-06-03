@@ -9,6 +9,8 @@
 	import { loadSession } from '$lib/utils/SessionLoad';
 	import NavBar from '$lib/shared-components/NavBar.svelte';
 	import Footer from '$lib/shared-components/Footer.svelte';
+	import { Button } from 'flowbite-svelte';
+	import nextImg from '$lib/static/next.png';
 
 	$: column_names = $data.listColumns() as string[];
 	$: missing_values = hasMissingValues($data);
@@ -66,63 +68,73 @@
 	<title>Data - {APP_NAME}</title>
 </svelte:head>
 
-<main class="bg-offwhite max-w-full min-h-screen m-0">
-	<NavBar currentPage={'modify'} />
-	<div class="flex justify-center pt-16 m-5 max-w-full">
-		{#if missing_values.length !== 0}
-			<span class="flex flex-col items-center">
-				<p class="mt-2 py-2 px-6 text-red-500 font-mono">
-					Warning: Missing values detected in [{columns_with_missing.join(', ')}]
-				</p>
-				<button
-					class="mt-2 w-2/3 rounded-lg py-1 text-red-50 bg-red-400 font-bold hover:text-slate-300 hover:bg-red-500"
-					on:click={removeMissingValues}
-					data-testid="remove-missing-button"
-				>
-					Remove missing values
-				</button>
-			</span>
-		{/if}
-	</div>
-
-	<div class="flex justify-between items-center p-5">
-		<Filter />
-		<div
-			class="flex items-center justify-center max-w-32 max-h-14 py-4 px-12 bg-darkblue rounded-lg hover:bg-blue-900"
-		>
-			<!-- Given that it was implemented with an a link, right now you need to click on the words to go to next page -->
-			<a
-				href="/select"
-				class=" text-offwhite font-bold rounded-lg text-sm mr-4"
-				on:click={handleClick}
-				data-testid="next-link">Next</a
-			>
-			<img src="next.png" class=" invert w-8 h-8" alt="Next icon" />
-		</div>
-	</div>
-
-	<div>
-		{#if second_data}
-			<button on:click={handleRowWiseMerge} data-testid="merge-index-button">Index merge</button>
-			<select bind:value={merge_col_1} data-testid="col1-select">
-				{#each column_names as col}
-					<option value={col}>{col}</option>
-				{/each}
-			</select>
-			<select bind:value={merge_col_2} data-testid="col2-select">
-				{#each second_data.listColumns() as col}
-					<option value={col}>{col}</option>
-				{/each}
-			</select>
-			{#if merge_col_1 && merge_col_2}
-				<button on:click={joinColumns} data-testid="merge-keyed-button">keyed merge</button>
+<main class="bg-offwhite max-w-full h-screen m-0 flex flex-col scrollbar-hide overflow-auto">
+	<NavBar currentPage={'modify'}></NavBar>
+	<div class="h-full flex flex-col justify-around pt-4">
+		<div class="flex justify-center pt-16">
+			{#if missing_values.length !== 0}
+				<span class="flex flex-col items-center">
+					<p class="py-4 px-6 text-red-500 font-mono">
+						Warning: Missing values detected in [{columns_with_missing.join(', ')}]
+					</p>
+					<button
+						class="w-2/3 rounded-lg py-1 text-red-50 bg-red-400 font-bold hover:text-slate-300 hover:bg-red-500"
+						on:click={removeMissingValues}
+						data-testid="remove-missing-button"
+					>
+						Remove missing values
+					</button>
+				</span>
 			{/if}
-		{/if}
-	</div>
+		</div>
 
-	<div class="flex">
-		<Table />
-		<Importer on:input={(e) => (second_data = e.detail.input)} />
+		<div class="flex justify-between items-center p-5">
+			<Filter />
+			<div
+				class="flex items-center justify-center max-w-32 max-h-14 h-full w-full bg-darkblue rounded-lg hover:bg-blue-900"
+			>
+				<!-- Given that it was implemented with an a link, right now you need to click on the words to go to next page -->
+				<Button
+					href="/select"
+					class=" text-offwhite font-bold rounded-lg text-sm w-full"
+					on:click={handleClick}
+					data-testid="next-link"
+				>
+					<div class="flex justify-center items-center">
+						Next
+						<img src={nextImg} class=" invert w-8 h-8 ml-4" alt="Next icon" />
+					</div>
+				</Button>
+			</div>
+		</div>
+
+		<div>
+			{#if second_data}
+				<button on:click={handleRowWiseMerge} data-testid="merge-index-button">Index merge</button>
+				<select bind:value={merge_col_1} data-testid="col1-select">
+					{#each column_names as col}
+						<option value={col}>{col}</option>
+					{/each}
+				</select>
+				<select bind:value={merge_col_2} data-testid="col2-select">
+					{#each second_data.listColumns() as col}
+						<option value={col}>{col}</option>
+					{/each}
+				</select>
+				{#if merge_col_1 && merge_col_2}
+					<button on:click={joinColumns} data-testid="merge-keyed-button">keyed merge</button>
+				{/if}
+			{/if}
+		</div>
+
+		<div class="flex items-center justify-center content-between h-[60%] px-24">
+			<div class="h-full w-full p-4">
+				<Table />
+			</div>
+			<div class="ml-10">
+				<Importer on:input={(e) => (second_data = e.detail.input)} />
+			</div>
+		</div>
 	</div>
 	<Footer />
 </main>
