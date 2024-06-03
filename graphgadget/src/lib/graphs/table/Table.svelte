@@ -1,12 +1,11 @@
 <script lang="ts">
 	import { afterUpdate, onMount } from 'svelte';
-	import { getTableInfo, isColumnFrequency } from '$lib/subgroup-controller/SubgroupController';
+	import { getTableInfo, isColumnFrequency } from '$components/subgroup-controller/SubgroupController';
 	import { Grid } from 'gridjs';
-	import { data, selectedColumns, selectedValues, binSizes } from '$lib/Store';
 	import 'gridjs/dist/theme/mermaid.css';
-	import StatisticsSelector from '$lib/statistics-selector/StatisticsSelector.svelte';
-	import TsvExporter from '$lib/exporter/tsv/TSVExporter.svelte';
-	import LatexExporter from '$lib/exporter/latex/LatexExporter.svelte';
+	import StatisticsSelector from '$lib/components/statistics-selector/StatisticsSelector.svelte';
+	import TsvExporter from '$components/exporter/tsv/TSVExporter.svelte';
+	import LatexExporter from '$components/exporter/latex/LatexExporter.svelte';
 
 	let tableWrapper: HTMLDivElement;
 

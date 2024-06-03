@@ -1,8 +1,9 @@
 <script lang="ts">
-	import Importer from '$lib/importer/Importer.svelte';
-	import { APP_NAME, df } from '$lib/Store';
+	import Importer from '$lib/components/importer/Importer.svelte';
+	import { df } from '$lib/Store';
+	import { APP_NAME } from '$lib/Constants';
 	import { goto } from '$app/navigation';
-	import type { Bundle } from '$lib/types';
+	import type { Bundle } from '$lib/Types';
 	import { Label, Checkbox } from 'flowbite-svelte';
 	import logo from '$assets/GraphGadgetHomeLogo.svg';
 
@@ -46,11 +47,18 @@
 </svelte:head>
 
 <header class="flex justify-center max-w-full align-middle">
-	<img src={logo} alt="Logo" class="w-[25%] mx-auto pt-24" />
+	<img src={logo} alt="Logo" class="w-[30%] mx-auto p-3" />
 </header>
 
 <div class="flex justify-center gap-5 p-5 bg-darkblue">
-	<Importer on:input={handleInput} />
+	<Importer on:input={handleInput} id="import-data" />
+	<label
+		class="text-lg font-bold text-gray-800 my-2 py-2 px-4 inline-block bg-gray-100 rounded-lg cursor-pointer transition-colors duration-300 ease-in-out border border-gray-300 shadow-md hover:text-blue-500 hover:bg-gray-200"
+		for="import-data"
+	>
+		
+		Select Data
+	</label>
 	<button
 		class="text-lg font-bold text-gray-800 my-2 py-2 px-4 inline-block bg-gray-100 rounded-lg cursor-pointer transition-colors duration-300 ease-in-out border border-gray-300 shadow-md hover:text-blue-500 hover:bg-gray-200"
 		on:click={() => goto('/previous')}

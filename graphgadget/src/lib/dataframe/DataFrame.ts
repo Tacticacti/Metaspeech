@@ -5,8 +5,8 @@ export class DataFrame {
 	/**
 	 * The names and types of the columns in the DataFrame.
 	 */
-	columns: Readable<ColumnMeta[]>;
-	private _columnMetas: Writable<ColumnMeta[]>;
+	columns: Readable<Column[]>;
+	private _columnMetas: Writable<Column[]>;
 
 	/**
 	 * The rows in the DataFrame.
@@ -20,7 +20,7 @@ export class DataFrame {
 	 * @param rows The rows of the DataFrame.
 	 */
 	constructor() {
-		this.columns = this._columnMetas = writable<ColumnMeta[]>([]);
+		this.columns = this._columnMetas = writable<Column[]>([]);
 		this.rows = this._rows = writable<DataType[][]>([]);
 	}
 
@@ -188,7 +188,7 @@ type DataTypeString = 'string' | 'number';
 /**
  * A type that represents a column in a DataFrame.
  */
-export type ColumnMeta = {
+export type Column = {
 	name: string;
 	type: DataTypeString;
 	hasMissing: boolean;
@@ -198,7 +198,7 @@ export type ColumnMeta = {
  * A type that represents a barebones DataFrame.
  */
 export type DataFrameLike = {
-	columns: ColumnMeta[];
+	columns: Column[];
 	rows: DataType[][];
 };
 
@@ -220,7 +220,6 @@ function isUndefinedLike(value: unknown): boolean {
 	if (value === undefined) return true;
 	if (value === null) return true;
 	if (typeof value === 'string' && value.trim() === '') return true;
-
 	return false;
 }
 
@@ -273,13 +272,13 @@ function toDataFrameLike(cols: string[], rows: unknown[][]): DataFrameLike {
 	return df;
 }
 
-function getColumnMetas(cols: string[], rows: unknown[][]): ColumnMeta[] {
-	const columnMetas: ColumnMeta[] = [];
+function getColumnMetas(cols: string[], rows: unknown[][]): Column[] {
+	const columnMetas: Column[] = [];
 
 	for (let i = 0; i < cols.length; i++) {
 		const col = selectIndex(rows, i);
 
-		const meta: ColumnMeta = { 
+		const meta: Column = { 
 			name: cols[i], 
 			type: getArraySubType(col),
 			hasMissing: hasMissingValues(col, rows.length) 
@@ -378,6 +377,11 @@ export function fromText(
 ): DataFrameLike {
 	const rows = text.split(rowDelimiter).map((row) => row.split(columnDelimiter));
 	const columns = rows.shift()!.map(c => c?.toString() ?? '');
+
+	const lastRow = rows[rows.length - 1];
+	if (lastRow.length === 1 && lastRow[0] === '') {
+		rows.pop();
+	}
 
 	return toDataFrameLike(columns, rows);
 }

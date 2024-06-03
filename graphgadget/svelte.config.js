@@ -21,7 +21,7 @@ const config = {
 			strict: true
 		}),
 		alias: {
-			$components: './src/lib/shared-components',
+			$components: './src/lib/components',
 			$assets: './src/lib/assets',
 		},
 	}

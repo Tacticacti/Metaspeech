@@ -2,10 +2,10 @@ import Histogram from './histogram/Histogram.svelte';
 import Scatter from './scatter/Scatter.svelte';
 import PieChart from './pie/PieChart.svelte';
 import Boxplot from './boxplot/Boxplot.svelte';
-import pieImg from '$lib/static/pieChart.png';
-import scatterImg from '$lib/static/scatterPlot.png';
-import histogramImg from '$lib/static/histogram.png';
-import boxplotImg from '$lib/static/boxPlot.png';
+import pieImg from '$assets/pieChart.png';
+import scatterImg from '$assets/scatterPlot.png';
+import histogramImg from '$assets/histogram.png';
+import boxplotImg from '$assets/boxPlot.png';
 import Table from './table/Table.svelte';
 
 /**

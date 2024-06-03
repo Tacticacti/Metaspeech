@@ -3,8 +3,8 @@
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { Button, Tooltip } from 'flowbite-svelte';
-	import nextImg from '$lib/static/next.png';
-	import info from '$lib/static/info.svg';
+	import nextImg from '$assets/next.png';
+	import info from '$assets/info.svg';
 	import type { DataFrameLike } from '$lib/dataframe/DataFrame';
 
 	/**

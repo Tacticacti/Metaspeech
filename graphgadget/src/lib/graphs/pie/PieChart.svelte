@@ -4,7 +4,7 @@
 	import { setColor } from '$lib/utils/CanvasUtils';
 	import { afterUpdate, onMount } from 'svelte';
 	import { selectedColumns } from '$lib/Store';
-	import WarningGenerator from '$lib/warning-generator/WarningGenerator.svelte';
+	import WarningGenerator from '$lib/components/warning-generator/WarningGenerator.svelte';
 	import Export from '$lib/graphs/GraphImageExport.svelte';
 
 	let canvas: HTMLCanvasElement;
