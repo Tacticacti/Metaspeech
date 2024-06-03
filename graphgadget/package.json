@@ -32,7 +32,6 @@
 		"@vitest/coverage-istanbul": "^1.6.0",
 		"autoprefixer": "^10.4.19",
 		"chartjs": "^0.3.24",
-		"dataframe-js": "^1.4.4",
 		"eslint": "^8.56.0",
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-plugin-svelte": "^2.35.1",

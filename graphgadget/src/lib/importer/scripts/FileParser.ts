@@ -1,8 +1,8 @@
-import { ParseXls } from '$lib/importer/scripts/XlsParser';
-import { DataFrame } from 'dataframe-js';
+import { parseXlS } from '$lib/importer/scripts/XlsParser';
 import { ParseJson } from './JsonParser';
-import { ParseTsv, ParseCsv } from './DsvLikeParser';
-import { UnsupportedFileError } from '../../../CustomErrors';
+import { UnsupportedFileError } from '$lib/types';
+import type { DataFrameLike } from '$lib/dataframe/DataFrame';
+import { fromFile } from '$lib/dataframe/DataFrame';
 
 /**
  * Extracts the file extension from a File object.
@@ -30,20 +30,19 @@ export function GetFileExtension(file: File): string {
  * @param file The file to parse.
  * @returns A Promise that resolves to a DataFrame.
  */
-export function Parse(file: File): Promise<DataFrame> {
+export function Parse(file: File): Promise<DataFrameLike> {
 	if (!file) return Promise.reject('No file found.');
 	switch (GetFileExtension(file)) {
+		case 'txt':
 		case 'tsv':
-			return ParseTsv(file);
+			return fromFile(file, '\t', '\n');
+		case 'csv':
+			return fromFile(file, ',', '\n');
 		case 'xls':
 		case 'xlsx':
-			return ParseXls(file);
+			return parseXlS(file);
 		case 'json':
 			return ParseJson(file);
-		case 'csv':
-			return ParseCsv(file);
-		case 'txt':
-			return ParseTsv(file);
 		default:
 			return Promise.reject(
 				new UnsupportedFileError('Unsupported file type found. Type found: ' + file.type)

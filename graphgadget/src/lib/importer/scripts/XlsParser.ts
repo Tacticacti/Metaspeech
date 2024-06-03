@@ -1,5 +1,5 @@
-import { DataFrame } from 'dataframe-js';
-import * as XLSX from '@e965/xlsx';
+import type { DataFrameLike } from '$lib/dataframe/DataFrame';
+import { read, utils } from '@e965/xlsx';
 
 /**
  * Parses an XLS file and returns a promise that resolves to a DataFrame containing the parsed data.
@@ -9,7 +9,7 @@ import * as XLSX from '@e965/xlsx';
  * @param file The File object representing the Excel file.
  * @returns {Promise<DataFrame>} A promise that resolves to a DataFrame with the Excel data.
  */
-export function ParseXls(file: File): Promise<DataFrame> {
+export function parseXlS(file: File): Promise<DataFrameLike> {
 	// Return a new promise that will resolve with the DataFrame or reject with an error
 	return new Promise((resolve, reject) => {
 		const reader = new FileReader();
@@ -24,19 +24,23 @@ export function ParseXls(file: File): Promise<DataFrame> {
 				}
 
 				// Parse the binary string to a workbook using SheetJS
-				const workbook = XLSX.read(data, { type: 'binary' });
+				const workbook = read(data, { type: 'binary' });
 
 				// Assume the first sheet in the workbook is the target sheet
 				const firstSheetName = workbook.SheetNames[0];
 				const worksheet = workbook.Sheets[firstSheetName];
 
 				// Convert the worksheet to JSON format
-				const json = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+				const json = utils.sheet_to_json(worksheet, { header: 1 });
 
 				// Validate the format of the first row as headers
 				if (Array.isArray(json[0]) && json[0].every((cell) => typeof cell === 'string')) {
 					// Create a DataFrame from the JSON, slicing from the second element onward and using the first row as headers
-					resolve(new DataFrame(json.slice(1), json[0]));
+					console.log(json);
+					resolve({
+						columns: json.slice(1) as string[], 
+						rows: json[0]
+					});
 				} else {
 					reject(new SyntaxError('Header row format is incorrect or missing'));
 				}

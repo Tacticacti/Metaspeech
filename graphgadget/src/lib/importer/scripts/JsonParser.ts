@@ -1,4 +1,4 @@
-import { DataFrame } from 'dataframe-js';
+import { fromObjects, type DataFrameLike } from "$lib/dataframe/DataFrame";
 
 /**
  * Parses a JSON file into a DataFrame. It accepts both arrays and objects.
@@ -6,7 +6,7 @@ import { DataFrame } from 'dataframe-js';
  * @param file The file to parse.
  * @returns A Promise that resolves to a DataFrame.
  */
-export function ParseJson(file: File): Promise<DataFrame> {
+export function ParseJson(file: File): Promise<DataFrameLike> {
 	return new Promise((resolve, reject) => {
 		const reader = new FileReader();
 
@@ -17,22 +17,22 @@ export function ParseJson(file: File): Promise<DataFrame> {
 					throw new Error('Failed to load file');
 				}
 
-				const json = JSON.parse(data as string);
+				let json = JSON.parse(data as string);
 
-				if (Array.isArray(json)) {
-					resolve(new DataFrame(json));
-				} else if (typeof json === 'object') {
-					// convert object key-values to array of objects
-					// by adding the key as an 'id' field to value
-					const arr = Object.keys(json).map((key) => {
+				if (!Array.isArray(json) && typeof json === 'object') {
+					json = Object.keys(json).map((key) => {
 						const obj = json[key];
 						return { id: key, ...obj };
 					});
-
-					resolve(new DataFrame(arr));
 				}
 
-				throw new SyntaxError('JSON data is not an array');
+
+				if (!Array.isArray(json)) {
+					throw new SyntaxError('JSON data is unrecognized format. Expected array or object.');
+				}
+
+				resolve(fromObjects(json));
+				
 			} catch (error) {
 				reject(error);
 			}

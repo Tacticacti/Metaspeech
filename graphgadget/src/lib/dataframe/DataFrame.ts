@@ -1,10 +1,11 @@
 import { type Readable, get, type Writable, writable } from 'svelte/store';
+import type { Grouper, Aggregator } from '$lib/dataframe/Grouping';
 
 export class DataFrame {
 	/**
 	 * The names and types of the columns in the DataFrame.
 	 */
-	columnMetas: Readable<ColumnMeta[]>;
+	columns: Readable<ColumnMeta[]>;
 	private _columnMetas: Writable<ColumnMeta[]>;
 
 	/**
@@ -19,7 +20,7 @@ export class DataFrame {
 	 * @param rows The rows of the DataFrame.
 	 */
 	constructor() {
-		this.columnMetas = this._columnMetas = writable<ColumnMeta[]>([]);
+		this.columns = this._columnMetas = writable<ColumnMeta[]>([]);
 		this.rows = this._rows = writable<DataType[][]>([]);
 	}
 
@@ -28,7 +29,7 @@ export class DataFrame {
 	 * @returns The shape of the DataFrame. [rows, columns]
 	 */
 	shape(): [number, number] {
-		return [get(this.rows).length, get(this.columnMetas).length];
+		return [get(this.rows).length, get(this.columns).length];
 	}
 
 	/**
@@ -55,7 +56,7 @@ export class DataFrame {
 	 * @param index The index of the column to delete.
 	 */
 	deleteColumn(index: number) {
-		const columnMetas = get(this.columnMetas);
+		const columnMetas = get(this.columns);
 		const rows = get(this.rows);
 
 		if (index === -1) return;
@@ -102,9 +103,9 @@ export class DataFrame {
 	 * @param col1 The index of the column to join on in the first DataFrame.
 	 * @param col2 The index of the column to join on in the second DataFrame.
 	 */
-	join(df: DataFrameLike, col1: number, col2: number) {
+	keyedJoin(df: DataFrameLike, col1: number, col2: number) {
 		// get cols and rows
-		const columns1 = get(this.columnMetas).map((c) => c.name);
+		const columns1 = get(this.columns);
 		const rows1 = get(this.rows);
 		const columns2 = df.columns;
 		const rows2 = df.rows;
@@ -129,17 +130,26 @@ export class DataFrame {
 		columns2.splice(col2, 1);
 
 		// set the new columns and rows
-		this.set({
-			columns: [...columns1, ...columns2],
-			rows: rows1
-		});
+		this.set({ columns: [...columns1, ...columns2], rows: rows1 });
+	}
+
+	join(df: DataFrameLike) {
+		const columns1 = get(this.columns);
+		const rows1 = get(this.rows);
+		const columns2 = df.columns;
+		const rows2 = df.rows;
+
+		const newColumns = [...columns1, ...columns2];
+		const newRows = rows1.map((row1, i) => [...row1, ...rows2[i]]);
+
+		this.set({ columns: newColumns, rows: newRows });
 	}
 
 	/**
 	 * Sometimes the stores don't update when the data changes. This function forces the stores to update.
 	 */
 	forceStoreUpdate() {
-		this._columnMetas.set(get(this.columnMetas));
+		this._columnMetas.set(get(this.columns));
 		this._rows.set(get(this.rows));
 	}
 
@@ -147,9 +157,9 @@ export class DataFrame {
 	 * Get the DataFrame as a DataFrameLike.
 	 * @returns The DataFrame as a DataFrameLike.
 	 */
-	get() {
+	get(): DataFrameLike {
 		return {
-			columns: get(this.columnMetas).map((c) => c.name),
+			columns: get(this.columns),
 			rows: get(this.rows)
 		};
 	}
@@ -162,7 +172,7 @@ export class DataFrame {
 		const cols = df.columns ?? [];
 		const rows = df.rows ?? [];
 
-		this._columnMetas.set(getColumnMetas(cols, rows));
+		this._columnMetas.set(cols);
 		this._rows.set(rows);
 	}
 }
@@ -173,39 +183,50 @@ export class DataFrame {
  * A type that represents a data type that can be stored in a DataFrame.
  */
 export type DataType = string | number | undefined;
+type DataTypeString = 'string' | 'number';
 
 /**
  * A type that represents a column in a DataFrame.
  */
 export type ColumnMeta = {
 	name: string;
-	type: string;
+	type: DataTypeString;
+	hasMissing: boolean;
 };
 
 /**
  * A type that represents a barebones DataFrame.
  */
 export type DataFrameLike = {
-	columns: string[];
+	columns: ColumnMeta[];
 	rows: DataType[][];
 };
+
+/**
+ * Check if a value is numeric.
+ * @param value The value to check.
+ * @returns Whether the value is numeric.
+ */
+function isNumeric(value: unknown): boolean {
+	return !isNaN(Number(value));
+}
+
+/**
+ * Check if a value is undefined, null, or an empty string.
+ * @param value The value to check.
+ * @returns Whether the value is undefined-like.
+ */
+function isUndefinedLike(value: unknown): boolean {
+	if (value === undefined) return true;
+	if (value === null) return true;
+	if (typeof value === 'string' && value.trim() === '') return true;
+
+	return false;
+}
 
 // #endregion
 
 // #region Grouping & Aggregating
-
-/**
- * A type that represents a function that takes a row and returns a string key.
- */
-export type Grouper = (row: DataType[]) => string;
-
-/**
- * A type that represents a function that takes a bucket of rows and returns the aggregated value.
- */
-export type Aggregator = {
-	name: string;
-	fn: (bucket: DataType[][]) => DataType;
-};
 
 /**
  * A type that represents a function that takes a bucket of rows and returns the key associated with the group.
@@ -222,15 +243,6 @@ function GroupKey(groupers: Grouper[]): Aggregator {
 // #endregion
 
 /**
- * Check if a value is numeric.
- * @param value The value to check.
- * @returns Whether the value is numeric.
- */
-function isNumeric(value: unknown): boolean {
-	return !isNaN(Number(value));
-}
-
-/**
  * Select an index from a 2D array.
  * index 1 would get [2, 3, 4] from:
  * [[1, 2, 3],
@@ -244,37 +256,90 @@ function selectIndex<T>(array: T[][], index: number): T[] {
 	return array.map((a) => a[index]);
 }
 
+// #region df importing
+
+/**
+ * Get the column metadata for a DataFrame.
+ * @param cols The names of the columns.
+ * @param rows The rows of the DataFrame.
+ * @returns The df.
+ */
+function toDataFrameLike(cols: string[], rows: unknown[][]): DataFrameLike {
+	const df: DataFrameLike = { columns: [], rows: [] };
+	
+	df.columns = getColumnMetas(cols, rows);
+	df.rows = cast2DArray(df.columns.map((c) => c.type), rows);
+
+	return df;
+}
+
+function getColumnMetas(cols: string[], rows: unknown[][]): ColumnMeta[] {
+	const columnMetas: ColumnMeta[] = [];
+
+	for (let i = 0; i < cols.length; i++) {
+		const col = selectIndex(rows, i);
+
+		const meta: ColumnMeta = { 
+			name: cols[i], 
+			type: getArraySubType(col),
+			hasMissing: hasMissingValues(col, rows.length) 
+		}; 
+
+		columnMetas.push(meta);
+	}
+
+	return columnMetas;
+}
+
 /**
  * Get the type of a column in a 2D array.
- * @param rows The 2D array.
+ * @param col The 2D array.
  * @param columnIndex The index of the column.
  * @returns The type of the column.
  */
-function getColumnType(rows: unknown[][], columnIndex: number): string {
-	let type = 'string';
-	const columnValues = selectIndex(rows, columnIndex);
+function getArraySubType(arr: unknown[]): DataTypeString {
+	let type: DataTypeString = 'string';
 
-	type = columnValues.every((v) => isNumeric(v) || !v) ? 'number' : type;
+	type = arr.every((v) => isNumeric(v) || isUndefinedLike(v)) ? 'number' : type;
 
 	return type;
 }
 
 /**
- * Get the column metas from a 2D array.
- * @param columnNames The names of the columns.
- * @param rows The 2D array.
- * @returns The column metas.
+ * Check if an array has missing values. Missing values are undefined, null, or whitespace strings.
+ * @param arr The array to check.
+ * @param length The length the array should have.
+ * @returns Whether the array has missing values.
  */
-function getColumnMetas(columnNames: string[], rows: unknown[][]): ColumnMeta[] {
-	return columnNames.map((name, i) => {
-		return {
-			name,
-			type: getColumnType(rows, i)
-		};
-	});
+function hasMissingValues(arr: unknown[], length: number): boolean {
+	return arr.length < length || arr.some(isUndefinedLike);
 }
 
-// #region df importing
+/**
+ * Get the column metadata for a DataFrame.
+ * @param cols The names of the columns.
+ * @param rows The rows of the DataFrame.
+ * @returns The column metadata.
+ */
+function cast2DArray(types: DataTypeString[], arr: unknown[][]): DataType[][] {
+	return arr.map((row) => row.map((cell, i) => castCell(types[i], cell)));
+}
+
+/**
+ * Cast a cell to a specific type.
+ * @param type The type to cast to.
+ * @param cell The cell to cast.
+ * @returns The casted cell.
+ */
+function castCell(type: DataTypeString, cell: unknown): DataType {
+	if(isUndefinedLike(cell)) return undefined;
+
+	if (type === 'number') {
+		return Number(cell);
+	}
+	
+	return cell!.toString();
+}
 
 /**
  * Create a DataFrame from a file.
@@ -311,14 +376,10 @@ export function fromText(
 	columnDelimiter: string = ',',
 	rowDelimiter: string = '\n'
 ): DataFrameLike {
-	const rows = text.split(rowDelimiter).map((row) => row.split(columnDelimiter).map(toDataType));
+	const rows = text.split(rowDelimiter).map((row) => row.split(columnDelimiter));
+	const columns = rows.shift()!.map(c => c?.toString() ?? '');
 
-	const columns = rows.shift()!.map(c => c?.toString() ?? ''); // maybe a different way to handle undefined
-
-	return {
-		columns: columns,
-		rows
-	};
+	return toDataFrameLike(columns, rows);
 }
 
 /**
@@ -332,28 +393,9 @@ export function fromObjects(collection: { [i: string]: unknown }[]): DataFrameLi
 	}
 
 	const columns = Object.keys(collection[0]);
-	const rows = collection.map((row) => columns.map((c) => toDataType(row[c])));
+	const rows = collection.map((row) => columns.map(c => row[c]));
 
-	return {
-		columns,
-		rows
-	};
-}
-
-/**
- * Parses a value into a DataType. It follows the following rules:
- * numeric -> converted to a number.
- * whitespace string -> undefined.
- * string -> trimed string.
- * else -> undefined.
- * @param df The DataFrameLike to create the DataFrame from.
- * @returns A DataFrame.
- */
-function toDataType(value: unknown): DataType {
-	if (typeof value === 'string' && value.trim() === '') return undefined;
-	if (isNumeric(value)) return Number(value);
-	if (typeof value === 'string') return value.trim();
-	return undefined;
+	return toDataFrameLike(columns, rows);
 }
 
 // #endregion

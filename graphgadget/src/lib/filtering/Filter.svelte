@@ -1,32 +1,28 @@
 <script lang="ts">
-	import { data } from '$lib/Store';
+	import { type DataType } from '$lib/dataframe/DataFrame';
+	import { df } from '$lib/Store';
 	import { afterUpdate } from 'svelte';
-	import { isNumber } from 'chart.js/helpers';
 	import { Button, Checkbox, Input, Select } from 'flowbite-svelte';
 	import filterImg from '$lib/static/filter.png';
 
+	const columns = df.columns;
+	
 	let isOpen: boolean = false;
-
+	let selectedIndex = 0;
 	let filterValue: string = '';
 	let useRangeChecked: boolean = true;
 	let min: number = 0;
 	let max: number = 0;
-	let selectedColumn: string;
-	let isNumberColumn: boolean = false;
 
-	$: useRange = isNumberColumn && useRangeChecked;
+	$: selectedColumn = $columns[selectedIndex];
+	$: columnNames = $columns.map((col) => col.name);
+	$: useRange = selectedColumn.type === 'number' && useRangeChecked;
+	
 
 	afterUpdate(() => {
-		const columns = $data.listColumns();
-
 		// pre-select a column
-		if (!selectedColumn || !columns.includes(selectedColumn)) {
-			selectedColumn = columns[0];
-		}
-
-		// if statement for when there are no columns
-		if (selectedColumn) {
-			isNumberColumn = isNumber($data.getRow(0)?.get(selectedColumn));
+		if (selectedIndex >= columnNames.length) {
+			selectedIndex = 0;
 		}
 	});
 
@@ -35,18 +31,24 @@
 	 * @param useMatching if true, remove rows that match the filter value. if false, remove rows that do not match the filter value.
 	 */
 	function filter(useMatching: boolean) {
-		if (useRange) {
-			// range filter
-			$data = $data.filter(
-				// @ts-expect-error dataframe badly defined types
-				(row) => (row.get(selectedColumn) >= min && row.get(selectedColumn) <= max) !== useMatching
-			);
-			return;
+		df.filter((row) => {
+			const value = row[selectedIndex];		
+			return matches(value) !== useMatching;
+		});
+	}
+
+	/**
+	 * Check if the value matches the filter value
+	 * @param value The value to check
+	 * @returns true if the value matches the filter value, false otherwise
+	 */
+	function matches(value: DataType): boolean {
+		if(useRange) {
+			const num = value as number;
+			return num >= min && num <= max;
 		}
 
-		// text filter
-		// @ts-expect-error dataframe badly defined types
-		$data = $data.filter((row) => (row.get(selectedColumn) == filterValue) !== useMatching);
+		return (value ?? '') === filterValue;
 	}
 </script>
 
@@ -61,14 +63,14 @@
 {#if isOpen}
 	<div class="flex justify-center flex-wrap" data-testid="filter-window">
 		<Select class="max-w-28 mr-2" bind:value={selectedColumn} data-testid="column-select">
-			{#each $data.listColumns() as col}
+			{#each $columns.map(c => c.name) as col}
 				<option value={col}>{col}</option>
 			{/each}
 		</Select>
-		{#if isNumberColumn}
-			<Checkbox class="mx-2" bind:checked={useRangeChecked} data-testid="userange-check"
-				>Select Range</Checkbox
-			>
+		{#if $columns[selectedIndex].type === 'number'}
+			<Checkbox class="mx-2" bind:checked={useRangeChecked} data-testid="userange-check">
+				Select Range
+			</Checkbox>
 		{/if}
 
 		{#if useRange}

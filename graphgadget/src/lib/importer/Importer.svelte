@@ -1,11 +1,11 @@
 <script lang="ts">
-	import { UnsupportedFileError } from '../../CustomErrors';
+	import { UnsupportedFileError } from '$lib/types';
 	import { createEventDispatcher } from 'svelte';
 	import { GetFileExtension, Parse } from '$lib/importer/scripts/FileParser';
-	import { DataFrame } from 'dataframe-js';
 	import type { Bundle } from '$lib/types';
 	import { writable } from 'svelte/store';
 	import ErrorModal from './ErrorModal.svelte';
+	import type { DataFrameLike } from '$lib/dataframe/DataFrame';
 
 	// allows creating component events
 	const dispatch = createEventDispatcher<{
@@ -32,9 +32,9 @@
 
 		// parse file
 		try {
-			const data: DataFrame = await Parse(file);
+			const data: DataFrameLike = await Parse(file);
 			const bundle = {
-				input: data,
+				data,
 				filename: file.name
 			};
 			dispatch('input', bundle);

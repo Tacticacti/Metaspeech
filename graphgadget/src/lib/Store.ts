@@ -1,14 +1,9 @@
 import { writable } from 'svelte/store';
-import { DataFrame } from 'dataframe-js';
+import { DataFrame } from '$lib/dataframe/DataFrame';
 
 // Name for the application and other shared metadata
 export const APP_NAME = 'GraphGadget';
 export const COPYRIGHT_YEAR = 2024;
-
-/**
- * The data store for the application.
- */
-export const data = writable<DataFrame>(new DataFrame([], []));
 
 /**
  * The bin dictionary type. The key is the column name and the value is the bin size for that column
@@ -53,3 +48,8 @@ export const binSizes = writable<BinDictionary>();
  * Whether to use mean or not
  */
 export const checkedMean = writable<boolean>(false);
+
+/**
+ * The data frame to use for the application
+ */
+export const df = new DataFrame();

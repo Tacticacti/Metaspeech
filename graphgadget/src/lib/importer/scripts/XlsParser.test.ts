@@ -1,7 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
-import { DataFrame } from 'dataframe-js';
 import * as XLSX from '@e965/xlsx';
-import { ParseXls } from './XlsParser';
+import { parseXlS } from './XlsParser';
 
 // Mocking XLSX
 vi.mock('@e965/xlsx', () => ({
@@ -33,7 +32,7 @@ describe('XlsParser', () => {
 		// @ts-expect-error ignore
 		XLSX.utils.sheet_to_json.mockReturnValue(jsonMock);
 		const readAsArrayBufferSpy = jest.spyOn(FileReader.prototype, 'readAsArrayBuffer');
-		const result = await ParseXls(file);
+		const result = await parseXlS(file);
 		expect(result).toBeInstanceOf(DataFrame);
 		expect(result.count()).toBe(1);
 		expect(readAsArrayBufferSpy).toBeCalledWith(file);
@@ -42,7 +41,7 @@ describe('XlsParser', () => {
 	it('Should reject invalid file', async () => {
 		const file = new File([], 'test.xls', { type: 'application/vnd.ms-excel' });
 		try {
-			await ParseXls(file);
+			await parseXlS(file);
 			throw new Error('Test failed: Expected ParseXls to throw an error but did not.');
 		} catch (error) {
 			expect(error).toBeInstanceOf(TypeError);
@@ -62,7 +61,7 @@ describe('XlsParser', () => {
 		// @ts-expect-error ignore
 		XLSX.utils.sheet_to_json.mockReturnValue([]);
 		try {
-			await ParseXls(file);
+			await parseXlS(file);
 			throw new Error('Test failed: Expected ParseXls to throw an error but did not.');
 		} catch (error) {
 			expect(error).toBeInstanceOf(SyntaxError);
@@ -81,7 +80,7 @@ describe('XlsParser', () => {
 
 		// Call the parseFile function with a dummy file
 		const file = new File([''], 'filename.xls', { type: 'application/vnd.ms-excel' });
-		await expect(ParseXls(file)).rejects.toThrow();
+		await expect(parseXlS(file)).rejects.toThrow();
 	});
 	it('handles data missing', async () => {
 		// Mock the FileReader object and its methods
@@ -94,6 +93,6 @@ describe('XlsParser', () => {
 
 		// Call the parseFile function with a dummy file
 		const file = new File([''], 'filename.xls', { type: 'application/vnd.ms-excel' });
-		await expect(ParseXls(file)).rejects.toThrow();
+		await expect(parseXlS(file)).rejects.toThrow();
 	});
 });

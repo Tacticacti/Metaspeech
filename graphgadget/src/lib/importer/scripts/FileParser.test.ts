@@ -1,7 +1,7 @@
 import { it, expect, vi } from 'vitest';
 import DataFrame from 'dataframe-js';
 import { Parse, GetFileExtension } from './FileParser';
-import { ParseXls } from './XlsParser';
+import { parseXlS } from './XlsParser';
 import { UnsupportedFileError } from '../../../CustomErrors';
 
 // Function to create and write data to a TSV file
@@ -65,7 +65,7 @@ describe('Tests for Parse', () => {
 		const result = Parse(file);
 		expect(result).toBeInstanceOf(Promise);
 		await expect(result).resolves.toBeInstanceOf(DataFrame);
-		expect(ParseXls).toHaveBeenCalled();
+		expect(parseXlS).toHaveBeenCalled();
 	});
 
 	it('should correctly parse .xlsx files', async () => {
@@ -75,7 +75,7 @@ describe('Tests for Parse', () => {
 		const result = Parse(file);
 		expect(result).toBeInstanceOf(Promise);
 		await expect(result).resolves.toBeInstanceOf(DataFrame);
-		expect(ParseXls).toHaveBeenCalled();
+		expect(parseXlS).toHaveBeenCalled();
 	});
 
 	it('importer pass tsv', async () => {

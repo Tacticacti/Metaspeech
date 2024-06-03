@@ -125,7 +125,7 @@ describe('DataFrame basics', () => {
 		};
 		df.set(data);
 
-		expect(get(df.columnMetas)).toEqual([
+		expect(get(df.columns)).toEqual([
 			{ name: 'a', type: 'string' },
 			{ name: 'b', type: 'number' }
 		]);
@@ -145,7 +145,7 @@ describe('DataFrame basics', () => {
 			rows: undefined
 		});
 
-		expect(get(df.columnMetas)).toEqual([]);
+		expect(get(df.columns)).toEqual([]);
 		expect(get(df.rows)).toEqual([]);
 	});
 

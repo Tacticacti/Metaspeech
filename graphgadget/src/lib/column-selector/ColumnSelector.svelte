@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { data } from '$lib/Store';
+	import { df } from '$lib/Store';
 	import { getNumericalColumnsAndMax } from './ColumnHelper';
 	import {
 		selectedColumns,
@@ -10,6 +10,14 @@
 		ABSOLUTE_FREQUENCY,
 		RELATIVE_FREQUENCY
 	} from '$lib/Store';
+	import type { GraphMeta } from '$lib/graphs/Graphs';
+
+	const columns = df.columns;
+
+	let groupby: GraphMeta[] = [];
+	let select: GraphMeta[] = [];
+
+	
 
 	let columnNames = $data.listColumns();
 	let numericColumns = getNumericalColumnsAndMax(columnNames, $data.toCollection(true));

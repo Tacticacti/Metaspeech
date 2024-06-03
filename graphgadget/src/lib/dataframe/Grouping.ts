@@ -1,4 +1,18 @@
-import type { Grouper, Aggregator } from './DataFrame';
+import type { DataType } from './DataFrame';
+
+/**
+ * A type that represents a function that takes a row and returns a string key.
+ */
+export type Grouper = (row: DataType[]) => string;
+
+/**
+ * A type that represents a function that takes a bucket of rows and returns the aggregated value.
+ */
+export type Aggregator = {
+	name: string;
+	fn: (bucket: DataType[][]) => DataType;
+};
+
 
 // #region Grouping
 
