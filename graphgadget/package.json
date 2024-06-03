@@ -13,7 +13,8 @@
 		"format": "prettier --write .",
 		"test:integration": "playwright test",
 		"test:unit": "vitest --coverage --run",
-		"all": "(npm run lint || (npm run format && npm run lint)) && npm run build && npm run test && npm run preview"
+		"all": "(npm run lint || (npm run format && npm run lint)) && npm run build && npm run test && npm run preview",
+		"try": "npm install && npm run dev"
 	},
 	"devDependencies": {
 		"@playwright/test": "1.44.0",
