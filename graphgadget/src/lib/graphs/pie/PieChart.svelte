@@ -52,7 +52,11 @@
 				plugins: {
 					// @ts-expect-error Needs a specific type for plugin
 					customCanvasBackgroundColor: {
-						color: 'pink'
+						color: 'white'
+					},
+					title: {
+						display: true,
+						text: 'Frequency of ' + $selectedColumns[0]
 					}
 				}
 			},
@@ -69,7 +73,7 @@
 		chart.data.labels = labels;
 		chart.data.datasets = [
 			{
-				label: $selectedColumns[0],
+				label: 'Frequency',
 				data: counts as number[],
 				backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'],
 				hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40']
@@ -77,6 +81,8 @@
 		];
 
 		chart.update();
+		console.log('lab ' + labels);
+		console.log('counts ' + counts);
 	});
 </script>
 

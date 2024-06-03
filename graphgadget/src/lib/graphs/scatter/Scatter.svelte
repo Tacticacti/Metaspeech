@@ -4,14 +4,14 @@
 	import { afterUpdate, onMount, onDestroy } from 'svelte';
 	import { setColor } from '$lib/utils/CanvasUtils';
 	import WarningGenerator from '$lib/warning-generator/WarningGenerator.svelte';
-	import { selectedColumns } from '$lib/Store';
+	import { selectedColumns, selectedValues } from '$lib/Store';
 	import Export from '$lib/graphs/GraphImageExport.svelte';
 
 	let canvas: HTMLCanvasElement;
 	let chart: Chart;
 
 	let x_axis = $selectedColumns[0];
-	let y_axis = $selectedColumns[1];
+	let y_axis = $selectedValues[0];
 
 	onMount(() => {
 		const plugin = {
@@ -30,7 +30,25 @@
 				plugins: {
 					// @ts-expect-error Needs a specific type for plugin
 					customCanvasBackgroundColor: {
-						color: 'lightgreen'
+						color: 'white'
+					},
+					title: {
+						display: true,
+						text: y_axis + ' x ' + x_axis
+					}
+				},
+				scales: {
+					x: {
+						title: {
+							display: true,
+							text: x_axis
+						}
+					},
+					y: {
+						title: {
+							display: true,
+							text: y_axis
+						}
 					}
 				}
 			},
@@ -54,6 +72,32 @@
 				borderWidth: 1
 			}
 		];
+		chart.config.options = {
+			plugins: {
+				// @ts-expect-error Needs a specific type for plugin
+				customCanvasBackgroundColor: {
+					color: 'white'
+				},
+				title: {
+					display: true,
+					text: y_axis + ' x ' + x_axis
+				}
+			},
+			scales: {
+				x: {
+					title: {
+						display: true,
+						text: x_axis
+					}
+				},
+				y: {
+					title: {
+						display: true,
+						text: y_axis
+					}
+				}
+			}
+		};
 
 		chart.update();
 	});
@@ -86,8 +130,8 @@
 			bind:value={y_axis}
 			class="p-2 border border-gray-300 rounded-md"
 		>
-			{#each $selectedColumns as column}
-				<option value={column}>{column}</option>
+			{#each $selectedValues as value}
+				<option {value}>{value}</option>
 			{/each}
 		</select>
 	</div>
