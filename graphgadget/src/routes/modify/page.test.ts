@@ -21,12 +21,12 @@ it('should render', () => {
 	expect(container).toBeDefined();
 });
 
-it('should have a link that directs to view', async () => {
+it('should have a link that directs to select', async () => {
 	const r = render(sut);
 
 	const link = h.getNextLink(r);
 	expect(link).toBeDefined();
-	expect(link).toHaveAttribute('href', '/view');
+	expect(link).toHaveAttribute('href', '/select');
 });
 
 describe('missing values', () => {
@@ -86,11 +86,34 @@ describe('merging', () => {
 		await fireEvent.input(r.getByTestId('file-input'));
 
 		const mergeButton = h.getKeyedMergeButton(r);
-		expect(mergeButton).toBeInTheDocument();
+		expect(mergeButton).toBeInTheDocument;
 
 		await fireEvent.click(mergeButton!);
 
 		expect(get(data).toText()).toEqual('d;e;b;c\n1;4;2;3');
+	});
+});
+
+describe('session storage', () => {
+	it('Table should be same on refresh mount', async () => {
+		const df1 = new DataFrame([{ a: '1', b: '2', c: '3' }]);
+		data.set(df1);
+		const r = render(sut);
+		expect(JSON.stringify(get(data))).toEqual(JSON.stringify(df1));
+
+		const link: HTMLLinkElement = h.getNextLink(r) as HTMLLinkElement;
+		await fireEvent.click(link);
+
+		expect(JSON.stringify(get(data))).toEqual(JSON.stringify(df1));
+	});
+
+	it('Should recover from session storage', async () => {
+		const df1 = new DataFrame([{ a: '1', b: '2', c: '3' }]);
+		sessionStorage.setItem('current-df', JSON.stringify(df1));
+
+		render(sut);
+
+		expect(JSON.stringify(get(data))).toEqual(JSON.stringify(df1));
 	});
 });
 

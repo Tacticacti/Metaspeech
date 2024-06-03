@@ -3,6 +3,7 @@ import sut from '$lib/graphs/boxplot/Boxplot.svelte';
 import { describe, it, expect } from 'vitest';
 import DataFrame from 'dataframe-js';
 import { data } from '$lib/Store';
+import { selectedColumns } from '$lib/Store';
 
 const df1 = new DataFrame(
 	{
@@ -13,25 +14,15 @@ const df1 = new DataFrame(
 	['column1', 'column2', 'column3']
 );
 const df2 = new DataFrame({}, []);
-describe('getColumnNames  function tests', () => {
-	it('with basic table', () => {
-		data.set(df1);
-		const { component } = render(sut);
-		expect(component.getColumnNames(df1.listColumns())).toStrictEqual(['column1', 'column2']);
-	});
-	it('with empty table', () => {
-		data.set(df2);
-		const { component } = render(sut);
-		expect(component.getColumnNames(df2.listColumns())).toStrictEqual([]);
-	});
-});
+
 describe('getColumnData  function tests', () => {
 	it('with basic table', () => {
 		data.set(df1);
 		const { component } = render(sut);
 		expect(component.getColumnData(df1.listColumns())).toStrictEqual([
 			[3, 6, 8],
-			[3, 4, 5]
+			[3, 4, 5],
+			['a', 'b', 'c']
 		]);
 	});
 	it('with empty table', () => {
@@ -46,10 +37,11 @@ describe('When user views', () => {
 		expect(container).to.exist;
 		expect(getByTestId('canvas-element')).to.exist;
 	});
-	it('warning shows', () => {
+	it('warning shows', async () => {
 		data.set(df1);
-		const { getByText } = render(sut);
-		const warning = getByText("Warning: Column column3 doesn't contain numbers!");
+		selectedColumns.set(['column1', 'column2', 'column3']);
+		const { getByTestId } = render(sut);
+		const warning = getByTestId('warning-column3');
 		expect(warning).to.exist;
 	});
 });

@@ -3,21 +3,16 @@
 	import { Chart, type ChartConfiguration } from 'chart.js/auto';
 	import { afterUpdate, onMount, onDestroy } from 'svelte';
 	import { setColor } from '$lib/utils/CanvasUtils';
-	import PngButton from '$lib/shared-components/PNGButton.svelte';
-	import JpgButton from '$lib/shared-components/JPGButton.svelte';
-	import { isNumber } from 'chart.js/helpers';
+	import WarningGenerator from '$lib/warning-generator/WarningGenerator.svelte';
+	import { selectedColumns, selectedValues } from '$lib/Store';
+	import Export from '$lib/graphs/GraphImageExport.svelte';
 
 	let canvas: HTMLCanvasElement;
 	let chart: Chart;
 
-	const column_names = $data.listColumns();
+	let x_axis = $selectedColumns[0];
+	let y_axis = $selectedValues[0];
 
-	let x_axis = column_names[0];
-	let y_axis = column_names[1];
-
-	// first element is warning for x_axis, second element is warning for y_axis
-	let warnings: string[] = ['', ''];
-	// setup chart after canvas is mounted
 	onMount(() => {
 		const plugin = {
 			id: 'customCanvasBackgroundColor',
@@ -35,7 +30,25 @@
 				plugins: {
 					// @ts-expect-error Needs a specific type for plugin
 					customCanvasBackgroundColor: {
-						color: 'lightgreen'
+						color: 'white'
+					},
+					title: {
+						display: true,
+						text: y_axis + ' x ' + x_axis
+					}
+				},
+				scales: {
+					x: {
+						title: {
+							display: true,
+							text: x_axis
+						}
+					},
+					y: {
+						title: {
+							display: true,
+							text: y_axis
+						}
 					}
 				}
 			},
@@ -47,23 +60,8 @@
 		chart = new Chart(canvas, cfg);
 	});
 
-	// called when x_axis or y_axis changes
+	// called when  x_axis or y_axis changes
 	afterUpdate(() => {
-		//check if first element is not a number
-		if (!isNumber($data.toArray(x_axis)[0])) {
-			warnings[0] = 'Warning: x_axis is not a number!';
-			chart.clear();
-			return;
-		} else {
-			warnings[0] = '';
-		}
-		if (!isNumber($data.toArray(y_axis)[0])) {
-			warnings[1] = 'Warning: y_axis is not a number!';
-			chart.clear();
-			return;
-		} else {
-			warnings[1] = '';
-		}
 		chart.data.labels = $data.toArray(x_axis);
 		chart.data.datasets = [
 			{
@@ -74,6 +72,32 @@
 				borderWidth: 1
 			}
 		];
+		chart.config.options = {
+			plugins: {
+				// @ts-expect-error Needs a specific type for plugin
+				customCanvasBackgroundColor: {
+					color: 'white'
+				},
+				title: {
+					display: true,
+					text: y_axis + ' x ' + x_axis
+				}
+			},
+			scales: {
+				x: {
+					title: {
+						display: true,
+						text: x_axis
+					}
+				},
+				y: {
+					title: {
+						display: true,
+						text: y_axis
+					}
+				}
+			}
+		};
 
 		chart.update();
 	});
@@ -83,29 +107,40 @@
 	});
 </script>
 
-<select data-testid="first-select" bind:value={x_axis}>
-	{#each column_names as column}
-		<option value={column}>{column}</option>
-	{/each}
-</select>
-<select data-testid="second-select" bind:value={y_axis}>
-	{#each column_names as column}
-		<option value={column}>{column}</option>
-	{/each}
-</select>
-
-<div data-testid="x-axis-warning">{warnings[0]}</div>
-<div data-testid="y-axis-warning">{warnings[1]}</div>
-
-<div>
-	<canvas data-testid="canvas-element" bind:this={canvas} />
+<WarningGenerator
+	needNumbers={true}
+	columnsAreLimited={false}
+	maxColumns={100}
+	valuesAreLimited={true}
+	maxValues={1}
+></WarningGenerator>
+<div class="flex flex-col items-center w-full">
+	<div class="mb-4 flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4">
+		<select
+			data-testid="first-select"
+			bind:value={x_axis}
+			class="p-2 border border-gray-300 rounded-md"
+		>
+			{#each $selectedColumns as column}
+				<option value={column}>{column}</option>
+			{/each}
+		</select>
+		<select
+			data-testid="second-select"
+			bind:value={y_axis}
+			class="p-2 border border-gray-300 rounded-md"
+		>
+			{#each $selectedValues as value}
+				<option {value}>{value}</option>
+			{/each}
+		</select>
+	</div>
+	<canvas data-testid="canvas-element" bind:this={canvas} class="mb-4 w-800" />
+	<Export {chart} />
 </div>
 
-<PngButton {chart} />
-<JpgButton {chart} />
-
 <style>
-	div > canvas {
+	.w-800 {
 		width: 800px;
 	}
 </style>
