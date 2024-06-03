@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { data } from '$lib/Store';
-	import { getNumericalColumnsAndMax } from './ColumnHelper';
+	import { getNumericalColumns } from './ColumnHelper';
 	import {
 		selectedColumns,
 		selectedValues,
@@ -12,7 +12,7 @@
 	} from '$lib/Store';
 
 	let columnNames = $data.listColumns();
-	let numericColumns = getNumericalColumnsAndMax(columnNames, $data.toCollection(true));
+	let numericColumns = getNumericalColumns(columnNames, $data.toCollection(true));
 	let currentlySelectedColumns: string[] = [];
 	let currentlySelectedValues: string[] = [];
 	let currentBinSizes: BinDictionary = {};
@@ -25,8 +25,7 @@
 	 */
 	$: availableForSelect = columnNames.filter(
 		(columnName) =>
-			!currentlySelectedColumns.includes(columnName) &&
-			numericColumns.map((n) => n[0]).includes(columnName)
+			!currentlySelectedColumns.includes(columnName) && numericColumns.includes(columnName)
 	);
 	/**
 	 * column names available for groupby: if not in selected values
@@ -42,6 +41,7 @@
 		$checkedMean = !$checkedMean;
 	}
 </script>
+
 <div class="flex justify-center">
 	<div>
 		<h3 class="mb-4 font-semibold text-gray-900 dark:text-white">Group by</h3>
@@ -61,9 +61,21 @@
 						/>
 						<label
 							for="groupby-checkbox-{column}"
-							class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+							class="w-1/2 py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
 							>{column}</label
 						>
+						{#if currentlySelectedColumns.includes(column) && numericColumns.includes(column)}
+							<label class="w-full py-3 ms-2 text-sm font-medium">
+								<input
+									type="number"
+									placeholder="Bin size"
+									bind:value={currentBinSizes[column]}
+									data-testid="number-bin-{column}"
+									name={column}
+									class="w-full border border-gray-300 rounded focus:outline-none focus:ring focus:border-blue-300 text-sm"
+								/>
+							</label>
+						{/if}
 					</div>
 				</li>
 			{/each}
@@ -130,40 +142,12 @@
 		</ul>
 	</div>
 	<div>
-		<h3 class="mb-4 font-semibold text-gray-900 dark:text-white">Binning</h3>
-		{#each numericColumns as column}
-			{#if currentlySelectedColumns.includes(column[0])}
-				<label class="block mb-4">
-					<span class="block text-gray-700 font-semibold mb-2">
-					{column[0]} Bin Size:
-					</span>
-					<input
-						type="number"
-						bind:value={currentBinSizes[column[0]]}
-						data-testid="number-bin-{column[0]}"
-						name={column[0]}
-						min="1"
-						max={Math.abs(column[1]) + 1}
-						class="block w-full p-2 border border-gray-300 rounded mb-2 focus:outline-none focus:ring focus:border-blue-300"
-					/>
-					<input
-						type="range"
-						bind:value={currentBinSizes[column[0]]}
-						data-testid="range-bin-{column[0]}"
-						name={column[0]}
-						min="1"
-						max={Math.abs(column[1]) + 1}
-						class="w-full"
-					/>
-				</label>
-			{/if}
-		{/each}
+		<button
+			class=" max-h-14 py-4 px-2 w-40 bg-darkblue rounded-lg hover:bg-blue-900 text-offwhite font-bold rounded-lg text-sm"
+			data-testid="checked-mean-button"
+			on:click={toggleMean}
+		>
+			{$checkedMean ? 'Disable mean' : 'Enable mean'}
+		</button>
 	</div>
-</div>
-
-
-<div>
-	<button data-testid="checked-mean-button" on:click={toggleMean}>
-		{$checkedMean ? 'Disable mean' : 'Enable mean'}
-	</button>
 </div>

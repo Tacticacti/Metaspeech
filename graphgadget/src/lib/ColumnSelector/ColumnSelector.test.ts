@@ -85,7 +85,6 @@ describe('binning tests', () => {
 		await user.click(column1Button);
 
 		expect(getByTestId('number-bin-column1')).to.exist;
-		expect(getByTestId('range-bin-column1')).to.exist;
 	});
 	it('shows column1, column2 bin, but not column3', async () => {
 		data.set(df1);
@@ -102,10 +101,6 @@ describe('binning tests', () => {
 		expect(getByTestId('number-bin-column1')).to.exist;
 		expect(getByTestId('number-bin-column2')).to.exist;
 		expect(queryByTestId('number-bin-column3')).not.toBeInTheDocument();
-
-		expect(getByTestId('range-bin-column1')).to.exist;
-		expect(getByTestId('range-bin-column2')).to.exist;
-		expect(queryByTestId('range-bin-column3')).not.toBeInTheDocument();
 	});
 	it('can type column1 bin', async () => {
 		data.set(df1);
