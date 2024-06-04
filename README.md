@@ -18,11 +18,11 @@ Graph Gadget is a website that visualizes, primarily but not limited to, speech 
 [![Tailwind css](https://img.shields.io/badge/Tailwind_CSS-06B6D4?logo=tailwindcss&labelColor=gray)](https://tailwindcss.com/)
 
 ## Contents
-1. [**⚡ Getting started**](#⚡-getting-started)
-2. [**🔗 Useful links**](#🔗-useful-links)
-3. [**🏗️ Project structure**](#🏗️-project-structure)
-4. [**🎨 Styling**](#🎨-styling)
-5. [**🧪 Testing**](#🧪-testing)
+1. [**⚡ Getting started**](#-getting-started)
+2. [**🔗 Useful links**](#-useful-links)
+3. [**🏗️ Project structure**](#%EF%B8%8F-project-structure)
+4. [**🎨 Styling**](#-styling)
+5. [**🧪 Testing**](#-testing)
 6. [**ℹ️ About us**](#ℹ️-about-us)
 
 ## ⚡ Getting started
