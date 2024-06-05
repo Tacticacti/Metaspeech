@@ -6,6 +6,7 @@ import sut from './+page.svelte';
 import '@testing-library/jest-dom';
 import { get } from 'svelte/store';
 import * as h from './page.help';
+import userEvent from '@testing-library/user-event';
 
 vi.mock('$lib/importer/Importer.svelte');
 vi.mock('$lib/filtering/filter.svelte');
@@ -137,5 +138,21 @@ describe('session storage', () => {
 		render(sut);
 
 		expect(JSON.stringify(get(data))).toEqual(JSON.stringify(df1));
+	});
+});
+
+describe('info icon hover', () => {
+	it('Bubble appears when hovering over info icon', async () => {
+		const user = userEvent.setup();
+		const df1 = new DataFrame([{ d: '1', e: '4' }]);
+		data.set(df1);
+		const r = render(sut);
+
+		await fireEvent.input(r.getByTestId('file-input'));
+		const icon: HTMLButtonElement = h.getInfoIcon(r)!;
+		await user.hover(icon);
+
+		const bubble = h.getInfoBubble(r);
+		expect(bubble).to.exist;
 	});
 });

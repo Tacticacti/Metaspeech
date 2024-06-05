@@ -47,7 +47,11 @@
 			{#each rows as row}
 				<TableBodyRow>
 					{#each row as cell}
-						<TableBodyCell tdClass="overflow-scroll scrollbar-hide scrollbar-hide::-webkit-scrollbar max-w-44" class="p-4 border" data-testid="{cell}-cell">
+						<TableBodyCell
+							tdClass="overflow-scroll scrollbar-hide scrollbar-hide::-webkit-scrollbar max-w-44"
+							class="p-4 border"
+							data-testid="{cell}-cell"
+						>
 							{cell}
 						</TableBodyCell>
 					{/each}

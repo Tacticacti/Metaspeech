@@ -9,8 +9,9 @@
 	import { loadSession } from '$lib/utils/SessionLoad';
 	import NavBar from '$lib/shared-components/NavBar.svelte';
 	import Footer from '$lib/shared-components/Footer.svelte';
-	import { Button, Select } from 'flowbite-svelte';
+	import { Button, Tooltip } from 'flowbite-svelte';
 	import nextImg from '$lib/static/next.png';
+	import info from '$lib/static/info.svg';
 
 	$: column_names = $data.listColumns() as string[];
 	$: missing_values = hasMissingValues($data);
@@ -110,20 +111,44 @@
 
 		<div>
 			{#if second_data}
-				<div class="flex justify-center w-full px-10">
-					<select class="max-w-36 mr-2 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500" bind:value={merge_col_1} data-testid="col1-select">
+				<div class="flex justify-center items-center w-full px-10">
+					<button
+						><img src={info} alt="info icon" class="h-12 mr-2" data-testid="info-icon" /></button
+					>
+					<Tooltip class="w-48 text-sm font-light bg-gray-600 opacity-90" data-testid="info-bubble">
+						Use the <span class="font-bold">Index merge</span> to attach columns in their index
+						order, if not select the column names from the datasets that you want to match and do a
+						<span class="font-bold">Keyex merge</span>.
+					</Tooltip>
+					<select
+						class="max-w-32 h-12 text-sm mr-2 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500"
+						bind:value={merge_col_1}
+						data-testid="col1-select"
+					>
 						{#each column_names as col}
 							<option value={col}>{col}</option>
 						{/each}
 					</select>
-					<select class="max-w-36 mr-2 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500" bind:value={merge_col_2} data-testid="col2-select">
+					<select
+						class="max-w-32 h-12 text-sm mr-2 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500"
+						bind:value={merge_col_2}
+						data-testid="col2-select"
+					>
 						{#each second_data.listColumns() as col}
 							<option value={col}>{col}</option>
 						{/each}
 					</select>
-					<Button class="bg-darkblue rounded-lg hover:bg-blue-900 mr-2" on:click={handleRowWiseMerge} data-testid="merge-index-button">Index merge</Button>
+					<Button
+						class="bg-white border border-gray-300 rounded-md font-bold text-darkblue h-12 text-sm hover:bg-gray-100 mr-2"
+						on:click={handleRowWiseMerge}
+						data-testid="merge-index-button">Index merge</Button
+					>
 					{#if merge_col_1 && merge_col_2}
-						<Button class="bg-darkblue rounded-lg hover:bg-blue-900" on:click={joinColumns} data-testid="merge-keyed-button">Keyed merge</Button>
+						<Button
+							class="bg-white border border-gray-300 rounded-md font-bold text-darkblue h-12 text-sm hover:bg-gray-100"
+							on:click={joinColumns}
+							data-testid="merge-keyed-button">Keyed merge</Button
+						>
 					{/if}
 				</div>
 			{/if}
