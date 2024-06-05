@@ -9,7 +9,7 @@
 	import { loadSession } from '$lib/utils/SessionLoad';
 	import NavBar from '$lib/shared-components/NavBar.svelte';
 	import Footer from '$lib/shared-components/Footer.svelte';
-	import { Button } from 'flowbite-svelte';
+	import { Button, Select } from 'flowbite-svelte';
 	import nextImg from '$lib/static/next.png';
 
 	$: column_names = $data.listColumns() as string[];
@@ -110,20 +110,22 @@
 
 		<div>
 			{#if second_data}
-				<button on:click={handleRowWiseMerge} data-testid="merge-index-button">Index merge</button>
-				<select bind:value={merge_col_1} data-testid="col1-select">
-					{#each column_names as col}
-						<option value={col}>{col}</option>
-					{/each}
-				</select>
-				<select bind:value={merge_col_2} data-testid="col2-select">
-					{#each second_data.listColumns() as col}
-						<option value={col}>{col}</option>
-					{/each}
-				</select>
-				{#if merge_col_1 && merge_col_2}
-					<button on:click={joinColumns} data-testid="merge-keyed-button">keyed merge</button>
-				{/if}
+				<div class="flex justify-center w-full px-10">
+					<Select class="max-w-36 mr-2" placeholder={"Select Column"} bind:value={merge_col_1} data-testid="col1-select">
+						{#each column_names as col}
+							<option value={col}>{col}</option>
+						{/each}
+					</Select>
+					<Select class="max-w-36 mr-2" placeholder={"Select Column"} bind:value={merge_col_2} data-testid="col2-select">
+						{#each second_data.listColumns() as col}
+							<option value={col}>{col}</option>
+						{/each}
+					</Select>
+					<Button class="bg-darkblue rounded-lg hover:bg-blue-900 mr-2" on:click={handleRowWiseMerge} data-testid="merge-index-button">Index merge</Button>
+					{#if merge_col_1 && merge_col_2}
+						<Button class="bg-darkblue rounded-lg hover:bg-blue-900" on:click={joinColumns} data-testid="merge-keyed-button">Keyed merge</Button>
+					{/if}
+				</div>
 			{/if}
 		</div>
 
