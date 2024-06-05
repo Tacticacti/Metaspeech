@@ -111,19 +111,19 @@
 		<div>
 			{#if second_data}
 				<div class="flex justify-center w-full px-10">
-					<Select class="max-w-36 mr-2" placeholder={"Select Column"} bind:value={merge_col_1} data-testid="col1-select">
+					<select class="max-w-36 mr-2 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500" bind:value={merge_col_1} data-testid="col1-select">
 						{#each column_names as col}
 							<option value={col}>{col}</option>
 						{/each}
-					</Select>
-					<Select class="max-w-36 mr-2" placeholder={"Select Column"} bind:value={merge_col_2} data-testid="col2-select">
+					</select>
+					<select class="max-w-36 mr-2 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500" bind:value={merge_col_2} data-testid="col2-select">
 						{#each second_data.listColumns() as col}
 							<option value={col}>{col}</option>
 						{/each}
-					</Select>
+					</select>
 					<Button class="bg-darkblue rounded-lg hover:bg-blue-900 mr-2" on:click={handleRowWiseMerge} data-testid="merge-index-button">Index merge</Button>
 					{#if merge_col_1 && merge_col_2}
-						<Button class="bg-darkblue rounded-lg hover:bg-blue-900" on:click={joinColumns} data-testid="merge-keyed-button">Keyed merge</Button>
+						<Button class="bg-darkblue rounded-lg hover:bg-blue-900" on:click={joinColumns} data-testid="merge-keyed-button">keyed merge</Button>
 					{/if}
 				</div>
 			{/if}
