@@ -70,7 +70,7 @@
 
 <main class="bg-offwhite max-w-full h-screen m-0 flex flex-col scrollbar-hide overflow-auto">
 	<NavBar currentPage={'modify'}></NavBar>
-	<div class="h-full flex flex-col justify-around pt-4">
+	<div class="h-full flex flex-col justify-around pt-4 mb-4">
 		<div class="flex justify-center pt-16">
 			{#if missing_values.length !== 0}
 				<span class="flex flex-col items-center">
@@ -123,14 +123,14 @@
 					</select>
 					<Button class="bg-darkblue rounded-lg hover:bg-blue-900 mr-2" on:click={handleRowWiseMerge} data-testid="merge-index-button">Index merge</Button>
 					{#if merge_col_1 && merge_col_2}
-						<Button class="bg-darkblue rounded-lg hover:bg-blue-900" on:click={joinColumns} data-testid="merge-keyed-button">keyed merge</Button>
+						<Button class="bg-darkblue rounded-lg hover:bg-blue-900" on:click={joinColumns} data-testid="merge-keyed-button">Keyed merge</Button>
 					{/if}
 				</div>
 			{/if}
 		</div>
 
 		<div class="flex items-center justify-center content-between h-[60%] px-24">
-			<div class="h-full w-full p-4">
+			<div class="h-full w-full p-4 pb-6">
 				<Table />
 			</div>
 			<div class="ml-10">
