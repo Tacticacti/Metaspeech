@@ -69,6 +69,7 @@
 								<input
 									type="number"
 									placeholder="Bin size"
+									min="1"
 									bind:value={currentBinSizes[column]}
 									data-testid="number-bin-{column}"
 									name={column}
