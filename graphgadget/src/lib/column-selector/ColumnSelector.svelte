@@ -46,7 +46,7 @@
 	<div class="pr-5">
 		<h3 class="mb-4 font-semibold text-gray-900 dark:text-white">Group by</h3>
 		<ul
-			class="w-48 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+			class="w-72 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white"
 		>
 			{#each availableForGroupby as column}
 				<li class="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-600">
@@ -85,7 +85,7 @@
 	<div>
 		<h3 class="mb-4 font-semibold text-gray-900 dark:text-white">Select</h3>
 		<ul
-			class="w-48 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+			class="w-72 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white"
 		>
 			{#each availableForSelect as column}
 				<li class="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-600">
