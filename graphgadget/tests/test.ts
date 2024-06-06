@@ -27,4 +27,15 @@ test.describe('Previous data page tests', () => {
 		await page.goto('/');
 		await helper.getPreviousData(page).click();
 	});
+
+	test('all important elements are visible', async ({ page }) => {
+		// page.once('dialog', dialog => {
+		// 	dialog.dismiss().catch(() => {});
+		// });
+		await expect(helper.getNoPreviousData(page)).toBeVisible();
+		await expect(helper.getClearData(page)).toBeVisible();
+		await expect(helper.getPrevDataIcon(page)).toBeVisible();
+		await expect(helper.getPrevDataHeading(page)).toBeVisible();
+		await expect(helper.getPrevDataBackArrow(page)).toBeVisible();
+	});
 });
