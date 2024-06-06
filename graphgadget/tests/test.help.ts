@@ -78,3 +78,14 @@ export function getDeleteButtons(page: Page): Locator {
 	//return page.getByRole('button', { name: 'X' })
 	return page.getByTestId('btn-delete-file');
 }
+
+/* Modify page elements */
+export function getFilterButton(page: Page): Locator {
+	return page.getByRole('button', { name: 'Filter icon Filter' });
+}
+
+
+
+export function getNextButton(page: Page): Locator {
+	return page.getByTestId('next-link');
+}
