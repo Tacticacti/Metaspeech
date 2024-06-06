@@ -84,8 +84,22 @@ export function getFilterButton(page: Page): Locator {
 	return page.getByRole('button', { name: 'Filter icon Filter' });
 }
 
-
-
 export function getNextButton(page: Page): Locator {
 	return page.getByTestId('next-link');
+}
+
+export function getColumnSelect(page: Page): Locator {
+	return page.getByTestId('column-select');
+}
+
+export function getTextFilterInput(page: Page): Locator {
+	return page.getByTestId('textfilter-input');
+}
+
+export function getRemoveMatchingButton(page: Page): Locator {
+	return page.getByTestId('remove-matching-button');
+}
+
+export function getRemoveNonMatchingButton(page: Page): Locator {
+	return page.getByTestId('remove-nonmatching-button');
 }
