@@ -12,7 +12,7 @@ test.describe('Initial page tests', () => {
 		const input = await page.$('input[type=file]');
 		expect(input).not.toBeNull;
 	});
-	
+
 	test('all important elements are visible', async ({ page }) => {
 		await expect(helper.getSelectData(page)).toBeVisible();
 		await expect(helper.getPreviousData(page)).toBeVisible();
@@ -206,7 +206,7 @@ test.describe('Previous data: imported multiple files', () => {
 		page.once('dialog', (dialog) => {
 			dialog.dismiss().catch(() => {});
 		});
-		
+
 		await helper.getClearData(page).click();
 
 		expect(helper.getListItems(page)).toHaveCount(2);
