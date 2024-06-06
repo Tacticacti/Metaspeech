@@ -118,7 +118,7 @@
 					<Tooltip class="w-48 text-sm font-light bg-gray-600 opacity-90" data-testid="info-bubble">
 						Use the <span class="font-bold">Index merge</span> to attach columns in their index
 						order, if not select the column names from the datasets that you want to match and do a
-						<span class="font-bold">Keyex merge</span>.
+						<span class="font-bold">Keyed merge</span>.
 					</Tooltip>
 					<select
 						class="max-w-32 h-12 text-sm mr-2 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500"
