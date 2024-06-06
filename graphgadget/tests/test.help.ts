@@ -14,6 +14,14 @@ export function getFooter(page: Page): Locator {
 	return page.locator('footer');
 }
 
+export function getErrorModal(page: Page): Locator {
+	return page.getByTestId('error-modal');
+}
+
+export function getCloseErrorModal(page: Page): Locator {
+	return page.getByTestId('close-button');
+}
+
 /* Initial page elements */
 
 export function getSelectData(page: Page): Locator {
