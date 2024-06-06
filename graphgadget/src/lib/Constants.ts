@@ -4,30 +4,25 @@ import BoxPlot from './graphs/boxplot/BoxPlot.svelte';
 import PieChart from './graphs/piechart/PieChart.svelte';
 import ScatterPlot from './graphs/scatterplot/ScatterPlot.svelte';
 import Table from './graphs/table/Table.svelte';
-import Histogram_img from '$assets/histogram.png';
-import BoxPlot_img from '$assets/boxplot.png';
-import PieChart_img from '$assets/piechart.png';
-import ScatterPlot_img from '$assets/scatterplot.png';
-import Table_img from '$assets/table.png';
+import Histogram_img from '$assets/graphs/histogram.png';
+import BoxPlot_img from '$assets/graphs/boxplot.png';
+import PieChart_img from '$assets/graphs/piechart.png';
+import ScatterPlot_img from '$assets/graphs/scatterplot.png';
+import Table_img from '$assets/graphs/table.png';
 
 /**
  * The name of the application.
  */
 export const APP_NAME = 'GraphGadget';
+
 /**
  * The copyright year.
  */
 export const COPYRIGHT_YEAR = 2024;
 
 /**
- * The absolute frequency string.
+ * The graphs that we support in the application.
  */
-export const ABSOLUTE_FREQUENCY: string = 'Absolute Frequency';
-/**
- * The relative frequency string.
- */
-export const RELATIVE_FREQUENCY: string = 'Relative Frequency';
-
 export const graphs: GraphMeta[] = [
 	{
 		title: 'Histogram',

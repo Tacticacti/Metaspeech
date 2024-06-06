@@ -3,9 +3,9 @@
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { Button, Tooltip } from 'flowbite-svelte';
-	import nextImg from '$assets/next.png';
-	import info from '$assets/info.svg';
-	import type { DataFrameLike } from '$lib/dataframe/DataFrame';
+	import nextImg from '$assets/icons/next.png';
+	import info from '$assets/icons/info.svg';
+	import type { DataFrameLike } from '$lib/Types';
 
 	/**
 	 * List of stored datasets

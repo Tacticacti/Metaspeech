@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { df } from '$lib/Store';
 	import type { DataFrameLike } from '$lib/Types';
-	import info from '$assets/info.svg';
+	import info from '$assets/icons/info.svg';
 	import { Tooltip, Button } from 'flowbite-svelte';
 
 	const columns = df.columns;

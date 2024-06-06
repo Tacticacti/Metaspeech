@@ -3,29 +3,29 @@
 	import { df } from '$lib/Store';
 	import { APP_NAME } from '$lib/Constants';
 	import { goto } from '$app/navigation';
-	import type { Bundle } from '$lib/Types';
+	import type { DataFile } from '$lib/Types';
 	import { Label, Checkbox } from 'flowbite-svelte';
 	import logo from '$assets/GraphGadgetHomeLogo.svg';
 
-	let storeData = false;
+	let shouldStoreData = false;
 
 	/**
 	 * Stores the data in the local storage
 	 * @param filename the name of the file to store
 	 */
-	function storeFile(bundle: Bundle) {
-		if (!storeData) return;
+	function storeFile(bundle: DataFile) {
+		if (!shouldStoreData) return;
 
 		var datasets = localStorage.getItem('datasets');
 		if (datasets === null) datasets = '[]';
 		var storedDatasets: string[] = JSON.parse(datasets);
 
-		if (!storedDatasets.includes(bundle.filename)) storedDatasets.push(bundle.filename);
+		if (!storedDatasets.includes(bundle.name)) storedDatasets.push(bundle.name);
 
 		localStorage.setItem('datasets', JSON.stringify(storedDatasets));
 
 		const json = JSON.stringify(bundle.data);
-		localStorage.setItem(bundle.filename, json);
+		localStorage.setItem(bundle.name, json);
 		sessionStorage.setItem('current-df', json);
 	}
 
@@ -34,7 +34,7 @@
 	 * Stores the data in the store and redirects to the modify page
 	 * @param event the event containing the data
 	 */
-	function handleInput(event: CustomEvent<Bundle>) {
+	function handleInput(event: CustomEvent<DataFile>) {
 		df.set(event.detail.data);
 		storeFile(event.detail);
 
@@ -61,6 +61,7 @@
 	<button
 		class="my-2 inline-block cursor-pointer rounded-lg border border-gray-300 bg-gray-100 px-4 py-2 text-lg font-bold text-gray-800 shadow-md transition-colors duration-300 ease-in-out hover:bg-gray-200 hover:text-blue-500"
 		on:click={() => goto('/previous')}
+		data-testid="previous-btn"
 	>
 		Previous Data
 	</button>
@@ -68,7 +69,7 @@
 
 <div class="mt-4 flex items-center justify-center text-center">
 	<Label class="flex items-center space-x-2">
-		<Checkbox id="store-data" bind:checked={storeData} />
+		<Checkbox id="store-data" bind:checked={shouldStoreData} />
 		<span>Keep session saved (client only)</span>
 	</Label>
 </div>

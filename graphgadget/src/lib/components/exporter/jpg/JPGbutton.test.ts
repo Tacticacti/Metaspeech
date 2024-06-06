@@ -5,7 +5,7 @@ import { type RenderResult } from '@testing-library/svelte';
 import userEvent from '@testing-library/user-event';
 
 describe('download', () => {
-	let page: RenderResult;
+	let page: RenderResult<sut>;
 	beforeEach(async () => {
 		page = render(sut);
 	});

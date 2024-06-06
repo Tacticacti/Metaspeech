@@ -1,4 +1,4 @@
-import type { DataFrameLike } from '$lib/dataframe/DataFrame';
+import type { DataFrameLike } from '$lib/Types';
 import { read, utils } from '@e965/xlsx';
 
 /**

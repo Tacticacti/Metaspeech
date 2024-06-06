@@ -1,8 +1,9 @@
 import { render, waitFor } from '@testing-library/svelte';
 import sut from './+page.svelte';
 import { describe, it, expect } from 'vitest';
-import { selected_graph } from '$lib/graphs/Store';
 import Histogram from '$lib/graphs/histogram/Histogram.svelte';
+
+
 
 describe('View', () => {
 	it('should render', () => {

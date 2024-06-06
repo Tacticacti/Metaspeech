@@ -6,9 +6,6 @@
 	 */
 	export let chart: Chart;
 
-	// for testing purposes
-	let isDownloadCalled = false;
-
 	/**
 	 * Download the canvas as a JPG image
 	 */
@@ -18,7 +15,6 @@
 		link.href = image;
 		link.download = 'graph_image.jpg';
 		link.click();
-		isDownloadCalled = true;
 	}
 </script>
 
@@ -30,7 +26,3 @@
 		JPG
 	</button>
 </div>
-
-{#if isDownloadCalled}
-	<div data-testid="download-function-called"></div>
-{/if}

@@ -3,7 +3,7 @@
 	import { df } from '$lib/Store';
 	import { afterUpdate } from 'svelte';
 	import { Button, Checkbox, Input, Select } from 'flowbite-svelte';
-	import filterImg from '$assets/filter.png';
+	import filterImg from '$assets/icons/filter.png';
 
 	const columns = df.columns;
 

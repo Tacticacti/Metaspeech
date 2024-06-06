@@ -1,11 +1,11 @@
 <script lang="ts">
-	import type { Bundle } from '$lib/Types';
+	import type { DataFile } from '$lib/Types';
 	import { createEventDispatcher } from 'svelte';
 	import { Parse } from '$components/importer/scripts/FileParser';
 	import type { DataFrameLike } from '$lib/dataframe/DataFrame';
 
 	const dispatch = createEventDispatcher<{
-		input: Bundle;
+		input: DataFile;
 	}>();
 
 	/**
@@ -22,7 +22,7 @@
 		const data: DataFrameLike = await Parse(file);
 		const bundle = {
 			data,
-			filename: file.name
+			name: file.name
 		};
 		dispatch('input', bundle);
 	}

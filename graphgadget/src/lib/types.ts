@@ -1,12 +1,6 @@
 import { type ComponentType, SvelteComponent } from 'svelte';
 
-/**
- * A bundle is a DataFrame with a filename.
- */
-export type Bundle = {
-	data: DataFrameLike;
-	filename: string;
-};
+// #region Errors
 
 /**
  * Error class for when a file is not supported by the application.
@@ -17,6 +11,22 @@ export class UnsupportedFileError extends Error {
 		this.name = 'UnsupportedFileError';
 	}
 }
+
+// #endregion
+
+/**
+ * A bundle is a DataFrame with a filename.
+ */
+export type DataFile = {
+	/**
+	 * The DataFrame contained in the file.
+	 */
+	data: DataFrameLike;
+	/**
+	 * The filename of the file.
+	 */
+	name: string;
+};
 
 export type GraphMeta = {
 	title: string;

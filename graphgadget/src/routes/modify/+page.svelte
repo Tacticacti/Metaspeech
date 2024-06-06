@@ -2,7 +2,7 @@
 	import { APP_NAME } from '$lib/Constants';
 	import Table from './Table.svelte';
 	import { Button } from 'flowbite-svelte';
-	import nextImg from '$assets/next.png';
+	import nextImg from '$assets/icons/next.png';
 	import MissingValues from './MissingValues.svelte';
 	import Filter from './Filter.svelte';
 	import Importer from '$lib/components/importer/Importer.svelte';
