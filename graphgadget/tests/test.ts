@@ -1,8 +1,30 @@
 import { test, expect } from '@playwright/test';
 
-test('should render', async ({ page }) => {
-	await page.goto('/');
-	//get file input
-	const input = await page.$('input[type=file]');
-	expect(input).not.toBeNull;
+import * as helper from './test.help';
+
+test.describe('Initial page tests', () => {
+	test.beforeEach(async ({ page }) => {
+		await page.goto('/');
+	});
+
+	test('file input not null', async ({ page }) => {
+		//get file input
+		const input = await page.$('input[type=file]');
+		expect(input).not.toBeNull;
+	});
+	test('all important elements are visible', async ({ page }) => {
+		await expect(helper.getSelectData(page)).toBeVisible();
+		await expect(helper.getPreviousData(page)).toBeVisible();
+		await expect(helper.getStoreClientData(page)).toBeVisible();
+		await expect(helper.getLogo(page)).toBeVisible();
+		await expect(helper.getNavBar(page)).toBeVisible();
+		await expect(helper.getFooter(page)).toBeVisible();
+	});
+});
+
+test.describe('Previous data page tests', () => {
+	test.beforeEach(async ({ page }) => {
+		await page.goto('/');
+		await helper.getPreviousData(page).click();
+	});
 });
