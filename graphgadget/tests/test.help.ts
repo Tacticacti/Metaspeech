@@ -47,3 +47,7 @@ export function getPrevDataHeading(page: Page): Locator {
 export function getPrevDataBackArrow(page: Page): Locator {
 	return page.getByRole('button', { name: 'go back arrow' });
 }
+
+export function getPrevDataInfoBuble(page: Page): Locator {
+	return page.getByTestId('info-bubble');
+}
