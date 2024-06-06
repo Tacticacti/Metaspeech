@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type {  Bundle } from '$lib/Types';
+	import type { Bundle } from '$lib/Types';
 	import { createEventDispatcher } from 'svelte';
 	import { Parse } from '$components/importer/scripts/FileParser';
 	import type { DataFrameLike } from '$lib/dataframe/DataFrame';

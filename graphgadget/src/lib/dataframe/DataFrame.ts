@@ -1,5 +1,14 @@
 import { type Readable, get, type Writable, writable } from 'svelte/store';
-import type { Grouper, Aggregator } from '$lib/dataframe/Grouping';
+import type {
+	GroupBy,
+	DataType,
+	Column,
+	DataFrameLike,
+	DataTypeString,
+	Grouper,
+	GroupedDataFrame,
+	Group
+} from '$lib/Types';
 
 export class DataFrame {
 	/**
@@ -73,28 +82,37 @@ export class DataFrame {
 	 * @param select A list of functions that take a bucket of rows and return the aggregated value.
 	 * @param includeGroupColumn Whether to include the 'groups' column in the new DataFrame, consisting of an array of the generated keys by the groupers (json).
 	 */
-	groupBy(groupBy: Grouper[], select: Aggregator[], includeGroupColumn: boolean = false) {
+	groupBy(): GroupedDataFrame {
 		const rows = get(this.rows);
+		const columns = get(this.columns);
 
-		if (includeGroupColumn) select.unshift(GroupKey(groupBy));
+		const groupers = columns
+			.map((c, i) => (c.groupBy ? toGrouper(c.groupBy, i) : undefined))
+			.filter((g) => g !== undefined) as Grouper[];
+		const select = columns.findIndex((c) => c.aggregate);
 
 		// make buckets for each group
-		const map = new Map<string, DataType[][]>();
+		const map = new Map<string, DataType[]>();
 		for (const row of rows) {
-			const key = JSON.stringify(groupBy.map((fn) => fn(row)));
-			map.has(key) ? map.get(key)!.push(row) : map.set(key, [row]);
+			const key = JSON.stringify(groupers.map((fn) => fn(row)));
+			if (map.has(key)) {
+				const arr = map.get(key) as DataType[];
+				arr.push(row[select]);
+			} else {
+				map.set(key, [row[select]]);
+			}
 		}
 
-		// aggregate each bucket to make new rows
-		const newRows = Array.from(map.values(), (bucket) => select.map(({ fn }) => fn(bucket)));
-		const newColumnMetas = getColumnMetas(
-			select.map(({ name }) => name),
-			newRows
-		);
+		const groups = Array.from(map.entries()).map(([key, arr]) => {
+			const keys = JSON.parse(key);
+			return { keys, values: arr };
+		}) as Group[];
 
-		// set new rows and columnMetas
-		this._rows.set(newRows);
-		this._columnMetas.set(newColumnMetas);
+		return {
+			groups,
+			groupedColumns: columns.filter((c) => c.groupBy !== undefined),
+			aggregateColumn: columns[select]
+		};
 	}
 
 	/**
@@ -175,32 +193,17 @@ export class DataFrame {
 		this._columnMetas.set(cols);
 		this._rows.set(rows);
 	}
+
+	/**
+	 * Check if the DataFrame is empty.
+	 * @returns Whether the DataFrame is empty.
+	 */
+	isEmpty() {
+		return get(this.rows).length === 0;
+	}
 }
 
 // #region df types
-
-/**
- * A type that represents a data type that can be stored in a DataFrame.
- */
-export type DataType = string | number | undefined;
-type DataTypeString = 'string' | 'number';
-
-/**
- * A type that represents a column in a DataFrame.
- */
-export type Column = {
-	name: string;
-	type: DataTypeString;
-	hasMissing: boolean;
-};
-
-/**
- * A type that represents a barebones DataFrame.
- */
-export type DataFrameLike = {
-	columns: Column[];
-	rows: DataType[][];
-};
 
 /**
  * Check if a value is numeric.
@@ -221,22 +224,6 @@ function isUndefinedLike(value: unknown): boolean {
 	if (value === null) return true;
 	if (typeof value === 'string' && value.trim() === '') return true;
 	return false;
-}
-
-// #endregion
-
-// #region Grouping & Aggregating
-
-/**
- * A type that represents a function that takes a bucket of rows and returns the key associated with the group.
- * @param groupers A list of functions that take a row and return a string key.
- * @returns The key associated with the group.
- */
-function GroupKey(groupers: Grouper[]): Aggregator {
-	return {
-		name: 'groups',
-		fn: (bucket) => JSON.stringify(groupers.map((fn) => fn(bucket[0])))
-	};
 }
 
 // #endregion
@@ -265,9 +252,12 @@ function selectIndex<T>(array: T[][], index: number): T[] {
  */
 function toDataFrameLike(cols: string[], rows: unknown[][]): DataFrameLike {
 	const df: DataFrameLike = { columns: [], rows: [] };
-	
+
 	df.columns = getColumnMetas(cols, rows);
-	df.rows = cast2DArray(df.columns.map((c) => c.type), rows);
+	df.rows = cast2DArray(
+		df.columns.map((c) => c.type),
+		rows
+	);
 
 	return df;
 }
@@ -278,11 +268,11 @@ function getColumnMetas(cols: string[], rows: unknown[][]): Column[] {
 	for (let i = 0; i < cols.length; i++) {
 		const col = selectIndex(rows, i);
 
-		const meta: Column = { 
-			name: cols[i], 
+		const meta: Column = {
+			name: cols[i],
 			type: getArraySubType(col),
-			hasMissing: hasMissingValues(col, rows.length) 
-		}; 
+			hasMissing: hasMissingValues(col, rows.length)
+		};
 
 		columnMetas.push(meta);
 	}
@@ -331,12 +321,12 @@ function cast2DArray(types: DataTypeString[], arr: unknown[][]): DataType[][] {
  * @returns The casted cell.
  */
 function castCell(type: DataTypeString, cell: unknown): DataType {
-	if(isUndefinedLike(cell)) return undefined;
+	if (isUndefinedLike(cell)) return undefined;
 
 	if (type === 'number') {
 		return Number(cell);
 	}
-	
+
 	return cell!.toString();
 }
 
@@ -376,7 +366,7 @@ export function fromText(
 	rowDelimiter: string = '\n'
 ): DataFrameLike {
 	const rows = text.split(rowDelimiter).map((row) => row.split(columnDelimiter));
-	const columns = rows.shift()!.map(c => c?.toString() ?? '');
+	const columns = rows.shift()!.map((c) => c?.toString() ?? '');
 
 	const lastRow = rows[rows.length - 1];
 	if (lastRow.length === 1 && lastRow[0] === '') {
@@ -397,9 +387,22 @@ export function fromObjects(collection: { [i: string]: unknown }[]): DataFrameLi
 	}
 
 	const columns = Object.keys(collection[0]);
-	const rows = collection.map((row) => columns.map(c => row[c]));
+	const rows = collection.map((row) => columns.map((c) => row[c]));
 
 	return toDataFrameLike(columns, rows);
 }
 
 // #endregion
+
+function toGrouper(value: GroupBy, index: number): Grouper {
+	switch (value.type) {
+		case 'specific':
+			return (row) => row[index];
+		case 'binned':
+			return (row) => {
+				const number = row[index] as number;
+				const binIndex = Math.floor(number / value.size);
+				return binIndex;
+			};
+	}
+}

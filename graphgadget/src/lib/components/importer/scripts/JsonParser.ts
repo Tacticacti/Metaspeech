@@ -1,4 +1,4 @@
-import { fromObjects, type DataFrameLike } from "$lib/dataframe/DataFrame";
+import { fromObjects, type DataFrameLike } from '$lib/dataframe/DataFrame';
 
 /**
  * Parses a JSON file into a DataFrame. It accepts both arrays and objects.
@@ -26,13 +26,11 @@ export function ParseJson(file: File): Promise<DataFrameLike> {
 					});
 				}
 
-
 				if (!Array.isArray(json)) {
 					throw new SyntaxError('JSON data is unrecognized format. Expected array or object.');
 				}
 
 				resolve(fromObjects(json));
-				
 			} catch (error) {
 				reject(error);
 			}

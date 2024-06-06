@@ -23,7 +23,8 @@ const config = {
 		alias: {
 			$components: './src/lib/components',
 			$assets: './src/lib/assets',
-		},
+			$static: './static'
+		}
 	}
 };
 

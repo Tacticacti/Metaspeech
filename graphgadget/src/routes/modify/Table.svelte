@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { df } from '$lib/Store';
-	import type { Column } from '$lib/dataframe/DataFrame';
+	import type { Column } from '$lib/Store';
 	import {
 		Table,
 		TableBody,
@@ -22,12 +22,7 @@
 		const input = event.target as HTMLInputElement;
 		const value = input.value.trim();
 
-		if (
-			value === column.name ||
-			value === '' ||
-			value === null ||
-			value === undefined
-		) {
+		if (value === column.name || value === '' || value === null || value === undefined) {
 			// Reset the input value
 			input.value = column.name;
 			return;
@@ -44,14 +39,14 @@
 			<TableHeadCell class="!p-0">
 				<div class="flex max-w-48">
 					<input
-						class="bg-darkblue overflow-x-scroll hover:bg-lightblue text-offwhite rounded-l-md"
+						class="overflow-x-scroll rounded-l-md bg-darkblue text-offwhite hover:bg-lightblue"
 						type="text"
 						on:change={(e) => columnValueChanged(e, header)}
 						value={header.name}
 						data-testid="header-{i}-input"
 					/>
 					<button
-						class="px-4 bg-red-400 text-offwhite hover:bg-red-500 rounded-r-md"
+						class="rounded-r-md bg-red-400 px-4 text-offwhite hover:bg-red-500"
 						on:click={() => df.deleteColumn(i)}
 						data-testid="header-{i}-delete"
 					>
@@ -65,7 +60,7 @@
 		{#each $rows as row}
 			<TableBodyRow>
 				{#each row as cell}
-					<TableBodyCell class="p-4 border" data-testid="{cell}-cell">
+					<TableBodyCell class="border p-4" data-testid="{cell}-cell">
 						{cell?.toString() ?? ''}
 					</TableBodyCell>
 				{/each}

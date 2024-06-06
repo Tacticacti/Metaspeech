@@ -38,7 +38,7 @@ export function parseXlS(file: File): Promise<DataFrameLike> {
 					// Create a DataFrame from the JSON, slicing from the second element onward and using the first row as headers
 					console.log(json);
 					resolve({
-						columns: json.slice(1) as string[], 
+						columns: json.slice(1) as string[],
 						rows: json[0]
 					});
 				} else {

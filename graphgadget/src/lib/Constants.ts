@@ -1,3 +1,5 @@
+import type { Graph, GraphMeta } from '$lib/Types';
+
 /**
  * The name of the application.
  */
@@ -15,3 +17,5 @@ export const ABSOLUTE_FREQUENCY: string = 'Absolute Frequency';
  * The relative frequency string.
  */
 export const RELATIVE_FREQUENCY: string = 'Relative Frequency';
+
+export const graphs: GraphMeta[] = [];

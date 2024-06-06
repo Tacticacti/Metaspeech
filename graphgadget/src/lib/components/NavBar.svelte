@@ -27,8 +27,8 @@
 			path: '/view'
 		}
 	];
-	
-	function getProgress(route: string): string {	
+
+	function getProgress(route: string): string {
 		if (route === '/') {
 			return '8%';
 		} else if (route === '/modify') {
@@ -38,18 +38,25 @@
 		} else if (route === '/view') {
 			return '88%';
 		}
-		
+
 		return '0%';
+	}
+
+	function getPageName(route: string): string {
+		const page = pages.find((p) => p.path === route);
+		return page ? page.name + ' - ' + APP_NAME : APP_NAME;
 	}
 </script>
 
-{#if pages.map(p => p.path).includes(currentPage)}
-	<div class="relative nav-m0 w-full">
-		<Navbar
-			class="bg-darkblue grid grid-cols-1 text-blue-200 py-2.5 z-20 border-b"
-		>
+<svelte:head>
+	<title>{getPageName(currentPage)}</title>
+</svelte:head>
+
+{#if pages.map((p) => p.path).includes(currentPage)}
+	<div class="nav-m0 relative w-full">
+		<Navbar class="z-20 grid grid-cols-1 border-b bg-darkblue py-2.5 text-blue-200">
 			<NavBrand href="/">
-				<img src={logo} class="me-3 h-6 sm:h-9 pl-0" alt="GG logo" />
+				<img src={logo} class="me-3 h-6 pl-0 sm:h-9" alt="GG logo" />
 				<span class="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
 					{APP_NAME}
 				</span>
@@ -62,16 +69,17 @@
 					{#each pages as page}
 						<NavLi
 							class={currentPage === page.path
-								? 'text-blue-200 hover:text-darkblue md:text-offwhite md:hover:text-offwhite font-bold'
+								? 'font-bold text-blue-200 hover:text-darkblue md:text-offwhite md:hover:text-offwhite'
 								: 'text-blue-200 hover:text-darkblue md:text-blue-400 md:hover:text-blue-50'}
-							href={page.path}>
+							href={page.path}
+						>
 							{page.name.toUpperCase()}
 						</NavLi>
 					{/each}
 				</NavUl>
 				<!-- progress bar below the nav bar options -->
-				<div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-					<div class="bg-blue-400 h-2.5 rounded-full" style="width: {getProgress(currentPage)}" />
+				<div class="h-2.5 w-full rounded-full bg-gray-200 dark:bg-gray-700">
+					<div class="h-2.5 rounded-full bg-blue-400" style="width: {getProgress(currentPage)}" />
 				</div>
 			</div>
 			<div class="ml-44" />

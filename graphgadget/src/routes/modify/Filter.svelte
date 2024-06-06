@@ -6,7 +6,7 @@
 	import filterImg from '$assets/filter.png';
 
 	const columns = df.columns;
-	
+
 	let isOpen: boolean = false;
 	let selectedIndex = 0;
 	let filterValue: string = '';
@@ -17,7 +17,6 @@
 	$: selectedColumn = $columns[selectedIndex];
 	$: columnNames = $columns.map((col) => col.name);
 	$: useRange = selectedColumn.type === 'number' && useRangeChecked;
-	
 
 	afterUpdate(() => {
 		// pre-select a column
@@ -32,7 +31,7 @@
 	 */
 	function filter(useMatching: boolean) {
 		df.filter((row) => {
-			const value = row[selectedIndex];		
+			const value = row[selectedIndex];
 			return matches(value) !== useMatching;
 		});
 	}
@@ -43,7 +42,7 @@
 	 * @returns true if the value matches the filter value, false otherwise
 	 */
 	function matches(value: DataType): boolean {
-		if(useRange) {
+		if (useRange) {
 			const num = value as number;
 			return num >= min && num <= max;
 		}
@@ -53,17 +52,17 @@
 </script>
 
 <Button
-	class="max-w-32 max-h-14 py-4 px-12 font-bold rounded-lg bg-darkblue text-offwhite hover:bg-blue-900"
+	class="max-h-14 max-w-32 rounded-lg bg-darkblue px-12 py-4 font-bold text-offwhite hover:bg-blue-900"
 	on:click={() => (isOpen = !isOpen)}
 >
-	<img src={filterImg} class=" invert w-8 h-8 mr-4" alt="Filter icon" />
+	<img src={filterImg} class=" mr-4 h-8 w-8 invert" alt="Filter icon" />
 	Filter
 </Button>
 
 {#if isOpen}
-	<div class="flex justify-center flex-wrap" data-testid="filter-window">
-		<Select class="max-w-28 mr-2" bind:value={selectedColumn} data-testid="column-select">
-			{#each $columns.map(c => c.name) as col}
+	<div class="flex flex-wrap justify-center" data-testid="filter-window">
+		<Select class="mr-2 max-w-28" bind:value={selectedColumn} data-testid="column-select">
+			{#each $columns.map((c) => c.name) as col}
 				<option value={col}>{col}</option>
 			{/each}
 		</Select>
@@ -74,9 +73,9 @@
 		{/if}
 
 		{#if useRange}
-			<div class="flex justify-center mr-5">
+			<div class="mr-5 flex justify-center">
 				<Input
-					class="max-w-16 mr-1"
+					class="mr-1 max-w-16"
 					type="number"
 					placeholder="min"
 					bind:value={min}
@@ -92,7 +91,7 @@
 			</div>
 		{:else}
 			<Input
-				class="max-w-28 mr-2"
+				class="mr-2 max-w-28"
 				type="text"
 				placeholder="Value to filter"
 				bind:value={filterValue}
@@ -100,10 +99,10 @@
 			/>
 		{/if}
 
-		<div class="flex justify-center flex-wrap">
+		<div class="flex flex-wrap justify-center">
 			<Button
 				color="light"
-				class="px-5 py-3 mr-2 rounded-md font-extrabold text-darkblue"
+				class="mr-2 rounded-md px-5 py-3 font-extrabold text-darkblue"
 				on:click={() => filter(true)}
 				data-testid="remove-matching-button"
 			>
@@ -111,7 +110,7 @@
 			</Button>
 			<Button
 				color="light"
-				class="px-5 py-3 rounded-md font-extrabold text-darkblue"
+				class="rounded-md px-5 py-3 font-extrabold text-darkblue"
 				on:click={() => filter(false)}
 				data-testid="remove-nonmatching-button"
 			>
