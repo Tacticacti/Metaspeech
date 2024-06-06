@@ -1,5 +1,4 @@
 import { test, expect } from '@playwright/test';
-import { join } from 'path';
 
 import * as helper from './test.help';
 
@@ -98,7 +97,7 @@ test.describe('Previous data: imported a file but did not store it', () => {
 			name: 'example.tsv',
 			mimeType: 'text/tsv',
 			buffer: Buffer.from(tsvData)
-		}); 
+		});
 		await helper.getNavHome(page).click();
 
 		await helper.getPreviousData(page).click();
@@ -137,10 +136,10 @@ test.describe('Previous data: imported multiple files', () => {
 				name: `example${i}.tsv`,
 				mimeType: 'text/tsv',
 				buffer: Buffer.from(tsvData)
-			}); 
+			});
 			await helper.getNavHome(page).click();
 		}
-		
+
 		await helper.getPreviousData(page).click();
 
 		await expect(page).toHaveURL('/previous');
@@ -154,14 +153,32 @@ test.describe('Previous data: imported multiple files', () => {
 
 		await expect(helper.getPrevDataList(page)).toBeVisible();
 
-		const lis = page.getByRole("listitem");
-		
 		// 2 list items
-		expect(lis.all.length).toBe(2);
-		expect(lis).toHaveValues(["example1.tsv", "example3.tsv"]);
+		expect(helper.getListItems(page)).toHaveCount(2);
+		// 2 delete btns
+		expect(helper.getDeleteButtons(page)).toHaveCount(2);
+
+		await expect(helper.getPrevFileButton(page, 'example1.tsv')).toBeVisible();
+		await expect(helper.getPrevFileButton(page, 'example3.tsv')).toBeVisible();
+		await expect(helper.getPrevFileButton(page, 'example2.tsv')).not.toBeVisible();
 
 		// not visible
 		await expect(helper.getNoPreviousData(page)).not.toBeVisible();
 		await expect(helper.getPrevDataInfoBuble(page)).not.toBeVisible();
+	});
+
+	test('delete one of them, click the other', async ({ page }) => {
+		await helper.getDeleteButtons(page).nth(0).click();
+
+		expect(helper.getListItems(page)).toHaveCount(1);
+		expect(helper.getDeleteButtons(page)).toHaveCount(1);
+
+		await expect(helper.getPrevFileButton(page, 'example3.tsv')).toBeVisible();
+		await expect(helper.getPrevFileButton(page, 'example1.tsv')).not.toBeVisible();
+		await expect(helper.getPrevFileButton(page, 'example2.tsv')).not.toBeVisible();
+
+		await helper.getPrevFileButton(page, 'example3.tsv').click();
+
+		await expect(page).toHaveURL('/modify');
 	});
 });

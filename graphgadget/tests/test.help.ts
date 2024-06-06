@@ -65,3 +65,16 @@ export function getPrevDataInfoBuble(page: Page): Locator {
 export function getPrevDataList(page: Page): Locator {
 	return page.getByTestId('prev-data-list');
 }
+
+export function getListItems(page: Page): Locator {
+	return page.getByRole('listitem');
+}
+
+export function getPrevFileButton(page: Page, file: string) {
+	return page.getByRole('button', { name: file });
+}
+
+export function getDeleteButtons(page: Page): Locator {
+	//return page.getByRole('button', { name: 'X' })
+	return page.getByTestId('btn-delete-file');
+}
