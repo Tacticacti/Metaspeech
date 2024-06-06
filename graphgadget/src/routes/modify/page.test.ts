@@ -155,4 +155,13 @@ describe('info icon hover', () => {
 		const bubble = h.getInfoBubble(r);
 		expect(bubble).to.exist;
 	});
+
+	it('Bubble not there if not hovering over icon', () => {
+		const df1 = new DataFrame([{ d: '1', e: '4' }]);
+		data.set(df1);
+		const r = render(sut);
+
+		const bubble = h.getInfoBubble(r);
+		expect(bubble).not.to.exist;
+	});
 });
