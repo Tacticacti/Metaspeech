@@ -2,7 +2,6 @@
 	import { data } from '$lib/Store';
 	import DataFrame from 'dataframe-js';
 	import { onMount } from 'svelte';
-	// @ts-expect-error Ill curse daily ts until this is fixed
 	import { goto } from '$app/navigation';
 	import { Button, Tooltip } from 'flowbite-svelte';
 	import Footer from '$lib/shared-components/Footer.svelte';
