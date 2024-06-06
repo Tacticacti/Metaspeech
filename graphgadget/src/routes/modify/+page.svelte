@@ -115,7 +115,11 @@
 					<button
 						><img src={info} alt="info icon" class="h-12 mr-2" data-testid="info-icon" /></button
 					>
-					<Tooltip class="w-48 text-sm font-light bg-gray-600 opacity-90" data-testid="info-bubble">
+					<Tooltip
+						placement="top"
+						class="w-48 text-sm font-light bg-gray-600 opacity-90 z-20"
+						data-testid="info-bubble"
+					>
 						Use the <span class="font-bold">Index merge</span> to attach columns in their index
 						order, if not select the column names from the datasets that you want to match and do a
 						<span class="font-bold">Keyed merge</span>.
