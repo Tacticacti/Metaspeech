@@ -1,5 +1,19 @@
 import { type Locator, type Page } from '@playwright/test';
 
+/* Common elements (layout) */
+
+export function getNavBar(page: Page): Locator {
+	return page.getByRole('navigation');
+}
+
+export function getNavHome(page: Page): Locator {
+	return page.getByRole('link', { name: 'HOME' });
+}
+
+export function getFooter(page: Page): Locator {
+	return page.locator('footer');
+}
+
 /* Initial page elements */
 
 export function getSelectData(page: Page): Locator {
@@ -18,12 +32,8 @@ export function getLogo(page: Page): Locator {
 	return page.getByRole('img', { name: 'Logo', exact: true });
 }
 
-export function getNavBar(page: Page): Locator {
-	return page.getByRole('navigation');
-}
-
-export function getFooter(page: Page): Locator {
-	return page.locator('footer');
+export function getImporterInput(page: Page): Locator {
+	return page.getByTestId('input');
 }
 
 /* Previous page elements */
@@ -50,4 +60,8 @@ export function getPrevDataBackArrow(page: Page): Locator {
 
 export function getPrevDataInfoBuble(page: Page): Locator {
 	return page.getByTestId('info-bubble');
+}
+
+export function getPrevDataList(page: Page): Locator {
+	return page.getByTestId('prev-data-list');
 }

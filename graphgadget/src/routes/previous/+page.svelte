@@ -111,7 +111,7 @@
 
 			{#if storedDatasets.length > 0}
 				<ul
-					class="max-w-xl max-h-[60vh] overflow-y-auto font-medium w-full text-lg leading-none bg-darkblue border-blue-200 divide-y divide-blue-200 rounded-md hover:cursor-pointer"
+					data-testid="prev-data-list" class="max-w-xl max-h-[60vh] overflow-y-auto font-medium w-full text-lg leading-none bg-darkblue border-blue-200 divide-y divide-blue-200 rounded-md hover:cursor-pointer"
 				>
 					{#each storedDatasets as dataset}
 						<li
