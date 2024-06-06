@@ -29,22 +29,21 @@ export function getFooter(page: Page): Locator {
 /* Previous page elements */
 
 export function getNoPreviousData(page: Page): Locator {
-    return page.getByText('No previous data available.');
+	return page.getByText('No previous data available.');
 }
 
-
 export function getClearData(page: Page): Locator {
-    return page.getByRole('button', { name: 'Clear Data' });
+	return page.getByRole('button', { name: 'Clear Data' });
 }
 
 export function getPrevDataIcon(page: Page): Locator {
-    return page.getByRole('button', { name: 'info icon' });
+	return page.getByRole('button', { name: 'info icon' });
 }
 
 export function getPrevDataHeading(page: Page): Locator {
-    return page.getByRole('heading', { name: 'Previous Data' });
+	return page.getByRole('heading', { name: 'Previous Data' });
 }
 
 export function getPrevDataBackArrow(page: Page): Locator {
-    return page.getByRole('button', { name: 'go back arrow' });
+	return page.getByRole('button', { name: 'go back arrow' });
 }
