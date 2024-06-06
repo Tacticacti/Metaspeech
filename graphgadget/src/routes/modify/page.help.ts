@@ -28,3 +28,11 @@ export function getRemoveMissingButton(r: RenderResult<sut>): HTMLButtonElement 
 export function getNextLink(r: RenderResult<sut>): HTMLLinkElement | null {
 	return r.queryByTestId('next-link') as HTMLLinkElement | null;
 }
+
+export function getInfoIcon(r: RenderResult<sut>): HTMLButtonElement | null {
+	return r.queryByTestId('info-icon') as HTMLButtonElement | null;
+}
+
+export function getInfoBubble(r: RenderResult<sut>): HTMLButtonElement | null {
+	return r.queryByTestId('info-bubble') as HTMLButtonElement | null;
+}

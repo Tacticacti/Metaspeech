@@ -9,8 +9,9 @@
 	import { loadSession } from '$lib/utils/SessionLoad';
 	import NavBar from '$lib/shared-components/NavBar.svelte';
 	import Footer from '$lib/shared-components/Footer.svelte';
-	import { Button } from 'flowbite-svelte';
+	import { Button, Tooltip } from 'flowbite-svelte';
 	import nextImg from '$lib/static/next.png';
+	import info from '$lib/static/info.svg';
 
 	$: column_names = $data.listColumns() as string[];
 	$: missing_values = hasMissingValues($data);
@@ -70,7 +71,7 @@
 
 <main class="bg-offwhite max-w-full h-screen m-0 flex flex-col scrollbar-hide overflow-auto">
 	<NavBar currentPage={'modify'}></NavBar>
-	<div class="h-full flex flex-col justify-around pt-4">
+	<div class="h-full flex flex-col justify-around pt-4 mb-4">
 		<div class="flex justify-center pt-16">
 			{#if missing_values.length !== 0}
 				<span class="flex flex-col items-center">
@@ -110,25 +111,55 @@
 
 		<div>
 			{#if second_data}
-				<button on:click={handleRowWiseMerge} data-testid="merge-index-button">Index merge</button>
-				<select bind:value={merge_col_1} data-testid="col1-select">
-					{#each column_names as col}
-						<option value={col}>{col}</option>
-					{/each}
-				</select>
-				<select bind:value={merge_col_2} data-testid="col2-select">
-					{#each second_data.listColumns() as col}
-						<option value={col}>{col}</option>
-					{/each}
-				</select>
-				{#if merge_col_1 && merge_col_2}
-					<button on:click={joinColumns} data-testid="merge-keyed-button">keyed merge</button>
-				{/if}
+				<div class="flex justify-center items-center w-full px-10">
+					<button
+						><img src={info} alt="info icon" class="h-12 mr-2" data-testid="info-icon" /></button
+					>
+					<Tooltip
+						placement="top"
+						class="w-48 text-sm font-light bg-gray-600 opacity-90 z-20"
+						data-testid="info-bubble"
+					>
+						Use the <span class="font-bold">Index merge</span> to attach columns in their index
+						order, if not select the column names from the datasets that you want to match and do a
+						<span class="font-bold">Keyed merge</span>.
+					</Tooltip>
+					<select
+						class="max-w-32 h-12 text-sm mr-2 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500"
+						bind:value={merge_col_1}
+						data-testid="col1-select"
+					>
+						{#each column_names as col}
+							<option value={col}>{col}</option>
+						{/each}
+					</select>
+					<select
+						class="max-w-32 h-12 text-sm mr-2 text-gray-900 bg-gray-50 border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500"
+						bind:value={merge_col_2}
+						data-testid="col2-select"
+					>
+						{#each second_data.listColumns() as col}
+							<option value={col}>{col}</option>
+						{/each}
+					</select>
+					<Button
+						class="bg-white border border-gray-300 rounded-md font-bold text-darkblue h-12 text-sm hover:bg-gray-100 mr-2"
+						on:click={handleRowWiseMerge}
+						data-testid="merge-index-button">Index merge</Button
+					>
+					{#if merge_col_1 && merge_col_2}
+						<Button
+							class="bg-white border border-gray-300 rounded-md font-bold text-darkblue h-12 text-sm hover:bg-gray-100"
+							on:click={joinColumns}
+							data-testid="merge-keyed-button">Keyed merge</Button
+						>
+					{/if}
+				</div>
 			{/if}
 		</div>
 
 		<div class="flex items-center justify-center content-between h-[60%] px-24">
-			<div class="h-full w-full p-4">
+			<div class="h-full w-full p-4 pb-6">
 				<Table />
 			</div>
 			<div class="ml-10">

@@ -25,9 +25,9 @@
 		<TableHead theadClass="sticky top-0 bg-offwhite">
 			{#each columns as header (header)}
 				<TableHeadCell class="!p-0">
-					<div class="flex max-w-48">
+					<div class="flex max-w-full min-w-48">
 						<input
-							class="bg-darkblue overflow-x-scroll w-36 hover:bg-lightblue text-offwhite rounded-l-md"
+							class="bg-darkblue overflow-x-scroll w-full hover:bg-lightblue text-offwhite rounded-l-md"
 							type="text"
 							on:change={(e) => ctrl.columnValueChanged(e, header)}
 							value={header}
@@ -47,7 +47,11 @@
 			{#each rows as row}
 				<TableBodyRow>
 					{#each row as cell}
-						<TableBodyCell class="p-4 border" data-testid="{cell}-cell">
+						<TableBodyCell
+							tdClass="overflow-scroll scrollbar-hide scrollbar-hide::-webkit-scrollbar max-w-44"
+							class="p-4 border"
+							data-testid="{cell}-cell"
+						>
 							{cell}
 						</TableBodyCell>
 					{/each}
