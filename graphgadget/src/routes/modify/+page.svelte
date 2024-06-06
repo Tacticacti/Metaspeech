@@ -16,8 +16,9 @@
 	<title>Data - {APP_NAME}</title>
 </svelte:head>
 
+<MissingValues />
+
 <div class="flex items-center justify-between p-5">
-	<MissingValues />
 	<Filter />
 	<div
 		class="flex h-full max-h-14 w-full max-w-32 items-center justify-center rounded-lg bg-darkblue hover:bg-blue-900"

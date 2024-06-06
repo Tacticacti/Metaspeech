@@ -35,22 +35,21 @@
 
 <Table shadow striped={true} divClass="!overflow-scroll !h-full">
 	<TableHead theadClass="sticky top-0 bg-offwhite">
-		{#each $columns as header, i (header.name)}
+		{#each $columns as header, i (header)}
 			<TableHeadCell class="!p-0">
-				<div class="flex max-w-48">
+				<div class="flex min-w-48 max-w-full">
 					<input
-						class="overflow-x-scroll rounded-l-md bg-darkblue text-offwhite hover:bg-lightblue"
+						class="w-full overflow-x-scroll rounded-l-md bg-darkblue text-offwhite hover:bg-lightblue"
 						type="text"
 						on:change={(e) => columnValueChanged(e, header)}
 						value={header.name}
-						data-testid="header-{i}-input"
+						data-testid="header-{header}-input"
 					/>
 					<button
 						class="rounded-r-md bg-red-400 px-4 text-offwhite hover:bg-red-500"
 						on:click={() => df.deleteColumn(i)}
-						data-testid="header-{i}-delete"
-					>
-						X
+						data-testid="header-{header}-delete"
+						>X
 					</button>
 				</div>
 			</TableHeadCell>
@@ -60,8 +59,12 @@
 		{#each $rows as row}
 			<TableBodyRow>
 				{#each row as cell}
-					<TableBodyCell class="border p-4" data-testid="{cell}-cell">
-						{cell?.toString() ?? ''}
+					<TableBodyCell
+						tdClass="overflow-scroll scrollbar-hide scrollbar-hide::-webkit-scrollbar max-w-44"
+						class="border p-4"
+						data-testid="{cell}-cell"
+					>
+						{cell}
 					</TableBodyCell>
 				{/each}
 			</TableBodyRow>

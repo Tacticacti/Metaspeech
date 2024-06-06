@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { df } from '$lib/Store';
-	import type { DataFrameLike } from '$lib/dataframe/DataFrame';
+	import type { DataFrameLike } from '$lib/Types';
+	import info from '$assets/info.svg';
+	import { Tooltip, Button } from 'flowbite-svelte';
 
 	const columns = df.columns;
 
@@ -24,19 +26,47 @@
 
 <div>
 	{#if second_data}
-		<button on:click={handleRowWiseMerge} data-testid="merge-index-button">Index merge</button>
-		<select bind:value={merge_col_1} data-testid="col1-select">
-			{#each $columns as col, i}
-				<option value={i}>{col.name}</option>
-			{/each}
-		</select>
-		<select bind:value={merge_col_2} data-testid="col2-select">
-			{#each second_data.columns as col, i}
-				<option value={i}>{col.name}</option>
-			{/each}
-		</select>
-		{#if merge_col_1 && merge_col_2}
-			<button on:click={joinColumns} data-testid="merge-keyed-button">keyed merge</button>
-		{/if}
+		<div class="flex w-full items-center justify-center px-10">
+			<button><img src={info} alt="info icon" class="mr-2 h-12" data-testid="info-icon" /></button>
+			<Tooltip
+				placement="top"
+				class="z-20 w-48 bg-gray-600 text-sm font-light opacity-90"
+				data-testid="info-bubble"
+			>
+				Use the <span class="font-bold">Index merge</span> to attach columns in their index order,
+				if not select the column names from the datasets that you want to match and do a
+				<span class="font-bold">Keyed merge</span>.
+			</Tooltip>
+			<select
+				class="focus:ring-primary-500 focus:border-primary-500 mr-2 h-12 max-w-32 rounded-lg border border-gray-300 bg-gray-50 text-sm text-gray-900"
+				bind:value={merge_col_1}
+				data-testid="col1-select"
+			>
+				{#each $columns as col, i}
+					<option value={i}>{col.name}</option>
+				{/each}
+			</select>
+			<select
+				class="focus:ring-primary-500 focus:border-primary-500 mr-2 h-12 max-w-32 rounded-lg border border-gray-300 bg-gray-50 text-sm text-gray-900"
+				bind:value={merge_col_2}
+				data-testid="col2-select"
+			>
+				{#each second_data.columns as col, i}
+					<option value={i}>{col.name}</option>
+				{/each}
+			</select>
+			<Button
+				class="mr-2 h-12 rounded-md border border-gray-300 bg-white text-sm font-bold text-darkblue hover:bg-gray-100"
+				on:click={handleRowWiseMerge}
+				data-testid="merge-index-button">Index merge</Button
+			>
+			{#if merge_col_1 && merge_col_2}
+				<Button
+					class="h-12 rounded-md border border-gray-300 bg-white text-sm font-bold text-darkblue hover:bg-gray-100"
+					on:click={joinColumns}
+					data-testid="merge-keyed-button">Keyed merge</Button
+				>
+			{/if}
+		</div>
 	{/if}
 </div>

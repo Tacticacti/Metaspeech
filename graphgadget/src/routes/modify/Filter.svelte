@@ -102,7 +102,7 @@
 		<div class="flex flex-wrap justify-center">
 			<Button
 				color="light"
-				class="mr-2 rounded-md px-5 py-3 font-extrabold text-darkblue"
+				class="mr-2 rounded-md px-5 py-3 font-bold text-darkblue"
 				on:click={() => filter(true)}
 				data-testid="remove-matching-button"
 			>
@@ -110,7 +110,7 @@
 			</Button>
 			<Button
 				color="light"
-				class="rounded-md px-5 py-3 font-extrabold text-darkblue"
+				class="rounded-md px-5 py-3 font-bold text-darkblue"
 				on:click={() => filter(false)}
 				data-testid="remove-nonmatching-button"
 			>
