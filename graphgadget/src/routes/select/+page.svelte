@@ -3,6 +3,10 @@
 	import type { Column, DataTypeString } from '$lib/Types';
 
 	const columns = df.columns;
+	$: aggregatableColumns = $columns.filter((c) => c.type === 'number' && !c.groupBy);
+	let aggregateBy: number = $columns.findIndex((c) => c.aggregate);
+
+	$: selectColumnForAggregation(aggregateBy);
 
 	function getGroupingOptions(type: DataTypeString): string[] {
 		const typeOptions = {
@@ -14,6 +18,7 @@
 
 	function selectColumnForGrouping(column: Column, select: boolean) {
 		column.groupBy = select ? { type: 'specific' } : undefined;
+		df.forceStoreUpdate();
 	}
 	function selectColumnForAggregation(index: number) {
 		for (let i = 0; i < $columns.length; i++) {
@@ -23,34 +28,42 @@
 </script>
 
 <a href="/view" data-testid="next-link">Next</a>
+<div class="flex">
+	<div class="flex flex-col">
+		{#each $columns as column}
+			<span>
+				<label>
+					{column.name}
+					<input
+						type="checkbox"
+						on:input={(e) => selectColumnForGrouping(column, e.currentTarget.checked)}
+						checked={Boolean(column.groupBy)}
+					/>
+				</label>
+				{#if column.groupBy}
+					<select bind:value={column.groupBy.type}>
+						{#each getGroupingOptions(column.type) as groupingOption}
+							<option value={groupingOption}>{groupingOption}</option>
+						{/each}
+					</select>
+					{#if column.groupBy.type === 'binned'}
+						<input type="number" bind:value={column.groupBy.size} />
+					{/if}
+				{/if}
+			</span>
+		{/each}
+	</div>
 
-{#each $columns as column}
-	<label>
-		{column.name}
-		<input
-			type="checkbox"
-			on:input={(e) => selectColumnForGrouping(column, Boolean(e.currentTarget.value))}
-		/>
-	</label>
-	{#if column.groupBy}
-		<select bind:value={column.groupBy.type}>
-			{#each getGroupingOptions(column.type) as groupingOption}
-				<option value={groupingOption}>{groupingOption}</option>
-			{/each}
-		</select>
-		{#if column.groupBy.type === 'binned'}
-			<input type="number" bind:value={column.groupBy.size} />
-		{/if}
-	{/if}
-{/each}
-
-<label>
-	Frequency
-	<input type="radio" on:input={() => selectColumnForAggregation(-1)} />
-</label>
-{#each $columns as column, index}
-	<label>
-		{column.name}
-		<input type="radio" on:input={() => selectColumnForAggregation(index)} />
-	</label>
-{/each}
+	<div class="flex flex-col">
+		<label>
+			Frequency
+			<input type="radio" bind:group={aggregateBy} value={-1} />
+		</label>
+		{#each aggregatableColumns as column, index}
+			<label>
+				{column.name}
+				<input type="radio" bind:group={aggregateBy} value={index} />
+			</label>
+		{/each}
+	</div>
+</div>

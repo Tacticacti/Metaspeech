@@ -1,5 +1,5 @@
 import { act, fireEvent, type RenderResult } from '@testing-library/svelte';
-import sut from '$lib/filtering/Filter.svelte';
+import sut from './Filter.svelte';
 
 export function rerender(r: RenderResult<sut>) {
 	return act(() => r.component.$set({}));

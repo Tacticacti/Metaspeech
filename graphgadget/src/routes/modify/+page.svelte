@@ -7,7 +7,7 @@
 	import Filter from './Filter.svelte';
 	import Importer from '$lib/components/importer/Importer.svelte';
 	import Merge from './Merge.svelte';
-	import { type DataFrameLike } from '$lib/dataframe/DataFrame';
+	import { type DataFrameLike } from '$lib/Types';
 
 	let second_data: DataFrameLike;
 </script>
@@ -16,9 +16,8 @@
 	<title>Data - {APP_NAME}</title>
 </svelte:head>
 
-<MissingValues />
-
 <div class="flex items-center justify-between p-5">
+	<MissingValues />
 	<Filter />
 	<div
 		class="flex h-full max-h-14 w-full max-w-32 items-center justify-center rounded-lg bg-darkblue hover:bg-blue-900"
@@ -39,8 +38,8 @@
 
 <Merge {second_data} />
 
-<div class="flex h-[60%] content-between items-center justify-center px-24">
-	<div class="h-full w-full p-4">
+<div class="flex h-[60%] max-h-fit w-full content-between items-center justify-center px-24">
+	<div class="h-20 w-full p-4">
 		<Table />
 	</div>
 	<div class="ml-10">

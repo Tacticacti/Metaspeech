@@ -10,7 +10,7 @@
 		loadSession();
 	});
 
-	navigating.subscribe((value) => {
+	navigating.subscribe(() => {
 		if (typeof sessionStorage === 'undefined') return;
 
 		sessionStorage.setItem('current-df', JSON.stringify(df.get()));

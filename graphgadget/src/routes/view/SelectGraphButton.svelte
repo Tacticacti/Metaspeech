@@ -1,8 +1,10 @@
 <script lang="ts">
+	import type { GraphMeta } from '$lib/Types';
+
 	/**
 	 * Graph object
 	 */
-	export let graph;
+	export let graph: GraphMeta;
 </script>
 
 <button
@@ -13,6 +15,6 @@
 	on:mouseover
 	on:focus
 >
-	<img src={graph.img_src} alt="graph img" class="self-center" />
+	<img src={graph.img} alt="graph img" class="self-center" />
 	<div class="self-center text-lg font-bold">{graph.title}</div>
 </button>

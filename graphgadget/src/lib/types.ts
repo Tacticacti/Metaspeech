@@ -21,7 +21,7 @@ export class UnsupportedFileError extends Error {
 export type GraphMeta = {
 	title: string;
 	description: string;
-	img_src: string;
+	img: string;
 	canRender: (data: GroupedDataFrame) => boolean;
 	graph: ComponentType<Graph>;
 };

@@ -1,12 +1,10 @@
 <script lang="ts">
 	import { df } from '$lib/Store';
-	import Grapher from '$lib/graphs/SelectGraph.svelte';
-	import { GraphMetas } from '$lib/graphs/Graphs';
+	import SelectGraph from './SelectGraph.svelte';
 	import { APP_NAME } from '$lib/Constants';
-	import { writable, type Writable } from 'svelte/store';
-	import { type Graph } from '$lib/Types';
+	import { type GraphMeta } from '$lib/Types';
 
-	let selected_graph: Writable<Graph | undefined> = writable(undefined);
+	let selectedGraph: GraphMeta | undefined;
 	const data = df.groupBy();
 </script>
 
@@ -14,11 +12,11 @@
 	<title>Visualisations - {APP_NAME}</title>
 </svelte:head>
 
-<Grapher graphs={GraphMetas} />
+<SelectGraph bind:selected={selectedGraph} />
 
-{#if $selected_graph}
+{#if selectedGraph}
 	<div class="mt-5 flex w-full justify-center">
-		<svelte:component this={$selected_graph.graph} {data} />
+		<svelte:component this={selectedGraph.graph} {data} />
 	</div>
 {:else}
 	<div class="mt-5 flex h-96 w-full justify-center">

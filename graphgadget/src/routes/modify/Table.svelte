@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { df } from '$lib/Store';
-	import type { Column } from '$lib/Store';
+	import type { Column } from '$lib/Types';
 	import {
 		Table,
 		TableBody,

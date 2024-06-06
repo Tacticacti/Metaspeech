@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { type DataType } from '$lib/dataframe/DataFrame';
+	import { type DataType } from '$lib/Types';
 	import { df } from '$lib/Store';
 	import { afterUpdate } from 'svelte';
 	import { Button, Checkbox, Input, Select } from 'flowbite-svelte';
@@ -16,7 +16,7 @@
 
 	$: selectedColumn = $columns[selectedIndex];
 	$: columnNames = $columns.map((col) => col.name);
-	$: useRange = selectedColumn.type === 'number' && useRangeChecked;
+	$: useRange = selectedColumn?.type === 'number' && useRangeChecked;
 
 	afterUpdate(() => {
 		// pre-select a column
