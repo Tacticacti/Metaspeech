@@ -12,6 +12,7 @@ test.describe('Initial page tests', () => {
 		const input = await page.$('input[type=file]');
 		expect(input).not.toBeNull;
 	});
+
 	test('all important elements are visible', async ({ page }) => {
 		await expect(helper.getSelectData(page)).toBeVisible();
 		await expect(helper.getPreviousData(page)).toBeVisible();
@@ -19,6 +20,23 @@ test.describe('Initial page tests', () => {
 		await expect(helper.getLogo(page)).toBeVisible();
 		await expect(helper.getNavBar(page)).toBeVisible();
 		await expect(helper.getFooter(page)).toBeVisible();
+		await expect(helper.getErrorModal(page)).not.toBeVisible();
+	});
+
+	test('input an invalid file format', async ({ page }) => {
+		await helper.getSelectData(page).click();
+
+		await helper.getImporterInput(page).setInputFiles({
+			name: 'example.png',
+			mimeType: 'image/png',
+			buffer: Buffer.from('<file content>')
+		});
+		await expect(helper.getErrorModal(page)).toBeVisible();
+
+		await helper.getCloseErrorModal(page).click();
+
+		await expect(helper.getErrorModal(page)).not.toBeVisible();
+		await expect(page).toHaveURL('/');
 	});
 });
 
@@ -180,5 +198,42 @@ test.describe('Previous data: imported multiple files', () => {
 		await helper.getPrevFileButton(page, 'example3.tsv').click();
 
 		await expect(page).toHaveURL('/modify');
+	});
+
+	test('clear data removes all', async ({ page }) => {
+		// First cancel, should have no effect
+
+		page.once('dialog', (dialog) => {
+			dialog.dismiss().catch(() => {});
+		});
+
+		await helper.getClearData(page).click();
+
+		expect(helper.getListItems(page)).toHaveCount(2);
+		expect(helper.getDeleteButtons(page)).toHaveCount(2);
+
+		await expect(helper.getPrevFileButton(page, 'example3.tsv')).toBeVisible();
+		await expect(helper.getPrevFileButton(page, 'example1.tsv')).toBeVisible();
+		await expect(helper.getPrevFileButton(page, 'example2.tsv')).not.toBeVisible();
+
+		await expect(helper.getNoPreviousData(page)).not.toBeVisible();
+
+		// Then accept, should delete two
+
+		page.once('dialog', (dialog) => {
+			dialog.accept().catch(() => {});
+		});
+
+		await helper.getClearData(page).click();
+
+		expect(helper.getListItems(page)).toHaveCount(0);
+		expect(helper.getDeleteButtons(page)).toHaveCount(0);
+
+		await expect(helper.getPrevFileButton(page, 'example3.tsv')).not.toBeVisible();
+		await expect(helper.getPrevFileButton(page, 'example1.tsv')).not.toBeVisible();
+		await expect(helper.getPrevFileButton(page, 'example2.tsv')).not.toBeVisible();
+
+		await expect(helper.getNoPreviousData(page)).toBeVisible();
+		await expect(helper.getPrevDataList(page)).not.toBeVisible();
 	});
 });
