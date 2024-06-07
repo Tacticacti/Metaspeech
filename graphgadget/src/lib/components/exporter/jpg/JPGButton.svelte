@@ -11,8 +11,7 @@
 	 */
 	function downloadCanvasJPG() {
 		const link = document.createElement('a');
-		const image = chart.toBase64Image('image/jpeg', 1.0);
-		link.href = image;
+		link.href = chart.toBase64Image('image/jpeg', 1.0);
 		link.download = 'graph_image.jpg';
 		link.click();
 	}

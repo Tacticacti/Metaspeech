@@ -14,6 +14,9 @@
 	 * @param filename the name of the file to store
 	 */
 	function storeFile(bundle: DataFile) {
+		const json = JSON.stringify(bundle.data);
+		sessionStorage.setItem('current-df', json);
+
 		if (!shouldStoreData) return;
 
 		var datasets = localStorage.getItem('datasets');
@@ -24,9 +27,7 @@
 
 		localStorage.setItem('datasets', JSON.stringify(storedDatasets));
 
-		const json = JSON.stringify(bundle.data);
 		localStorage.setItem(bundle.name, json);
-		sessionStorage.setItem('current-df', json);
 	}
 
 	/**
@@ -51,7 +52,7 @@
 </header>
 
 <div class="flex justify-center gap-5 bg-darkblue p-5">
-	<Importer on:input={handleInput} id="import-data" />
+	<Importer on:input={handleInput} id="import-data" data-testid="import" />
 	<label
 		class="my-2 inline-block cursor-pointer rounded-lg border border-gray-300 bg-gray-100 px-4 py-2 text-lg font-bold text-gray-800 shadow-md transition-colors duration-300 ease-in-out hover:bg-gray-200 hover:text-blue-500"
 		for="import-data"
@@ -69,7 +70,7 @@
 
 <div class="mt-4 flex items-center justify-center text-center">
 	<Label class="flex items-center space-x-2">
-		<Checkbox id="store-data" bind:checked={shouldStoreData} />
+		<Checkbox id="store-data" bind:checked={shouldStoreData} data-testid="store-data-cb" />
 		<span>Keep session saved (client only)</span>
 	</Label>
 </div>

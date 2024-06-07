@@ -1,6 +1,28 @@
-import { it, expect, describe } from 'vitest';
+import { vi, it, expect, describe } from 'vitest';
 import { getByText, render } from '@testing-library/svelte';
 import sut from '$lib/components/NavBar.svelte';
+import { get, writable } from 'svelte/store';
+import type { Page } from '@sveltejs/kit';
+import { page } from '$app/stores';
+
+vi.mock('$app/stores', (og) => ({
+	...og<typeof import('$app/stores')>(),
+	page: writable<Page<Record<string, string>, string | null>>({
+		params: {},
+		url: new URL('http://localhost/'),
+		route: { id: '/' },
+		data: {},
+		status: 200,
+		error: null,
+		state: {},
+		form: {}
+	})
+}));
+
+beforeEach(() => {
+	const pageV = get(page);
+	pageV.route.id = '/';
+});
 
 const checkAllButtonsExist = (container: HTMLElement) => {
 	const home = getByText(container, 'HOME');
@@ -26,64 +48,72 @@ const checkButtonClass = (button: HTMLElement, isActive: boolean) => {
 };
 
 describe('check links exist', () => {
-	it('All buttons exist when defaulted to home', () => {
+	it('All buttons exist when in home', () => {
+		const pageV = get(page);
+		pageV.route.id = '/';
 		const { container } = render(sut);
 		checkAllButtonsExist(container);
 	});
 
-	it('All buttons exist when in home', () => {
-		const { container } = render(sut, { currentPage: '' });
-		checkAllButtonsExist(container);
-	});
-
-	it('All buttons exist when in home part 2', () => {
-		const { container } = render(sut, { currentPage: '' });
-		checkAllButtonsExist(container);
-	});
-
 	it('All buttons exist when in modify', () => {
-		const { container } = render(sut, { currentPage: 'modify' });
+		const pageV = get(page);
+		pageV.route.id = '/modify';
+		const { container } = render(sut);
 		checkAllButtonsExist(container);
 	});
 
 	it('All buttons exist when in select', () => {
-		const { container } = render(sut, { currentPage: 'select' });
+		const pageV = get(page);
+		pageV.route.id = '/select';
+		const { container } = render(sut);
 		checkAllButtonsExist(container);
 	});
 
 	it('All buttons exist when in view', () => {
-		const { container } = render(sut, { currentPage: 'view' });
+		const pageV = get(page);
+		pageV.route.id = '/view';
+		const { container } = render(sut);
 		checkAllButtonsExist(container);
 	});
 });
 
 describe('check link classes', () => {
 	it('Home button is active when in home', () => {
-		const { container } = render(sut, { currentPage: '' });
+		const pageV = get(page);
+		pageV.route.id = '/';
+		const { container } = render(sut);
 		const home = getByText(container, 'HOME');
 		checkButtonClass(home, true);
 	});
 
 	it('Data button is active when in modify', () => {
-		const { container } = render(sut, { currentPage: 'modify' });
+		const pageV = get(page);
+		pageV.route.id = '/modify';
+		const { container } = render(sut);
 		const data = getByText(container, 'DATA');
 		checkButtonClass(data, true);
 	});
 
 	it('Parameters button is active when in select', () => {
-		const { container } = render(sut, { currentPage: 'select' });
+		const pageV = get(page);
+		pageV.route.id = '/select';
+		const { container } = render(sut);
 		const parameters = getByText(container, 'PARAMETERS');
 		checkButtonClass(parameters, true);
 	});
 
 	it('Visualizations button is active when in view', () => {
-		const { container } = render(sut, { currentPage: 'view' });
+		const pageV = get(page);
+		pageV.route.id = '/view';
+		const { container } = render(sut);
 		const visualizations = getByText(container, 'VISUALIZATIONS');
 		checkButtonClass(visualizations, true);
 	});
 
 	it('Other buttons are inactive when in home', () => {
-		const { container } = render(sut, { currentPage: '' });
+		const pageV = get(page);
+		pageV.route.id = '/';
+		const { container } = render(sut);
 		const data = getByText(container, 'DATA');
 		const parameters = getByText(container, 'PARAMETERS');
 		const visualizations = getByText(container, 'VISUALIZATIONS');
@@ -93,7 +123,9 @@ describe('check link classes', () => {
 	});
 
 	it('Other buttons are inactive when in modify', () => {
-		const { container } = render(sut, { currentPage: 'modify' });
+		const pageV = get(page);
+		pageV.route.id = '/modify';
+		const { container } = render(sut);
 		const home = getByText(container, 'HOME');
 		const parameters = getByText(container, 'PARAMETERS');
 		const visualizations = getByText(container, 'VISUALIZATIONS');
@@ -103,7 +135,9 @@ describe('check link classes', () => {
 	});
 
 	it('Other buttons are inactive when in select', () => {
-		const { container } = render(sut, { currentPage: 'select' });
+		const pageV = get(page);
+		pageV.route.id = '/select';
+		const { container } = render(sut);
 		const home = getByText(container, 'HOME');
 		const data = getByText(container, 'DATA');
 		const visualizations = getByText(container, 'VISUALIZATIONS');
@@ -113,7 +147,9 @@ describe('check link classes', () => {
 	});
 
 	it('Other buttons are inactive when in view', () => {
-		const { container } = render(sut, { currentPage: 'view' });
+		const pageV = get(page);
+		pageV.route.id = '/';
+		const { container } = render(sut);
 		const home = getByText(container, 'HOME');
 		const data = getByText(container, 'DATA');
 		const parameters = getByText(container, 'PARAMETERS');
@@ -125,29 +161,33 @@ describe('check link classes', () => {
 
 describe('check currentPage conditions', () => {
 	it('Home button has active class when currentPage is empty or root', () => {
-		const { container } = render(sut, { currentPage: '' });
+		const pageV = get(page);
+		pageV.route.id = '/';
+		const { container } = render(sut);
 		const home = getByText(container, 'HOME');
 		checkButtonClass(home, true);
-
-		const { container: rootContainer } = render(sut, { currentPage: '/' });
-		const homeRoot = getByText(rootContainer, 'HOME');
-		checkButtonClass(homeRoot, true);
 	});
 
 	it('Data button has active class when currentPage is modify', () => {
-		const { container } = render(sut, { currentPage: 'modify' });
+		const pageV = get(page);
+		pageV.route.id = '/modify';
+		const { container } = render(sut);
 		const data = getByText(container, 'DATA');
 		checkButtonClass(data, true);
 	});
 
 	it('Parameters button has active class when currentPage is select', () => {
-		const { container } = render(sut, { currentPage: 'select' });
+		const pageV = get(page);
+		pageV.route.id = '/select';
+		const { container } = render(sut);
 		const parameters = getByText(container, 'PARAMETERS');
 		checkButtonClass(parameters, true);
 	});
 
 	it('Visualizations button has active class when currentPage is view', () => {
-		const { container } = render(sut, { currentPage: 'view' });
+		const pageV = get(page);
+		pageV.route.id = '/view';
+		const { container } = render(sut);
 		const visualizations = getByText(container, 'VISUALIZATIONS');
 		checkButtonClass(visualizations, true);
 	});

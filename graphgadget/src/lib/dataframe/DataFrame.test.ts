@@ -1,15 +1,24 @@
 import { get } from 'svelte/store';
 import { DataFrame, fromFile, fromObjects, fromText } from './DataFrame';
 import { describe, it, expect } from 'vitest';
-import { Count, Mean, Specific, Min, Max, Var, Std, Median, Percent, Sum, Bins } from './Grouping';
 
 describe('importing a DataFrame', () => {
-	it('should import a DataFrame from a file', async () => {
-		const file = new File(['a,b\n1,2\n3,4'], 'test.csv');
-		const df = await fromFile(file);
+	it('should import a DataFrame from text', () => {
+		const df = fromText('a,b\n1,2\n3,4');
 
 		expect(df).toEqual({
-			columns: ['a', 'b'],
+			columns: [
+				{
+					hasMissing: false,
+					name: 'a',
+					type: 'number'
+				},
+				{
+					hasMissing: false,
+					name: 'b',
+					type: 'number'
+				}
+			],
 			rows: [
 				[1, 2],
 				[3, 4]
@@ -17,16 +26,12 @@ describe('importing a DataFrame', () => {
 		});
 	});
 
-	it('should import a DataFrame from text', () => {
-		const df = fromText('a,b\n1,2\n3,4');
+	it('should import a DataFrame from a file', async () => {
+		const file = new File(['a,b\n1,2\n3,4'], 'test.csv');
+		const df = await fromFile(file);
+		const expected = fromText('a,b\n1,2\n3,4');
 
-		expect(df).toEqual({
-			columns: ['a', 'b'],
-			rows: [
-				[1, 2],
-				[3, 4]
-			]
-		});
+		expect(df).toEqual(expected);
 	});
 
 	it('should import a DataFrame from objects', () => {
@@ -34,14 +39,9 @@ describe('importing a DataFrame', () => {
 			{ a: 1, b: 2 },
 			{ a: 3, b: 4 }
 		]);
+		const expected = fromText('a,b\n1,2\n3,4');
 
-		expect(df).toEqual({
-			columns: ['a', 'b'],
-			rows: [
-				[1, 2],
-				[3, 4]
-			]
-		});
+		expect(df).toEqual(expected);
 	});
 
 	it('should import an empty DataFrame from an empty array', () => {
@@ -57,7 +57,18 @@ describe('importing a DataFrame', () => {
 		const df = fromObjects([{ a: 1, b: 2 }, { a: 3 }]);
 
 		expect(df).toEqual({
-			columns: ['a', 'b'],
+			columns: [
+				{
+					hasMissing: false,
+					name: 'a',
+					type: 'number'
+				},
+				{
+					hasMissing: true,
+					name: 'b',
+					type: 'number'
+				}
+			],
 			rows: [
 				[1, 2],
 				[3, undefined]
@@ -116,18 +127,12 @@ describe('importing a DataFrame', () => {
 describe('DataFrame basics', () => {
 	it('should have columns and rows', () => {
 		const df = new DataFrame();
-		const data = {
-			columns: ['a', 'b'],
-			rows: [
-				['a', 2],
-				['b', 4]
-			]
-		};
+		const data = fromText('a,b\na,2\nb,4');
 		df.set(data);
 
 		expect(get(df.columns)).toEqual([
-			{ name: 'a', type: 'string' },
-			{ name: 'b', type: 'number' }
+			{ name: 'a', type: 'string', hasMissing: false },
+			{ name: 'b', type: 'number', hasMissing: false }
 		]);
 		expect(get(df.rows)).toEqual([
 			['a', 2],

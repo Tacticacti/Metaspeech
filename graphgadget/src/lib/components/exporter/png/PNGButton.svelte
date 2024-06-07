@@ -26,4 +26,3 @@
 		PNG
 	</button>
 </div>
-

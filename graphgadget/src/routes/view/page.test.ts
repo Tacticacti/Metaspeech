@@ -3,8 +3,6 @@ import sut from './+page.svelte';
 import { describe, it, expect } from 'vitest';
 import Histogram from '$lib/graphs/histogram/Histogram.svelte';
 
-
-
 describe('View', () => {
 	it('should render', () => {
 		const { container } = render(sut);
