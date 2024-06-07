@@ -36,6 +36,7 @@ build:
    paths: 
      - graphgadget/build # used for deploying
      - graphgadget/.svelte-kit/tsconfig.json # used by testing
+   expire_in: 1 hour
 
 test-unit:
   stage: test
