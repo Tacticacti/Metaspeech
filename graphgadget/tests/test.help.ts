@@ -117,7 +117,7 @@ export function getRemoveNonMatchingButton(page: Page): Locator {
 	return page.getByTestId('remove-nonmatching-button');
 }
 
-export function getUseRangeCheckbox(page: Page): Locator {
+export function getRangeCheckbox(page: Page): Locator {
 	return page.getByTestId('userange-check');
 }
 
