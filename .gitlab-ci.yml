@@ -36,17 +36,23 @@ build:
      - graphgadget/build # used for deploying
      - graphgadget/.svelte-kit/tsconfig.json # used by testing
 
-test:
+test-unit:
   stage: test
   script: 
     - cd graphgadget
-    - npm run test
+    - npm run test:unit
   artifacts:
     reports:
       coverage_report:
         coverage_format: cobertura
         path: graphgadget/coverage/cobertura-coverage.xml
   coverage: '/^Statements\s*:\s*([^%]+)/'
+
+test-system:
+  stage: test
+  script: 
+    - cd graphgadget
+    - npm run test:integration
 
 pages:
   stage: deploy
