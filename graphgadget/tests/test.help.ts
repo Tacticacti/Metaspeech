@@ -2,6 +2,11 @@ import { type Locator, type Page } from '@playwright/test';
 
 /* Common elements (layout) */
 
+export const tsvTestData = `Id\tLanguage\tAge\tGender\tDuration(seconds)
+1\tEN\t19\tM\t100
+2\tPT\t21\tF\t200
+3\tES\t50\tM\t140`;
+
 export function getNavBar(page: Page): Locator {
 	return page.getByRole('navigation');
 }
@@ -110,4 +115,20 @@ export function getRemoveMatchingButton(page: Page): Locator {
 
 export function getRemoveNonMatchingButton(page: Page): Locator {
 	return page.getByTestId('remove-nonmatching-button');
+}
+
+export function getUseRangeCheckbox(page: Page): Locator {
+	return page.getByTestId('userange-check');
+}
+
+export function getSelectRange(page: Page): Locator {
+	return page.getByText('Select Range');
+}
+
+export function getMinRangeInput(page: Page): Locator {
+	return page.getByTestId('minrange-input');
+}
+
+export function getMaxRangeInput(page: Page): Locator {
+	return page.getByTestId('maxrange-input');
 }
