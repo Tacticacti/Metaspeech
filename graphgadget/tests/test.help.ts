@@ -7,6 +7,16 @@ export const tsvTestData = `Id\tLanguage\tAge\tGender\tDuration(seconds)
 2\tPT\t21\tF\t200
 3\tES\t50\tM\t140`;
 
+export const tsvTestDataTwo = `Column_1\tColumn_2
+1\tcell_2
+2\tcell_4
+3\tcell_6`;
+
+export const tsvCorruptedTestData = `Id\tLanguage\tAge\tGender\tDuration(seconds)
+1EN\t19\tM\t100
+2\tPT21F\t200
+3\tES\t50\tM\t140`;
+
 export function getNavBar(page: Page): Locator {
 	return page.getByRole('navigation');
 }
@@ -131,4 +141,31 @@ export function getMinRangeInput(page: Page): Locator {
 
 export function getMaxRangeInput(page: Page): Locator {
 	return page.getByTestId('maxrange-input');
+}
+
+export function getWarningText(page: Page): Locator {
+	return page.getByText('Warning: Missing values');
+}
+
+export function getRemoveMissingButton(page: Page): Locator {
+	return page.getByTestId('remove-missing-button');
+}
+
+export function getInfoButton(page: Page): Locator {
+	return page.getByRole('button', { name: 'info icon' });
+}
+
+export function getColumnOneSelect(page: Page): Locator {
+	return page.getByTestId('col1-select');
+}
+
+export function getColumnTwoSelect(page: Page): Locator {
+	return page.getByTestId('col2-select');
+}
+
+export function getMergeIndexButton(page: Page): Locator {
+	return page.getByTestId('merge-index-button');
+}
+export function getMergeKeyedButton(page: Page): Locator {
+	return page.getByTestId('merge-keyed-button');
 }
