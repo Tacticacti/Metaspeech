@@ -19,6 +19,7 @@ prepare:
   artifacts:
    paths:
    - graphgadget/node_modules
+   expire_in: 1 hour
 
 check:
   stage: check
