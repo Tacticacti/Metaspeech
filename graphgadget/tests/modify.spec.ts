@@ -1,6 +1,8 @@
 import { test, expect } from '@playwright/test';
 import * as helper from './test.help';
 import { tsvTestData, tsvTestDataTwo, tsvCorruptedTestData } from './test.help';
+import fs from 'fs';
+import path from 'path';
 
 test.describe('Modify page tests', () => {
 	test.describe('Page layout tests', () => {
@@ -125,10 +127,7 @@ test.describe('Modify page tests', () => {
 			const checkbox = helper.getRangeCheckbox(page);
 			const removeMatchingButton = helper.getRemoveMatchingButton(page);
 
-			await checkbox.click();
-
-			await expect(checkbox).not.toBeChecked();
-
+			await checkbox.uncheck();
 			await helper.getTextFilterInput(page).fill('1');
 			await removeMatchingButton.click();
 
@@ -315,6 +314,33 @@ test.describe('Modify page tests', () => {
 			await keyedMergeButton.click();
 
 			await expect(helper.getColumnHeaderInput(page, 'Column_1')).not.toBeVisible();
+			await expect(helper.getColumnHeaderInput(page, 'Column_2')).toBeVisible();
+		});
+
+		test('Test merge with JSON file', async ({ page }) => {
+			const jsonFilePath = path.resolve('./tests/', 'test.json');
+			const jsonData = fs.readFileSync(jsonFilePath, 'utf-8');
+
+			await page.goto('/');
+			await page.getByTestId('input').setInputFiles({
+				name: 'example.tsv',
+				mimeType: 'text/tsv',
+				buffer: Buffer.from(tsvTestData)
+			});
+
+			await expect(page).toHaveURL('/modify');
+
+			await helper.getSelectData(page).setInputFiles({
+				name: 'test.json',
+				mimeType: 'application/json',
+				buffer: Buffer.from(jsonData)
+			});
+
+			const indexMergeButton = helper.getMergeIndexButton(page);
+			await indexMergeButton.click();
+
+			await expect(helper.getColumnHeaderInput(page, 'Id')).toBeVisible();
+			await expect(helper.getColumnHeaderInput(page, 'Column_1')).toBeVisible();
 			await expect(helper.getColumnHeaderInput(page, 'Column_2')).toBeVisible();
 		});
 	});
