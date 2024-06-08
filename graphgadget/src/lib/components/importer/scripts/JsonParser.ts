@@ -1,4 +1,5 @@
-import { fromObjects, type DataFrameLike } from '$lib/dataframe/DataFrame';
+import { fromObjects } from '$lib/dataframe/DataFrame';
+import type { DataFrameLike } from '$lib/Types';
 
 /**
  * Parses a JSON file into a DataFrame. It accepts both arrays and objects.

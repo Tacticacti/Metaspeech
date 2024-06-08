@@ -2,7 +2,7 @@
 	import type { DataFile } from '$lib/Types';
 	import { createEventDispatcher } from 'svelte';
 	import { Parse } from '$components/importer/scripts/FileParser';
-	import type { DataFrameLike } from '$lib/dataframe/DataFrame';
+	import type { DataFrameLike } from '$lib/Types';
 
 	const dispatch = createEventDispatcher<{
 		input: DataFile;
