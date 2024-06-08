@@ -9,10 +9,10 @@
 
 	function dispatchInputEvent() {
 		dispatch('input', {
-			data: fromText('a,b,c\n4,5,6\n7,8,9'),
+			data: fromText('a,b,c\n1,2,3\n2,3,4'),
 			name: 'test.csv'
 		});
 	}
 </script>
 
-<button on:click={() => dispatchInputEvent()} {...$$restProps} />
+<input on:input={() => dispatchInputEvent()} {...$$restProps} />

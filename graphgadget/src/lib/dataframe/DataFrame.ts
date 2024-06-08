@@ -15,7 +15,7 @@ export class DataFrame {
 	 * The names and types of the columns in the DataFrame.
 	 */
 	columns: Readable<Column[]>;
-	private _columnMetas: Writable<Column[]>;
+	private _columns: Writable<Column[]>;
 
 	/**
 	 * The rows in the DataFrame.
@@ -29,7 +29,7 @@ export class DataFrame {
 	 * @param rows The rows of the DataFrame.
 	 */
 	constructor() {
-		this.columns = this._columnMetas = writable<Column[]>([]);
+		this.columns = this._columns = writable<Column[]>([]);
 		this.rows = this._rows = writable<DataType[][]>([]);
 	}
 
@@ -49,6 +49,12 @@ export class DataFrame {
 		let rows = get(this.rows);
 		rows = rows.filter(fn);
 		this._rows.set(rows);
+		this._columns.set(
+			getColumnMetas(
+				get(this.columns).map((c) => c.name),
+				rows
+			)
+		);
 	}
 
 	/**
@@ -148,7 +154,13 @@ export class DataFrame {
 		columns2.splice(col2, 1);
 
 		// set the new columns and rows
-		this.set({ columns: [...columns1, ...columns2], rows: rows1 });
+		this.set({
+			columns: getColumnMetas(
+				[...columns1, ...columns2].map((c) => c.name),
+				rows1
+			),
+			rows: rows1
+		});
 	}
 
 	join(df: DataFrameLike) {
@@ -167,7 +179,7 @@ export class DataFrame {
 	 * Sometimes the stores don't update when the data changes. This function forces the stores to update.
 	 */
 	forceStoreUpdate() {
-		this._columnMetas.set(get(this.columns));
+		this._columns.set(get(this.columns));
 		this._rows.set(get(this.rows));
 	}
 
@@ -190,7 +202,7 @@ export class DataFrame {
 		const cols = df.columns ?? [];
 		const rows = df.rows ?? [];
 
-		this._columnMetas.set(cols);
+		this._columns.set(cols);
 		this._rows.set(rows);
 	}
 
@@ -392,6 +404,10 @@ export function fromObjects(collection: { [i: string]: unknown }[]): DataFrameLi
 	return toDataFrameLike(columns, rows);
 }
 
+export function fromArrays(array: unknown[][]): DataFrameLike {
+	const cols = array.splice(0, 1)[0] as string[];
+	return toDataFrameLike(cols, array);
+}
 // #endregion
 
 function toGrouper(value: GroupBy, index: number): Grouper {

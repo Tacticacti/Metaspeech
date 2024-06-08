@@ -1,27 +1,12 @@
-import { vi, it, expect, describe } from 'vitest';
+import { it, expect, describe } from 'vitest';
 import { getByText, render } from '@testing-library/svelte';
 import sut from '$lib/components/NavBar.svelte';
-import { get, writable } from 'svelte/store';
-import type { Page } from '@sveltejs/kit';
+import { get } from 'svelte/store';
 import { page } from '$app/stores';
-
-vi.mock('$app/stores', (og) => ({
-	...og<typeof import('$app/stores')>(),
-	page: writable<Page<Record<string, string>, string | null>>({
-		params: {},
-		url: new URL('http://localhost/'),
-		route: { id: '/' },
-		data: {},
-		status: 200,
-		error: null,
-		state: {},
-		form: {}
-	})
-}));
 
 beforeEach(() => {
 	const pageV = get(page);
-	pageV.route.id = '/';
+	pageV.route = { id: '/' };
 });
 
 const checkAllButtonsExist = (container: HTMLElement) => {
@@ -153,7 +138,7 @@ describe('check link classes', () => {
 		const home = getByText(container, 'HOME');
 		const data = getByText(container, 'DATA');
 		const parameters = getByText(container, 'PARAMETERS');
-		checkButtonClass(home, false);
+		checkButtonClass(home, true);
 		checkButtonClass(data, false);
 		checkButtonClass(parameters, false);
 	});

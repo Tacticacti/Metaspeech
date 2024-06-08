@@ -43,12 +43,12 @@
 						type="text"
 						on:change={(e) => columnValueChanged(e, header)}
 						value={header.name}
-						data-testid="header-{header}-input"
+						data-testid="header-{header.name}-input"
 					/>
 					<button
 						class="rounded-r-md bg-red-400 px-4 text-offwhite hover:bg-red-500"
 						on:click={() => df.deleteColumn(i)}
-						data-testid="header-{header}-delete"
+						data-testid="header-{header.name}-delete"
 						>X
 					</button>
 				</div>

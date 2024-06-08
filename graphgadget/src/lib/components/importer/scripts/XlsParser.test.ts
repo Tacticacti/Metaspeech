@@ -1,6 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
-import * as XLSX from '@e965/xlsx';
+import { read, utils } from '@e965/xlsx';
 import { parseXlS } from './XlsParser';
+import { fromText } from '$lib/dataframe/DataFrame';
 
 // Mocking XLSX
 vi.mock('@e965/xlsx', () => ({
@@ -11,13 +12,6 @@ vi.mock('@e965/xlsx', () => ({
 }));
 
 describe('XlsParser', () => {
-	const oldFileReader = window.FileReader;
-
-	afterEach(() => {
-		window.FileReader = oldFileReader;
-		vi.restoreAllMocks();
-	});
-
 	it('Should return a dataframe', async () => {
 		const file = new File(['dummy data'], 'test.xls', { type: 'application/vnd.ms-excel' });
 		const jsonMock = [
@@ -25,18 +19,17 @@ describe('XlsParser', () => {
 			['Data1', 'Data2']
 		];
 		// @ts-expect-error ignore
-		XLSX.read.mockReturnValue({
+		read.mockReturnValue({
 			SheetNames: ['Sheet1'],
 			Sheets: { Sheet1: {} }
 		});
 		// @ts-expect-error ignore
-		XLSX.utils.sheet_to_json.mockReturnValue(jsonMock);
+		utils.sheet_to_json.mockReturnValue(jsonMock);
 		const readAsArrayBufferSpy = jest.spyOn(FileReader.prototype, 'readAsArrayBuffer');
 		const result = await parseXlS(file);
-		expect(result).toBeInstanceOf(DataFrame);
-		expect(result.count()).toBe(1);
+		expect(result).toEqual(fromText('Header1,Header2\nData1,Data2'));
 		expect(readAsArrayBufferSpy).toBeCalledWith(file);
-		expect(readAsArrayBufferSpy).toBeCalledTimes(1);
+		expect(readAsArrayBufferSpy).toHaveBeenCalledOnce();
 	});
 	it('Should reject invalid file', async () => {
 		const file = new File([], 'test.xls', { type: 'application/vnd.ms-excel' });
@@ -54,12 +47,12 @@ describe('XlsParser', () => {
 	it('Should have invalid header when converting to dataframe from json', async () => {
 		const file = new File(['dummy data'], 'test.xls', { type: 'application/vnd.ms-excel' });
 		// @ts-expect-error ignore
-		XLSX.read.mockReturnValue({
+		read.mockReturnValue({
 			SheetNames: ['Sheet1'],
 			Sheets: { Sheet1: {} }
 		});
 		// @ts-expect-error ignore
-		XLSX.utils.sheet_to_json.mockReturnValue([]);
+		utils.sheet_to_json.mockReturnValue([]);
 		try {
 			await parseXlS(file);
 			throw new Error('Test failed: Expected ParseXls to throw an error but did not.');

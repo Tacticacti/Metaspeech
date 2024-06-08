@@ -1,5 +1,5 @@
 import { act, fireEvent, type RenderResult } from '@testing-library/svelte';
-import sut from '../../lib/components/table/Table.svelte';
+import sut from './Table.svelte';
 
 export function getHeaderInput(r: RenderResult<sut>, header: string): HTMLInputElement | null {
 	return r.queryByTestId('header-' + header + '-input') as HTMLInputElement | null;
@@ -16,8 +16,8 @@ export function getCell(r: RenderResult<sut>, cell: string): HTMLElement | null 
 	return r.queryByTestId(cell + '-cell') as HTMLElement | null;
 }
 
-export function rerender(r: RenderResult<sut>) {
-	act(() => r.component.$set({}));
+export function rerender(r: RenderResult<sut>): Promise<void> {
+	return act(() => r.component.$set({}));
 }
 
 export async function renameColumn(

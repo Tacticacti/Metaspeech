@@ -45,11 +45,11 @@ describe('navigation', () => {
 	});
 
 	it('moves to modify page when data is selected', async () => {
-		await fireEvent.click(getImport());
+		await fireEvent.input(getImport());
 
 		expect(goto).toHaveBeenCalledWith('/modify');
 		expect(sessionStorage.getItem('current-df')).toEqual(
-			JSON.stringify(fromText('a,b,c\n4,5,6\n7,8,9'))
+			JSON.stringify(fromText('a,b,c\n1,2,3\n2,3,4'))
 		);
 	});
 });
@@ -63,11 +63,11 @@ describe('store data', () => {
 			await user.click(storeDataCheckbox);
 		}
 
-		await fireEvent.click(getImport());
+		await fireEvent.input(getImport());
 
 		expect(localStorage.getItem('datasets')).toEqual(JSON.stringify(['test.csv']));
 		expect(localStorage.getItem('test.csv')).toEqual(
-			JSON.stringify(fromText('a,b,c\n4,5,6\n7,8,9'))
+			JSON.stringify(fromText('a,b,c\n1,2,3\n2,3,4'))
 		);
 	});
 	it('does not store data when checkbox is not checked', async () => {
@@ -78,7 +78,7 @@ describe('store data', () => {
 			await user.click(storeDataCheckbox);
 		}
 
-		await fireEvent.click(getImport());
+		await fireEvent.input(getImport());
 
 		expect(localStorage.getItem('test.csv')).toBeFalsy();
 	});

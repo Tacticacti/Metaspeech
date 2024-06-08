@@ -5,7 +5,6 @@
 	import { Button, Tooltip } from 'flowbite-svelte';
 	import nextImg from '$assets/icons/next.png';
 	import info from '$assets/icons/info.svg';
-	import type { DataFrameLike } from '$lib/Types';
 
 	/**
 	 * List of stored datasets
@@ -38,16 +37,6 @@
 	function loadDataset(key: string) {
 		var jsonData = localStorage.getItem(key);
 		var parsed = jsonData ? JSON.parse(jsonData) : null;
-		// In the case decides to delete a dataset from console
-		if (!parsed) {
-			loadDatasets();
-			deleteDataset(key);
-
-			alert('this dataset no longer exists');
-			return;
-		}
-		// Parse again because first time it returns a string
-		parsed = JSON.parse(parsed) as DataFrameLike;
 		df.set(parsed);
 		sessionStorage.setItem('current-df', JSON.stringify(parsed));
 
@@ -66,6 +55,7 @@
 
 		localStorage.removeItem(key);
 		datasets.splice(index, 1);
+		datasets = datasets; // svelte moment
 		localStorage.setItem('datasets', JSON.stringify(datasets));
 	}
 

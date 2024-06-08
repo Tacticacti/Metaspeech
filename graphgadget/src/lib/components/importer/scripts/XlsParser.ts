@@ -1,4 +1,5 @@
 import type { DataFrameLike } from '$lib/Types';
+import { fromArrays } from '$lib/dataframe/DataFrame';
 import { read, utils } from '@e965/xlsx';
 
 /**
@@ -34,13 +35,8 @@ export function parseXlS(file: File): Promise<DataFrameLike> {
 				const json = utils.sheet_to_json(worksheet, { header: 1 });
 
 				// Validate the format of the first row as headers
-				if (Array.isArray(json[0]) && json[0].every((cell) => typeof cell === 'string')) {
-					// Create a DataFrame from the JSON, slicing from the second element onward and using the first row as headers
-					console.log(json);
-					resolve({
-						columns: json.slice(1) as string[],
-						rows: json[0]
-					});
+				if (Array.isArray(json[0])) {
+					resolve(fromArrays(json as unknown[][]));
 				} else {
 					reject(new SyntaxError('Header row format is incorrect or missing'));
 				}

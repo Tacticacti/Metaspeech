@@ -47,7 +47,7 @@
 			return num >= min && num <= max;
 		}
 
-		return (value ?? '') === filterValue;
+		return (value?.toString() ?? '') === filterValue;
 	}
 </script>
 
@@ -62,11 +62,11 @@
 {#if isOpen}
 	<div class="flex flex-wrap justify-center" data-testid="filter-window">
 		<Select class="mr-2 max-w-28" bind:value={selectedColumn} data-testid="column-select">
-			{#each $columns.map((c) => c.name) as col}
-				<option value={col}>{col}</option>
+			{#each $columns as col}
+				<option value={col}>{col.name}</option>
 			{/each}
 		</Select>
-		{#if $columns[selectedIndex].type === 'number'}
+		{#if selectedColumn?.type === 'number'}
 			<Checkbox class="mx-2" bind:checked={useRangeChecked} data-testid="userange-check">
 				Select Range
 			</Checkbox>

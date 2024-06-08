@@ -4,7 +4,8 @@
 	import info from '$assets/icons/info.svg';
 	import { Tooltip, Button } from 'flowbite-svelte';
 
-	const columns = df.columns;
+	const columns1 = df.columns;
+	$: columns2 = second_data?.columns;
 
 	export let second_data: DataFrameLike;
 	let merge_col_1: number;
@@ -42,7 +43,7 @@
 				bind:value={merge_col_1}
 				data-testid="col1-select"
 			>
-				{#each $columns as col, i}
+				{#each $columns1 as col, i}
 					<option value={i}>{col.name}</option>
 				{/each}
 			</select>
@@ -60,7 +61,7 @@
 				on:click={handleRowWiseMerge}
 				data-testid="merge-index-button">Index merge</Button
 			>
-			{#if merge_col_1 && merge_col_2}
+			{#if $columns1[merge_col_1] !== undefined && columns2[merge_col_2] !== undefined}
 				<Button
 					class="h-12 rounded-md border border-gray-300 bg-white text-sm font-bold text-darkblue hover:bg-gray-100"
 					on:click={joinColumns}

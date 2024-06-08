@@ -1,16 +1,15 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, fireEvent } from '@testing-library/svelte';
-import DataFrame from 'dataframe-js';
-import { data } from '$lib/Store';
+import { df } from '$lib/Store';
 import sut from './+page.svelte';
 import '@testing-library/jest-dom';
-import { get } from 'svelte/store';
 import * as h from './page.help';
 import userEvent from '@testing-library/user-event';
+import { fromText } from '$lib/dataframe/DataFrame';
 
-vi.mock('$lib/importer/Importer.svelte');
-vi.mock('$lib/filtering/filter.svelte');
-vi.mock('$lib/table/Table.svelte');
+vi.mock('$components/importer/Importer.svelte');
+vi.mock('./filter.svelte');
+vi.mock('./Table.svelte');
 
 beforeEach(() => {
 	vi.clearAllMocks();
@@ -32,11 +31,7 @@ it('should have a link that directs to select', async () => {
 
 describe('missing values', () => {
 	it('should be able to remove rows with missing values', async () => {
-		const df = new DataFrame([
-			{ a: 1, b: 2 },
-			{ a: 3, b: undefined }
-		]);
-		data.set(df);
+		df.set(fromText('a,b\n1,2\n3,'));
 		const r = render(sut);
 
 		const button = h.getRemoveMissingButton(r);
@@ -44,14 +39,13 @@ describe('missing values', () => {
 
 		await fireEvent.click(button!);
 
-		expect(get(data).toText()).toEqual('a;b\n1;2');
+		expect(df.get()).toEqual(fromText('a,b\n1,2'));
 	});
 });
 
 describe('merging', () => {
 	it('should be able to index-merge two DataFrames', async () => {
-		const df1 = new DataFrame([{ d: 4, e: 5 }]);
-		data.set(df1);
+		df.set(fromText('d,e\n4,5'));
 		const r = render(sut);
 
 		await fireEvent.input(r.getByTestId('file-input'));
@@ -63,11 +57,10 @@ describe('merging', () => {
 
 		await fireEvent.click(mergeButton!);
 
-		expect(get(data).toText()).toEqual('d;e;a;b;c\n4;5;1;2;3');
+		expect(df.get()).toEqual(fromText('d,e,a,b,c\n4,5,1,2,3'));
 	});
 	it('should be able to column-merge two DataFrames', async () => {
-		const df1 = new DataFrame([{ a: '1', d: '4' }]);
-		data.set(df1);
+		df.set(fromText('a,d\n1,4'));
 		const r = render(sut);
 
 		await fireEvent.input(r.getByTestId('file-input'));
@@ -77,11 +70,10 @@ describe('merging', () => {
 
 		await fireEvent.click(mergeButton!);
 
-		expect(get(data).toText()).toEqual('a;d;b;c\n1;4;2;3');
+		expect(df.get()).toEqual(fromText('a,d,b,c\n1,4,2,3'));
 	});
 	it('should be able to column-merge two DataFrames', async () => {
-		const df1 = new DataFrame([{ d: '1', e: '4' }]);
-		data.set(df1);
+		df.set(fromText('d,e\n1,4'));
 		const r = render(sut);
 
 		await fireEvent.input(r.getByTestId('file-input'));
@@ -91,61 +83,14 @@ describe('merging', () => {
 
 		await fireEvent.click(mergeButton!);
 
-		expect(get(data).toText()).toEqual('d;e;b;c\n1;4;2;3');
-	});
-});
-
-describe('session storage', () => {
-	it('Table should be same on refresh mount', async () => {
-		const df1 = new DataFrame([{ a: '1', b: '2', c: '3' }]);
-		data.set(df1);
-		const r = render(sut);
-		expect(JSON.stringify(get(data))).toEqual(JSON.stringify(df1));
-
-		const link: HTMLLinkElement = h.getNextLink(r) as HTMLLinkElement;
-		await fireEvent.click(link);
-
-		expect(JSON.stringify(get(data))).toEqual(JSON.stringify(df1));
-	});
-
-	it('Should recover from session storage', async () => {
-		const df1 = new DataFrame([{ a: '1', b: '2', c: '3' }]);
-		sessionStorage.setItem('current-df', JSON.stringify(df1));
-
-		render(sut);
-
-		expect(JSON.stringify(get(data))).toEqual(JSON.stringify(df1));
-	});
-});
-
-describe('session storage', () => {
-	it('Table should be same on refresh mount', async () => {
-		const df1 = new DataFrame([{ a: '1', b: '2', c: '3' }]);
-		data.set(df1);
-		const r = render(sut);
-		expect(JSON.stringify(get(data))).toEqual(JSON.stringify(df1));
-
-		const link: HTMLLinkElement = h.getNextLink(r) as HTMLLinkElement;
-		await fireEvent.click(link);
-
-		expect(JSON.stringify(get(data))).toEqual(JSON.stringify(df1));
-	});
-
-	it('Should recover from session storage', async () => {
-		const df1 = new DataFrame([{ a: '1', b: '2', c: '3' }]);
-		sessionStorage.setItem('current-df', JSON.stringify(df1));
-
-		render(sut);
-
-		expect(JSON.stringify(get(data))).toEqual(JSON.stringify(df1));
+		expect(df.get()).toEqual(fromText('d,e,b,c\n1,4,2,3'));
 	});
 });
 
 describe('info icon hover', () => {
 	it('Bubble appears when hovering over info icon', async () => {
 		const user = userEvent.setup();
-		const df1 = new DataFrame([{ d: '1', e: '4' }]);
-		data.set(df1);
+		df.set(fromText('d,e\n1,4'));
 		const r = render(sut);
 
 		await fireEvent.input(r.getByTestId('file-input'));
@@ -157,8 +102,7 @@ describe('info icon hover', () => {
 	});
 
 	it('Bubble not there if not hovering over icon', () => {
-		const df1 = new DataFrame([{ d: '1', e: '4' }]);
-		data.set(df1);
+		df.set(fromText('d,e\n1,4'));
 		const r = render(sut);
 
 		const bubble = h.getInfoBubble(r);

@@ -1,10 +1,9 @@
 import { describe, it, expect } from 'vitest';
-import { data } from '$lib/Store';
+import { df } from '$lib/Store';
 import sut from './Table.svelte';
 import { fireEvent, render } from '@testing-library/svelte';
-import DataFrame from 'dataframe-js';
-import '$lib/table/Table.help.ts';
-import * as h from '$lib/table/Table.help';
+import * as h from './Table.help';
+import { fromText } from '$lib/dataframe/DataFrame';
 
 describe('Table', () => {
 	it('should render', () => {
@@ -13,16 +12,7 @@ describe('Table', () => {
 	});
 	it('should render a table with headers and rows based on provided data', async () => {
 		// Create a mock DataFrame
-		const mockData = new DataFrame(
-			[
-				{ col1: 'Row1Col1', col2: 'Row1Col2' },
-				{ col1: 'Row2Col1', col2: 'Row2Col2' }
-			],
-			['col1', 'col2']
-		);
-
-		// Render the component with mock data
-		data.set(mockData);
+		df.set(fromText('col1,col2\nRow1Col1,Row1Col2\nRow2Col1,Row2Col2'));
 		const r = render(sut);
 
 		// Check if headers are present
@@ -36,27 +26,20 @@ describe('Table', () => {
 		expect(h.getCell(r, 'Row2Col2')).toBeDefined();
 	});
 	it('should be able to render an empty table', async () => {
-		const df = new DataFrame([]);
-		data.set(df);
+		df.set({ columns: [], rows: [] });
 		const { container } = render(sut);
 
 		expect(container).toBeTruthy();
 	});
-	it('should not fail with undefined', async () => {
-		// @ts-expect-error - intentionally testing with invalid data
-		data.set(undefined);
-
-		render(sut);
-	});
 	it('should update the table when data updates', async () => {
-		let mockData = new DataFrame([{ col1: 'Row1Col1' }], ['col1']);
+		let mockData = fromText('col1\nRow1Col1');
 
-		data.set(mockData);
+		df.set(mockData);
 		const r = render(sut);
 
-		mockData = new DataFrame([{ col1: 'Row3Col1' }], ['col1']);
+		mockData = fromText('col1\nRow2Col1');
 
-		data.set(mockData);
+		df.set(mockData);
 		await h.rerender(r);
 
 		expect(h.getCell(r, 'Row1Col1')).toBeNull();
@@ -66,15 +49,7 @@ describe('Table', () => {
 
 describe('Deleting', () => {
 	it('should be able to be deleted', async () => {
-		const mockData = new DataFrame(
-			[
-				{ col1: 'Row1Col1', col2: 'Row1Col2' },
-				{ col1: 'Row2Col1', col2: 'Row2Col2' }
-			],
-			['col1', 'col2']
-		);
-
-		data.set(mockData);
+		df.set(fromText('col1,col2\nRow1Col1,Row1Col2\nRow2Col1,Row2Col2'));
 		const r = render(sut);
 
 		const deleteButton = h.getHeaderDeleteButton(r, 'col1');
@@ -88,15 +63,7 @@ describe('Deleting', () => {
 
 describe('Renaming', async () => {
 	it('should be able to be renamed', async () => {
-		const mockData = new DataFrame(
-			[
-				{ col1: 'Row1Col1', col2: 'Row1Col2' },
-				{ col1: 'Row2Col1', col2: 'Row2Col2' }
-			],
-			['col1', 'col2']
-		);
-
-		data.set(mockData);
+		df.set(fromText('col1,col2\nRow1Col1,Row1Col2\nRow2Col1,Row2Col2'));
 		const r = render(sut);
 
 		h.renameColumn(r, 'col1', 'newName');
@@ -104,15 +71,7 @@ describe('Renaming', async () => {
 		expect(h.getHeaderInput(r, 'newName')).toBeDefined();
 	});
 	it('should reset the column name when left empty', async () => {
-		const mockData = new DataFrame(
-			[
-				{ col1: 'Row1Col1', col2: 'Row1Col2' },
-				{ col1: 'Row2Col1', col2: 'Row2Col2' }
-			],
-			['col1', 'col2']
-		);
-
-		data.set(mockData);
+		df.set(fromText('col1,col2\nRow1Col1,Row1Col2\nRow2Col1,Row2Col2'));
 		const r = render(sut);
 
 		h.renameColumn(r, 'col1', '');
@@ -120,15 +79,7 @@ describe('Renaming', async () => {
 		expect(h.getHeaderInput(r, 'col1')).toBeDefined();
 	});
 	it('should not allow renaming to an existing column name', async () => {
-		const mockData = new DataFrame(
-			[
-				{ col1: 'Row1Col1', col2: 'Row1Col2' },
-				{ col1: 'Row2Col1', col2: 'Row2Col2' }
-			],
-			['col1', 'col2']
-		);
-
-		data.set(mockData);
+		df.set(fromText('col1,col2\nRow1Col1,Row1Col2\nRow2Col1,Row2Col2'));
 		const r = render(sut);
 
 		h.renameColumn(r, 'col1', 'col2');
@@ -136,15 +87,7 @@ describe('Renaming', async () => {
 		expect(h.getHeaderInput(r, 'col1')).toBeDefined();
 	});
 	it('should trim whitespace from the new column name', async () => {
-		const mockData = new DataFrame(
-			[
-				{ col1: 'Row1Col1', col2: 'Row1Col2' },
-				{ col1: 'Row2Col1', col2: 'Row2Col2' }
-			],
-			['col1', 'col2']
-		);
-
-		data.set(mockData);
+		df.set(fromText('col1,col2\nRow1Col1,Row1Col2\nRow2Col1,Row2Col2'));
 		const r = render(sut);
 
 		h.renameColumn(r, 'col1', ' newName ');

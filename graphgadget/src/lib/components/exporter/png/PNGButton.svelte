@@ -10,7 +10,6 @@
 	 * Download the canvas as a PNG image
 	 */
 	function downloadCanvasPNG() {
-		console.log(chart);
 		const link = document.createElement('a');
 		link.href = chart.toBase64Image();
 		link.download = 'graph_image.png';

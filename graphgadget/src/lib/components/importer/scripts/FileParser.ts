@@ -1,7 +1,7 @@
 import { parseXlS } from '$lib/components/importer/scripts/XlsParser';
 import { ParseJson } from './JsonParser';
 import { UnsupportedFileError } from '$lib/Types';
-import type { DataFrameLike } from '$lib/dataframe/DataFrame';
+import type { DataFrameLike } from '$lib/Types';
 import { fromFile } from '$lib/dataframe/DataFrame';
 
 /**
@@ -31,7 +31,7 @@ export function GetFileExtension(file: File): string {
  * @returns A Promise that resolves to a DataFrame.
  */
 export function Parse(file: File): Promise<DataFrameLike> {
-	if (!file) return Promise.reject('No file found.');
+	if (!file) return Promise.reject(new UnsupportedFileError('No file found.'));
 	switch (GetFileExtension(file)) {
 		case 'txt':
 		case 'tsv':

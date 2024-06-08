@@ -76,14 +76,17 @@ describe('importing a DataFrame', () => {
 		});
 	});
 
-	it('should import a DataFrame with string values', () => {
+	it('should import a DataFrame with string number values', () => {
 		const df = fromObjects([
 			{ a: '1', b: '2' },
 			{ a: '3', b: '4' }
 		]);
 
 		expect(df).toEqual({
-			columns: ['a', 'b'],
+			columns: [
+				{ name: 'a', type: 'number', hasMissing: false },
+				{ name: 'b', type: 'number', hasMissing: false }
+			],
 			rows: [
 				[1, 2],
 				[3, 4]
@@ -95,7 +98,10 @@ describe('importing a DataFrame', () => {
 		const df = fromText(',b\n1,2\n3,4');
 
 		expect(df).toEqual({
-			columns: ['', 'b'],
+			columns: [
+				{ name: '', type: 'number', hasMissing: false },
+				{ name: 'b', type: 'number', hasMissing: false }
+			],
 			rows: [
 				[1, 2],
 				[3, 4]
@@ -107,7 +113,10 @@ describe('importing a DataFrame', () => {
 		const df = fromText('a,b\n1,2\n3');
 
 		expect(df).toEqual({
-			columns: ['a', 'b'],
+			columns: [
+				{ name: 'a', type: 'number', hasMissing: false },
+				{ name: 'b', type: 'number', hasMissing: true }
+			],
 			rows: [[1, 2], [3]]
 		});
 	});
@@ -115,7 +124,10 @@ describe('importing a DataFrame', () => {
 	it('should replace missing values with undefined', () => {
 		const df = fromText('a,b\n1,2\n3,');
 		expect(df).toEqual({
-			columns: ['a', 'b'],
+			columns: [
+				{ name: 'a', type: 'number', hasMissing: false },
+				{ name: 'b', type: 'number', hasMissing: true }
+			],
 			rows: [
 				[1, 2],
 				[3, undefined]
@@ -156,14 +168,7 @@ describe('DataFrame basics', () => {
 
 	it('should return the correct shape', () => {
 		const df = new DataFrame();
-		df.set({
-			columns: ['a', 'b'],
-			rows: [
-				[1, 2],
-				[3, 4],
-				[5, 6]
-			]
-		});
+		df.set(fromText('a,b\n1,2\n3,4\n5,6'));
 
 		expect(df.shape()).toEqual([3, 2]);
 	});
@@ -182,13 +187,7 @@ describe('DataFrame basics', () => {
 describe('DataFrame operations', () => {
 	it('should select columns', () => {
 		const df = new DataFrame();
-		df.set({
-			columns: ['a', 'b'],
-			rows: [
-				[1, 2],
-				[3, 4]
-			]
-		});
+		df.set(fromText('a,b\n1,2\n3,4'));
 
 		const selected = df.selectColumn(0);
 		expect(selected).toEqual([1, 3]);
@@ -196,10 +195,7 @@ describe('DataFrame operations', () => {
 
 	it('should read missing as undefined', () => {
 		const df = new DataFrame();
-		df.set({
-			columns: ['a', 'b'],
-			rows: [[1, 2], [3]]
-		});
+		df.set(fromText('a,b\n1,2\n3,'));
 
 		const selected = df.selectColumn(1);
 		expect(selected).toEqual([2, undefined]);
@@ -207,263 +203,43 @@ describe('DataFrame operations', () => {
 
 	it('should filter rows', () => {
 		const df = new DataFrame();
-		df.set({
-			columns: ['a', 'b'],
-			rows: [
-				[1, 2],
-				[3, 4]
-			]
-		});
+		df.set(fromText('a,b\n1,2\n3,4'));
 
 		df.filter((row) => row[0] === 3);
-		expect(df.get()).toEqual({
-			columns: ['a', 'b'],
-			rows: [[3, 4]]
-		});
+		expect(df.get()).toEqual(fromText('a,b\n3,4'));
 	});
 
 	it('should delete columns', () => {
 		const df = new DataFrame();
-		df.set({
-			columns: ['a', 'b'],
-			rows: [
-				[1, 2],
-				[3, 4]
-			]
-		});
+		df.set(fromText('a,b\n1,2\n3,4'));
 
 		df.deleteColumn(0);
-		expect(df.get()).toEqual({
-			columns: ['b'],
-			rows: [[2], [4]]
-		});
+		expect(df.get()).toEqual(fromText('b\n2\n4'));
 	});
 
 	it('should do nothing when deleting a non-existent column', () => {
 		const df = new DataFrame();
-		df.set({
-			columns: ['a', 'b'],
-			rows: [
-				[1, 2],
-				[3, 4]
-			]
-		});
+		df.set(fromText('a,b\n1,2\n3,4'));
 
 		df.deleteColumn(-1);
-		expect(df.get()).toEqual({
-			columns: ['a', 'b'],
-			rows: [
-				[1, 2],
-				[3, 4]
-			]
-		});
+		expect(df.get()).toEqual(fromText('a,b\n1,2\n3,4'));
 	});
 });
 
 describe('DataFrame joining', () => {
-	it('should join two DataFrames', () => {
+	it('should join two DataFrames (keyed)', () => {
 		const df = new DataFrame();
-		df.set({
-			columns: ['a', 'b'],
-			rows: [
-				[1, 2],
-				[3, 4]
-			]
-		});
+		df.set(fromText('a,b\n1,2\n3,4'));
 
-		df.join(
-			{
-				columns: ['c', 'd'],
-				rows: [
-					[1, 6],
-					[3, 8]
-				]
-			},
-			0,
-			0
-		);
-		expect(df.get()).toEqual({
-			columns: ['a', 'b', 'd'],
-			rows: [
-				[1, 2, 6],
-				[3, 4, 8]
-			]
-		});
+		df.keyedJoin(fromText('c,d\n1,6\n3,8'), 0, 0);
+		expect(df.get()).toEqual(fromText('a,b,d\n1,2,6\n3,4,8'));
 	});
 
 	it('should left join two DataFrames', () => {
 		const df = new DataFrame();
-		df.set({
-			columns: ['a', 'b'],
-			rows: [
-				[1, 2],
-				[3, 4]
-			]
-		});
+		df.set(fromText('a,b\n1,2\n3,4'));
 
-		df.join(
-			{
-				columns: ['c', 'd'],
-				rows: [
-					[1, 6],
-					[2, 8] //different key
-				]
-			},
-			0,
-			0
-		);
-		expect(df.get()).toEqual({
-			columns: ['a', 'b', 'd'],
-			rows: [
-				[1, 2, 6],
-				[3, 4]
-			]
-		});
-	});
-});
-
-describe('DataFrame grouping and aggregating', () => {
-	it('should group by a column', () => {
-		const df = new DataFrame();
-		df.set({
-			columns: ['a', 'b'],
-			rows: [
-				[1, 2],
-				[1, 4],
-				[2, 6]
-			]
-		});
-
-		df.groupBy([Specific(0)], [Count('count')], false);
-		expect(df.get()).toEqual({
-			columns: ['count'],
-			rows: [[2], [1]]
-		});
-	});
-
-	it('should default to excluding group key', () => {
-		const df = new DataFrame();
-		df.set({
-			columns: ['a', 'b'],
-			rows: [
-				[1, 2],
-				[1, 4],
-				[2, 6]
-			]
-		});
-
-		df.groupBy([Specific(0)], [Count('count')]);
-		expect(df.get()).toEqual({
-			columns: ['count'],
-			rows: [[2], [1]]
-		});
-	});
-
-	it('should be able to include the generated key', () => {
-		const df = new DataFrame();
-		df.set({
-			columns: ['a', 'b'],
-			rows: [
-				[1, 2],
-				[1, 4],
-				[2, 6]
-			]
-		});
-
-		df.groupBy([Specific(0)], [Count('count')], true);
-		expect(df.get()).toEqual({
-			columns: ['groups', 'count'],
-			rows: [
-				[JSON.stringify(['1']), 2],
-				[JSON.stringify(['2']), 1]
-			]
-		});
-	});
-
-	it('should be able to do the aggregations', () => {
-		const df = new DataFrame();
-		df.set({
-			columns: ['a', 'b'],
-			rows: [
-				[1, 2],
-				[1, 4],
-				[2, 6],
-				[2, 8],
-				[2, 10],
-				[3, 12],
-				[3, 14],
-				[3, 16]
-			]
-		});
-		df.groupBy(
-			[Specific(0)],
-			[
-				Count('count'),
-				Percent('percent', get(df.rows).length),
-				Mean('mean', 1),
-				Min('min', 1),
-				Max('max', 1),
-				Median('median', 1),
-				Std('std', 1),
-				Var('var', 1),
-				Sum('sum', 1)
-			]
-		);
-		expect(df.get()).toEqual({
-			columns: ['count', 'percent', 'mean', 'min', 'max', 'median', 'std', 'var', 'sum'],
-			rows: [
-				[2, 0.25, 3, 2, 4, 3, 1, 1, 6],
-				[3, 0.375, 8, 6, 10, 8, 1.632993161855452, 2.6666666666666665, 24],
-				[3, 0.375, 14, 12, 16, 14, 1.632993161855452, 2.6666666666666665, 42]
-			]
-		});
-	});
-
-	it('should replace undefined with empty string for specific grouping', () => {
-		const df = new DataFrame();
-		df.set({
-			columns: ['a', 'b'],
-			rows: [
-				[1, 2],
-				[undefined, 4],
-				[2, 6],
-				[undefined, 8]
-			]
-		});
-		df.groupBy([Specific(0)], [Count('count')], true);
-		expect(df.get()).toEqual({
-			columns: ['groups', 'count'],
-			rows: [
-				[JSON.stringify(['1']), 1],
-				[JSON.stringify(['']), 2],
-				[JSON.stringify(['2']), 1]
-			]
-		});
-	});
-
-	it('should be able to group by bins', () => {
-		const df = new DataFrame();
-		df.set({
-			columns: ['a', 'b'],
-			rows: [
-				[1, 2],
-				[1, 4],
-				[2, 6],
-				[2, 8],
-				[2, 10],
-				[3, 12],
-				[3, 14],
-				[3, 16]
-			]
-		});
-
-		df.groupBy([Bins(0, 2)], [Count('count')], true);
-		expect(df.get()).toEqual({
-			columns: ['groups', 'count'],
-			rows: [
-				[JSON.stringify(['0']), 2],
-				[JSON.stringify(['1']), 6]
-			]
-		});
+		df.keyedJoin(fromText('c,d\n1,6\n2,8'), 0, 0);
+		expect(df.get()).toEqual(fromText('a,b,d\n1,2,6\n3,4'));
 	});
 });

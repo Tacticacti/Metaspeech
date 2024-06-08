@@ -44,6 +44,6 @@
 		<Table />
 	</div>
 	<div class="ml-10">
-		<Importer on:input={(e) => (second_data = e.detail.data)} />
+		<Importer on:input={(e) => (second_data = e.detail.data)} data-testid="file-input" />
 	</div>
 </div>

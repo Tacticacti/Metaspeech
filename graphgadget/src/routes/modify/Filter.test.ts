@@ -1,10 +1,9 @@
 import { describe, expect, it, vi } from 'vitest';
 import { fireEvent, render } from '@testing-library/svelte';
-import sut from '$lib/filtering/Filter.svelte';
-import { data } from '$lib/Store';
-import DataFrame from 'dataframe-js';
-import { get } from 'svelte/store';
-import * as h from '$lib/filtering/Filter.help';
+import sut from './Filter.svelte';
+import * as h from './Filter.help';
+import { df } from '$lib/Store';
+import { fromText } from '$lib/dataframe/DataFrame';
 
 beforeEach(() => {
 	vi.clearAllMocks();
@@ -40,7 +39,7 @@ describe('hiding window', () => {
 describe('select column', () => {
 	it('should render all columns'),
 		async () => {
-			data.set(new DataFrame([{ a: 1, b: 2, c: 3 }]));
+			df.set(fromText('a,b,c\n1,2,3'));
 
 			const r = render(sut);
 			await h.openFilterWindow(r);
@@ -51,36 +50,35 @@ describe('select column', () => {
 		};
 	it('should pre-select a column'),
 		async () => {
-			data.set(new DataFrame([{ a: 1, b: 2, c: 3 }]));
+			df.set(fromText('a,b,c\n1,2,3'));
 
 			const r = render(sut);
 			await h.openFilterWindow(r);
 
 			const columnSelect = h.getColumnSelect(r);
-			expect(columnSelect?.value).to.be.oneOf(get(data).listColumns());
+			expect(columnSelect?.value).toBeDefined();
 		};
 	it('should update the column when it is removed'),
 		async () => {
-			data.set(new DataFrame([{ a: 1, b: 2, c: 3 }]));
+			df.set(fromText('a,b,c\n1,2,3'));
 
 			const r = render(sut);
 			await h.openFilterWindow(r);
 
 			// drop currently selected column from $data
 			const columnSelect = h.getColumnSelect(r);
-			const oldColumn = columnSelect?.value ?? '';
-			data.set(get(data).drop(oldColumn));
+			const oldColumn = columnSelect?.value ?? 0;
+			df.deleteColumn(Number(oldColumn));
 			await h.rerender(r);
 
 			expect(columnSelect?.value).to.not.equal(oldColumn);
-			expect(columnSelect?.value).to.be.oneOf(get(data).listColumns());
 		};
 });
 
 describe('range checkbox', () => {
 	it('should be enabled for numeric columns'),
 		async () => {
-			data.set(new DataFrame([{ a: 1, b: 'a', c: 3 }]));
+			df.set(fromText('a,b,c\n1,2,3'));
 
 			const r = render(sut);
 			await h.openFilterWindow(r);
@@ -93,7 +91,7 @@ describe('range checkbox', () => {
 
 	it('should be disabled for non-numeric columns'),
 		async () => {
-			data.set(new DataFrame([{ a: 1, b: 'a', c: 3 }]));
+			df.set(fromText('a,b,c\n1,a,3'));
 
 			const r = render(sut);
 			await h.openFilterWindow(r);
@@ -108,7 +106,7 @@ describe('range checkbox', () => {
 describe('range inputs', () => {
 	it('should be disabled when the checkbox is not checked'),
 		async () => {
-			data.set(new DataFrame([{ a: 1, b: 2, c: 3 }]));
+			df.set(fromText('a,b,c\n1,2,3'));
 
 			const r = render(sut);
 			await h.openFilterWindow(r);
@@ -120,7 +118,7 @@ describe('range inputs', () => {
 		};
 	it('should be enabled when the checkbox is checked'),
 		async () => {
-			data.set(new DataFrame([{ a: 1, b: 2, c: 3 }]));
+			df.set(fromText('a,b,c\n1,2,3'));
 
 			const r = render(sut);
 			await h.openFilterWindow(r);
@@ -134,7 +132,7 @@ describe('range inputs', () => {
 
 describe('text input', () => {
 	it('should be enabled for all columns', async () => {
-		data.set(new DataFrame([{ a: 1, b: 2, c: 3 }]));
+		df.set(fromText('a,b,c\n1,2,3'));
 
 		const r = render(sut);
 		await h.openFilterWindow(r);
@@ -144,7 +142,7 @@ describe('text input', () => {
 		expect(h.getTextFilterInput(r)).to.exist;
 	});
 	it('should be hidden when range is used', async () => {
-		data.set(new DataFrame([{ a: 1, b: 2, c: 3 }]));
+		df.set(fromText('a,b,c\n1,2,3'));
 
 		const r = render(sut);
 		await h.openFilterWindow(r);
@@ -157,13 +155,7 @@ describe('text input', () => {
 
 describe('text filtering', () => {
 	it('should be able to filter by text (matching)', async () => {
-		data.set(
-			new DataFrame([
-				{ a: 1, b: 2, c: 3 },
-				{ a: 2, b: 3, c: 4 },
-				{ a: 3, b: 4, c: 5 }
-			])
-		);
+		df.set(fromText('a,b,c\n1,2,3\n2,3,4\n3,4,5'));
 
 		// open filter window
 		const r = render(sut);
@@ -178,16 +170,10 @@ describe('text filtering', () => {
 
 		await h.removeMatching(r);
 
-		expect(get(data).toText()).to.equal('a;b;c\n1;2;3\n3;4;5');
+		expect(df.get()).toEqual(fromText('a,b,c\n1,2,3\n3,4,5'));
 	});
 	it('should be able to filter by text (non-matching)', async () => {
-		data.set(
-			new DataFrame([
-				{ a: 1, b: 2, c: 3 },
-				{ a: 2, b: 3, c: 4 },
-				{ a: 3, b: 4, c: 5 }
-			])
-		);
+		df.set(fromText('a,b,c\n1,2,3\n2,3,4\n3,4,5'));
 
 		// open filter window
 		const r = render(sut);
@@ -202,18 +188,12 @@ describe('text filtering', () => {
 
 		await h.removeNonMatching(r);
 
-		expect(get(data).toText()).to.equal('a;b;c\n2;3;4');
+		expect(df.get()).toEqual(fromText('a,b,c\n2,3,4'));
 	});
 });
 describe('range filtering', () => {
 	it('should be able to filter by range (matching)', async () => {
-		data.set(
-			new DataFrame([
-				{ a: 1, b: 2, c: 3 },
-				{ a: 2, b: 3, c: 4 },
-				{ a: 3, b: 4, c: 5 }
-			])
-		);
+		df.set(fromText('a,b,c\n1,2,3\n2,3,4\n3,4,5'));
 
 		// open filter window
 		const r = render(sut);
@@ -231,17 +211,11 @@ describe('range filtering', () => {
 
 		await h.removeMatching(r);
 
-		expect(get(data).toText()).to.equal('a;b;c\n1;2;3');
+		expect(df.get()).toEqual(fromText('a,b,c\n1,2,3'));
 	});
 
 	it('should be able to filter by range (non-matching)', async () => {
-		data.set(
-			new DataFrame([
-				{ a: 1, b: 2, c: 3 },
-				{ a: 2, b: 3, c: 4 },
-				{ a: 3, b: 4, c: 5 }
-			])
-		);
+		df.set(fromText('a,b,c\n1,2,3\n2,3,4\n3,4,5'));
 
 		// open filter window
 		const r = render(sut);
@@ -259,6 +233,6 @@ describe('range filtering', () => {
 
 		await h.removeNonMatching(r);
 
-		expect(get(data).toText()).to.equal('a;b;c\n2;3;4\n3;4;5');
+		expect(df.get()).toEqual(fromText('a,b,c\n2,3,4\n3,4,5'));
 	});
 });

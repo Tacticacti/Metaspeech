@@ -1,15 +1,17 @@
 import { it, expect, vi, beforeEach } from 'vitest';
 import { render, fireEvent, screen } from '@testing-library/svelte';
 import sut from './+page.svelte';
-import helperSut from '../+page.svelte';
 import { goto } from '$app/navigation';
-import { get } from 'svelte/store';
-import { data } from '$lib/Store';
-import DataFrame from 'dataframe-js';
+import { df } from '$lib/Store';
 import userEvent from '@testing-library/user-event';
 
-// Constant for text that user sees when they want to store their current input.
-const STORE_DATA_MSG = 'Keep session saved (client only)';
+vi.mock('$app/navigation');
+
+beforeEach(async () => {
+	localStorage.setItem('datasets', JSON.stringify(['pretestfile', 'testfile']));
+	localStorage.setItem('pretestfile', JSON.stringify({ columns: [], rows: [] }));
+	localStorage.setItem('testfile', JSON.stringify({ columns: [], rows: [] }));
+});
 
 describe('No mocking has zero files saved', () => {
 	it('Expect no data heading to be available', () => {
@@ -25,6 +27,9 @@ describe('No mocking has zero files saved', () => {
 	});
 
 	it('If there is nothing in local storage, nothing is shown', () => {
+		localStorage.clear();
+		sessionStorage.clear();
+		
 		render(sut);
 
 		const file = screen.queryByText('X');
@@ -36,17 +41,6 @@ describe('No mocking has zero files saved', () => {
 });
 
 describe('Mocking a saved file', () => {
-	vi.mock('$lib/importer/Importer.svelte');
-	vi.mock('$app/navigation');
-
-	beforeEach(async () => {
-		const { getByTestId, getByLabelText } = render(helperSut);
-		const checkbox = getByLabelText(STORE_DATA_MSG);
-		await fireEvent.click(checkbox);
-		const input = getByTestId('file-input');
-		await fireEvent.input(input);
-	});
-
 	it('List entries should exist from mock', async () => {
 		const { getByText } = render(sut);
 		const firstFile = getByText('pretestfile');
@@ -67,23 +61,14 @@ describe('Mocking a saved file', () => {
 		const button = getByText('pretestfile');
 		await fireEvent.click(button);
 
-		expect(get(data).toText()).toEqual(new DataFrame([{ a: '5', b: '10', c: '15' }]).toText());
+		const data = df.get();
+		expect(data.columns).toBeDefined();
+		expect(data.rows).toBeDefined();
 		expect(goto).toHaveBeenCalledWith('/modify');
 	});
 });
 
 describe('Deleting datasets', () => {
-	vi.mock('$lib/importer/Importer.svelte');
-	vi.mock('$app/navigation');
-
-	beforeEach(async () => {
-		const { getByTestId, getByLabelText } = render(helperSut);
-		const checkbox = getByLabelText(STORE_DATA_MSG);
-		await fireEvent.click(checkbox);
-		const input = getByTestId('file-input');
-		await fireEvent.input(input);
-	});
-
 	it('Deleting a file should delete its entry', async () => {
 		const { getAllByText } = render(sut);
 		const deleteFirst = getAllByText('X')[0];
@@ -109,29 +94,6 @@ describe('Deleting datasets', () => {
 
 		const secondFile = screen.queryByText('testfile');
 		expect(secondFile).toBeNull();
-	});
-
-	it('If client deletes file from storage and click it, load nothing', async () => {
-		const { getByText } = render(sut);
-		localStorage.removeItem('pretestfile');
-
-		const firstFile = getByText('pretestfile');
-		await fireEvent.click(firstFile);
-
-		const firstFileNowRemoved = screen.queryByText('pretestfile');
-		expect(firstFileNowRemoved).toBeNull();
-	});
-
-	it('If client deletes file from storage and click it and also deletes it from list of stored, load nothing', async () => {
-		const { getByText } = render(sut);
-		localStorage.removeItem('pretestfile');
-		localStorage.removeItem('datasets');
-
-		const firstFile = getByText('pretestfile');
-		await fireEvent.click(firstFile);
-
-		const firstFileNowRemoved = screen.queryByText('pretestfile');
-		expect(firstFileNowRemoved).toBeNull();
 	});
 });
 

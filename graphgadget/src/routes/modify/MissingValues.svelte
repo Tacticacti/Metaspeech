@@ -11,7 +11,7 @@
 	 * Removes rows from data that miss values
 	 */
 	function removeMissingValues() {
-		$rows.filter((row) => row.every((cell) => cell !== undefined));
+		df.filter((row) => !row.some((cell) => cell === undefined));
 	}
 </script>
 

@@ -2,12 +2,12 @@ import { fireEvent, render } from '@testing-library/svelte';
 import { afterEach, describe, it, expect, vi } from 'vitest';
 import sut from './Importer.svelte';
 import * as fileParserModule from './scripts/FileParser';
-import { DataFrame } from 'dataframe-js';
 import type { DataFile } from '$lib/Types';
+import { fromText } from '$lib/dataframe/DataFrame';
 
 // Mocking the file parser module to control its behavior
 vi.mock('./scripts/FileParser', () => ({
-	Parse: vi.fn(() => Promise.resolve(new DataFrame([])))
+	Parse: vi.fn(() => Promise.resolve(fromText('a,b\n1,2\n3,4\n5,6')))
 }));
 
 describe('Page', () => {
@@ -62,7 +62,7 @@ describe('Importer', () => {
 
 		// Check if the 'input' event was dispatched with the expected data, which should be a DataFrame instance
 		const result: DataFile = await dispatched;
-		expect(result.input).toBeInstanceOf(DataFrame); // Verify that the result is indeed an instance of DataFrame
+		expect(result.data).toEqual(fromText('a,b\n1,2\n3,4\n5,6')); // Verify that the result is indeed an instance of DataFrame
 	});
 
 	it('should not call Parse if no file is selected', async () => {
