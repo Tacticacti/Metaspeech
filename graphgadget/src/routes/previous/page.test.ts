@@ -29,7 +29,7 @@ describe('No mocking has zero files saved', () => {
 	it('If there is nothing in local storage, nothing is shown', () => {
 		localStorage.clear();
 		sessionStorage.clear();
-		
+
 		render(sut);
 
 		const file = screen.queryByText('X');

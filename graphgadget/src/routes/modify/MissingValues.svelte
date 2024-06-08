@@ -2,7 +2,6 @@
 	import { df } from '$lib/Store';
 
 	const columns = df.columns;
-	const rows = df.rows;
 
 	$: missing_values = $columns.some((c) => c.hasMissing);
 	$: columns_with_missing = $columns.filter((c) => c.hasMissing);

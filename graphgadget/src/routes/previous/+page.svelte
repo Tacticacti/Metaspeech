@@ -104,6 +104,7 @@
 
 	{#if datasets.length > 0}
 		<ul
+			data-testid="prev-data-list"
 			class="max-h-[60vh] w-full max-w-xl divide-y divide-blue-200 overflow-y-auto rounded-md border-blue-200 bg-darkblue text-lg font-medium leading-none hover:cursor-pointer"
 		>
 			{#each datasets as dataset}
@@ -113,6 +114,7 @@
 					<span class="ml-6 mr-2.5 h-7 w-1 rounded-r-md bg-blue-500"></span>
 					<button class="h-16 w-full" on:click={() => loadDataset(dataset)}>{dataset}</button>
 					<button
+						data-testid="btn-delete-file"
 						class="mr-2 h-10 rounded-full px-4 font-sans text-2xl font-bold text-offwhite hover:bg-red-400"
 						on:click={() => deleteDataset(dataset)}>X</button
 					>
