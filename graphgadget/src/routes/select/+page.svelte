@@ -1,44 +1,69 @@
 <script lang="ts">
-	import { beforeUpdate } from 'svelte';
-	import { loadSession } from '$lib/utils/SessionLoad';
-	import ColumnSelector from '$lib/column-selector/ColumnSelector.svelte';
-	import NavBar from '$lib/shared-components/NavBar.svelte';
-	import Footer from '$lib/shared-components/Footer.svelte';
-	import { Button } from 'flowbite-svelte';
-	import nextImg from '$lib/static/next.png';
-	import { APP_NAME } from '$lib/Store';
+	import { df } from '$lib/Store';
+	import type { Column, DataTypeString } from '$lib/Types';
 
-	/**
-	 * Will check if there is a dataframe in session storage and load it
-	 */
-	beforeUpdate(() => {
-		loadSession();
-	});
+	const columns = df.columns;
+	$: aggregatableColumns = $columns.filter((c) => c.type === 'number' && !c.groupBy);
+	let aggregateBy: number = $columns.findIndex((c) => c.aggregate);
+
+	$: selectColumnForAggregation(aggregateBy);
+
+	function getGroupingOptions(type: DataTypeString): string[] {
+		const typeOptions = {
+			string: ['specific'],
+			number: ['specific', 'binned']
+		};
+		return typeOptions[type] ?? [];
+	}
+
+	function selectColumnForGrouping(column: Column, select: boolean) {
+		column.groupBy = select ? { type: 'specific' } : undefined;
+		df.forceStoreUpdate();
+	}
+	function selectColumnForAggregation(index: number) {
+		for (let i = 0; i < $columns.length; i++) {
+			$columns[i].aggregate = i === index;
+		}
+	}
 </script>
 
-<svelte:head>
-	<title>Parameters - {APP_NAME}</title>
-</svelte:head>
-
-<main class="bg-offwhite max-w-full h-screen m-0 flex flex-col scrollbar-hide overflow-auto">
-	<NavBar currentPage={'select'} />
-	<div class="flex flex-col pt-16 m-5 max-w-full h-full">
-		<div
-			class="flex items-center justify-center self-end max-w-32 max-h-14 h-full w-full bg-darkblue rounded-lg hover:bg-blue-900"
-		>
-			<!-- Given that it was implemented with an a link, right now you need to click on the words to go to next page -->
-			<Button
-				href="/view"
-				class=" text-offwhite font-bold rounded-lg text-sm w-full"
-				data-testid="next-link"
-			>
-				<div class="flex justify-center items-center">
-					Next
-					<img src={nextImg} class=" invert w-8 h-8 ml-4" alt="Next icon" />
-				</div>
-			</Button>
-		</div>
-		<ColumnSelector></ColumnSelector>
+<a href="/view" data-testid="next-link">Next</a>
+<div class="flex">
+	<div class="flex flex-col">
+		{#each $columns as column}
+			<span>
+				<label>
+					{column.name}
+					<input
+						type="checkbox"
+						on:input={(e) => selectColumnForGrouping(column, e.currentTarget.checked)}
+						checked={Boolean(column.groupBy)}
+					/>
+				</label>
+				{#if column.groupBy}
+					<select bind:value={column.groupBy.type}>
+						{#each getGroupingOptions(column.type) as groupingOption}
+							<option value={groupingOption}>{groupingOption}</option>
+						{/each}
+					</select>
+					{#if column.groupBy.type === 'binned'}
+						<input type="number" bind:value={column.groupBy.size} />
+					{/if}
+				{/if}
+			</span>
+		{/each}
 	</div>
-	<Footer></Footer>
-</main>
+
+	<div class="flex flex-col">
+		<label>
+			Frequency
+			<input type="radio" bind:group={aggregateBy} value={-1} />
+		</label>
+		{#each aggregatableColumns as column, index}
+			<label>
+				{column.name}
+				<input type="radio" bind:group={aggregateBy} value={index} />
+			</label>
+		{/each}
+	</div>
+</div>

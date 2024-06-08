@@ -1,5 +1,42 @@
-<script>
+<script lang="ts">
+	import Footer from '$components/Footer.svelte';
+	import NavBar from '$components/NavBar.svelte';
 	import '../app.css';
+	import { navigating } from '$app/stores';
+	import { df } from '$lib/Store';
+	import { onMount } from 'svelte';
+
+	onMount(() => {
+		loadSession();
+	});
+
+	navigating.subscribe(() => {
+		if (typeof sessionStorage === 'undefined') return;
+
+		sessionStorage.setItem('current-df', JSON.stringify(df.get()));
+	});
+
+	/**
+	 * Loads the session from the session storage.
+	 * @returns The loaded DataFrame.
+	 */
+	function loadSession() {
+		if (typeof sessionStorage === 'undefined') return;
+		const jsonData = sessionStorage.getItem('current-df');
+		let parsed = jsonData ? JSON.parse(jsonData) : null;
+
+		if (parsed === null) return;
+
+		df.set(parsed);
+	}
 </script>
 
-<slot />
+<svelte:window on:error={console.error} />
+
+<div class="scrollbar-hide flex max-h-screen min-h-screen flex-col overflow-auto bg-offwhite">
+	<NavBar />
+	<main class="flex-grow overflow-auto">
+		<slot />
+	</main>
+	<Footer />
+</div>

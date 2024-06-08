@@ -56,7 +56,7 @@ export function getLogo(page: Page): Locator {
 }
 
 export function getImporterInput(page: Page): Locator {
-	return page.getByTestId('input');
+	return page.getByTestId('import');
 }
 
 /* Previous page elements */

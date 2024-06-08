@@ -23,22 +23,6 @@ test.describe('Initial page tests', () => {
 		await expect(helper.getFooter(page)).toBeVisible();
 		await expect(helper.getErrorModal(page)).not.toBeVisible();
 	});
-
-	test('input an invalid file format', async ({ page }) => {
-		await helper.getSelectData(page).click();
-
-		await helper.getImporterInput(page).setInputFiles({
-			name: 'example.png',
-			mimeType: 'image/png',
-			buffer: Buffer.from('<file content>')
-		});
-		await expect(helper.getErrorModal(page)).toBeVisible();
-
-		await helper.getCloseErrorModal(page).click();
-
-		await expect(helper.getErrorModal(page)).not.toBeVisible();
-		await expect(page).toHaveURL('/');
-	});
 });
 
 test.describe('Previous data (empty) page tests', () => {

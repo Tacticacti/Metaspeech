@@ -1,6 +1,8 @@
-import { data } from '$lib/Store';
-import { it, expect } from 'vitest';
+import { expect, it, describe } from 'vitest';
+import { df } from './Store';
 
-it('should have data', () => {
-	expect(data).toBeDefined();
+describe('Store', () => {
+	it('should have a data frame', () => {
+		expect(df).toBeDefined();
+	});
 });

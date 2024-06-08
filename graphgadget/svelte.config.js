@@ -19,7 +19,12 @@ const config = {
 			fallback: undefined,
 			precompress: false,
 			strict: true
-		})
+		}),
+		alias: {
+			$components: './src/lib/components',
+			$assets: './src/lib/assets',
+			$static: './static'
+		}
 	}
 };
 

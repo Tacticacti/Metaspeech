@@ -13,7 +13,8 @@
 		"format": "prettier --write .",
 		"test:integration": "playwright test",
 		"test:unit": "vitest --coverage --run",
-		"all": "(npm run lint || (npm run format && npm run lint)) && npm run build && npm run test && npm run preview"
+		"all": "(npm run lint || (npm run format && npm run lint)) && npm run build && npm run test && npm run preview",
+		"try": "npm install && npm run dev"
 	},
 	"devDependencies": {
 		"@playwright/test": "1.44.0",
@@ -23,7 +24,6 @@
 		"@testing-library/jest-dom": "^6.4.5",
 		"@testing-library/svelte": "^5.1.0",
 		"@testing-library/user-event": "^14.5.2",
-		"@types/dataframe-js": "^1.4.3",
 		"@types/eslint": "^8.56.0",
 		"@types/jest": "^29.5.12",
 		"@typescript-eslint/eslint-plugin": "^7.0.0",
@@ -31,7 +31,6 @@
 		"@vitest/coverage-istanbul": "^1.6.0",
 		"autoprefixer": "^10.4.19",
 		"chartjs": "^0.3.24",
-		"dataframe-js": "^1.4.4",
 		"eslint": "^8.56.0",
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-plugin-svelte": "^2.35.1",
@@ -42,8 +41,9 @@
 		"jest-canvas-mock": "^2.5.2",
 		"jsdom": "^24.0.0",
 		"postcss": "^8.4.38",
-		"prettier": "^3.1.1",
+		"prettier": "^3.3.1",
 		"prettier-plugin-svelte": "^3.1.2",
+		"prettier-plugin-tailwindcss": "^0.6.1",
 		"svelte": "^4.2.7",
 		"svelte-check": "^3.6.0",
 		"tailwindcss": "^3.4.3",
