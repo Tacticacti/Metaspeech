@@ -5,7 +5,7 @@ import { df } from '$lib/Store';
 import { fromText } from '$lib/dataframe/DataFrame';
 
 vi.mock('$components/Footer.svelte');
-vi.mock('$components/Navbar.svelte');
+vi.mock('$components/NavBar.svelte');
 vi.mock('$app/stores', async (og) => ({
 	...(await og<typeof import('$app/stores')>()),
 	navigating: {
