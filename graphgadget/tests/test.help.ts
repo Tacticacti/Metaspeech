@@ -169,3 +169,19 @@ export function getMergeIndexButton(page: Page): Locator {
 export function getMergeKeyedButton(page: Page): Locator {
 	return page.getByTestId('merge-keyed-button');
 }
+
+export function getColumnHeaderInput(page: Page, headerName: string): Locator {
+	return page.getByTestId('header-' + headerName + '-input');
+}
+
+export function getColumnHeaderDeleteButton(page: Page, headerName: string): Locator {
+	return page.getByTestId('header-' + headerName + '-delete');
+}
+
+export function getTableCell(page: Page, cellName: string): Locator {
+	return page.getByTestId(cellName + '-cell');
+}
+
+export function getInfoBubble(page: Page): Locator {
+	return page.getByTestId('info-bubble');
+}

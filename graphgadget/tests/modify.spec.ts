@@ -24,11 +24,11 @@ test.describe('Modify page tests', () => {
 		});
 
 		test('Test if expected columns from test data are visible', async ({ page }) => {
-			await expect(page.getByTestId('header-Id-input')).toBeVisible();
-			await expect(page.getByTestId('header-Language-input')).toBeVisible();
-			await expect(page.getByTestId('header-Age-input')).toBeVisible();
-			await expect(page.getByTestId('header-Gender-input')).toBeVisible();
-			await expect(page.getByTestId('header-Duration(seconds)-input')).toBeVisible();
+			await expect(helper.getColumnHeaderInput(page, 'Id')).toBeVisible();
+			await expect(helper.getColumnHeaderInput(page, 'Language')).toBeVisible();
+			await expect(helper.getColumnHeaderInput(page, 'Age')).toBeVisible();
+			await expect(helper.getColumnHeaderInput(page, 'Gender')).toBeVisible();
+			await expect(helper.getColumnHeaderInput(page, 'Duration(seconds)')).toBeVisible();
 		});
 	});
 
@@ -100,9 +100,9 @@ test.describe('Modify page tests', () => {
 			await maxRangeInput.fill('2');
 			await removeMatchingButton.click();
 
-			await expect(page.getByTestId('1-cell')).not.toBeVisible();
-			await expect(page.getByTestId('2-cell')).not.toBeVisible();
-			await expect(page.getByTestId('3-cell')).toBeVisible();
+			await expect(helper.getTableCell(page, '1')).not.toBeVisible();
+			await expect(helper.getTableCell(page, '2')).not.toBeVisible();
+			await expect(helper.getTableCell(page, '3')).toBeVisible();
 		});
 
 		test('Test remove nonmatching button', async ({ page }) => {
@@ -114,9 +114,9 @@ test.describe('Modify page tests', () => {
 			await maxRangeInput.fill('2');
 			await removeNonMatchingButton.click();
 
-			await expect(page.getByTestId('1-cell')).toBeVisible();
-			await expect(page.getByTestId('2-cell')).toBeVisible();
-			await expect(page.getByTestId('3-cell')).not.toBeVisible();
+			await expect(helper.getTableCell(page, '1')).toBeVisible();
+			await expect(helper.getTableCell(page, '2')).toBeVisible();
+			await expect(helper.getTableCell(page, '3')).not.toBeVisible();
 		});
 
 		test('Test remove matching button using text filter input for numerical column', async ({
@@ -132,9 +132,9 @@ test.describe('Modify page tests', () => {
 			await helper.getTextFilterInput(page).fill('1');
 			await removeMatchingButton.click();
 
-			await expect(page.getByTestId('1-cell')).not.toBeVisible();
-			await expect(page.getByTestId('2-cell')).toBeVisible();
-			await expect(page.getByTestId('3-cell')).toBeVisible();
+			await expect(helper.getTableCell(page, '1')).not.toBeVisible();
+			await expect(helper.getTableCell(page, '2')).toBeVisible();
+			await expect(helper.getTableCell(page, '3')).toBeVisible();
 		});
 
 		test('Test remove nonmatching button using text filter input for numerical column', async ({
@@ -150,9 +150,9 @@ test.describe('Modify page tests', () => {
 			await helper.getTextFilterInput(page).fill('1');
 			await removeNonMatchingButton.click();
 
-			await expect(page.getByTestId('1-cell')).toBeVisible();
-			await expect(page.getByTestId('2-cell')).not.toBeVisible();
-			await expect(page.getByTestId('3-cell')).not.toBeVisible();
+			await expect(helper.getTableCell(page, '1')).toBeVisible();
+			await expect(helper.getTableCell(page, '2')).not.toBeVisible();
+			await expect(helper.getTableCell(page, '3')).not.toBeVisible();
 		});
 
 		test('Test remove matching button using text filter input for string column', async ({
@@ -166,9 +166,9 @@ test.describe('Modify page tests', () => {
 			await helper.getTextFilterInput(page).fill('EN');
 			await removeMatchingButton.click();
 
-			await expect(page.getByTestId('1-cell')).not.toBeVisible();
-			await expect(page.getByTestId('2-cell')).toBeVisible();
-			await expect(page.getByTestId('3-cell')).toBeVisible();
+			await expect(helper.getTableCell(page, '1')).not.toBeVisible();
+			await expect(helper.getTableCell(page, '2')).toBeVisible();
+			await expect(helper.getTableCell(page, '3')).toBeVisible();
 		});
 
 		test('Test remove nonmatching button using text filter input for string column', async ({
@@ -182,9 +182,9 @@ test.describe('Modify page tests', () => {
 			await helper.getTextFilterInput(page).fill('EN');
 			await removeNonMatchingButton.click();
 
-			await expect(page.getByTestId('1-cell')).toBeVisible();
-			await expect(page.getByTestId('2-cell')).not.toBeVisible();
-			await expect(page.getByTestId('3-cell')).not.toBeVisible();
+			await expect(helper.getTableCell(page, '1')).toBeVisible();
+			await expect(helper.getTableCell(page, '2')).not.toBeVisible();
+			await expect(helper.getTableCell(page, '3')).not.toBeVisible();
 		});
 	});
 
@@ -214,17 +214,15 @@ test.describe('Modify page tests', () => {
 		test('Test if expected rows are removed', async ({ page }) => {
 			const removeMissingButton = helper.getRemoveMissingButton(page);
 
-			await expect(
-				page.getByRole('row', { name: '1EN 19 M 100 null' }).getByTestId('null-cell')
-			).toBeVisible();
-			await expect(page.getByTestId('null-cell').nth(1)).toBeVisible();
-			await expect(page.getByTestId('null-cell').nth(2)).toBeVisible();
+			await expect(helper.getTableCell(page, 'null').first()).toBeVisible();
+			await expect(helper.getTableCell(page, 'null').nth(1)).toBeVisible();
+			await expect(helper.getTableCell(page, 'null').nth(2)).toBeVisible();
 
 			await removeMissingButton.click();
 
-			await expect(page.getByTestId('1-cell')).not.toBeVisible();
-			await expect(page.getByTestId('2-cell')).not.toBeVisible();
-			await expect(page.getByTestId('3-cell')).toBeVisible();
+			await expect(helper.getTableCell(page, '1')).not.toBeVisible();
+			await expect(helper.getTableCell(page, '2')).not.toBeVisible();
+			await expect(helper.getTableCell(page, '3')).toBeVisible();
 		});
 	});
 
@@ -241,26 +239,26 @@ test.describe('Modify page tests', () => {
 		});
 
 		test('Test renaming column', async ({ page }) => {
-			const columnInput = page.getByTestId('header-Id-input');
+			const columnInput = helper.getColumnHeaderInput(page, 'Id');
 
 			await columnInput.dblclick();
 			await columnInput.fill('Test_Name');
 			await helper.getFilterButton(page).click();
 
-			await expect(page.getByTestId('header-Test_Name-input')).toBeVisible();
+			await expect(helper.getColumnHeaderInput(page, 'Test_Name')).toBeVisible();
 			await expect(columnInput).not.toBeVisible();
 		});
 
 		test('Test deleting column', async ({ page }) => {
-			const columnDeleteButton = page.getByTestId('header-Id-delete');
-			const columnInput = page.getByTestId('header-Id-input');
+			const columnDeleteButton = helper.getColumnHeaderDeleteButton(page, 'Id');
+			const columnInput = helper.getColumnHeaderInput(page, 'Id');
 
 			await columnDeleteButton.click();
 
 			await expect(columnInput).not.toBeVisible();
-			await expect(page.getByTestId('1-cell')).not.toBeVisible();
-			await expect(page.getByTestId('2-cell')).not.toBeVisible();
-			await expect(page.getByTestId('3-cell')).not.toBeVisible();
+			await expect(helper.getTableCell(page, '1')).not.toBeVisible();
+			await expect(helper.getTableCell(page, '2')).not.toBeVisible();
+			await expect(helper.getTableCell(page, '3')).not.toBeVisible();
 		});
 	});
 
@@ -297,7 +295,7 @@ test.describe('Modify page tests', () => {
 			const infoButton = helper.getInfoButton(page);
 			await infoButton.hover();
 
-			const tooltip = page.getByTestId('info-bubble');
+			const tooltip = helper.getInfoBubble(page);
 			await expect(tooltip).toBeVisible();
 			await expect(tooltip).toContainText(/Use the Index merge to attach columns in their index/);
 		});
@@ -307,8 +305,8 @@ test.describe('Modify page tests', () => {
 
 			await indexMergeButton.click();
 
-			await expect(page.getByTestId('header-Column_1-input')).toBeVisible();
-			await expect(page.getByTestId('header-Column_2-input')).toBeVisible();
+			await expect(helper.getColumnHeaderInput(page, 'Column_1')).toBeVisible();
+			await expect(helper.getColumnHeaderInput(page, 'Column_2')).toBeVisible();
 		});
 
 		test('Test keyed merge button', async ({ page }) => {
@@ -316,8 +314,8 @@ test.describe('Modify page tests', () => {
 
 			await keyedMergeButton.click();
 
-			await expect(page.getByTestId('header-Column_1-input')).not.toBeVisible();
-			await expect(page.getByTestId('header-Column_2-input')).toBeVisible();
+			await expect(helper.getColumnHeaderInput(page, 'Column_1')).not.toBeVisible();
+			await expect(helper.getColumnHeaderInput(page, 'Column_2')).toBeVisible();
 		});
 	});
 });
