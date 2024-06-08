@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 import * as helper from './test.help';
+import { tsvTestData } from './test.help';
 
 test.describe('Initial page tests', () => {
 	test.beforeEach(async ({ page }) => {
@@ -99,11 +100,6 @@ test.describe('Previous data (empty) page tests', () => {
 	});
 });
 
-const tsvData = `Id  Language    Age Gender  Duration (seconds)
-1   EN  19  M   100
-2   PT  21  F   200
-3   ES  50  M   140`;
-
 test.describe('Previous data: imported a file but did not store it', () => {
 	test.beforeEach(async ({ page }) => {
 		await page.goto('/');
@@ -114,7 +110,7 @@ test.describe('Previous data: imported a file but did not store it', () => {
 		await helper.getImporterInput(page).setInputFiles({
 			name: 'example.tsv',
 			mimeType: 'text/tsv',
-			buffer: Buffer.from(tsvData)
+			buffer: Buffer.from(tsvTestData)
 		});
 		await helper.getNavHome(page).click();
 
@@ -153,7 +149,7 @@ test.describe('Previous data: imported multiple files', () => {
 			await helper.getImporterInput(page).setInputFiles({
 				name: `example${i}.tsv`,
 				mimeType: 'text/tsv',
-				buffer: Buffer.from(tsvData)
+				buffer: Buffer.from(tsvTestData)
 			});
 			await helper.getNavHome(page).click();
 		}
