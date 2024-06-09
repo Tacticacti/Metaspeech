@@ -38,6 +38,7 @@
 	function handleInput(event: CustomEvent<DataFile>) {
 		df.set(event.detail.data);
 		storeFile(event.detail);
+		console.log('clicked');
 
 		goto('/modify');
 	}
