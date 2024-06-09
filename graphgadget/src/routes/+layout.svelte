@@ -33,10 +33,10 @@
 
 <svelte:window on:error={console.error} />
 
-<div class="scrollbar-hide flex max-h-screen min-h-screen flex-col overflow-auto bg-offwhite">
-	<NavBar />
-	<main class="flex-grow overflow-auto">
+<NavBar />
+<div class="flex flex-col min-h-screen bg-offwhite">
+	<main class="flex-1">
 		<slot />
 	</main>
-	<Footer />
 </div>
+<Footer />
