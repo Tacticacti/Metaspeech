@@ -71,13 +71,13 @@
 	}
 </script>
 
-<div class="bg-offwhite min-h-screen max-h-screen flex justify-center">
+<div class="flex max-h-screen min-h-screen justify-center bg-offwhite">
 	<div class="absolute left-0 top-0">
 		<Button href="/" class="ml-4 mt-4 rounded-xl bg-darkblue hover:bg-blue-800">
 			<img src={nextImg} alt="go back arrow" class="w-8 rotate-180 invert" />
 		</Button>
 	</div>
-	
+
 	<div class="absolute right-0 top-0 flex">
 		<div id="ext-ref" class="mr-24 mt-12 size-0"></div>
 		<Button id="ref-left"
@@ -95,14 +95,14 @@
 			> and can be removed at any point.
 		</Tooltip>
 	</div>
-	
+
 	<div class="flex w-[80%] flex-col items-center pt-8 align-top">
 		<div class="flex min-w-full flex-col items-center">
 			<h1 class="mb-4 text-2xl font-semibold text-darkblue">Previous Data</h1>
 			<h2 class="mb-8 text-lg font-semibold text-darkblue">Click on a file to use it.</h2>
 			<div class="mb-8 h-[4px] min-w-[80%] rounded-full bg-darkblue"></div>
 		</div>
-	
+
 		{#if datasets.length > 0}
 			<ul
 				data-testid="prev-data-list"
@@ -125,7 +125,7 @@
 		{:else}
 			<p class=" text-xl font-semibold text-red-400">No previous data available.</p>
 		{/if}
-	
+
 		<Button
 			class="my-12 rounded-lg bg-red-400 px-12 py-2 text-base font-bold text-offwhite hover:bg-red-500"
 			on:click={clearCache}>Clear Data</Button

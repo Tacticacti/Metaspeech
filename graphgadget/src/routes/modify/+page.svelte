@@ -16,7 +16,7 @@
 	<title>Data - {APP_NAME}</title>
 </svelte:head>
 
-<div class="flex-1 flex flex-col">
+<div class="flex flex-1 flex-col">
 	<MissingValues />
 
 	<div class="flex items-center justify-between p-5">
@@ -40,7 +40,7 @@
 	<Merge {second_data} />
 
 	<div class="flex w-full flex-1 content-between items-center justify-center px-24">
-		<div class="w-full p-4 overflow-scroll scrollbar-hide">
+		<div class="scrollbar-hide w-full overflow-scroll p-4">
 			<Table />
 		</div>
 		<div class="ml-10">

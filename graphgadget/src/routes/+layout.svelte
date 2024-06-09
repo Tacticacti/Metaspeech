@@ -22,7 +22,7 @@
 	 */
 	function loadSession() {
 		if (typeof sessionStorage === 'undefined') return;
-		
+
 		const jsonData = sessionStorage.getItem('current-df');
 		let parsed = jsonData ? JSON.parse(jsonData) : null;
 
@@ -35,8 +35,8 @@
 <svelte:window on:error={console.error} />
 
 <NavBar />
-<div class="flex flex-col min-h-screen bg-offwhite">
-	<main class="flex flex-col flex-1">
+<div class="flex min-h-screen flex-col bg-offwhite">
+	<main class="flex flex-1 flex-col">
 		<slot />
 	</main>
 </div>
