@@ -12,11 +12,11 @@
 	let second_data: DataFrameLike;
 </script>
 
-<svelte:head>
+<!-- <svelte:head>
 	<title>Data - {APP_NAME}</title>
-</svelte:head>
+</svelte:head> -->
 
-<div class="bg-blue-600 h-full">
+<div class="flex-1 flex flex-col">
 	<MissingValues />
 
 	<div class="flex items-center justify-between p-5">
@@ -40,8 +40,8 @@
 
 	<Merge {second_data} />
 
-	<div class="flex w-full h-[60%] content-between bg-red-600 items-center justify-center px-24">
-		<div class="max-h-4 w-full p-4 bg-green-400">
+	<div class="flex w-full flex-1 content-between items-center justify-center px-24">
+		<div class="w-full p-4 overflow-scroll scrollbar-hide">
 			<Table />
 		</div>
 		<div class="ml-10">

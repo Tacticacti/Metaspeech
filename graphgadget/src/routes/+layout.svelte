@@ -35,7 +35,7 @@
 
 <NavBar />
 <div class="flex flex-col min-h-screen bg-offwhite">
-	<main class="flex-1">
+	<main class="flex flex-col flex-1">
 		<slot />
 	</main>
 </div>
