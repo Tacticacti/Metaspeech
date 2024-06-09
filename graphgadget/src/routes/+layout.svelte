@@ -22,6 +22,7 @@
 	 */
 	function loadSession() {
 		if (typeof sessionStorage === 'undefined') return;
+		
 		const jsonData = sessionStorage.getItem('current-df');
 		let parsed = jsonData ? JSON.parse(jsonData) : null;
 

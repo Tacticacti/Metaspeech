@@ -12,9 +12,9 @@
 	let second_data: DataFrameLike;
 </script>
 
-<!-- <svelte:head>
+<svelte:head>
 	<title>Data - {APP_NAME}</title>
-</svelte:head> -->
+</svelte:head>
 
 <div class="flex-1 flex flex-col">
 	<MissingValues />
@@ -24,7 +24,6 @@
 		<div
 			class="flex h-full max-h-14 w-full max-w-32 items-center justify-center rounded-lg bg-darkblue hover:bg-blue-900"
 		>
-			<!-- Given that it was implemented with an a link, right now you need to click on the words to go to next page -->
 			<Button
 				href="/select"
 				class=" w-full rounded-lg text-sm font-bold text-offwhite"
