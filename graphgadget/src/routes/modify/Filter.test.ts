@@ -161,7 +161,8 @@ describe('text filtering', () => {
 		const r = render(sut);
 		await h.openFilterWindow(r);
 
-		await h.setColumnSelect(r, 'a');
+		await h.setColumnSelect(r, '0');
+
 		await h.setUseRangeCheckbox(r, false);
 
 		const textFilterInput = h.getTextFilterInput(r)!;
@@ -179,7 +180,7 @@ describe('text filtering', () => {
 		const r = render(sut);
 		await h.openFilterWindow(r);
 
-		await h.setColumnSelect(r, 'a');
+		await h.setColumnSelect(r, '0');
 		await h.setUseRangeCheckbox(r, false);
 
 		const textFilterInput = h.getTextFilterInput(r)!;
@@ -199,7 +200,7 @@ describe('range filtering', () => {
 		const r = render(sut);
 		await h.openFilterWindow(r);
 
-		await h.setColumnSelect(r, 'a');
+		await h.setColumnSelect(r, '0');
 		await h.setUseRangeCheckbox(r, true);
 
 		const minRangeInput = h.getMinRangeInput(r)!;
@@ -221,7 +222,7 @@ describe('range filtering', () => {
 		const r = render(sut);
 		await h.openFilterWindow(r);
 
-		await h.setColumnSelect(r, 'a');
+		await h.setColumnSelect(r, '0');
 		await h.setUseRangeCheckbox(r, true);
 
 		const minRangeInput = h.getMinRangeInput(r)!;

@@ -10,8 +10,8 @@
 		loadSession();
 	});
 
-	navigating.subscribe(() => {
-		if (typeof sessionStorage === 'undefined') return;
+	navigating.subscribe((value) => {
+		if (typeof sessionStorage === 'undefined' || value === null) return;
 
 		sessionStorage.setItem('current-df', JSON.stringify(df.get()));
 	});
@@ -22,6 +22,7 @@
 	 */
 	function loadSession() {
 		if (typeof sessionStorage === 'undefined') return;
+
 		const jsonData = sessionStorage.getItem('current-df');
 		let parsed = jsonData ? JSON.parse(jsonData) : null;
 
@@ -33,10 +34,10 @@
 
 <svelte:window on:error={console.error} />
 
-<div class="scrollbar-hide flex max-h-screen min-h-screen flex-col overflow-auto bg-offwhite">
-	<NavBar />
-	<main class="flex-grow overflow-auto">
+<NavBar />
+<div class="flex min-h-screen flex-col bg-offwhite">
+	<main class="flex flex-1 flex-col">
 		<slot />
 	</main>
-	<Footer />
 </div>
+<Footer />

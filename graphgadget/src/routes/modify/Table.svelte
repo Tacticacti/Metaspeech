@@ -33,7 +33,7 @@
 	}
 </script>
 
-<Table shadow striped={true} divClass="!overflow-scroll !h-full">
+<Table shadow striped={true} divClass="!overflow-scroll !max-h-[30vw]">
 	<TableHead theadClass="sticky top-0 bg-offwhite">
 		{#each $columns as header, i (header)}
 			<TableHeadCell class="!p-0">

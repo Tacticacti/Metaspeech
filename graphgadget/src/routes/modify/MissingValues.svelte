@@ -10,11 +10,11 @@
 	 * Removes rows from data that miss values
 	 */
 	function removeMissingValues() {
-		df.filter((row) => !row.some((cell) => cell === undefined));
+		df.filter((row) => !row.some((cell) => cell === undefined || cell === null));
 	}
 </script>
 
-<div class="flex justify-center pt-16">
+<div class="flex justify-center">
 	{#if missing_values}
 		<span class="flex flex-col items-center">
 			<p class="px-6 py-4 font-mono text-red-500">
