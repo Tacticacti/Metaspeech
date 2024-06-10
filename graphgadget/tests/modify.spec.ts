@@ -1,6 +1,12 @@
 import { test, expect } from '@playwright/test';
 import * as helper from './test.help';
-import { tsvTestData, tsvTestDataTwo, tsvCorruptedTestData, jsonTestData } from './test.help';
+import {
+	tsvTestData,
+	tsvTestDataTwo,
+	tsvCorruptedTestData,
+	jsonTestData,
+	jsonCorruptedTestData
+} from './test.help';
 
 test.describe('Modify page tests', () => {
 	test.describe('Page layout tests', () => {
@@ -67,7 +73,7 @@ test.describe('Modify page tests', () => {
 			await expect(columnSelect).toBeVisible();
 			await expect(helper.getRangeCheckbox(page)).toBeVisible();
 
-			await columnSelect.selectOption('Language');
+			await columnSelect.selectOption({ label: 'Language' });
 			await expect(helper.getTextFilterInput(page)).toBeVisible();
 			await expect(helper.getRangeCheckbox(page)).not.toBeVisible();
 		});
@@ -206,19 +212,28 @@ test.describe('Modify page tests', () => {
 			);
 		});
 
-		// test('Test if expected rows are removed', async ({ page }) => {
-		// 	const removeMissingButton = helper.getRemoveMissingButton(page);
+		test('Test if expected rows are removed', async ({ page }) => {
+			await page.goto('/');
+			const corruptedData = JSON.stringify(JSON.parse(jsonCorruptedTestData));
 
-		// 	await expect(page.getByRole('row', { name: '1EN 19 M' })).toBeVisible();
-		// 	await expect(page.getByRole('row', { name: 'PT21F 200' })).toBeVisible();
-		// 	await expect(page.getByRole('row', { name: 'ES 50 M 140' })).toBeVisible();
+			await page.getByTestId('import').setInputFiles({
+				name: 'test.json',
+				mimeType: 'application/json',
+				buffer: Buffer.from(corruptedData)
+			});
 
-		// 	await removeMissingButton.click();
+			const removeMissingButton = helper.getRemoveMissingButton(page);
 
-		// 	await expect(page.getByRole('row', { name: '1EN 19 M' })).not.toBeVisible();
-		// 	await expect(page.getByRole('row', { name: 'PT21F 200' })).not.toBeVisible();
-		// 	await expect(page.getByRole('row', { name: 'ES 50 M 140' })).not.toBeVisible();
-		// });
+			await expect(page.getByRole('row', { name: 'Row_1 1 undefined' })).toBeVisible();
+			await expect(page.getByRole('row', { name: 'Row_2 3 4' })).toBeVisible();
+			await expect(page.getByRole('row', { name: 'Row_3 5 undefined' })).toBeVisible();
+
+			await removeMissingButton.click();
+
+			await expect(page.getByRole('row', { name: 'Row_1 1 undefined' })).not.toBeVisible();
+			await expect(page.getByRole('row', { name: 'Row_2 3 4' })).toBeVisible();
+			await expect(page.getByRole('row', { name: 'Row_3 5 undefined' })).not.toBeVisible();
+		});
 	});
 
 	test.describe('Column modify tests', () => {
@@ -314,7 +329,6 @@ test.describe('Modify page tests', () => {
 		});
 
 		test('Test merge with JSON file', async ({ page }) => {
-			// Parse the JSON string and convert it back to a string to create a buffer
 			const jsonData = JSON.stringify(JSON.parse(jsonTestData));
 
 			await helper.getAppendFile(page).setInputFiles({
