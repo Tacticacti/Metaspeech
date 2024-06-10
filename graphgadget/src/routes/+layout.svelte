@@ -12,7 +12,6 @@
 
 	navigating.subscribe((value) => {
 		if (typeof sessionStorage === 'undefined' || value === null) return;
-		console.log('nav');
 
 		sessionStorage.setItem('current-df', JSON.stringify(df.get()));
 	});
@@ -23,8 +22,6 @@
 	 */
 	function loadSession() {
 		if (typeof sessionStorage === 'undefined') return;
-
-		console.log('load');
 
 		const jsonData = sessionStorage.getItem('current-df');
 		let parsed = jsonData ? JSON.parse(jsonData) : null;

@@ -10,8 +10,6 @@
 	 * Removes rows from data that miss values
 	 */
 	function removeMissingValues() {
-		console.log(df.get().rows);
-
 		df.filter((row) => !row.some((cell) => cell === undefined || cell === null));
 	}
 </script>

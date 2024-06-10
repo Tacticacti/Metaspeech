@@ -1,8 +1,6 @@
 import { test, expect } from '@playwright/test';
 import * as helper from './test.help';
 import { tsvTestData, tsvTestDataTwo, tsvCorruptedTestData, jsonTestData } from './test.help';
-import fs from 'fs';
-import path from 'path';
 
 test.describe('Modify page tests', () => {
 	test.describe('Page layout tests', () => {

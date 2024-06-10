@@ -182,13 +182,13 @@ describe('text filtering', () => {
 		await h.setColumnSelect(r, 'a');
 		await h.setUseRangeCheckbox(r, false);
 
-		// const textFilterInput = h.getTextFilterInput(r)!;
-		// textFilterInput.value = '2';
-		// await fireEvent.input(textFilterInput);
+		const textFilterInput = h.getTextFilterInput(r)!;
+		textFilterInput.value = '2';
+		await fireEvent.input(textFilterInput);
 
-		// await h.removeNonMatching(r);
+		await h.removeNonMatching(r);
 
-		// expect(df.get()).toEqual(fromText('a,b,c\n2,3,4'));
+		expect(df.get()).toEqual(fromText('a,b,c\n2,3,4'));
 	});
 });
 describe('range filtering', () => {
