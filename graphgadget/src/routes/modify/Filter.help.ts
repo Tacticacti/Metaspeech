@@ -59,6 +59,7 @@ export async function setUseRangeCheckbox(r: RenderResult<sut>, checked: boolean
 
 export async function setColumnSelect(r: RenderResult<sut>, column: string): Promise<void> {
 	const columnSelect = getColumnSelect(r)!;
+
 	columnSelect.value = column;
 	await fireEvent.change(columnSelect);
 	await rerender(r);
