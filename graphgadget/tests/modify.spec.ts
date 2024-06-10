@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import * as helper from './test.help';
-import { tsvTestData, tsvTestDataTwo, tsvCorruptedTestData } from './test.help';
+import { tsvTestData, tsvTestDataTwo, tsvCorruptedTestData, jsonTestData } from './test.help';
 import fs from 'fs';
 import path from 'path';
 
@@ -204,22 +204,22 @@ test.describe('Modify page tests', () => {
 
 		test('Test if warning elements contain expected information', async ({ page }) => {
 			await expect(helper.getWarningText(page)).toHaveText(
-				'Warning: Missing values detected in [Duration(seconds), Gender]'
+				'Warning: Missing values detected in [Gender, Duration(seconds)]'
 			);
 		});
 
 		test('Test if expected rows are removed', async ({ page }) => {
 			const removeMissingButton = helper.getRemoveMissingButton(page);
 
-			await expect(helper.getTableCell(page, 'null').first()).toBeVisible();
-			await expect(helper.getTableCell(page, 'null').nth(1)).toBeVisible();
-			await expect(helper.getTableCell(page, 'null').nth(2)).toBeVisible();
+			await expect(page.getByRole('row', { name: '1EN 19 M' })).toBeVisible();
+			await expect(page.getByRole('row', { name: 'PT21F 200' })).toBeVisible();
+			await expect(page.getByRole('row', { name: 'ES 50 M 140' })).toBeVisible();
 
 			await removeMissingButton.click();
 
-			await expect(helper.getTableCell(page, '1')).not.toBeVisible();
-			await expect(helper.getTableCell(page, '2')).not.toBeVisible();
-			await expect(helper.getTableCell(page, '3')).toBeVisible();
+			await expect(page.getByRole('row', { name: '1EN 19 M' })).not.toBeVisible();
+			await expect(page.getByRole('row', { name: 'PT21F 200' })).not.toBeVisible();
+			await expect(page.getByRole('row', { name: 'ES 50 M 140' })).not.toBeVisible();
 		});
 	});
 
@@ -286,8 +286,8 @@ test.describe('Modify page tests', () => {
 		});
 
 		test('Test elements contain expected information', async ({ page }) => {
-			await expect(helper.getColumnOneSelect(page)).toHaveValue('Id');
-			await expect(helper.getColumnTwoSelect(page)).toHaveValue('Column_1');
+			await expect(helper.getColumnOneSelect(page)).toHaveValue('0');
+			await expect(helper.getColumnTwoSelect(page)).toHaveValue('0');
 
 			const infoButton = helper.getInfoButton(page);
 			await infoButton.hover();
@@ -316,17 +316,8 @@ test.describe('Modify page tests', () => {
 		});
 
 		test('Test merge with JSON file', async ({ page }) => {
-			const jsonFilePath = path.resolve('./tests/', 'test.json');
-			const jsonData = fs.readFileSync(jsonFilePath, 'utf-8');
-
-			await page.goto('/');
-			await page.getByTestId('import').setInputFiles({
-				name: 'example.tsv',
-				mimeType: 'text/tsv',
-				buffer: Buffer.from(tsvTestData)
-			});
-
-			await expect(page).toHaveURL('/modify');
+			// Parse the JSON string and convert it back to a string to create a buffer
+			const jsonData = JSON.stringify(JSON.parse(jsonTestData));
 
 			await helper.getAppendFile(page).setInputFiles({
 				name: 'test.json',

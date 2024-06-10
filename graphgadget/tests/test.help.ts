@@ -17,6 +17,23 @@ export const tsvCorruptedTestData = `Id\tLanguage\tAge\tGender\tDuration(seconds
 2\tPT21F\t200
 3\tES\t50\tM\t140`;
 
+export const jsonTestData = `
+{
+	"Row_1": {
+		"Column_1": "1",
+		"Column_2": "2"
+	},
+	"Row_2": {
+		"Column_1": "3",
+		"Column_2": "4"
+	},
+	"Row_3": {
+		"Column_1": "5",
+		"Column_2": "6"
+	}
+}
+`;
+
 export function getNavBar(page: Page): Locator {
 	return page.getByRole('navigation');
 }
