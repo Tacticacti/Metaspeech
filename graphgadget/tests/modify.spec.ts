@@ -12,7 +12,7 @@ test.describe('Modify page tests', () => {
 	test.describe('Page layout tests', () => {
 		test.beforeEach(async ({ page }) => {
 			await page.goto('/');
-			await page.getByTestId('import').setInputFiles({
+			await helper.getImporterInput(page).setInputFiles({
 				name: 'example.tsv',
 				mimeType: 'text/tsv',
 				buffer: Buffer.from(tsvTestData)
@@ -41,7 +41,7 @@ test.describe('Modify page tests', () => {
 	test.describe('Filter options tests', () => {
 		test.beforeEach(async ({ page }) => {
 			await page.goto('/');
-			await page.getByTestId('import').setInputFiles({
+			await helper.getImporterInput(page).setInputFiles({
 				name: 'example.tsv',
 				mimeType: 'text/tsv',
 				buffer: Buffer.from(tsvTestData)
@@ -192,7 +192,7 @@ test.describe('Modify page tests', () => {
 	test.describe('Warning for null value tests', () => {
 		test.beforeEach(async ({ page }) => {
 			await page.goto('/');
-			await page.getByTestId('import').setInputFiles({
+			await helper.getImporterInput(page).setInputFiles({
 				name: 'example.tsv',
 				mimeType: 'text/tsv',
 				buffer: Buffer.from(tsvCorruptedTestData)
@@ -216,7 +216,7 @@ test.describe('Modify page tests', () => {
 			await page.goto('/');
 			const corruptedData = JSON.stringify(JSON.parse(jsonCorruptedTestData));
 
-			await page.getByTestId('import').setInputFiles({
+			await helper.getImporterInput(page).setInputFiles({
 				name: 'test.json',
 				mimeType: 'application/json',
 				buffer: Buffer.from(corruptedData)
@@ -239,7 +239,7 @@ test.describe('Modify page tests', () => {
 	test.describe('Column modify tests', () => {
 		test.beforeEach(async ({ page }) => {
 			await page.goto('/');
-			await page.getByTestId('import').setInputFiles({
+			await helper.getImporterInput(page).setInputFiles({
 				name: 'example.tsv',
 				mimeType: 'text/tsv',
 				buffer: Buffer.from(tsvTestData)
@@ -275,7 +275,7 @@ test.describe('Modify page tests', () => {
 	test.describe('Merge file tests', () => {
 		test.beforeEach(async ({ page }) => {
 			await page.goto('/');
-			await page.getByTestId('import').setInputFiles({
+			await helper.getImporterInput(page).setInputFiles({
 				name: 'example.tsv',
 				mimeType: 'text/tsv',
 				buffer: Buffer.from(tsvTestData)
