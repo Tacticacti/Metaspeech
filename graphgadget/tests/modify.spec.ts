@@ -8,7 +8,7 @@ test.describe('Modify page tests', () => {
 	test.describe('Page layout tests', () => {
 		test.beforeEach(async ({ page }) => {
 			await page.goto('/');
-			await page.getByTestId('input').setInputFiles({
+			await page.getByTestId('import').setInputFiles({
 				name: 'example.tsv',
 				mimeType: 'text/tsv',
 				buffer: Buffer.from(tsvTestData)
@@ -20,7 +20,7 @@ test.describe('Modify page tests', () => {
 		test('Test if all important elements are visible', async ({ page }) => {
 			await expect(helper.getNavBar(page)).toBeVisible();
 			await expect(helper.getFilterButton(page)).toBeVisible();
-			await expect(helper.getSelectData(page)).toBeVisible();
+			await expect(helper.getAppendFile(page)).toBeVisible();
 			await expect(helper.getNextButton(page)).toBeVisible();
 			await expect(helper.getFooter(page)).toBeVisible();
 		});
@@ -37,7 +37,7 @@ test.describe('Modify page tests', () => {
 	test.describe('Filter options tests', () => {
 		test.beforeEach(async ({ page }) => {
 			await page.goto('/');
-			await page.getByTestId('input').setInputFiles({
+			await page.getByTestId('import').setInputFiles({
 				name: 'example.tsv',
 				mimeType: 'text/tsv',
 				buffer: Buffer.from(tsvTestData)
@@ -58,7 +58,6 @@ test.describe('Modify page tests', () => {
 		});
 
 		test('Test if filter options contain expected information', async ({ page }) => {
-			await expect(helper.getColumnSelect(page)).toHaveValue('Id');
 			await expect(helper.getRangeCheckbox(page)).toBeChecked();
 			await expect(helper.getMinRangeInput(page)).toHaveValue('0');
 			await expect(helper.getMaxRangeInput(page)).toHaveValue('0');
@@ -70,8 +69,7 @@ test.describe('Modify page tests', () => {
 			await expect(columnSelect).toBeVisible();
 			await expect(helper.getRangeCheckbox(page)).toBeVisible();
 
-			await columnSelect.selectOption({ label: 'Language' });
-			await expect(columnSelect).toHaveValue('Language');
+			await columnSelect.selectOption('Language');
 			await expect(helper.getTextFilterInput(page)).toBeVisible();
 			await expect(helper.getRangeCheckbox(page)).not.toBeVisible();
 		});
@@ -190,7 +188,7 @@ test.describe('Modify page tests', () => {
 	test.describe('Warning for null value tests', () => {
 		test.beforeEach(async ({ page }) => {
 			await page.goto('/');
-			await page.getByTestId('input').setInputFiles({
+			await page.getByTestId('import').setInputFiles({
 				name: 'example.tsv',
 				mimeType: 'text/tsv',
 				buffer: Buffer.from(tsvCorruptedTestData)
@@ -228,7 +226,7 @@ test.describe('Modify page tests', () => {
 	test.describe('Column modify tests', () => {
 		test.beforeEach(async ({ page }) => {
 			await page.goto('/');
-			await page.getByTestId('input').setInputFiles({
+			await page.getByTestId('import').setInputFiles({
 				name: 'example.tsv',
 				mimeType: 'text/tsv',
 				buffer: Buffer.from(tsvTestData)
@@ -264,7 +262,7 @@ test.describe('Modify page tests', () => {
 	test.describe('Merge file tests', () => {
 		test.beforeEach(async ({ page }) => {
 			await page.goto('/');
-			await page.getByTestId('input').setInputFiles({
+			await page.getByTestId('import').setInputFiles({
 				name: 'example.tsv',
 				mimeType: 'text/tsv',
 				buffer: Buffer.from(tsvTestData)
@@ -272,7 +270,7 @@ test.describe('Modify page tests', () => {
 
 			await expect(page).toHaveURL('/modify');
 
-			await helper.getSelectData(page).setInputFiles({
+			await helper.getAppendFile(page).setInputFiles({
 				name: 'example2.tsv',
 				mimeType: 'text/tsv',
 				buffer: Buffer.from(tsvTestDataTwo)
@@ -322,7 +320,7 @@ test.describe('Modify page tests', () => {
 			const jsonData = fs.readFileSync(jsonFilePath, 'utf-8');
 
 			await page.goto('/');
-			await page.getByTestId('input').setInputFiles({
+			await page.getByTestId('import').setInputFiles({
 				name: 'example.tsv',
 				mimeType: 'text/tsv',
 				buffer: Buffer.from(tsvTestData)
@@ -330,7 +328,7 @@ test.describe('Modify page tests', () => {
 
 			await expect(page).toHaveURL('/modify');
 
-			await helper.getSelectData(page).setInputFiles({
+			await helper.getAppendFile(page).setInputFiles({
 				name: 'test.json',
 				mimeType: 'application/json',
 				buffer: Buffer.from(jsonData)

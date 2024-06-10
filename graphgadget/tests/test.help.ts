@@ -43,6 +43,10 @@ export function getSelectData(page: Page): Locator {
 	return page.getByText('Select Data');
 }
 
+export function getAppendFile(page: Page): Locator {
+	return page.getByText('Append File');
+}
+
 export function getPreviousData(page: Page): Locator {
 	return page.getByRole('button', { name: 'Previous Data' });
 }
