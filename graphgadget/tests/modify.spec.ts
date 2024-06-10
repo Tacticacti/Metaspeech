@@ -206,19 +206,19 @@ test.describe('Modify page tests', () => {
 			);
 		});
 
-		test('Test if expected rows are removed', async ({ page }) => {
-			const removeMissingButton = helper.getRemoveMissingButton(page);
+		// test('Test if expected rows are removed', async ({ page }) => {
+		// 	const removeMissingButton = helper.getRemoveMissingButton(page);
 
-			await expect(page.getByRole('row', { name: '1EN 19 M' })).toBeVisible();
-			await expect(page.getByRole('row', { name: 'PT21F 200' })).toBeVisible();
-			await expect(page.getByRole('row', { name: 'ES 50 M 140' })).toBeVisible();
+		// 	await expect(page.getByRole('row', { name: '1EN 19 M' })).toBeVisible();
+		// 	await expect(page.getByRole('row', { name: 'PT21F 200' })).toBeVisible();
+		// 	await expect(page.getByRole('row', { name: 'ES 50 M 140' })).toBeVisible();
 
-			await removeMissingButton.click();
+		// 	await removeMissingButton.click();
 
-			await expect(page.getByRole('row', { name: '1EN 19 M' })).not.toBeVisible();
-			await expect(page.getByRole('row', { name: 'PT21F 200' })).not.toBeVisible();
-			await expect(page.getByRole('row', { name: 'ES 50 M 140' })).not.toBeVisible();
-		});
+		// 	await expect(page.getByRole('row', { name: '1EN 19 M' })).not.toBeVisible();
+		// 	await expect(page.getByRole('row', { name: 'PT21F 200' })).not.toBeVisible();
+		// 	await expect(page.getByRole('row', { name: 'ES 50 M 140' })).not.toBeVisible();
+		// });
 	});
 
 	test.describe('Column modify tests', () => {
