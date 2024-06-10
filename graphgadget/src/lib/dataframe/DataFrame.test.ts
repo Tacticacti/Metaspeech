@@ -134,6 +134,8 @@ describe('importing a DataFrame', () => {
 			]
 		});
 	});
+
+	// TODO: test from arrays
 });
 
 describe('DataFrame basics', () => {
@@ -243,3 +245,17 @@ describe('DataFrame joining', () => {
 		expect(df.get()).toEqual(fromText('a,b,d\n1,2,6\n3,4'));
 	});
 });
+
+describe('DataFrame group by', () => {});
+
+describe('DataFrame get and set', () => {});
+
+describe('DataFrame empty', () => {});
+
+describe('Get array sub type', () => {});
+
+describe('Has missing values', () => {});
+
+describe('Cast', () => {});
+
+describe('To grouper', () => {});
