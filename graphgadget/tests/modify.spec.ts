@@ -224,15 +224,15 @@ test.describe('Modify page tests', () => {
 
 			const removeMissingButton = helper.getRemoveMissingButton(page);
 
-			await expect(page.getByRole('row', { name: 'Row_1 1 undefined' })).toBeVisible();
+			await expect(page.getByRole('row', { name: 'Row_1 1 null' })).toBeVisible();
 			await expect(page.getByRole('row', { name: 'Row_2 3 4' })).toBeVisible();
-			await expect(page.getByRole('row', { name: 'Row_3 5 undefined' })).toBeVisible();
+			await expect(page.getByRole('row', { name: 'Row_3 5 null' })).toBeVisible();
 
 			await removeMissingButton.click();
 
-			await expect(page.getByRole('row', { name: 'Row_1 1 undefined' })).not.toBeVisible();
+			await expect(page.getByRole('row', { name: 'Row_1 1 null' })).not.toBeVisible();
 			await expect(page.getByRole('row', { name: 'Row_2 3 4' })).toBeVisible();
-			await expect(page.getByRole('row', { name: 'Row_3 5 undefined' })).not.toBeVisible();
+			await expect(page.getByRole('row', { name: 'Row_3 5 null' })).not.toBeVisible();
 		});
 	});
 
