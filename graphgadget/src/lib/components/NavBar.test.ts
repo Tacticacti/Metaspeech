@@ -60,6 +60,13 @@ describe('check links exist', () => {
 		const { container } = render(sut);
 		checkAllButtonsExist(container);
 	});
+
+	it('Nothing exists when in invalid URL', () => {
+		const pageV = get(page);
+		pageV.route.id = '/invalid-url';
+		const { container } = render(sut);
+		expect(container).toHaveTextContent('');
+	});
 });
 
 describe('check link classes', () => {

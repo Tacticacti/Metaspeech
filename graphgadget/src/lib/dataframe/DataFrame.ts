@@ -70,7 +70,7 @@ export class DataFrame {
 	 * Delete a column from the DataFrame.
 	 * @param index The index of the column to delete.
 	 */
-	deleteColumn(index: number) {
+	deleteColumn(index: number): void {
 		const columnMetas = get(this.columns);
 		const rows = get(this.rows);
 
@@ -83,10 +83,9 @@ export class DataFrame {
 	}
 
 	/**
-	 * Group rows and aggregate values to make a new DataFrame.
-	 * @param groupBy A list of functions that take a row and return a string key.
-	 * @param select A list of functions that take a bucket of rows and return the aggregated value.
-	 * @param includeGroupColumn Whether to include the 'groups' column in the new DataFrame, consisting of an array of the generated keys by the groupers (json).
+	 * Group rows and aggregate values to make a new DataFrame. It checks the current columns to see
+	 * which ones to group by and which ones to aggregate
+	 * @returns the grouped data frame after grouping.
 	 */
 	groupBy(): GroupedDataFrame {
 		const rows = get(this.rows);
@@ -127,7 +126,7 @@ export class DataFrame {
 	 * @param col1 The index of the column to join on in the first DataFrame.
 	 * @param col2 The index of the column to join on in the second DataFrame.
 	 */
-	keyedJoin(df: DataFrameLike, col1: number, col2: number) {
+	keyedJoin(df: DataFrameLike, col1: number, col2: number): void {
 		// get cols and rows
 		const columns1 = get(this.columns);
 		const rows1 = get(this.rows);
@@ -163,7 +162,7 @@ export class DataFrame {
 		});
 	}
 
-	join(df: DataFrameLike) {
+	join(df: DataFrameLike): void {
 		const columns1 = get(this.columns);
 		const rows1 = get(this.rows);
 		const columns2 = df.columns;
@@ -178,7 +177,7 @@ export class DataFrame {
 	/**
 	 * Sometimes the stores don't update when the data changes. This function forces the stores to update.
 	 */
-	forceStoreUpdate() {
+	forceStoreUpdate(): void {
 		this._columns.set(get(this.columns));
 		this._rows.set(get(this.rows));
 	}
@@ -198,7 +197,7 @@ export class DataFrame {
 	 * Set the columns and rows of the DataFrame.
 	 * @param df The DataFrame to set.
 	 */
-	set(df: DataFrameLike) {
+	set(df: DataFrameLike): void {
 		const cols = df.columns ?? [];
 		const rows = df.rows ?? [];
 
@@ -216,7 +215,7 @@ export class DataFrame {
 	 * Check if the DataFrame is empty.
 	 * @returns Whether the DataFrame is empty.
 	 */
-	isEmpty() {
+	isEmpty(): boolean {
 		return get(this.rows).length === 0;
 	}
 }
@@ -384,7 +383,11 @@ export function fromText(
 	rowDelimiter: string = '\n'
 ): DataFrameLike {
 	const rows = text.split(rowDelimiter).map((row) => row.split(columnDelimiter));
-	const columns = rows.shift()!.map((c) => c?.toString() ?? '');
+	const columns = rows.shift()!.map((c) => c ?? '');
+
+	if (rows.length === 0 || columns.length === 0) {
+		return toDataFrameLike([], []);
+	}
 
 	const lastRow = rows[rows.length - 1];
 	if (lastRow.length === 1 && lastRow[0] === '') {

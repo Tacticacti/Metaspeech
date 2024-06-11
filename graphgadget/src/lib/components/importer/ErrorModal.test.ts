@@ -5,10 +5,30 @@ import ErrorModal from './ErrorModal.svelte';
 describe('ErrorModal Component', () => {
 	it('should render the error message', () => {
 		const message = 'This is an error message';
-		const { getByText } = render(ErrorModal, { message });
+		const { getByText } = render(ErrorModal, { message, visible: true });
 		const errorMessageElement = getByText(message);
+
 		expect(errorMessageElement).toBeTruthy();
 		expect(errorMessageElement).toBeInTheDocument();
+		expect(errorMessageElement).toHaveTextContent(message);
+		expect(errorMessageElement.nodeType).toBe(Node.ELEMENT_NODE);
+		expect(errorMessageElement.tagName).toEqual('P');
+
+		expect(errorMessageElement).toBeVisible();
+	});
+
+	it('error message not visible', () => {
+		const message = 'This is an error message';
+		const { getByText } = render(ErrorModal, { message, visible: false });
+		const errorMessageElement = getByText(message);
+
+		expect(errorMessageElement).toBeTruthy();
+		expect(errorMessageElement).toBeInTheDocument();
+		expect(errorMessageElement).toHaveTextContent(message);
+		expect(errorMessageElement.nodeType).toBe(Node.ELEMENT_NODE);
+		expect(errorMessageElement.tagName).toEqual('P');
+
+		expect(errorMessageElement).not.toBeVisible();
 	});
 
 	it('should dispatch close event when the close button is clicked', async () => {
