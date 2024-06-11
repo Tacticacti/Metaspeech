@@ -23,7 +23,7 @@ describe('ErrorModal Component', () => {
 		const errorMessageElement = getByText(message);
 
 		expect(errorMessageElement).toBeTruthy();
-		expect(errorMessageElement).toBeInTheDocument();		
+		expect(errorMessageElement).toBeInTheDocument();
 		expect(errorMessageElement).toHaveTextContent(message);
 		expect(errorMessageElement.nodeType).toBe(Node.ELEMENT_NODE);
 		expect(errorMessageElement.tagName).toEqual('P');
