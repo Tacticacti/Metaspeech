@@ -1,17 +1,13 @@
 <script lang="ts">
 	import { df } from '$lib/Store';
 	import type { Column } from '$lib/Types';
-	import {
-		Table,
-		TableBody,
-		TableBodyCell,
-		TableBodyRow,
-		TableHead,
-		TableHeadCell
-	} from 'flowbite-svelte';
+	import CustomVirtualList from '$components/CustomVirtualList.svelte';
 
 	const columns = df.columns;
 	const rows = df.rows;
+
+	let start: number;
+	let end: number;
 
 	/**
 	 * sets the value of a column in the 'data' dataframe
@@ -33,11 +29,11 @@
 	}
 </script>
 
-<Table shadow striped={true} divClass="!overflow-scroll !max-h-[30vw]">
-	<TableHead theadClass="sticky top-0 bg-offwhite">
-		{#each $columns as header, i (header)}
-			<TableHeadCell class="!p-0">
-				<div class="flex min-w-48 max-w-full">
+<CustomVirtualList items={$rows} bind:start bind:end>
+	<div slot="header-slot" class="sticky top-0 w-full">
+		<div class="flex w-full">
+			{#each $columns as header, i (header)}
+				<div class="flex w-full min-w-48">
 					<input
 						class="w-full overflow-x-scroll rounded-l-md bg-darkblue text-offwhite hover:bg-lightblue"
 						type="text"
@@ -52,22 +48,28 @@
 						>X
 					</button>
 				</div>
-			</TableHeadCell>
+			{/each}
+		</div>
+	</div>
+	<div slot="row-type1" class="flex w-full max-w-full bg-gray-400" let:item>
+		{#each item as cell}
+			<div
+				class="scrollbar-hide scrollbar-hide::-webkit-scrollbar w-full min-w-48 overflow-x-scroll border bg-offwhite p-4 hover:bg-gray-300"
+				data-testid="{cell}-cell"
+			>
+				{cell}
+			</div>
 		{/each}
-	</TableHead>
-	<TableBody>
-		{#each $rows as row}
-			<TableBodyRow>
-				{#each row as cell}
-					<TableBodyCell
-						tdClass="overflow-scroll scrollbar-hide scrollbar-hide::-webkit-scrollbar max-w-44"
-						class="border p-4"
-						data-testid="{cell}-cell"
-					>
-						{cell}
-					</TableBodyCell>
-				{/each}
-			</TableBodyRow>
+	</div>
+	<div slot="row-type2" class="flex w-full max-w-full bg-gray-400" let:item>
+		{#each item as cell}
+			<div
+				class="scrollbar-hide scrollbar-hide::-webkit-scrollbar w-full min-w-48 overflow-x-scroll border bg-blue-100 p-4 hover:bg-blue-200"
+				data-testid="{cell}-cell"
+			>
+				{cell}
+			</div>
 		{/each}
-	</TableBody>
-</Table>
+	</div>
+</CustomVirtualList>
+<p class=" text-lg font-semibold">Showing {start}-{end} of {$rows.length} rows</p>
