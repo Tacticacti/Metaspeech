@@ -298,7 +298,12 @@ describe('DataFrame joining', () => {
 		df.set(fromText('a,b\n1,2\n3,4'));
 
 		df.keyedJoin(fromText('c,d\n1,6\n2,8'), 0, 0);
-		expect(df.get()).toEqual(fromText('a,b,d\n1,2,6\n3,4'));
+		expect(df.get()).toEqual(fromText('a,b,d\n1,2,6\n3,4, '));
+		// `
+		//  a | b     c | d      a | b | d
+		//  1 | 2  x  1 | 6  ->  1 | 2 | 6
+		//  3 | 4     2 | 8      3 | 4 | undefined
+		// `
 	});
 });
 

@@ -201,6 +201,12 @@ export class DataFrame {
 		const cols = df.columns ?? [];
 		const rows = df.rows ?? [];
 
+		rows.forEach((row) => {
+			while (row.length < cols.length) {
+				row.push(undefined);
+			}
+		});
+
 		this._columns.set(cols);
 		this._rows.set(rows);
 	}
