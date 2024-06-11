@@ -4,4 +4,4 @@
 	export let data: GroupedDataFrame;
 </script>
 
-{data.groups.length}
+{data?.groups.length}

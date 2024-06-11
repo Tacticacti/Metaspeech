@@ -29,9 +29,7 @@
 	];
 
 	function getProgress(route: string): string {
-		if (route === '/') {
-			return '8%';
-		} else if (route === '/modify') {
+		if (route === '/modify') {
 			return '29%';
 		} else if (route === '/select') {
 			return '55%';
@@ -39,7 +37,7 @@
 			return '88%';
 		}
 
-		return '0%';
+		return '8%';
 	}
 
 	function getPageName(route: string): string {
