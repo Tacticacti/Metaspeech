@@ -1,7 +1,4 @@
 <script lang="ts">
-	import type { DataType } from '$lib/Types';
-
-	//
 	import { onMount, tick } from 'svelte';
 
 	// props
@@ -15,12 +12,13 @@
 
 	// local state
 	let height_map: number[] = [];
-	let rows: string | any[] | HTMLCollectionOf<Element>;
-	let viewport: { scrollTo?: any; scrollLeft?: any; scrollTop?: any; };
+	// @ts-expect-error I think we miss a package for some web components
+	let rows;
+	let viewport: { scrollTo: (x: number, y: number) => void; scrollLeft: number; scrollTop: number };
 	let contents: HTMLElement;
-	let viewport_height = 0;
+	let viewport_height: number = 0;
 	let visible;
-	let mounted:boolean;
+	let mounted: boolean;
 
 	let top = 0;
 	let bottom = 0;
@@ -28,7 +26,7 @@
 	let right = 0;
 	let average_height: number;
 
-	$: visible = items.slice(start, end).map((data: any, i: number) => {
+	$: visible = items.slice(start, end).map((data: [][], i: number) => {
 		return { index: i + start, data };
 	});
 
@@ -36,7 +34,7 @@
 	$: if (mounted) refresh(items, viewport_height, itemHeight);
 
 	// typically only happen at the beginning
-	async function refresh(items: string | any[], viewport_height: number, itemHeight: number | undefined) {
+	async function refresh(items: string, viewport_height: number, itemHeight: number | undefined) {
 		const { scrollTop } = viewport;
 
 		await tick(); // wait until the DOM is up to date
@@ -45,11 +43,13 @@
 		let i = start;
 
 		while (content_height < viewport_height && i < items.length) {
+			// @ts-expect-error carried error from line 15
 			let row = rows[i - start];
 
 			if (!row) {
 				end = i + 1;
 				await tick(); // render the newly visible row
+				// @ts-expect-error carried error from line 15
 				row = rows[i - start];
 			}
 
@@ -73,6 +73,7 @@
 		const old_start = start;
 
 		for (let v = 0; v < rows.length; v += 1) {
+			// @ts-expect-error carried error from line 15
 			height_map[start + v] = itemHeight || rows[v].offsetHeight;
 		}
 
@@ -115,8 +116,10 @@
 			let actual_height = 0;
 
 			for (let i = start; i < old_start; i += 1) {
+				// @ts-expect-error carried error from line 15
 				if (rows[i - start]) {
 					expected_height += height_map[i];
+					// @ts-expect-error carried error from line 15
 					actual_height += itemHeight || rows[i - start].offsetHeight;
 				}
 			}
