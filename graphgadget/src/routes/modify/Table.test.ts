@@ -1,9 +1,15 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { df } from '$lib/Store';
 import sut from './Table.svelte';
 import { fireEvent, render } from '@testing-library/svelte';
 import * as h from './Table.help';
 import { fromText } from '$lib/dataframe/DataFrame';
+
+vi.mock('$components/CustomVirtualList.svelte');
+
+beforeEach(() => {
+	vi.clearAllMocks();
+});
 
 describe('Table', () => {
 	it('should render', () => {
@@ -43,7 +49,44 @@ describe('Table', () => {
 		await h.rerender(r);
 
 		expect(h.getCell(r, 'Row1Col1')).toBeNull();
-		expect(h.getCell(r, 'Row3Col1')).toBeDefined();
+		expect(h.getCell(r, 'Row2Col1')).toBeDefined();
+	});
+	it('Should show how many items are visible in the table', () => {
+		df.set(fromText('col1,col2\nRow1Col1,Row1Col2\nRow2Col1,Row2Col2'));
+		const r = render(sut);
+
+		expect(h.getByText(r, 'Showing 0-2 of 2 rows')).toBeVisible();
+	});
+	it('Should only contain row type 1 if one row', () => {
+		df.set(fromText('col1,col2\nRow1Col1,Row1Col2'));
+		const r = render(sut);
+
+		expect(h.getRowType(r, '1')).toBeVisible();
+	});
+	it('Should only contain row type 1 and 2 if two rows', () => {
+		df.set(fromText('col1,col2\nRow1Col1,Row1Col2\nRow2Col1,Row2Col2'));
+		const r = render(sut);
+
+		expect(h.getRowType(r, '1')).toBeVisible();
+		expect(h.getRowType(r, '2')).toBeVisible();
+	});
+	it('Cells should exist', () => {
+		df.set(fromText('col1,col2\nRow1Col1,Row1Col2\nRow2Col1,Row2Col2'));
+		const r = render(sut);
+
+		expect(h.getByText(r, 'Row1Col1')).toBeVisible();
+		expect(h.getByText(r, 'Row1Col2')).toBeVisible();
+		expect(h.getByText(r, 'Row2Col1')).toBeVisible();
+		expect(h.getByText(r, 'Row2Col2')).toBeVisible();
+	});
+	it('Cells shouldnt exist if nothing in table', () => {
+		df.set(fromText(''));
+		const r = render(sut);
+
+		expect(h.getByText(r, 'Row1Col1')).toBeNull();
+		expect(h.getByText(r, 'Row1Col2')).toBeNull();
+		expect(h.getByText(r, 'Row2Col1')).toBeNull();
+		expect(h.getByText(r, 'Row2Col2')).toBeNull();
 	});
 });
 

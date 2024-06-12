@@ -16,6 +16,14 @@ export function getCell(r: RenderResult<sut>, cell: string): HTMLElement | null 
 	return r.queryByTestId(cell + '-cell') as HTMLElement | null;
 }
 
+export function getRowType(r: RenderResult<sut>, type: string): HTMLElement | null {
+	return r.queryByTestId('row-type' + type) as HTMLElement | null;
+}
+
+export function getByText(r: RenderResult<sut>, text: string): HTMLElement | null {
+	return r.queryByText(text) as HTMLElement | null;
+}
+
 export function rerender(r: RenderResult<sut>): Promise<void> {
 	return act(() => r.component.$set({}));
 }

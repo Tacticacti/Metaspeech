@@ -20,7 +20,20 @@
 		column.groupBy = select ? { type: 'specific' } : undefined;
 		df.forceStoreUpdate();
 	}
+	function translateIndex(index: number) {
+		let count = -1;
+		for (let i = 0; i < $columns.length; i++) {
+			if ($columns[i].type === 'number') {
+				count++;
+				if (count == index) {
+					return i;
+				}
+			}
+		}
+		return -1;
+	}
 	function selectColumnForAggregation(index: number) {
+		index = translateIndex(index);
 		for (let i = 0; i < $columns.length; i++) {
 			$columns[i].aggregate = i === index;
 		}
