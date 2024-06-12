@@ -1,12 +1,4 @@
-import type { GroupedDataFrame, Column } from '$lib/Types';
-
-export type ScatterDataset = {
-    data: [number, number][];
-    label: string;
-    backgroundColor: string;
-    borderColor: string;
-    pointStyle: string;
-}
+import type { GroupedDataFrame, Column, ScatterStyle, ScatterDataset } from '$lib/Types';
 
 export function getXAxisCol(groupedColumns: Column[]) : Column {
     for (const col of groupedColumns) {
@@ -26,32 +18,36 @@ export function getLegendCol(groupedColumns: Column[], xCol: Column) : Column | 
     return undefined;
 }
 
-export function getScatterDatasets(groupedData: GroupedDataFrame, yAxisCol: Column, xAxisCol: Column, legendCol: Column | undefined): ScatterDataset[] {
-    return [
-		{
-			data: [
-				[19, 10],
-				[20, 30],
-				[42, 32],
-				[50, 33]
-			],
-			label: 'Male',
-			backgroundColor: 'rgba(51, 50, 200, 1)',
-			borderColor: 'rgba(51, 50, 200, 1)',
-			pointStyle: 'cross'
-		},
-		{
-			data: [
-				[19, 20],
-				[19, 40],
-				[40, 40],
-				[52, 30],
-				[60, 50]
-			],
-			label: 'Female',
-			backgroundColor: 'rgba(255, 99, 132, 1)',
-			borderColor: 'rgba(255, 99, 132, 1)',
-			pointStyle: 'rect'
-		}
-	];
+export function getScatterDatasets(groupedData: GroupedDataFrame, yAxisCol: Column, xAxisCol: Column, legendCol: Column | undefined, styles: ScatterStyle[]): ScatterDataset[] {
+
+    
+
+
+    // return [
+	// 	{
+	// 		data: [
+	// 			[19, 10],
+	// 			[20, 30],
+	// 			[42, 32],
+	// 			[50, 33]
+	// 		],
+	// 		label: 'Male',
+	// 		backgroundColor: 'rgba(51, 50, 200, 1)',
+	// 		borderColor: 'rgba(51, 50, 200, 1)',
+	// 		pointStyle: 'cross'
+	// 	},
+	// 	{
+	// 		data: [
+	// 			[19, 20],
+	// 			[19, 40],
+	// 			[40, 40],
+	// 			[52, 30],
+	// 			[60, 50]
+	// 		],
+	// 		label: 'Female',
+	// 		backgroundColor: 'rgba(255, 99, 132, 1)',
+	// 		borderColor: 'rgba(255, 99, 132, 1)',
+	// 		pointStyle: 'rect'
+	// 	}
+	// ];
 }

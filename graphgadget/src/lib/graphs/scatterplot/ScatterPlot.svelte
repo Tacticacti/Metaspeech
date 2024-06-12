@@ -1,5 +1,6 @@
 <script lang="ts">
-	import type { GroupedDataFrame, Column } from '$lib/Types';
+	import type { GroupedDataFrame, Column, ScatterStyle } from '$lib/Types';
+	import { scatterStyles } from '$lib/Constants';
 	import { afterUpdate, onMount, onDestroy } from 'svelte';
 	import { Chart, type ChartConfiguration } from 'chart.js/auto';
 	import Export from '$lib/components/exporter/GraphImageExport.svelte';
@@ -19,7 +20,7 @@
 	$: x_axis = xAxisCol.name;
 	$: legend = legendCol?.name;
 
-	$: datasets = getScatterDatasets(data, yAxisCol, xAxisCol, legendCol);
+	$: datasets = getScatterDatasets(data, yAxisCol, xAxisCol, legendCol, scatterStyles);
 
 	function swapGroupColumns() {
 		if (legendCol === undefined) {
@@ -97,7 +98,9 @@
 	afterUpdate(() => {
 		for (const ds of datasets) {
 			chart.data.datasets.push({
-				...ds,
+				data: ds.data,
+				label: ds.label,
+				...ds.style,
 				radius: 7
 			});
 		}

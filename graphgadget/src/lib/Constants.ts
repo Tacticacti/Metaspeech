@@ -1,4 +1,4 @@
-import type { GraphMeta } from '$lib/Types';
+import type { GraphMeta, ScatterStyle } from '$lib/Types';
 import Histogram from './graphs/histogram/Histogram.svelte';
 import BoxPlot from './graphs/boxplot/BoxPlot.svelte';
 import PieChart from './graphs/piechart/PieChart.svelte';
@@ -64,4 +64,60 @@ export const graphs: GraphMeta[] = [
 		canRender: () => true,
 		graph: Table
 	}
+];
+
+/**
+ * Ten custom dataset styles for the scatterplot
+ */
+export const scatterStyles: ScatterStyle[] = [
+	{
+		backgroundColor: 'blue',
+		borderColor: 'blue',
+		pointStyle: 'circle'
+	},
+	{
+		backgroundColor: 'red',
+		borderColor: 'red',
+		pointStyle: 'cross'
+	},
+	{
+		backgroundColor: 'orange',
+		borderColor: 'orange',
+		pointStyle: 'crossRot'
+	},
+	{
+		backgroundColor: 'black',
+		borderColor: 'black',
+		pointStyle: 'dash'
+	},
+	{
+		backgroundColor: 'purple',
+		borderColor: 'purple',
+		pointStyle: 'line'
+	},
+	{
+		backgroundColor: 'yellow',
+		borderColor: 'yellow',
+		pointStyle: 'rect'
+	},
+	{
+		backgroundColor: 'magenta',
+		borderColor: 'magenta',
+		pointStyle: 'rectRounded'
+	},
+	{
+		backgroundColor: 'cyan',
+		borderColor: 'cyan',
+		pointStyle: 'rectRot'
+	},
+	{
+		backgroundColor: 'brown',
+		borderColor: 'brown',
+		pointStyle: 'star'
+	},
+	{
+		backgroundColor: 'pink',
+		borderColor: 'pink',
+		pointStyle: 'triangle'
+	},
 ];
