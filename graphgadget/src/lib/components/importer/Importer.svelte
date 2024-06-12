@@ -19,7 +19,8 @@
 		if (!file) return;
 
 		// parse file
-		const data: DataFrameLike = await Parse(file);
+		const data: DataFrameLike = JSON.parse(JSON.stringify(await Parse(file)));
+
 		const bundle = {
 			data,
 			name: file.name

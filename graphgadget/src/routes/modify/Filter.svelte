@@ -61,9 +61,9 @@
 
 {#if isOpen}
 	<div class="flex flex-wrap justify-center" data-testid="filter-window">
-		<Select class="mr-2 max-w-28" bind:value={selectedColumn} data-testid="column-select">
-			{#each $columns as col}
-				<option value={col}>{col.name}</option>
+		<Select class="mr-2 max-w-28" bind:value={selectedIndex} data-testid="column-select">
+			{#each $columns as col, index}
+				<option value={index}>{col.name}</option>
 			{/each}
 		</Select>
 		{#if selectedColumn?.type === 'number'}

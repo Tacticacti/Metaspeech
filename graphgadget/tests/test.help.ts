@@ -13,9 +13,43 @@ export const tsvTestDataTwo = `Column_1\tColumn_2
 3\tcell_6`;
 
 export const tsvCorruptedTestData = `Id\tLanguage\tAge\tGender\tDuration(seconds)
-1EN\t19\tM\t100
-2\tPT21F\t200
+1EN\t19\tM\t100\t 
+2\tPT21F\t200\t \t 
 3\tES\t50\tM\t140`;
+
+export const jsonTestData = `
+{
+	"Row_1": {
+		"Column_1": "1",
+		"Column_2": "2"
+	},
+	"Row_2": {
+		"Column_1": "3",
+		"Column_2": "4"
+	},
+	"Row_3": {
+		"Column_1": "5",
+		"Column_2": "6"
+	}
+}
+`;
+
+export const jsonCorruptedTestData = `
+{
+	"Row_1": {
+		"Column_1": "1",
+		"Column_2": ""
+	},
+	"Row_2": {
+		"Column_1": "3",
+		"Column_2": "4"
+	},
+	"Row_3": {
+		"Column_1": "5",
+		"Column_2": ""
+	}
+}
+`;
 
 export function getNavBar(page: Page): Locator {
 	return page.getByRole('navigation');
@@ -41,6 +75,10 @@ export function getCloseErrorModal(page: Page): Locator {
 
 export function getSelectData(page: Page): Locator {
 	return page.getByText('Select Data');
+}
+
+export function getAppendFile(page: Page): Locator {
+	return page.getByText('Append File');
 }
 
 export function getPreviousData(page: Page): Locator {

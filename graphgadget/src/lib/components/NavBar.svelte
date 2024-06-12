@@ -29,9 +29,7 @@
 	];
 
 	function getProgress(route: string): string {
-		if (route === '/') {
-			return '8%';
-		} else if (route === '/modify') {
+		if (route === '/modify') {
 			return '29%';
 		} else if (route === '/select') {
 			return '55%';
@@ -39,7 +37,7 @@
 			return '88%';
 		}
 
-		return '0%';
+		return '8%';
 	}
 
 	function getPageName(route: string): string {
@@ -53,8 +51,8 @@
 </svelte:head>
 
 {#if pages.map((p) => p.path).includes(currentPage)}
-	<div class="nav-m0 relative w-full">
-		<Navbar class="z-20 grid grid-cols-1 border-b bg-darkblue py-2.5 text-blue-200">
+	<div class="nav-m0 relative h-20 w-full">
+		<Navbar class="fixed z-20 grid grid-cols-1 border-b bg-darkblue py-2.5 text-blue-200 ">
 			<NavBrand href="/">
 				<img src={logo} class="me-3 h-6 pl-0 sm:h-9" alt="GG logo" />
 				<span class="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
