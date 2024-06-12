@@ -70,6 +70,17 @@
 					title: {
 						display: true,
 						text: y_axis + ' x ' + x_axis
+					},
+					legend: {
+						display: true,
+						position: 'right',
+						title: {
+							display: true,
+							text: legend,
+						},
+						labels: {
+							usePointStyle: true
+						}
 					}
 				},
 				scales: {
@@ -96,54 +107,27 @@
 	});
 
 
-	// called when  x_axis or y_axis changes
+	// called when datasets change
 	afterUpdate(() => {
-		//chart.data.labels = maleAges;
 		for (const ds of datasets) {
 			chart.data.datasets.push({
 				...ds,
-				borderWidth: 1,
-				radius: 10
+				radius: 7
 			});
 		}
-
-		chart.config.options = {
-			plugins: {
-				// @ts-expect-error Needs a specific type for plugin
-				customCanvasBackgroundColor: {
-					color: 'white'
-				},
-				title: {
-					display: true,
-					text: y_axis + ' x ' + x_axis
-				}
-			},
-			scales: {
-				x: {
-					title: {
-						display: true,
-						text: x_axis
-					}
-				},
-				y: {
-					title: {
-						display: true,
-						text: y_axis
-					}
-				}
-			}
-		};
 
 		chart.update();
 	});
 
 	onDestroy(() => {
-		if (chart) chart.destroy();
+		if (chart) { 
+			chart.destroy();
+		}
 	});
 </script>
 
-<div class="flex flex-col items-center w-full">
-	<canvas data-testid="canvas-element" bind:this={canvas} class="mb-4 w-800" />
+<div class="flex flex-col items-center w-full w-800">
+	<canvas data-testid="canvas-element" bind:this={canvas} class="mb-4" />
 	<Export {chart} />
 </div>
 
