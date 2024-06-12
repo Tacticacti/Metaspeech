@@ -21,7 +21,8 @@ export default defineConfig({
 				'src/**/__mocks__/**/*',
 				'src/**/*.help.ts',
 				'src/routes/+layout.ts',
-				'src/lib/Constants.ts'
+				'src/lib/Constants.ts',
+				'src/lib/components/CustomVirtualList.svelte'
 			],
 			reporter: ['cobertura', 'text-summary', 'text', 'html'],
 			skipFull: true
