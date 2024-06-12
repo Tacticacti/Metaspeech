@@ -1,24 +1,17 @@
 <script lang="ts">
-	import type { DataType, GroupedDataFrame } from '$lib/Types';
+	import type { Column, DataType, GroupedDataFrame } from '$lib/Types';
 
 	export let data: GroupedDataFrame;
 
 	$: keysTop = Math.ceil(data.groupedColumns.length / 2);
 	$: keysLeft = data.groupedColumns.length - keysTop;
-	$: keys = data.groupedColumns.map((c, i) => Array.from(new Set(data.groups.map(g => g.keys[i])))).sort((a, b) => b.length - a.length);
-	$: result = getCells(data, selectedOption)
-
-	// $: {
-	// 	console.log(data)
-	// 	console.log(map)
-	// 	console.log(shape)
-	// 	console.log(keysTop)
-	// 	console.log(keysLeft)
-	// }
+	$: keys = getKeys(data);
+	$: result = createTable(data, selectedOption)
 
 	type AggregateOption = {
 		name: string;
-		fn: (data: GroupedDataFrame) => { keys: string[]; value: string }[];
+		fn: (data: GroupedDataFrame) => { keys: DataType[]; value: string }[];
+		default: string;
 	};
 
 	type Cell = {
@@ -28,12 +21,18 @@
 		class: 'header' | 'data' | undefined;
 		skip: boolean;
 	}
+	type KeySet = {
+		unique: DataType[]
+		col: Column
+	}
 
-	const aggregateOptions_none = [
+	const aggregateOptions_none: AggregateOption[] = [
 		{
 			name: 'Count',
-			fn: (data: GroupedDataFrame) =>
-				data.groups.map((g) => ({ keys: g.keys, value: `${g.values.length}` }))
+			fn: (data: GroupedDataFrame) =>{				
+				return data.groups.map((g) => ({ keys: g.keys, value: `${g.values.length}` }))
+			},
+			default: '0'
 		},
 		{
 			name: 'xxx.xx%',
@@ -47,23 +46,24 @@
 						value: `${percentage}%` 
 					}
 				});
-			}
+			},
+			default: '0.00%'
 		}
 	];
-	const aggregateOptions_single = [
+	const aggregateOptions_single: AggregateOption[] = [
 		{
 			name: 'Mean',
 			fn: (data: GroupedDataFrame) => {
-				const n = total(data, false);
-				return data.groups.map((g) => ({ keys: g.keys, value: `${sum(g.values) / n}` }));
-			}
+				return data.groups.map((g) => ({ keys: g.keys, value: `${sum(g.values) / g.values.length}` }));
+			},
+			default: '-'
 		},
 		{
 			name: 'Mean (SD)',
 			fn: (data: GroupedDataFrame) => {
 				const n = total(data, false);
 				const result = [];
-				for (const g of data.groups) {
+				for (const g of data.groups) {				
 					const mean = sum(g.values) / n;
 					const filteredValues = g.values.filter((v) => typeof v === 'number') as number[];
 					const sd = Math.sqrt(
@@ -72,7 +72,8 @@
 					result.push({ keys: g.keys, value: `${mean} (${sd})` });
 				}
 				return result;
-			}
+			},
+			default: '-'
 		}
 	];
 
@@ -96,7 +97,26 @@
 
 		const calculatedValues = selectedOption.fn(data);
 
-		return new Map(calculatedValues.map((v) => [JSON.stringify(v.keys.sort()), v.value]));
+		return new Map(calculatedValues.map((v) => [JSON.stringify(v.keys), v.value]));
+	}
+
+	function getKeys(data: GroupedDataFrame): KeySet[] {
+		const keySets = [];
+		for (let i = 0; i < data.groupedColumns.length; i++) {
+			const col = data.groupedColumns[i];
+			const values = data.groups.map((g) => g.keys[i]);
+			let unique = Array.from(new Set(values));
+			if (col.type === 'number'){
+				const temp = unique.filter(k => typeof k === 'number') as number[];
+				unique = temp.sort((a, b) => a - b);
+			} else {
+				unique = unique.filter(k => typeof k !== 'undefined').sort();
+			}
+			unique.sort();
+			keySets.push({ unique, col });
+		}
+
+		return keySets.sort((a, b) => b.unique.length - a.unique.length);
 	}
 
 	function getShape(keys: DataType[][], keysTop: number, keysLeft: number) {
@@ -108,9 +128,9 @@
 		return [rowCount, colCount];
 	}
 
-	function getCells(data: GroupedDataFrame, selectedOption: AggregateOption) {
+	function createTable(data: GroupedDataFrame, selectedOption: AggregateOption) {
 		const map = getMap(data, selectedOption)
-		const shape = getShape(keys, keysTop, keysLeft)
+		const shape = getShape(keys.map(k => k.unique), keysTop, keysLeft)
 		const result = []
 		for (let row = 0; row < shape[0]; row++) {
 			const rowResult = []
@@ -133,35 +153,40 @@
 			};
 		}
 
-		const cellKeys = getKeys(row, col)
+		const cellKeys = getKeySignature(row, col)
 
 		if (row < keysTop) {
 			const index = row * 2
-			const content = cellKeys[index]
+			const content = cellKeys[index]?.toString() ?? ''
 			return {
 				content,
 				rowSpan: 1,
-				colSpan: keys.filter((_, i) => i > index && i % 2 === 0).reduce((arr, k) => arr * k.length, 1),
+				colSpan: keys.filter((_, i) => i > index && i % 2 === 0).reduce((arr, k) => arr * k.unique.length, 1),
 				class: 'header',
 				skip: content === getCell(row, col - 1, map).content
 			}
 		}
 		if (col < keysLeft) {
 			const index = col * 2 + 1
-			const content = cellKeys[index]
+			const content = cellKeys[index]?.toString() ?? ''
 			return {
 				content,
-				rowSpan: keys.filter((_, i) => i > index && i % 2 === 1).reduce((arr, k) => arr * k.length, 1),
+				rowSpan: keys.filter((_, i) => i > index && i % 2 === 1).reduce((arr, k) => arr * k.unique.length, 1),
 				colSpan: 1,
 				class: 'header',
 				skip: content === getCell(row - 1, col, map).content
 			}
 		}
 
-		console.log(map, JSON.stringify(cellKeys), map.get(JSON.stringify(cellKeys)))
+		const realKey = []
+		const keyPositions = keys.map(k => data.groupedColumns.indexOf(k.col))
+
+		for (let i = 0; i < keyPositions.length; i++) {
+			realKey[keyPositions[i]] = cellKeys[i]
+		}
 
 		return {
-			content: map.get(JSON.stringify(cellKeys.sort())) ?? '',
+			content: map.get(JSON.stringify(realKey)) ?? selectedOption?.default ?? '-',
 			rowSpan: 1,
 			colSpan: 1,
 			class: 'data',
@@ -169,7 +194,7 @@
 		}
 	}
 
-	function getKeys(row: number, col: number): string[] {
+	function getKeySignature(row: number, col: number): DataType[] {
 		const pos = [col - keysLeft, row - keysTop]
 		const result = []
 		for (let i = keys.length -1; i >= 0; i--) {
@@ -180,9 +205,9 @@
 				continue
 			}
 
-			let index = localPos % keys[i].length
-			pos[isEven] = Math.floor(localPos / keys[i].length)
-			result[i] = keys[i][index]?.toString() ?? ''
+			let index = localPos % keys[i].unique.length
+			pos[isEven] = Math.floor(localPos / keys[i].unique.length)
+			result[i] = keys[i].unique[index]
 		}
 		return result
 	}
