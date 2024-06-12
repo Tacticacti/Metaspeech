@@ -18,12 +18,29 @@ export function getLegendCol(groupedColumns: Column[], xCol: Column) : Column | 
     return undefined;
 }
 
+function getScatterMap(groupedData: GroupedDataFrame, yAxisCol: Column, xAxisCol: Column, legendCol: Column | undefined): Map<string | number, [number, number][]> {
+    throw new Error('TODO');
+}
+
 export function getScatterDatasets(groupedData: GroupedDataFrame, yAxisCol: Column, xAxisCol: Column, legendCol: Column | undefined, styles: ScatterStyle[]): ScatterDataset[] {
 
-    
+    const scatterMap = getScatterMap(groupedData, yAxisCol, xAxisCol, legendCol);
+    const legendValues = [...scatterMap.keys()];
 
+    const scatterDataset: ScatterDataset[] = [];
 
-    // return [
+    for (let i = 0; i < legendValues.length; ++i) {
+        const style = styles[i % styles.length];
+        const label = legendValues[i] + '';
+        const data = scatterMap.get(legendValues[i])!;
+
+        scatterDataset.push({data, label, style});
+    }
+
+    return scatterDataset;
+}
+
+// return [
 	// 	{
 	// 		data: [
 	// 			[19, 10],
@@ -50,4 +67,3 @@ export function getScatterDatasets(groupedData: GroupedDataFrame, yAxisCol: Colu
 	// 		pointStyle: 'rect'
 	// 	}
 	// ];
-}
