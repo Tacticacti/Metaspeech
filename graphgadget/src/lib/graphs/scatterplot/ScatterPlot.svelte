@@ -126,14 +126,14 @@
 	});
 </script>
 
-<div class="flex flex-col items-center w-full w-800">
+<div class="flex flex-col items-center w-full w-1200">
 	<canvas data-testid="canvas-element" bind:this={canvas} class="mb-4" />
 	<Export {chart} />
 </div>
 
 <style>
-	.w-800 {
-		width: 800px;
+	.w-1200 {
+		width: 1200px;
 	}
 </style>
 
