@@ -40,7 +40,7 @@
 	<Merge {second_data} />
 
 	<div class="flex w-full flex-1 content-between items-center justify-center px-24">
-		<div class="scrollbar-hide w-full overflow-scroll p-4">
+		<div class="scrollbar-hide w-full self-baseline overflow-scroll p-4">
 			<Table />
 		</div>
 		<div class="ml-10">
