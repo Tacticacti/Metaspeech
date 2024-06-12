@@ -55,8 +55,6 @@ export function scaleXAxisText(data: GroupedDataFrame): string{
  * @returns scale string
  */
 export function scaleYAxisText(data: GroupedDataFrame, selectedFunction: string): string{
-    console.log('func called');
-    console.log(selectedFunction);
     
     if(data.aggregateColumn !== undefined){
         return data.aggregateColumn.name;
@@ -67,7 +65,6 @@ export function scaleYAxisText(data: GroupedDataFrame, selectedFunction: string)
     if(selectedFunction == 'Relative Frequency'){
         return 'Relative frequency(%)';
     }
-    console.log('happens');
     
     return 'Unknown';
 }
@@ -85,7 +82,7 @@ export function calculateMean(data: GroupedDataFrame): [string[], number[]]{
     for(let i = 0; i < data.groups.length; i++){
         let group: Group = data.groups[i];
         let name: string = "";
-        for(let j = 0; j < group.keys.length; j++){
+        for(let j = 0; j < group.keys.length; j++){ 
             name += group.keys[j];
         }
         bins.push(name);
