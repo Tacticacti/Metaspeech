@@ -5,7 +5,7 @@ import {
 	calculateRelativeFrequency
 } from '$lib/graphs/sharedFunctions';
 import type { GroupedDataFrame } from '$lib/Types';
-import { type ChartConfiguration } from 'chart.js';
+import { type ChartConfiguration, type ChartDataset, type Plugin } from 'chart.js';
 import { titleText, scaleXAxisText, scaleYAxisText } from '$lib/graphs/sharedFunctions';
 
 /**
@@ -28,6 +28,13 @@ export function handleData(selectedFunction: string, data: GroupedDataFrame): [s
 	return [[], []];
 }
 
+/**
+ * creates datasets which are used later on to create a chart
+ * @param data current grouped dataframe
+ * @param values current aggragated values
+ * @param selectedFunction selected function name
+ * @returns datasets for chart
+ */
 export function createDatasets(data: GroupedDataFrame, values: number[], selectedFunction: string) {
 	const datasets = [
 		{
@@ -44,9 +51,20 @@ export function createDatasets(data: GroupedDataFrame, values: number[], selecte
 	];
 	return datasets;
 }
+
+
+
+/**
+ * creates config object for chart
+ * @param labels bin names
+ * @param datasets values for each of the bins
+ * @param data current grouped dataframe
+ * @param selectedFunction user selected function
+ * @returns config object
+ */
 export function createConfig(
 	labels: string[],
-	datasets,
+	datasets: ChartDataset[],
 	data: GroupedDataFrame,
 	selectedFunction: string
 ): ChartConfiguration {
@@ -59,7 +77,6 @@ export function createConfig(
 		type: 'bar',
 		data: {
 			labels: labels,
-			//@ts-expect-error dont know type of datasets
 			datasets: datasets
 		},
 
