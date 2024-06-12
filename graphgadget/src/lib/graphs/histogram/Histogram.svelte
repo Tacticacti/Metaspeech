@@ -5,13 +5,18 @@
 	import { sortGroups } from '$lib/dataframe/DataFrame';
 	import { onDestroy } from 'svelte';
 	import { titleText, scaleText } from '$lib/graphs/sharedFunctions';
+	import { handleMean, handleSum } from '$lib/graphs/sharedFunctions';
 
 	export let data: GroupedDataFrame;
 	data.groups = sortGroups(data.groups);
-	console.log(data.groups);
+	let aggregationHappens: boolean = data.aggregateColumn !== undefined;
 	
 	let selectedAggregationFunction:string = 'sum';
-	let possibleFunctions: string[] = ['sum', 'mean'];
+	let possibleFunctionsForAggregation: string[] = ['sum', 'mean'];
+
+
+	let selectedNonAggregationFunction:string = 'Absolute Frequency';
+	let possibleFunctionsForNonAggregation: string[] = ['Absolute Frequency', 'Relative Frequency'];
 	
 
 	let chart: Chart;
@@ -21,55 +26,15 @@
 		console.log(selectedAggregationFunction);
 		
 		switch(selectedAggregationFunction){
-			case 'sum': return handleSum();
-			case 'mean': return handleMean();
+			case 'sum': return handleSum(data);
+			case 'mean': return handleMean(data);
 		}
 		return [[], []];
-	}
-	function handleMean(): [string[], number[]]{
-		let bins: string[] = [];
-		let values: number[] = [];
-		for(let i = 0; i < data.groups.length; i++){
-			let group: Group = data.groups[i];
-			let name: string = "";
-			for(let j = 0; j < group.keys.length; j++){
-				name += group.keys[j];
-			}
-			bins.push(name);
-			let sum: number = 0;
-			for(let j = 0; j < group.values.length; j++){
-				sum += group.values[j] as number;			//this will always be number, because it is not possible
-															//to select a non numeric column in parameter page
-															//Make sure to pass only numeric columns!
-			}
-			values.push(sum/group.values.length);
-		}
-		return [bins, values];
-	}
-	function handleSum(): [string[], number[]]{
-		let bins: string[] = [];
-		let values: number[] = [];
-		for(let i = 0; i < data.groups.length; i++){
-			let group: Group = data.groups[i];
-			let name: string = "";
-			for(let j = 0; j < group.keys.length; j++){
-				name += group.keys[j];
-			}
-			bins.push(name);
-			let sum: number = 0;
-			for(let j = 0; j < group.values.length; j++){
-				sum += group.values[j] as number;			//this will always be number, because it is not possible
-															//to select a non numeric column in parameter page
-															//Make sure to pass only numeric columns!
-			}
-			values.push(sum);
-		}
-		return [bins, values];
 	}
 	afterUpdate(() => {
 		let labels: string[] = [];
 		let values: number[] = [];
-		if(data.aggregateColumn !== undefined){
+		if(aggregationHappens){
 			[labels, values] = handleAggregation();
 		}
 		console.log(labels);
@@ -133,9 +98,14 @@
 		};
 
 		if(chart) {
-			chart.data = datasets;
+			chart.data.labels = labels;
+			chart.data.datasets = datasets;
+			chart.update();
 		}
-		else chart = new Chart(canvas, cfg);
+		
+		else {
+			chart = new Chart(canvas, cfg);
+		}
 	});
 
 	onDestroy(() => {
@@ -145,7 +115,7 @@
 </script>
 
 <div class="flex flex-col">
-	{#each possibleFunctions as func}
+	{#each possibleFunctionsForAggregation as func}
 		<label>
 			{func}
 			<input type="radio" bind:group={selectedAggregationFunction} value={func} />
