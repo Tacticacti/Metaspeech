@@ -1,52 +1,38 @@
 <script lang="ts">
-	import type { GroupedDataFrame } from '$lib/Types';
+	import type { GroupedDataFrame, Column } from '$lib/Types';
 	import { afterUpdate, onMount, onDestroy } from 'svelte';
 	import { Chart, type ChartConfiguration } from 'chart.js/auto';
 	import Export from '$lib/components/exporter/GraphImageExport.svelte';
 	import { setColor } from '$lib/graphs/utils/CanvasUtils';
+	import { getScatterDatasets, getXAxisCol, getLegendCol } from '$lib/graphs/scatterplot/ScatterPlotController';
 
 	let canvas: HTMLCanvasElement;
 	let chart: Chart;
 
 	export let data: GroupedDataFrame;
 
-	type ScatterDataset = {
-		data: [number, number][];
-		label: string;
-		backgroundColor: string;
-		borderColor: string;
-		pointStyle: string;
-	}
+	const yAxisCol = data.aggregateColumn!;
+	let xAxisCol = getXAxisCol(data.groupedColumns);
+	let legendCol = getLegendCol(data.groupedColumns, xAxisCol);
 
-	let datasets: ScatterDataset[] = [
-		{
-			data: [
-				[19, 10],
-				[20, 30],
-				[42, 32],
-				[50, 33]
-			],
-			label: 'Male',
-			backgroundColor: 'rgba(51, 50, 200, 1)',
-			borderColor: 'rgba(51, 50, 200, 1)',
-			pointStyle: 'cross'
-		},
-		{
-			data: [
-				[19, 20],
-				[19, 40],
-				[40, 40],
-				[52, 30],
-				[60, 50]
-			],
-			label: 'Female',
-			backgroundColor: 'rgba(255, 99, 132, 1)',
-			borderColor: 'rgba(255, 99, 132, 1)',
-			pointStyle: 'rect'
+	$: y_axis = yAxisCol.name;
+	$: x_axis = xAxisCol.name;
+	$: legend = legendCol?.name;
+
+	$: datasets = getScatterDatasets(data, yAxisCol, xAxisCol, legendCol);
+
+	function swapGroupColumns() {
+		if (legendCol === undefined) {
+			return;
 		}
-	];
+		if (legendCol!.type !== 'number') {
+			return;
+		}
 
-	let x_axis = 'Age', y_axis = 'WER', legend = 'Gender';
+		const temp = legendCol!;
+		legendCol = xAxisCol;
+		xAxisCol = temp;
+	}
 
 	onMount(() => {
 		const plugin = {
@@ -125,6 +111,12 @@
 		}
 	});
 </script>
+
+{#if legendCol?.type === 'number'}
+	<button on:click={swapGroupColumns}>
+		Swap x-axis and legend
+	</button>
+{/if}
 
 <div class="flex flex-col items-center w-full w-1200">
 	<canvas data-testid="canvas-element" bind:this={canvas} class="mb-4" />
