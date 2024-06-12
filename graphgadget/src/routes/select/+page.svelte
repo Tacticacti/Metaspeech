@@ -38,7 +38,6 @@
 		for (let i = 0; i < $columns.length; i++) {
 			$columns[i].aggregate = i === index;
 		}
-		
 	}
 </script>
 

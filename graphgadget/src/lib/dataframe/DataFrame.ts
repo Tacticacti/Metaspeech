@@ -226,7 +226,7 @@ export class DataFrame {
  * @returns either 0, 1, -1 depending on a, b
  */
 export function sortGroups(groups: Group[]): Group[] {
-    return groups.sort((a, b) => compareDataTypeArray(a.keys, b.keys));
+	return groups.sort((a, b) => compareDataTypeArray(a.keys, b.keys));
 }
 /**
  * helper function to compare 2 DataType arrays. Usually used for sorting
@@ -235,19 +235,18 @@ export function sortGroups(groups: Group[]): Group[] {
  * @returns either 0, 1, -1 depending on a, b
  */
 function compareDataTypeArray(a: DataType[], b: DataType[]): number {
-    let limit = Math.min(a.length, b.length);
-	for(let i = 0; i < limit; i++){
-		let aElement = a[i];
-		let bElement = b[i];
-		let compareScore = compareDataType(aElement, bElement);
-		if(compareScore !== 0){
+	const limit = Math.min(a.length, b.length);
+	for (let i = 0; i < limit; i++) {
+		const aElement = a[i];
+		const bElement = b[i];
+		const compareScore = compareDataType(aElement, bElement);
+		if (compareScore !== 0) {
 			return compareScore;
 		}
 	}
-	if(a.length === b.length){
+	if (a.length === b.length) {
 		return 0;
-	}
-	else if(a.length > b.length){
+	} else if (a.length > b.length) {
 		return 1;
 	}
 	return -1;
@@ -259,22 +258,22 @@ function compareDataTypeArray(a: DataType[], b: DataType[]): number {
  * @returns either 0, 1, -1 depending on a, b
  */
 function compareDataType(a: DataType, b: DataType): number {
-    if (a === undefined && b === undefined) return 0;
-    if (a === undefined) return 1;
-    if (b === undefined) return -1;
+	if (a === undefined && b === undefined) return 0;
+	if (a === undefined) return 1;
+	if (b === undefined) return -1;
 
-    if (typeof a === 'number' && typeof b === 'number') {
-        return a - b;
-    }
+	if (typeof a === 'number' && typeof b === 'number') {
+		return a - b;
+	}
 
-    if (typeof a === 'string' && typeof b === 'string') {
-        return a.localeCompare(b);
-    }
+	if (typeof a === 'string' && typeof b === 'string') {
+		return a.localeCompare(b);
+	}
 
-    if (typeof a === 'number') return -1;
-    if (typeof b === 'number') return 1;
+	if (typeof a === 'number') return -1;
+	if (typeof b === 'number') return 1;
 
-    return 0; // This case is redundant but added for completeness
+	return 0; // This case is redundant but added for completeness
 }
 // #region df types
 
