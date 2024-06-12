@@ -12,14 +12,21 @@
 	<title>Visualisations - {APP_NAME}</title>
 </svelte:head>
 
-<SelectGraph bind:selected={selectedGraph} />
 
-{#if selectedGraph}
-	<div class="mt-5 flex w-full justify-center">
-		<svelte:component this={selectedGraph.graph} {data} />
+
+<main class="bg-lightblue">
+	<div class="flex flex-col justify-center pt-16 m-5 max-w-full items-center">
+		<SelectGraph bind:selected={selectedGraph} />
+		{#if selectedGraph}
+			<div class="mt-5 flex w-full justify-center">
+				<svelte:component this={selectedGraph.graph} {data} />
+			</div>
+		{:else}
+			<div class="mt-5 flex h-96 w-full justify-center">
+				<p class="text-lg text-white">Please select a graph to display.</p>
+			</div>
+		{/if}
 	</div>
-{:else}
-	<div class="mt-5 flex h-96 w-full justify-center">
-		<p class="text-lg text-white">Please select a graph to display.</p>
-	</div>
-{/if}
+</main>
+
+

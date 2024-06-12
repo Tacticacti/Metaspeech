@@ -4,6 +4,7 @@
 	import { Chart, type ChartConfiguration } from 'chart.js/auto';
 	import { sortGroups } from '$lib/dataframe/DataFrame';
 	import { onDestroy } from 'svelte';
+	import { titleText, scaleText } from '$lib/graphs/sharedFunctions';
 
 	export let data: GroupedDataFrame;
 	data.groups = sortGroups(data.groups);
@@ -17,6 +18,8 @@
 	let canvas: HTMLCanvasElement;
 
 	function handleAggregation(): [string[], number[]]{
+		console.log(selectedAggregationFunction);
+		
 		switch(selectedAggregationFunction){
 			case 'sum': return handleSum();
 			case 'mean': return handleMean();
@@ -74,7 +77,7 @@
 		
 		let datasets = [
 			{
-				label: labels,
+				label: data.aggregateColumn ? data.aggregateColumn.name : "undefined",
 				data: values,
 				backgroundColor: 'rgba(51, 50, 200, 1)',
 				borderColor: 'rgba(255, 99, 132, 1)',
@@ -83,7 +86,7 @@
 		];
 		const plugin = {
 			id: 'customCanvasBackgroundColor',
-			beforeDraw: 'white'
+			beforeDraw: 'rgba(0, 0, 0, 1)'
 		};
 
 		const cfg: ChartConfiguration = {
@@ -98,21 +101,14 @@
 				plugins: {
 					// @ts-expect-error Needs a specific type for plugin
 					customCanvasBackgroundColor: {
-						color: 'white'
+						color: 'rgba(0, 0, 0, 1)'
 					},
 					title: {
 						display: true,
 						// Checks if there are colums selected, if not then this is just Absolute Frequency
 						// Else the title is the values x group of columns
 						text:
-							'test1'
-							// $selectedColumns.length === 0
-							// 	? 'Absolute Frequency'
-							// 	: $selectedValues[0] +
-							// 		' x ' +
-							// 		($selectedColumns.length > 1
-							// 			? '(' + $selectedColumns.join(', ') + ')'
-							// 			: $selectedColumns[0])
+							titleText(data)
 					}
 				},
 				scales: {
@@ -120,10 +116,7 @@
 						title: {
 							display: true,
 							text:
-								'test2'
-								// $selectedColumns.length > 1
-								// 	? 'Group: (' + $selectedColumns.join(', ') + ')'
-								// 	: $selectedColumns[0]
+								scaleText(data)
 						}
 					},
 					y: {
@@ -159,6 +152,6 @@
 		</label>
 	{/each}
 </div>
-<div class="flex flex-col items-center">
-	<canvas data-testid="canvas-element" bind:this={canvas} class = "w-full" />
+<div class="flex flex-col items-center w-[60%]">
+	<canvas data-testid="canvas-element" bind:this={canvas} />
 </div>
