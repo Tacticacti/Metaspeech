@@ -14,6 +14,7 @@
 		data: [number, number][];
 		label: string;
 		backgroundColor: string;
+		borderColor: string;
 		pointStyle: string;
 	}
 
@@ -27,6 +28,7 @@
 			],
 			label: 'Male',
 			backgroundColor: 'rgba(51, 50, 200, 1)',
+			borderColor: 'rgba(51, 50, 200, 1)',
 			pointStyle: 'cross'
 		},
 		{
@@ -39,6 +41,7 @@
 			],
 			label: 'Female',
 			backgroundColor: 'rgba(255, 99, 132, 1)',
+			borderColor: 'rgba(255, 99, 132, 1)',
 			pointStyle: 'rect'
 		}
 	];
@@ -99,8 +102,8 @@
 		for (const ds of datasets) {
 			chart.data.datasets.push({
 				...ds,
-				//borderColor: 'rgba(255, 99, 132, 1)',
-				borderWidth: 3
+				borderWidth: 1,
+				radius: 10
 			});
 		}
 
