@@ -1,10 +1,14 @@
 <script lang="ts">
-	import type { GroupedDataFrame, Column, ScatterStyle } from '$lib/Types';
+	import type { GroupedDataFrame } from '$lib/Types';
 	import { scatterStyles } from '$lib/Constants';
 	import { afterUpdate, onMount, onDestroy } from 'svelte';
 	import { Chart, type ChartConfiguration } from 'chart.js/auto';
 	import Export from '$lib/components/exporter/GraphImageExport.svelte';
-	import { getScatterDatasets, getXAxisCol, getLegendCol } from '$lib/graphs/scatterplot/ScatterPlotController';
+	import {
+		getScatterDatasets,
+		getXAxisCol,
+		getLegendCol
+	} from '$lib/graphs/scatterplot/ScatterPlotController';
 	import { setColor } from '$lib/graphs/utils/CanvasUtils';
 
 	let canvas: HTMLCanvasElement;
@@ -41,12 +45,12 @@
 			beforeDraw: setColor
 		};
 
-		const cfg : ChartConfiguration = {
+		const cfg: ChartConfiguration = {
 			type: 'scatter',
 			data: {
 				datasets: []
 			},
-			
+
 			// @ts-expect-error plugin needs a type same as above
 			plugins: [plugin]
 		};
@@ -70,7 +74,7 @@
 					position: 'right',
 					title: {
 						display: true,
-						text: legend,
+						text: legend
 					},
 					labels: {
 						usePointStyle: true
@@ -93,32 +97,30 @@
 			}
 		};
 
-		chart.data.datasets = datasets.map(ds => {
+		chart.data.datasets = datasets.map((ds) => {
 			return {
 				data: ds.data,
 				label: ds.label,
 				...ds.style,
 				radius: 7
-			}
+			};
 		});
 
 		chart.update();
 	});
 
 	onDestroy(() => {
-		if (chart) { 
+		if (chart) {
 			chart.destroy();
 		}
 	});
 </script>
 
 {#if legendCol?.type === 'number'}
-	<button on:click={swapGroupColumns}>
-		Swap x-axis and legend
-	</button>
+	<button on:click={swapGroupColumns}> Swap x-axis and legend </button>
 {/if}
 
-<div class="flex flex-col items-center w-full w-1200">
+<div class="w-1200 flex w-full flex-col items-center">
 	<canvas data-testid="canvas-element" bind:this={canvas} class="mb-4" />
 	<Export {chart} />
 </div>
@@ -128,4 +130,3 @@
 		width: 1200px;
 	}
 </style>
-

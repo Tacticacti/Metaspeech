@@ -46,7 +46,9 @@ export const graphs: GraphMeta[] = [
 			'A scatterplot shows the relationship between two quantitative variables measured for the same individuals. The values of one variable appear on the horizontal axis, and the values of the other variable appear on the vertical axis. Each individual in the data appears as a point on the graph.',
 		img: ScatterPlot_img,
 		canRender: (data) =>
-			data.aggregateColumn !== undefined && data.groupedColumns && data.groupedColumns.some((col) => col.type === 'number'),
+			data.aggregateColumn !== undefined &&
+			data.groupedColumns &&
+			data.groupedColumns.some((col) => col.type === 'number'),
 		graph: ScatterPlot
 	},
 	{
@@ -119,5 +121,5 @@ export const scatterStyles: ScatterStyle[] = [
 		backgroundColor: 'pink',
 		borderColor: 'pink',
 		pointStyle: 'triangle'
-	},
+	}
 ];

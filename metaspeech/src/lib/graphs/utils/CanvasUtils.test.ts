@@ -33,4 +33,3 @@ describe('CanvasUtils', () => {
 		expect(chart.ctx.fillStyle).toBeDefined();
 	});
 });
-

@@ -13,4 +13,3 @@ export function setColor(chart, ignored: string, options: ChartOptions) {
 	ctx.fillRect(0, 0, chart.width, chart.height);
 	ctx.restore();
 }
-
