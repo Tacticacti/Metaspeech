@@ -4,7 +4,7 @@
 	import { Chart, type ChartConfiguration } from 'chart.js/auto';
 	import { sortGroups } from '$lib/dataframe/DataFrame';
 	import { onDestroy } from 'svelte';
-	import { scaleYAxisText } from '$lib/graphs/sharedFunctions';
+	import { getScaleYAxisText } from '$lib/graphs/sharedFunctions';
 	import { createConfig, createDatasets, handleData } from './helper';
 
 	export let data: GroupedDataFrame;
@@ -34,7 +34,7 @@
 				y: {
 					title: {
 						display: true,
-						text: scaleYAxisText(data, selectedFunction)
+						text: getScaleYAxisText(data, selectedFunction)
 					}
 				}
 			};

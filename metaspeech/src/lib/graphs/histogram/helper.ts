@@ -6,7 +6,7 @@ import {
 } from '$lib/graphs/sharedFunctions';
 import type { GroupedDataFrame } from '$lib/Types';
 import { type ChartConfiguration, type ChartDataset } from 'chart.js';
-import { titleText, scaleXAxisText, scaleYAxisText } from '$lib/graphs/sharedFunctions';
+import { getTitleText, getScaleXAxisText, getScaleYAxisText } from '$lib/graphs/sharedFunctions';
 
 /**
  * Sets the background color of the chart
@@ -120,20 +120,20 @@ export function createConfig(
 					display: true,
 					// Checks if there are colums selected, if not then this is just Absolute Frequency
 					// Else the title is the values x group of columns
-					text: titleText(data)
+					text: getTitleText(data)
 				}
 			},
 			scales: {
 				x: {
 					title: {
 						display: true,
-						text: scaleXAxisText(data)
+						text: getScaleXAxisText(data)
 					}
 				},
 				y: {
 					title: {
 						display: true,
-						text: scaleYAxisText(data, selectedFunction)
+						text: getScaleYAxisText(data, selectedFunction)
 					}
 				}
 			}

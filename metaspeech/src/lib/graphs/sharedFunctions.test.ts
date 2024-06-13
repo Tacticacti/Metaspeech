@@ -1,7 +1,7 @@
 import {
-	scaleXAxisText,
-	titleText,
-	scaleYAxisText,
+	getScaleXAxisText,
+	getTitleText,
+	getScaleYAxisText,
 	calculateMean,
 	calculateSum,
 	calculateAbsoluteFrequency,
@@ -16,7 +16,7 @@ describe('title text tests ', () => {
 		df.set(fromText('age,cars\n18,1\n32,4\n18,2'));
 
 		const groupedDf = df.groupBy();
-		const title = titleText(groupedDf);
+		const title = getTitleText(groupedDf);
 
 		expect(title).toBe('Total Frequency');
 	});
@@ -29,7 +29,7 @@ describe('title text tests ', () => {
 		columns[0].groupBy = { type: 'specific' };
 
 		const groupedDf = df.groupBy();
-		const title = titleText(groupedDf);
+		const title = getTitleText(groupedDf);
 
 		expect(title).toBe('cars x age');
 	});
@@ -41,7 +41,7 @@ describe('title text tests ', () => {
 		columns[0].groupBy = { type: 'specific' };
 
 		const groupedDf = df.groupBy();
-		const title = titleText(groupedDf);
+		const title = getTitleText(groupedDf);
 
 		expect(title).toBe('Frequency of age');
 	});
@@ -55,7 +55,7 @@ describe('title text tests ', () => {
 		columns[2].groupBy = { type: 'specific' };
 
 		const groupedDf = df.groupBy();
-		const title = titleText(groupedDf);
+		const title = getTitleText(groupedDf);
 
 		expect(title).toBe('cars x (age, trains)');
 	});
@@ -67,7 +67,7 @@ describe('scaleXAxisText tests ', () => {
 		df.set(fromText('age,cars\n18,1\n32,4\n18,2'));
 
 		const groupedDf = df.groupBy();
-		const axis = scaleXAxisText(groupedDf);
+		const axis = getScaleXAxisText(groupedDf);
 
 		expect(axis).toBe('all');
 	});
@@ -81,7 +81,7 @@ describe('scaleXAxisText tests ', () => {
 
 		const groupedDf = df.groupBy();
 
-		const axis = scaleXAxisText(groupedDf);
+		const axis = getScaleXAxisText(groupedDf);
 
 		expect(axis).toBe('age');
 	});
@@ -97,7 +97,7 @@ describe('scaleXAxisText tests ', () => {
 
 		const groupedDf = df.groupBy();
 
-		const axis = scaleXAxisText(groupedDf);
+		const axis = getScaleXAxisText(groupedDf);
 
 		expect(axis).toBe('Group: (age, trains)');
 	});
@@ -114,7 +114,7 @@ describe('scaleYAxisText tests ', () => {
 		const groupedDf = df.groupBy();
 		const selectedFunction = 'sum';
 
-		const axis = scaleYAxisText(groupedDf, selectedFunction);
+		const axis = getScaleYAxisText(groupedDf, selectedFunction);
 
 		expect(axis).toBe('cars');
 	});
@@ -125,7 +125,7 @@ describe('scaleYAxisText tests ', () => {
 		const groupedDf = df.groupBy();
 		const selectedFunction = 'Absolute Frequency';
 
-		const axis = scaleYAxisText(groupedDf, selectedFunction);
+		const axis = getScaleYAxisText(groupedDf, selectedFunction);
 
 		expect(axis).toBe('Absolute frequency(Count)');
 	});
@@ -136,7 +136,7 @@ describe('scaleYAxisText tests ', () => {
 		const groupedDf = df.groupBy();
 		const selectedFunction = 'Relative Frequency';
 
-		const axis = scaleYAxisText(groupedDf, selectedFunction);
+		const axis = getScaleYAxisText(groupedDf, selectedFunction);
 
 		expect(axis).toBe('Relative frequency(%)');
 	});
@@ -147,7 +147,7 @@ describe('scaleYAxisText tests ', () => {
 		const groupedDf = df.groupBy();
 		const selectedFunction = 'unknown func';
 
-		const axis = scaleYAxisText(groupedDf, selectedFunction);
+		const axis = getScaleYAxisText(groupedDf, selectedFunction);
 
 		expect(axis).toBe('Unknown');
 	});

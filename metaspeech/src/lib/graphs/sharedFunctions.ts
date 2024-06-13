@@ -5,7 +5,7 @@ import type { GroupedDataFrame, Group } from '$lib/Types';
  * @param data current dataframe
  * @returns title string
  */
-export function titleText(data: GroupedDataFrame): string {
+export function getTitleText(data: GroupedDataFrame): string {
 	if (data.groupedColumns.length === 0) {
 		return 'Total Frequency';
 	}
@@ -24,7 +24,7 @@ export function titleText(data: GroupedDataFrame): string {
  * @param data current dataframe
  * @returns scale string
  */
-export function scaleXAxisText(data: GroupedDataFrame): string {
+export function getScaleXAxisText(data: GroupedDataFrame): string {
 	if (data.groupedColumns.length === 0) {
 		return 'all';
 	}
@@ -39,7 +39,7 @@ export function scaleXAxisText(data: GroupedDataFrame): string {
  * @param data current dataframe
  * @returns scale string
  */
-export function scaleYAxisText(data: GroupedDataFrame, selectedFunction: string): string {
+export function getScaleYAxisText(data: GroupedDataFrame, selectedFunction: string): string {
 	if (data.aggregateColumn !== undefined) {
 		return data.aggregateColumn.name;
 	}
