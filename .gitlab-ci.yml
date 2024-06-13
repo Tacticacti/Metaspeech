@@ -2,7 +2,7 @@ image: mcr.microsoft.com/playwright:v1.44.0-jammy
 
 # cache: #  Parameter 'cache' to cache the installation files for your projects dependencies, for building faster
 #   paths:
-#     - graphgadget/
+#     - metaspeech/
 
 stages:
   - prepare
@@ -14,53 +14,53 @@ stages:
 prepare:
   stage: prepare
   script:
-    - cd graphgadget
+    - cd metaspeech
     - npm ci
   artifacts:
    paths:
-   - graphgadget/node_modules
+   - metaspeech/node_modules
    expire_in: 1 hour
 
 check:
   stage: check
   script:
-    - cd graphgadget
+    - cd metaspeech
     - npm run lint
 
 build:
   stage: build
   script:
-    - cd graphgadget
+    - cd metaspeech
     - npm run build
   artifacts:
    paths: 
-     - graphgadget/build # used for deploying
-     - graphgadget/.svelte-kit/tsconfig.json # used by testing
+     - metaspeech/build # used for deploying
+     - metaspeech/.svelte-kit/tsconfig.json # used by testing
    expire_in: 1 hour
 
 test-unit:
   stage: test
   script: 
-    - cd graphgadget
+    - cd metaspeech
     - npm run test:unit
   artifacts:
     reports:
       coverage_report:
         coverage_format: cobertura
-        path: graphgadget/coverage/cobertura-coverage.xml
+        path: metaspeech/coverage/cobertura-coverage.xml
   coverage: '/^Statements\s*:\s*([^%]+)/'
 
 test-system:
   stage: test
   script: 
-    - cd graphgadget
+    - cd metaspeech
     - npm run test:integration
 
 pages:
   stage: deploy
   script:
   - mkdir .public
-  - cp -r graphgadget/build/* .public
+  - cp -r metaspeech/build/* .public
   - mv .public public
   artifacts:
     paths:
