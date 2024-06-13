@@ -10,11 +10,11 @@
 <button
 	tabindex="0"
 	data-testid={graph.title}
-	class="flex h-12 w-52 flex-row flex-wrap justify-around rounded-md border border-gray-400 p-1 hover:bg-gray-300"
+	class="box-content flex h-12 w-44 flex-row flex-wrap justify-between rounded-md border border-gray-400 p-1 px-3 hover:bg-gray-300"
 	on:click
 	on:mouseover
 	on:focus
 >
-	<img src={graph.img} alt="graph img" class="self-center" />
+	<img src={graph.img} alt="graph img" class="self-center" width="30px" />
 	<div class="self-center text-lg font-bold">{graph.title}</div>
 </button>
