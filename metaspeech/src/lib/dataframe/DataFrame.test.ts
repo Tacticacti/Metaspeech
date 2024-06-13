@@ -1,5 +1,14 @@
 import { get } from 'svelte/store';
-import { DataFrame, fromFile, fromObjects, fromText, fromArrays, compareDataTypeArray, compareDataType, sortGroups } from './DataFrame';
+import {
+	DataFrame,
+	fromFile,
+	fromObjects,
+	fromText,
+	fromArrays,
+	compareDataTypeArray,
+	compareDataType,
+	sortGroups
+} from './DataFrame';
 import { describe, it, expect } from 'vitest';
 import type { DataFrameLike, DataType, Group } from '$lib/Types';
 
@@ -551,16 +560,17 @@ describe('compare DataType tests', () => {
 describe('sorting tests', () => {
 	it('1 simple group', () => {
 		const groups: Group[] = [
-			{values: [], keys:[2, 'b', 1]},
-			{values: [], keys:[1, 'b']},
-			{values: [], keys:[2, 'b']},
-			{values: [], keys:[1, 'a']}];
+			{ values: [], keys: [2, 'b', 1] },
+			{ values: [], keys: [1, 'b'] },
+			{ values: [], keys: [2, 'b'] },
+			{ values: [], keys: [1, 'a'] }
+		];
 
-		expect(sortGroups(groups)).toStrictEqual(
-			[{values: [], keys:[1, 'a']},
-			{values: [], keys:[1, 'b']},
-			{values: [], keys:[2, 'b']},
-			{values: [], keys:[2, 'b', 1]}]
-		);
+		expect(sortGroups(groups)).toStrictEqual([
+			{ values: [], keys: [1, 'a'] },
+			{ values: [], keys: [1, 'b'] },
+			{ values: [], keys: [2, 'b'] },
+			{ values: [], keys: [2, 'b', 1] }
+		]);
 	});
 });

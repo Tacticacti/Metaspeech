@@ -17,14 +17,6 @@ export function titleText(data: GroupedDataFrame): string {
 		title += '(' + data.groupedColumns.map((column) => column.name).join(', ') + ')';
 	else title += data.groupedColumns[0].name;
 	return title;
-	// original:
-	// data.groupedColumns.length === 0
-	// ? 'Absolute Frequency'
-	// : data.aggregateColumn.name +
-	//     ' x ' +
-	//     (data.groupedColumns.length > 1
-	//         ? '(' + data.groupedColumns.map(column => column.name).join(', ') + ')'
-	//         : data.groupedColumns[0].name)
 }
 
 /**
@@ -40,10 +32,6 @@ export function scaleXAxisText(data: GroupedDataFrame): string {
 		return 'Group: (' + data.groupedColumns.map((column) => column.name).join(', ') + ')';
 	}
 	return data.groupedColumns[0].name;
-	// original:
-	// data.groupedColumns.length > 1
-	// ? 'Group: (' + data.groupedColumns.map(column => column.name).join(', ') + ')'
-	// : data.groupedColumns[0].name
 }
 
 /**
