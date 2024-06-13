@@ -30,10 +30,9 @@
 	 * Swaps the x-axis column with the legend column
 	 */
 	function swapGroupColumns() {
-		if (legendCol?.type !== 'number')
-			return;
+		if (legendCol?.type !== 'number') return;
 
-		[legendCol, xAxisCol] = [xAxisCol, legenCol];
+		[legendCol, xAxisCol] = [xAxisCol, legendCol];
 	}
 
 	onMount(() => {

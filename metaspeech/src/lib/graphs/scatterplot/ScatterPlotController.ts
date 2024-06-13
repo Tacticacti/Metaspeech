@@ -6,12 +6,13 @@ import type { GroupedDataFrame, Column, ScatterStyle, ScatterDataset } from '$li
  * @returns the column to be in the x-axis
  */
 export function getXAxisCol(groupedColumns: Column[]): Column {
-	for (const col of groupedColumns) {
-		if (col.type === 'number') {
-			return col;
-		}
+	const xCol = groupedColumns.find((col) => col.type === 'number');
+
+	if (xCol === undefined) {
+		throw new Error('Scatterplot required one numerical group-by column!');
 	}
-	throw new Error('Scatterplot required one numerical group-by column!');
+
+	return xCol;
 }
 
 /**
@@ -20,12 +21,7 @@ export function getXAxisCol(groupedColumns: Column[]): Column {
  * @returns the column to be in the legend
  */
 export function getLegendCol(groupedColumns: Column[], xCol: Column): Column | undefined {
-	for (const col of groupedColumns) {
-		if (col !== xCol) {
-			return col;
-		}
-	}
-	return undefined;
+	return groupedColumns.find((col) => col !== xCol);
 }
 
 /**
@@ -40,8 +36,8 @@ function getIndicesOfColumns(
 	xAxisCol: Column,
 	legendCol: Column | undefined
 ): [number, number] {
-	let indexX = groupedColumns.indexOf(xAxisCol);
-	let indexLegend = groupedColumns.indexOf(legendCol);
+	const indexX = groupedColumns.indexOf(xAxisCol);
+	const indexLegend = legendCol === undefined ? -1 : groupedColumns.indexOf(legendCol!);
 
 	return [indexX, indexLegend];
 }
