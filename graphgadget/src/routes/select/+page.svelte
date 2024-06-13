@@ -34,7 +34,6 @@
 	}
 	function selectColumnForAggregation(index: number) {
 		index = translateIndex(index);
-		index = translateIndex(index);
 		for (let i = 0; i < $columns.length; i++) {
 			$columns[i].aggregate = i === index;
 		}
