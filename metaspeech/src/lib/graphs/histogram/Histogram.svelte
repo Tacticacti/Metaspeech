@@ -27,21 +27,18 @@
 
 		const cfg: ChartConfiguration = createConfig(labels, datasets, data, selectedFunction);
 
-		if (chart) {
-			chart.data.labels = labels;
-			chart.data.datasets = datasets;
-			chart.options.scales = {
-				y: {
-					title: {
-						display: true,
-						text: getScaleYAxisText(data, selectedFunction)
-					}
+		chart ??= new Chart(canvas, cfg);
+		chart.data.labels = labels;
+		chart.data.datasets = datasets;
+		chart.options.scales = {
+			y: {
+				title: {
+					display: true,
+					text: getScaleYAxisText(data, selectedFunction)
 				}
-			};
-			chart.update();
-		} else {
-			chart = new Chart(canvas, cfg);
-		}
+			}
+		};
+		chart.update();
 	});
 
 	onDestroy(() => {
