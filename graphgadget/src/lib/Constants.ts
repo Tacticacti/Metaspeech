@@ -8,7 +8,7 @@ import Histogram_img from '$assets/graphs/histogram.png';
 import BoxPlot_img from '$assets/graphs/boxplot.png';
 import PieChart_img from '$assets/graphs/piechart.png';
 import ScatterPlot_img from '$assets/graphs/scatterplot.png';
-import Table_img from '$assets/graphs/table.png';
+import Table_img from '$assets/graphs/table.svg';
 
 /**
  * The name of the application.
@@ -24,6 +24,13 @@ export const COPYRIGHT_YEAR = 2024;
  * The graphs that we support in the application.
  */
 export const graphs: GraphMeta[] = [
+	{
+		title: 'Table',
+		description: 'A table is a grid of data that can be sorted, filtered, and searched.',
+		img: Table_img,
+		canRender: () => true,
+		graph: Table
+	},
 	{
 		title: 'Histogram',
 		description:
@@ -56,12 +63,5 @@ export const graphs: GraphMeta[] = [
 		img: BoxPlot_img,
 		canRender: (data) => data.groupedColumns.length === 1,
 		graph: BoxPlot
-	},
-	{
-		title: 'Table',
-		description: 'A table is a grid of data that can be sorted, filtered, and searched.',
-		img: Table_img,
-		canRender: () => true,
-		graph: Table
 	}
 ];

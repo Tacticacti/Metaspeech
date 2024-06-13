@@ -1,18 +1,6 @@
 <script lang="ts">
 	import type { Column, DataType, GroupedDataFrame } from '$lib/Types';
-
-	export let data: GroupedDataFrame;
-
-	$: keysTop = Math.ceil(data.groupedColumns.length / 2);
-	$: keysLeft = data.groupedColumns.length - keysTop;
-	$: keys = getKeys(data);
-	$: result = createTable(data, selectedOption)
-
-	type AggregateOption = {
-		name: string;
-		fn: (data: GroupedDataFrame) => { keys: DataType[]; value: string }[];
-		default: string;
-	};
+	import { aggregateOptions_none, aggregateOptions_single, type AggregateOption } from './Table';
 
 	type Cell = {
 		content: string;
@@ -20,84 +8,34 @@
 		colSpan: number;
 		class: 'header' | 'data' | undefined;
 		skip: boolean;
-	}
+	};
 	type KeySet = {
-		unique: DataType[]
-		col: Column
-	}
+		unique: DataType[];
+		col: Column;
+		i: number;
+	};
 
-	const aggregateOptions_none: AggregateOption[] = [
-		{
-			name: 'Count',
-			fn: (data: GroupedDataFrame) =>{				
-				return data.groups.map((g) => ({ keys: g.keys, value: `${g.values.length}` }))
-			},
-			default: '0'
-		},
-		{
-			name: 'xxx.xx%',
-			fn: (data: GroupedDataFrame) => {
-				const n = total(data, true);
-				return data.groups.map((g) => {
-					const p = g.values.length / n;
-					const percentage = (p * 100).toFixed(2);
-					return { 
-						keys: g.keys, 
-						value: `${percentage}%` 
-					}
-				});
-			},
-			default: '0.00%'
-		}
-	];
-	const aggregateOptions_single: AggregateOption[] = [
-		{
-			name: 'Mean',
-			fn: (data: GroupedDataFrame) => {
-				return data.groups.map((g) => ({ keys: g.keys, value: `${sum(g.values) / g.values.length}` }));
-			},
-			default: '-'
-		},
-		{
-			name: 'Mean (SD)',
-			fn: (data: GroupedDataFrame) => {
-				const n = total(data, false);
-				const result = [];
-				for (const g of data.groups) {				
-					const mean = sum(g.values) / n;
-					const filteredValues = g.values.filter((v) => typeof v === 'number') as number[];
-					const sd = Math.sqrt(
-						filteredValues.reduce((acc, v) => acc + (v - mean) ** 2, 0) / filteredValues.length
-					);
-					result.push({ keys: g.keys, value: `${mean} (${sd})` });
-				}
-				return result;
-			},
-			default: '-'
-		}
-	];
-
+	export let data: GroupedDataFrame;
 	const aggregateOptions =
 		data.aggregateColumn === undefined ? aggregateOptions_none : aggregateOptions_single;
 	let selectedOption: AggregateOption;
-
-	function sum(values: DataType[]): number {
-		// @ts-expect-error - ts doesn't know that we're filtering out non-numbers
-		return values.filter((v) => typeof v === 'number').reduce((acc, v) => acc + v, 0);
-	}
-	function total(data: GroupedDataFrame, expectUndefined: boolean): number {
-		if (expectUndefined) {
-			return data.groups.reduce((acc, g) => acc + g.values.length, 0);
-		}
-		return data.groups.reduce((acc, g) => acc + g.values.filter((v) => v !== undefined).length, 0);
-	}
+	$: keysTop = Math.ceil(data.groupedColumns.length / 2);
+	$: keysLeft = data.groupedColumns.length - keysTop;
+	$: keys = getKeys(data);
+	$: result = createTable(data, selectedOption);
 
 	function getMap(data: GroupedDataFrame, selectedOption: AggregateOption): Map<string, string> {
 		if (selectedOption === undefined) return new Map();
 
-		const calculatedValues = selectedOption.fn(data);
+		const map = new Map<string, string>();
+		
+		for (let group of data.groups) {
+			const key = JSON.stringify(group.keys);
+			const value = selectedOption.fn(data, group);
+			map.set(key, value);
+		}
 
-		return new Map(calculatedValues.map((v) => [JSON.stringify(v.keys), v.value]));
+		return map;
 	}
 
 	function getKeys(data: GroupedDataFrame): KeySet[] {
@@ -106,40 +44,46 @@
 			const col = data.groupedColumns[i];
 			const values = data.groups.map((g) => g.keys[i]);
 			let unique = Array.from(new Set(values));
-			if (col.type === 'number'){
-				const temp = unique.filter(k => typeof k === 'number') as number[];
+			
+			if (col.type === 'number') {
+				const temp = unique.filter((k) => typeof k === 'number') as number[];
 				unique = temp.sort((a, b) => a - b);
+				
 			} else {
-				unique = unique.filter(k => typeof k !== 'undefined').sort();
+				unique = unique.filter((k) => typeof k !== 'undefined').sort();
 			}
-			unique.sort();
-			keySets.push({ unique, col });
+			
+			keySets.push({ unique, col, i });
 		}
 
 		return keySets.sort((a, b) => b.unique.length - a.unique.length);
 	}
 
 	function getShape(keys: DataType[][], keysTop: number, keysLeft: number) {
-		let rowCount = keysTop
-		rowCount += keys.filter((_, i) => i % 2 === 1).reduce((acc, k) => acc + k.length, 0) || 1
-		let colCount = keysLeft
-		colCount += keys.filter((_, i) => i % 2 === 0).reduce((acc, k) => acc + k.length, 0) || 1
+		let rowCount = keysTop;
+		rowCount += keys.filter((_, i) => i % 2 === 1).reduce((acc, k) => acc * k.length, 1);
+		let colCount = keysLeft;
+		colCount += keys.filter((_, i) => i % 2 === 0).reduce((acc, k) => acc * k.length, 1);
 
 		return [rowCount, colCount];
 	}
 
 	function createTable(data: GroupedDataFrame, selectedOption: AggregateOption) {
-		const map = getMap(data, selectedOption)
-		const shape = getShape(keys.map(k => k.unique), keysTop, keysLeft)
-		const result = []
+		const map = getMap(data, selectedOption);
+		const shape = getShape(
+			keys.map((k) => k.unique),
+			keysTop,
+			keysLeft
+		);
+		const result = [];
 		for (let row = 0; row < shape[0]; row++) {
-			const rowResult = []
+			const rowResult = [];
 			for (let col = 0; col < shape[1]; col++) {
-				rowResult.push(getCell(row, col, map))
+				rowResult.push(getCell(row, col, map));
 			}
-			result.push(rowResult)
+			result.push(rowResult);
 		}
-		return result
+		return result;
 	}
 
 	function getCell(row: number, col: number, map: Map<string, string>): Cell {
@@ -153,36 +97,42 @@
 			};
 		}
 
-		const cellKeys = getKeySignature(row, col)
+		const cellKeys = getKeySignature(row, col);
 
 		if (row < keysTop) {
-			const index = row * 2
-			const content = cellKeys[index]?.toString() ?? ''
+			const index = row * 2;
+			const content = keyToString(cellKeys[index], keys[index]);
+			const prev = getCell(row, col - 1, map);
 			return {
 				content,
 				rowSpan: 1,
-				colSpan: keys.filter((_, i) => i > index && i % 2 === 0).reduce((arr, k) => arr * k.unique.length, 1),
+				colSpan: keys
+					.filter((_, i) => i > index && i % 2 === 0)
+					.reduce((arr, k) => arr * k.unique.length, 1),
 				class: 'header',
-				skip: content === getCell(row, col - 1, map).content
-			}
+				skip: content === prev.content && prev.colSpan > 1
+			};
 		}
 		if (col < keysLeft) {
-			const index = col * 2 + 1
-			const content = cellKeys[index]?.toString() ?? ''
+			const index = col * 2 + 1;
+			const content = keyToString(cellKeys[index], keys[index]);
+			const prev = getCell(row - 1, col, map);
 			return {
 				content,
-				rowSpan: keys.filter((_, i) => i > index && i % 2 === 1).reduce((arr, k) => arr * k.unique.length, 1),
+				rowSpan: keys
+					.filter((_, i) => i > index && i % 2 === 1)
+					.reduce((arr, k) => arr * k.unique.length, 1),
 				colSpan: 1,
 				class: 'header',
-				skip: content === getCell(row - 1, col, map).content
-			}
+				skip: content === prev.content && prev.rowSpan > 1
+			};
 		}
 
-		const realKey = []
-		const keyPositions = keys.map(k => data.groupedColumns.indexOf(k.col))
+		const realKey = [];
+		const keyPositions = keys.map((k) => data.groupedColumns.indexOf(k.col));
 
 		for (let i = 0; i < keyPositions.length; i++) {
-			realKey[keyPositions[i]] = cellKeys[i]
+			realKey[keyPositions[i]] = cellKeys[i];
 		}
 
 		return {
@@ -191,44 +141,78 @@
 			colSpan: 1,
 			class: 'data',
 			skip: false
-		}
+		};
 	}
 
 	function getKeySignature(row: number, col: number): DataType[] {
-		const pos = [col - keysLeft, row - keysTop]
-		const result = []
-		for (let i = keys.length -1; i >= 0; i--) {
-			const isEven = i % 2
-			let localPos = pos[isEven]
+		const pos = [col - keysLeft, row - keysTop];
+		const result = [];
+		for (let i = keys.length - 1; i >= 0; i--) {
+			const isEven = i % 2;
+			let localPos = pos[isEven];
 			if (localPos < 0) {
-				result[i] = ''
-				continue
+				result[i] = '';
+				continue;
 			}
 
-			let index = localPos % keys[i].unique.length
-			pos[isEven] = Math.floor(localPos / keys[i].unique.length)
-			result[i] = keys[i].unique[index]
+			let index = localPos % keys[i].unique.length;
+			pos[isEven] = Math.floor(localPos / keys[i].unique.length);
+			result[i] = keys[i].unique[index];
 		}
-		return result
+		return result;
+	}
+	function keyToString(key: DataType, keySet: KeySet): string {
+		if (key === undefined) return '';
+		if (keySet.col.groupBy!.type === 'binned' && keySet.col.groupBy!.size > 1){
+			const size = keySet.col.groupBy!.size;
+			const index = key as number;
+
+			const start = index * size;
+			const end = start + size -1;
+			
+			return `[${start}-${end})`;
+		}
+		return key.toString();
 	}
 </script>
+<div class="w-screen">
+	<select bind:value={selectedOption}>
+		{#each aggregateOptions as option}
+			<option value={option}>{option.name}</option>
+		{/each}
+	</select>
+	
+	<table class="max-w-screen overflow-auto">
+		{#each result as row}
+			<tr>
+				{#each row as cell}
+					{#if !cell.skip}
+						<td colspan={cell.colSpan} rowspan={cell.rowSpan} class={cell.class}>
+							{cell.content}
+						</td>
+					{/if}
+				{/each}
+			</tr>
+		{/each}
+	</table>
+</div>
 
-<select bind:value={selectedOption}>
-	{#each aggregateOptions as option}
-		<option value={option}>{option.name}</option>
-	{/each}
-</select>
 
-<table>
-	{#each result as row}
-		<tr>
-			{#each row as cell}
-				{#if !cell.skip}
-					<td colspan={cell.colSpan} rowspan={cell.rowSpan} class={cell.class}>
-						{cell.content}
-					</td>
-				{/if}
-			{/each}
-		</tr>
-	{/each}
-</table>
+<style>
+	table {
+		border-collapse: collapse;
+	}
+
+	td {
+		border: 1px solid black;
+		padding: 5px;
+	}
+
+	td.header {
+		background-color: #f0f0f0;
+	}
+
+	td.data {
+		background-color: #f8f8f8;
+	}
+</style>
