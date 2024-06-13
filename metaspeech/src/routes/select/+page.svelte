@@ -10,6 +10,10 @@
 
 	$: selectColumnForAggregation(aggregateBy);
 
+	function resetAggregateBy() {
+		aggregateBy = -1;
+	}
+
 	function selectColumnForGrouping(column: Column, select: boolean) {
 		column.groupBy = select
 			? column.type === 'number'
@@ -48,10 +52,11 @@
 					<span class=" mb-2 flex w-full min-w-96 items-center justify-between">
 						<label class="flex items-center">
 							<input
-								class="mr-2 h-5 w-5 rounded-xl border-2 transition-all duration-200 ease-in-out focus:invisible"
+								class="mr-2 h-5 w-5 rounded-xl border-2 transition-all duration-200 ease-in-out"
 								type="checkbox"
 								on:input={(e) => selectColumnForGrouping(column, e.currentTarget.checked)}
 								checked={Boolean(column.groupBy)}
+								on:change={resetAggregateBy}
 							/>
 							<span class="w-36 truncate">
 								{column.name}
@@ -61,7 +66,7 @@
 							<div class="ml-10">
 								<span>Bin Size:</span>
 								<input
-									class="remove-arrow max-h-6 max-w-16 rounded-lg border-0 bg-darkblue text-center font-medium text-offwhite"
+									class="remove-arrow max-h-6 max-w-16 rounded-lg border-0 bg-darkblue text-center font-medium text-offwhite hover:bg-lightblue"
 									type="number"
 									placeholder="1"
 									bind:value={column.groupBy.size}
@@ -80,7 +85,7 @@
 			<div class="mt-5 flex w-fit flex-col">
 				<label class="mb-2">
 					<input
-						class="mr-1 h-5 w-5 border-2 transition-all duration-200 ease-in-out focus:invisible"
+						class="mr-1 h-5 w-5 border-2 transition-all duration-200 ease-in-out"
 						type="radio"
 						bind:group={aggregateBy}
 						value={-1}
@@ -91,7 +96,7 @@
 				{#each aggregatableColumns as column, index}
 					<label class="mb-2 flex items-center">
 						<input
-							class="mr-2 h-5 w-5 border-2 transition-all duration-200 ease-in-out focus:invisible"
+							class="mr-2 h-5 w-5 border-2 transition-all duration-200 ease-in-out"
 							type="radio"
 							bind:group={aggregateBy}
 							value={index}
