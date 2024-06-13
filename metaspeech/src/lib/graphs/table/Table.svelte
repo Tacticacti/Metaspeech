@@ -8,8 +8,7 @@
 	} from './Table';
 
 	export let data: GroupedDataFrame;
-	const aggregateOptions =
-		data?.aggregateColumn === undefined ? aggregateOptions_none : aggregateOptions_single;
+	const aggregateOptions = data?.aggregateColumn ? aggregateOptions_single : aggregateOptions_none;
 	let selectedOption: AggregateOption;
 
 	$: table = createTable(data, selectedOption);
