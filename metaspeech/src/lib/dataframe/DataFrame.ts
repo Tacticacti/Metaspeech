@@ -220,7 +220,11 @@ export class DataFrame {
 	}
 }
 /**
- * sorts groups. Used in histogram to order so it is more intuitive.
+ * sorts groups. Used in histogram to order so it is more intuitive. checks each element. Goes from 0 to nth index.
+ * If nth element in a and b are numbers then func puts key with smallest number first, if these numbers are equal func moves to the next element.
+ * if nth element in and b are string then func uses built in string comparator to decide which comes first, if strings are equal func moves to the next element.
+ * if there are no more elements for one of the keys, then this key comes first in sorting.
+ * if both keys are same length and func went through all elements that means these keys are equal.
  * @param a first DataType
  * @param b second DataType
  * @returns either 0, 1, -1 depending on a, b
