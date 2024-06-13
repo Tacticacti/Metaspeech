@@ -14,7 +14,7 @@ describe('Select Visuals', () => {
 	});
 	it('should contain link to next page', async () => {
 		const r = render(sut);
-		const nextLink = h.getByTestId(r, 'next-link');
+		const nextLink = r.getByTestId('next-link');
 
 		expect(nextLink).toBeDefined();
 		expect(nextLink).toHaveAttribute('href', '/view');

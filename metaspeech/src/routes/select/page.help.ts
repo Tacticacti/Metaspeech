@@ -5,10 +5,6 @@ export function rerender(r: RenderResult<sut>) {
 	return act(() => r.component.$set({}));
 }
 
-export function getByTestId(r: RenderResult<sut>, id: string) {
-	return r.getByTestId(id) as HTMLElement | null;
-}
-
 export function getDisplayValues(r: RenderResult<sut>, id: string) {
 	return r.queryAllByText(id) as HTMLElement[] | null;
 }
