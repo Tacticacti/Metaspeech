@@ -23,7 +23,7 @@
 	function translateIndex(index: number) {
 		let count = -1;
 		for (let i = 0; i < $columns.length; i++) {
-			if ($columns[i].type === 'number') {
+			if ($columns[i].type === 'number' && $columns[i].groupBy === undefined) {
 				count++;
 				if (count == index) {
 					return i;

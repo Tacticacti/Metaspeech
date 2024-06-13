@@ -5,7 +5,7 @@
 	import { goto } from '$app/navigation';
 	import type { DataFile } from '$lib/Types';
 	import { Label, Checkbox } from 'flowbite-svelte';
-	import logo from '$assets/GraphGadgetHomeLogo.svg';
+	import logo from '$assets/MetaSpeechHomeLogo.svg';
 
 	let shouldStoreData = false;
 
