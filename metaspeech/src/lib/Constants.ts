@@ -13,7 +13,7 @@ import Table_img from '$assets/graphs/table.png';
 /**
  * The name of the application.
  */
-export const APP_NAME = 'GraphGadget';
+export const APP_NAME = 'MetaSpeech';
 
 /**
  * The copyright year.
