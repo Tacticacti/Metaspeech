@@ -54,14 +54,14 @@
 		{#each possibleFunctionsForAggregation as func}
 			<label>
 				{func}
-				<input type="radio" bind:group={selectedFunction} value={func} />
+				<input data-testid="aggregation-{func}" type="radio" bind:group={selectedFunction} value={func} />
 			</label>
 		{/each}
 	{:else}
 		{#each possibleFunctionsForNonAggregation as func}
 			<label>
 				{func}
-				<input type="radio" bind:group={selectedFunction} value={func} />
+				<input data-testid="nonaggregation-{func}" type="radio" bind:group={selectedFunction} value={func} />
 			</label>
 		{/each}
 	{/if}

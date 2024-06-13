@@ -17,9 +17,9 @@ import { titleText, scaleXAxisText, scaleYAxisText } from '$lib/graphs/sharedFun
 export function handleData(selectedFunction: string, data: GroupedDataFrame): [string[], number[]] {
 	switch (selectedFunction) {
 		case 'sum':
-			return calculateMean(data);
-		case 'mean':
 			return calculateSum(data);
+		case 'mean':
+			return calculateMean(data);
 		case 'Absolute Frequency':
 			return calculateAbsoluteFrequency(data);
 		case 'Relative Frequency':
@@ -38,11 +38,7 @@ export function handleData(selectedFunction: string, data: GroupedDataFrame): [s
 export function createDatasets(data: GroupedDataFrame, values: number[], selectedFunction: string) {
 	const datasets = [
 		{
-			label: data.aggregateColumn
-				? data.aggregateColumn.name
-				: selectedFunction == 'Absolute Frequency'
-					? 'count'
-					: 'Percentage',
+			label: createDatasetsLabel(data, values, selectedFunction),
 			data: values,
 			backgroundColor: 'rgba(51, 50, 200, 1)',
 			borderColor: 'rgba(255, 99, 132, 1)',
@@ -52,7 +48,20 @@ export function createDatasets(data: GroupedDataFrame, values: number[], selecte
 	return datasets;
 }
 
-
+/**
+ * makes label for datasets object
+ * @param data current grouped dataframe
+ * @param values current values
+ * @param selectedFunction current selected function
+ * @returns label for datasets
+ */
+export function createDatasetsLabel(data: GroupedDataFrame, values: number[], selectedFunction: string){
+	return data.aggregateColumn						//not sure if this is readable
+	? data.aggregateColumn.name
+	: selectedFunction == 'Absolute Frequency'
+		? 'Count'
+		: 'Percentage'
+}
 
 /**
  * creates config object for chart
