@@ -91,6 +91,14 @@ export class DataFrame {
 		const rows = get(this.rows);
 		const columns = get(this.columns);
 
+		columns.forEach((c) => {
+			if (c.groupBy?.type === 'binned' && (c.groupBy?.size <= 1 || c.groupBy?.size === null)) {
+				c.groupBy = {
+					type: 'specific'
+				};
+			}
+		});
+
 		const groupers = columns
 			.map((c, i) => (c.groupBy ? toGrouper(c.groupBy, i) : undefined))
 			.filter((g) => g !== undefined) as Grouper[];

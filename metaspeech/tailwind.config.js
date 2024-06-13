@@ -5,7 +5,11 @@ export default {
 		'./node_modules/flowbite-svelte/**/*.{html,js,svelte,ts}'
 	],
 	theme: {
-		extend: {},
+		extend: {
+			fontFamily: {
+				Jost: ['Jost', 'serif']
+			}
+		},
 		colors: {
 			darkblue: '#3D4F75',
 			lightblue: '#637290',
