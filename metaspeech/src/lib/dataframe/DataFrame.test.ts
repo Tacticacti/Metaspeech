@@ -1,7 +1,16 @@
 import { get } from 'svelte/store';
-import { DataFrame, fromFile, fromObjects, fromText, fromArrays } from './DataFrame';
+import {
+	DataFrame,
+	fromFile,
+	fromObjects,
+	fromText,
+	fromArrays,
+	compareDataTypeArray,
+	compareDataType,
+	sortGroups
+} from './DataFrame';
 import { describe, it, expect } from 'vitest';
-import type { DataFrameLike, Group } from '$lib/Types';
+import type { DataFrameLike, DataType, Group } from '$lib/Types';
 
 describe('importing a DataFrame', () => {
 	it('should import a DataFrame from text', () => {
@@ -456,5 +465,112 @@ describe('DataFrame group by', () => {
 		for (const group of expectedGroups) {
 			expect(dfgroup.groups).toContainEqual(group);
 		}
+	});
+});
+
+describe('compare DataType array tests', () => {
+	it('2 undefined data types', () => {
+		const a: DataType = undefined;
+		const b: DataType = undefined;
+
+		expect(compareDataType(a, b)).toBe(0);
+	});
+	it('a is undefined', () => {
+		const a: DataType = undefined;
+		const b: DataType = 2;
+
+		expect(compareDataType(a, b)).toBe(1);
+	});
+	it('b is undefined', () => {
+		const a: DataType = 1;
+		const b: DataType = undefined;
+
+		expect(compareDataType(a, b)).toBe(-1);
+	});
+	it('both are numbers', () => {
+		const a: DataType = 1;
+		const b: DataType = 2;
+
+		expect(compareDataType(a, b)).toBe(-1);
+	});
+	it('both are strings', () => {
+		const a: DataType = 'aa';
+		const b: DataType = 'aa';
+
+		expect(compareDataType(a, b)).toBe(0);
+	});
+	it('a is a string but b is a number', () => {
+		const a: DataType = 'aa';
+		const b: DataType = 2;
+
+		expect(compareDataType(a, b)).toBe(1);
+	});
+	it('a is a number but b is a string', () => {
+		const a: DataType = 1;
+		const b: DataType = 'b';
+
+		expect(compareDataType(a, b)).toBe(-1);
+	});
+});
+describe('compare DataType tests', () => {
+	it('2 empty lists', () => {
+		const a: DataType[] = [];
+		const b: DataType[] = [];
+
+		expect(compareDataTypeArray(a, b)).toBe(0);
+	});
+	it('lists with numbers', () => {
+		const a: DataType[] = [1, 2];
+		const b: DataType[] = [1, 3];
+
+		expect(compareDataTypeArray(a, b)).toBe(-1);
+	});
+	it('lists with numbers but b is longer', () => {
+		const a: DataType[] = [1, 2];
+		const b: DataType[] = [1, 2, 3];
+
+		expect(compareDataTypeArray(a, b)).toBe(-1);
+	});
+	it('1 numbers list and 1 string list', () => {
+		const a: DataType[] = [1, 2];
+		const b: DataType[] = ['a', 'b'];
+
+		expect(compareDataTypeArray(a, b)).toBe(-1);
+	});
+	it('2 equal number lists', () => {
+		const a: DataType[] = [1, 2];
+		const b: DataType[] = [1, 2];
+
+		expect(compareDataTypeArray(a, b)).toBe(0);
+	});
+	it('2 equal string lists', () => {
+		const a: DataType[] = ['a', 'b'];
+		const b: DataType[] = ['a', 'b'];
+
+		expect(compareDataTypeArray(a, b)).toBe(0);
+	});
+	it('mixed', () => {
+		const a: DataType[] = [1, 'b', 2];
+		const b: DataType[] = [1, 'b', 1];
+
+		expect(compareDataTypeArray(a, b)).toBe(1);
+	});
+});
+
+describe('sorting tests', () => {
+	it('1 simple group', () => {
+		const groups: Group[] = [
+			{ values: [], keys: [2, 'b', 1] },
+			{ values: [], keys: [1, 'b'] },
+			{ values: [], keys: [2, 'b'] },
+			{ values: [], keys: [1, 'a'] }
+		];
+
+		expect(sortGroups(groups)).toStrictEqual([
+			{ values: [], keys: [1, 'a'] },
+			{ values: [], keys: [1, 'b'] },
+			{ values: [], keys: [2, 'b'] },
+			{ values: [], keys: [2, 'b', 1] }
+		]);
 	});
 });
