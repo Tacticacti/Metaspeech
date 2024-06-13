@@ -40,18 +40,8 @@ function getIndicesOfColumns(
 	xAxisCol: Column,
 	legendCol: Column | undefined
 ): [number, number] {
-	let i = 0,
-		indexX = -1,
-		indexLegend = -1;
-
-	for (const col of groupedColumns) {
-		if (col === xAxisCol) {
-			indexX = i;
-		} else if (col === legendCol) {
-			indexLegend = i;
-		}
-		++i;
-	}
+	let indexX = groupedColumns.indexOf(xAxisCol);
+	let indexLegend = groupedColumns.indexOf(legendCol);
 
 	return [indexX, indexLegend];
 }
