@@ -63,10 +63,7 @@ export function calculateMean(data: GroupedDataFrame): [string[], number[]] {
 	const values: number[] = [];
 	for (let i = 0; i < data.groups.length; i++) {
 		const group: Group = data.groups[i];
-		let name: string = '';
-		for (let j = 0; j < group.keys.length; j++) {
-			name += group.keys[j];
-		}
+		const name: string = JSON.stringify(group.keys);
 		bins.push(name);
 		let sum: number = 0;
 		for (let j = 0; j < group.values.length; j++) {
@@ -89,10 +86,8 @@ export function calculateSum(data: GroupedDataFrame): [string[], number[]] {
 	const values: number[] = [];
 	for (let i = 0; i < data.groups.length; i++) {
 		const group: Group = data.groups[i];
-		let name: string = '';
-		for (let j = 0; j < group.keys.length; j++) {
-			name += group.keys[j];
-		}
+		const name: string = JSON.stringify(group.keys);
+
 		bins.push(name);
 		let sum: number = 0;
 		for (let j = 0; j < group.values.length; j++) {
@@ -115,10 +110,8 @@ export function calculateAbsoluteFrequency(data: GroupedDataFrame): [string[], n
 	const values: number[] = [];
 	for (let i = 0; i < data.groups.length; i++) {
 		const group: Group = data.groups[i];
-		let name: string = '';
-		for (let j = 0; j < group.keys.length; j++) {
-			name += group.keys[j];
-		}
+		const name: string = JSON.stringify(group.keys);
+
 		bins.push(name);
 		values.push(group.values.length);
 	}
@@ -136,10 +129,8 @@ export function calculateRelativeFrequency(data: GroupedDataFrame): [string[], n
 	let total: number = 0;
 	for (let i = 0; i < data.groups.length; i++) {
 		const group: Group = data.groups[i];
-		let name: string = '';
-		for (let j = 0; j < group.keys.length; j++) {
-			name += group.keys[j];
-		}
+		const name: string = JSON.stringify(group.keys);
+
 		bins.push(name);
 
 		total += group.values.length;

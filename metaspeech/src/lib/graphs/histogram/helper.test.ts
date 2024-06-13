@@ -19,7 +19,7 @@ describe('handleData tests', () => {
 		const groupedDf = df.groupBy();
 
 		const [labels, values] = handleData('sum', groupedDf);
-		expect(labels).toStrictEqual(['18', '32']);
+		expect(labels).toStrictEqual(['[18]', '[32]']);
 		expect(values).toStrictEqual([3, 4]);
 	});
 	it('check if mean is executed and gives correct output', () => {
@@ -34,7 +34,7 @@ describe('handleData tests', () => {
 
 		const [labels, values] = handleData('sum', groupedDf);
 
-		expect(labels).toStrictEqual(['18', '32']);
+		expect(labels).toStrictEqual(['[18]', '[32]']);
 		expect(values).toStrictEqual([1, 4]);
 	});
 	it('check if abs freq is executed and gives correct output', () => {
@@ -49,7 +49,7 @@ describe('handleData tests', () => {
 
 		const [labels, values] = handleData('Absolute Frequency', groupedDf);
 
-		expect(labels).toStrictEqual(['18', '32']);
+		expect(labels).toStrictEqual(['[18]', '[32]']);
 		expect(values).toStrictEqual([2, 1]);
 	});
 	it('check if rel freq is executed and gives correct output', () => {
@@ -64,7 +64,7 @@ describe('handleData tests', () => {
 
 		const [labels, values] = handleData('Relative Frequency', groupedDf);
 
-		expect(labels).toStrictEqual(['18', '32']);
+		expect(labels).toStrictEqual(['[18]', '[32]']);
 		expect(values).toStrictEqual([(2 / 3) * 100, (1 / 3) * 100]);
 	});
 	it('non function returns empty lists', () => {
