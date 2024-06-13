@@ -234,7 +234,7 @@ export function sortGroups(groups: Group[]): Group[] {
  * @param b second DataType
  * @returns either 0, 1, -1 depending on a, b
  */
-function compareDataTypeArray(a: DataType[], b: DataType[]): number {
+export function compareDataTypeArray(a: DataType[], b: DataType[]): number {
 	const limit = Math.min(a.length, b.length);
 	for (let i = 0; i < limit; i++) {
 		const aElement = a[i];
@@ -257,7 +257,7 @@ function compareDataTypeArray(a: DataType[], b: DataType[]): number {
  * @param b second DataType
  * @returns either 0, 1, -1 depending on a, b
  */
-function compareDataType(a: DataType, b: DataType): number {
+export function compareDataType(a: DataType, b: DataType): number {
 	if (a === undefined && b === undefined) return 0;
 	if (a === undefined) return 1;
 	if (b === undefined) return -1;
