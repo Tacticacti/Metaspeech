@@ -48,7 +48,7 @@
 </svelte:head>
 
 <header class="flex max-w-full justify-center align-middle">
-	<img src={logo} alt="Logo" class="mx-auto w-[30%] p-3" />
+	<img src={logo} alt="Logo" class="mx-auto h-[15vw] w-[30%] p-3" />
 </header>
 
 <div class="flex justify-center gap-5 bg-darkblue p-5">
