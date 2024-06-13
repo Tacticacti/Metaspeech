@@ -66,14 +66,14 @@
 	 */
 	function drawWhiteBackground(chart: Chart) {
 		const ctx = chart.canvas.getContext('2d');
-		if (ctx) {
-			ctx.save();
-			ctx.fillStyle = 'white';
-			ctx.fillRect(0, 0, chart.width, chart.height);
-			ctx.restore();
-		} else {
+		if (!ctx) {
 			console.error('Failed to get 2D context for chart canvas');
+			return;
 		}
+                ctx.save();
+		ctx.fillStyle = 'white';
+		ctx.fillRect(0, 0, chart.width, chart.height);
+		ctx.restore();
 	}
 
 	/**
