@@ -19,9 +19,7 @@
 	let canvas: HTMLCanvasElement;
 
 	afterUpdate(() => {
-		let labels: string[] = [];
-		let values: number[] = [];
-		[labels, values] = handleData(selectedFunction, data);
+		const [labels, values] = handleData(selectedFunction, data);
 
 		let datasets = createDatasets(data, values, selectedFunction);
 
