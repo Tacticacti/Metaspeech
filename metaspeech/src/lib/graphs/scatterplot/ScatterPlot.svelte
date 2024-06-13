@@ -5,6 +5,7 @@
 	import { Chart, type ChartConfiguration } from 'chart.js/auto';
 	import Export from '$lib/components/exporter/GraphImageExport.svelte';
 	import { getScatterDatasets, getXAxisCol, getLegendCol } from '$lib/graphs/scatterplot/ScatterPlotController';
+	import { setColor } from '$lib/graphs/utils/CanvasUtils';
 
 	let canvas: HTMLCanvasElement;
 	let chart: Chart;
@@ -46,6 +47,7 @@
 				datasets: []
 			},
 			
+			// @ts-expect-error plugin needs a type same as above
 			plugins: [plugin]
 		};
 
@@ -55,6 +57,7 @@
 	afterUpdate(() => {
 		chart.options = {
 			plugins: {
+				// @ts-expect-error Needs a specific type for plugin
 				customCanvasBackgroundColor: {
 					color: 'white'
 				},
@@ -98,6 +101,8 @@
 				radius: 7
 			}
 		});
+
+		chart.update();
 	});
 
 	onDestroy(() => {
