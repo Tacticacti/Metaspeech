@@ -70,7 +70,7 @@
 			console.error('Failed to get 2D context for chart canvas');
 			return;
 		}
-                ctx.save();
+		ctx.save();
 		ctx.fillStyle = 'white';
 		ctx.fillRect(0, 0, chart.width, chart.height);
 		ctx.restore();
