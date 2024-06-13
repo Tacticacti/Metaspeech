@@ -55,7 +55,7 @@ export type GroupBy = Specific | Binned;
 
 export type Grouper = (row: DataType[]) => DataType;
 
-export type Specific = {
+type Specific = {
 	type: 'specific';
 };
 
