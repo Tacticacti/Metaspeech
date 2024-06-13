@@ -45,7 +45,11 @@ function getScatterMap(
 	xAxisCol: Column,
 	legendCol: Column | undefined
 ): Map<string, [number, number][]> {
-	const [indexX, indexLegend] = getIndicesOfColumns(groupedData.groupedColumns, xAxisCol, legendCol);
+	const [indexX, indexLegend] = getIndicesOfColumns(
+		groupedData.groupedColumns,
+		xAxisCol,
+		legendCol
+	);
 	const map = new Map<string, [number, number][]>();
 
 	for (const group of groupedData.groups) {
