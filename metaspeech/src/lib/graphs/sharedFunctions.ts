@@ -10,9 +10,8 @@ export function titleText(data: GroupedDataFrame): string {
 		return 'Total Frequency';
 	}
 	let title: string;
-	if (data.aggregateColumn)
-		title = data.aggregateColumn.name + ' x ';
-        else title = 'Frequency of ';
+	if (data.aggregateColumn) title = data.aggregateColumn.name + ' x ';
+	else title = 'Frequency of ';
 
 	if (data.groupedColumns.length > 1)
 		title += '(' + data.groupedColumns.map((column) => column.name).join(', ') + ')';
