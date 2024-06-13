@@ -227,7 +227,66 @@ export class DataFrame {
 		return get(this.rows).length === 0;
 	}
 }
+/**
+ * sorts groups. Used in histogram to order so it is more intuitive. checks each element. Goes from 0 to nth index.
+ * If nth element in a and b are numbers then func puts key with smallest number first, if these numbers are equal func moves to the next element.
+ * if nth element in and b are string then func uses built in string comparator to decide which comes first, if strings are equal func moves to the next element.
+ * if there are no more elements for one of the keys, then this key comes first in sorting.
+ * if both keys are same length and func went through all elements that means these keys are equal.
+ * @param a first DataType
+ * @param b second DataType
+ * @returns either 0, 1, -1 depending on a, b
+ */
+export function sortGroups(groups: Group[]): Group[] {
+	return groups.sort((a, b) => compareDataTypeArray(a.keys, b.keys));
+}
+/**
+ * helper function to compare 2 DataType arrays. Usually used for sorting
+ * @param a first DataType
+ * @param b second DataType
+ * @returns either 0, 1, -1 depending on a, b
+ */
+export function compareDataTypeArray(a: DataType[], b: DataType[]): number {
+	const limit = Math.min(a.length, b.length);
+	for (let i = 0; i < limit; i++) {
+		const aElement = a[i];
+		const bElement = b[i];
+		const compareScore = compareDataType(aElement, bElement);
+		if (compareScore !== 0) {
+			return compareScore;
+		}
+	}
+	if (a.length === b.length) {
+		return 0;
+	} else if (a.length > b.length) {
+		return 1;
+	}
+	return -1;
+}
+/**
+ * helper function to compare 2 DataTypes. Usually used for sorting
+ * @param a first DataType
+ * @param b second DataType
+ * @returns either 0, 1, -1 depending on a, b
+ */
+export function compareDataType(a: DataType, b: DataType): number {
+	if (a === b) return 0;
+	if (a === undefined) return 1;
+	if (b === undefined) return -1;
 
+	if (typeof a === 'number' && typeof b === 'number') {
+		return a - b;
+	}
+
+	if (typeof a === 'string' && typeof b === 'string') {
+		return a.localeCompare(b);
+	}
+
+	if (typeof a === 'number') return -1;
+	if (typeof b === 'number') return 1;
+
+	return 0; // This case is redundant but added for completeness
+}
 // #region df types
 
 /**
