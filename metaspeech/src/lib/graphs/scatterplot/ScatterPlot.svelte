@@ -119,14 +119,15 @@
 	});
 </script>
 
-{#if legendCol?.type === 'number'}
-	<button data-testid="scatter-swap-columns" on:click={swapGroupColumns}>
-		Swap x-axis and legend
-	</button>
-{/if}
-
 <div class="w-1200 flex w-full flex-col items-center">
 	<canvas data-testid="canvas-element" bind:this={canvas} class="mb-4" />
+
+	{#if legendCol?.type === 'number'}
+		<button data-testid="scatter-swap-columns" on:click={swapGroupColumns} class="my-2 inline-block cursor-pointer rounded-lg border border-gray-300 bg-gray-100 px-4 py-2 text-lg font-bold text-gray-800 shadow-md transition-colors duration-300 ease-in-out hover:bg-gray-200 hover:text-blue-500">
+			Swap x-axis and legend
+		</button>
+	{/if}
+
 	<Export {chart} />
 </div>
 
