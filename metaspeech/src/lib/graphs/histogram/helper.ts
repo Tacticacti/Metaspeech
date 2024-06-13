@@ -9,6 +9,23 @@ import { type ChartConfiguration, type ChartDataset } from 'chart.js';
 import { titleText, scaleXAxisText, scaleYAxisText } from '$lib/graphs/sharedFunctions';
 
 /**
+ * Sets the background color of the chart
+ * @param chart the chart to set the color to
+ * @param ignored not used, but required for the function signature
+ * @param options the options to set the color to
+ */
+// @ts-expect-error Not sure the type of chart (not Chart), ignored can be any type
+
+function setColor(chart, ignored: string, options: ChartOptions) {
+	const { ctx } = chart;
+	ctx.save();
+	ctx.globalCompositeOperation = 'destination-over';
+	ctx.fillStyle = options.color || '#99ffff';
+	ctx.fillRect(0, 0, chart.width, chart.height);
+	ctx.restore();
+}
+
+/**
  * determines which aggregation or frequency function to use
  * @param selectedFunction determines which function user has selected
  * @param data current data frame
@@ -83,7 +100,7 @@ export function createConfig(
 ): ChartConfiguration {
 	const plugin = {
 		id: 'customCanvasBackgroundColor',
-		beforeDraw: 'rgba(0, 0, 0, 1)'
+		beforeDraw: setColor
 	};
 
 	const cfg: ChartConfiguration = {
@@ -97,7 +114,7 @@ export function createConfig(
 			plugins: {
 				// @ts-expect-error Needs a specific type for plugin
 				customCanvasBackgroundColor: {
-					color: 'rgba(0, 0, 0, 1)'
+					color: 'white'
 				},
 				title: {
 					display: true,
