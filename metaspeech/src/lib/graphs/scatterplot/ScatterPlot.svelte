@@ -24,8 +24,11 @@
 	$: x_axis = xAxisCol.name;
 	$: legend = legendCol?.name;
 
-	$: datasets = getScatterDatasets(data, yAxisCol, xAxisCol, legendCol, scatterStyles);
+	$: datasets = getScatterDatasets(data, xAxisCol, legendCol, scatterStyles);
 
+	/**
+	 * Swaps the x-axis column with the legend column
+	 */
 	function swapGroupColumns() {
 		if (legendCol === undefined) {
 			return;
@@ -117,7 +120,9 @@
 </script>
 
 {#if legendCol?.type === 'number'}
-	<button on:click={swapGroupColumns}> Swap x-axis and legend </button>
+	<button data-testid="scatter-swap-columns" on:click={swapGroupColumns}>
+		Swap x-axis and legend
+	</button>
 {/if}
 
 <div class="w-1200 flex w-full flex-col items-center">

@@ -7,6 +7,18 @@ export const tsvTestData = `Id\tLanguage\tAge\tGender\tDuration(seconds)
 2\tPT\t21\tF\t200
 3\tES\t50\tM\t140`;
 
+export const tsvTestDataThree = `Id\tGroup\tAge\tGender\tDuration(seconds)
+1\t1\t19\tM\t100
+2\t1\t46\tF\t300
+3\t2\t59\tF\t400
+4\t2\t19\tM\t400
+5\t2\t49\tM\t100
+6\t3\t47\tF\t300
+7\t3\t53\tM\t100
+8\t1\t59\tM\t400
+9\t1\t44\tF\t500
+10\t2\t38\tM\t140`;
+
 export const tsvTestDataTwo = `Column_1\tColumn_2
 1\tcell_2
 2\tcell_4
@@ -57,6 +69,10 @@ export function getNavBar(page: Page): Locator {
 
 export function getNavHome(page: Page): Locator {
 	return page.getByRole('link', { name: 'HOME' });
+}
+
+export function getNavVisualizations(page: Page): Locator {
+	return page.getByRole('link', { name: 'VISUALIZATIONS' });
 }
 
 export function getFooter(page: Page): Locator {
@@ -222,4 +238,32 @@ export function getTableCell(page: Page, cellName: string): Locator {
 
 export function getInfoBubble(page: Page): Locator {
 	return page.getByTestId('info-bubble');
+}
+
+/* Select page elements */
+export function getGroupColumnCheckbox(page: Page, colName: string): Locator {
+	return page.getByRole('checkbox', { name: colName });
+}
+
+export function getSelectColumnRadio(page: Page, colName: string): Locator {
+	return page.getByRole('radio', { name: colName });
+}
+
+/* View page elements */
+
+export function getCanvasElement(page: Page): Locator {
+	return page.getByTestId('canvas-element');
+}
+
+export function getPngButton(page: Page): Locator {
+	return page.getByRole('button', { name: 'PNG' });
+}
+
+/* Scatter plot */
+export function getScatterPlotGraph(page: Page): Locator {
+	return page.getByTestId('Scatter');
+}
+
+export function getScatterSwapColumns(page: Page): Locator {
+	return page.getByTestId('scatter-swap-columns');
 }

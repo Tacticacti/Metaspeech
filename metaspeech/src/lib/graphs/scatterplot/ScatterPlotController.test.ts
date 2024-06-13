@@ -99,9 +99,7 @@ describe('get scatter datasets test', () => {
 			groupedColumns: [allColumns[0]],
 			aggregateColumn: allColumns[3]
 		};
-		expect(getScatterDatasets(groupedFrame, allColumns[3], allColumns[0], undefined, [])).toEqual(
-			[]
-		);
+		expect(getScatterDatasets(groupedFrame, allColumns[0], undefined, [])).toEqual([]);
 	});
 
 	it('WER vs age', () => {
@@ -142,9 +140,7 @@ describe('get scatter datasets test', () => {
 			}
 		];
 
-		expect(
-			getScatterDatasets(groupedFrame, allColumns[3], allColumns[0], undefined, styles)
-		).toEqual(expected);
+		expect(getScatterDatasets(groupedFrame, allColumns[0], undefined, styles)).toEqual(expected);
 	});
 
 	it('WER vs age, another groupped column which is not legend', () => {
@@ -185,9 +181,7 @@ describe('get scatter datasets test', () => {
 			}
 		];
 
-		expect(
-			getScatterDatasets(groupedFrame, allColumns[3], allColumns[0], undefined, styles)
-		).toEqual(expected);
+		expect(getScatterDatasets(groupedFrame, allColumns[0], undefined, styles)).toEqual(expected);
 	});
 
 	it('WER vs age, gender legend', () => {
@@ -246,9 +240,9 @@ describe('get scatter datasets test', () => {
 			}
 		];
 
-		expect(
-			getScatterDatasets(groupedFrame, allColumns[3], allColumns[0], allColumns[2], styles)
-		).toEqual(expected);
+		expect(getScatterDatasets(groupedFrame, allColumns[0], allColumns[2], styles)).toEqual(
+			expected
+		);
 	});
 
 	it('WER vs age, group legend, style should wrap around', () => {
@@ -325,10 +319,7 @@ describe('get scatter datasets test', () => {
 		];
 
 		expect(
-			getScatterDatasets(groupedFrame, allColumns[3], allColumns[0], allColumns[2], [
-				styles[0],
-				styles[1]
-			])
+			getScatterDatasets(groupedFrame, allColumns[0], allColumns[2], [styles[0], styles[1]])
 		).toEqual(expected);
 	});
 });
