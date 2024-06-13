@@ -336,12 +336,9 @@ function getCell(row: number, col: number, meta: TableMeta): Cell {
 function getKeySignature(row: number, col: number, meta: TableMeta): DataType[] {
 	const [keysTop, keysLeft] = meta.headerShape;
 	const pos = [col - keysLeft, row - keysTop];
-	const keySets = meta.keySets;
-
 	const result = [];
-
-	for (const [i, set] of keySets.entries()) {
-		const unique = set.unique;
+	for (let i = meta.keySets.length - 1; i >= 0; i--) {
+		const unique = meta.keySets[i].unique;
 		const isEven = i % 2;
 		const localPos = pos[isEven];
 		if (localPos < 0) {
