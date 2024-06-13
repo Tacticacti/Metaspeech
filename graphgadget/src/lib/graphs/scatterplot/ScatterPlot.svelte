@@ -59,7 +59,7 @@
 						text: y_axis + ' x ' + x_axis
 					},
 					legend: {
-						display: true,
+						display: legendCol !== undefined,
 						position: 'right',
 						title: {
 							display: true,

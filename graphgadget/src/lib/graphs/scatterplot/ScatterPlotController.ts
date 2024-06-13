@@ -38,13 +38,11 @@ function getScatterMap(groupedData: GroupedDataFrame, yAxisCol: Column, xAxisCol
     const map = new Map<string, [number, number][]>();
 
     for (const group of groupedData.groups) {
-        let key = '';
+        // Use a default label for the dataset, if no legend
+        let key = 'Dataset';
 
-        if (legendCol === undefined) {
-            // Use x-axis column name as key
-            key = xAxisCol.name;
-        } else {
-            // Use legend value as key
+        if (legendCol !== undefined) {
+            // Use legend value as key, if defined
             key = group.keys[indexLegend]?.toString() ?? '';
         }
 
