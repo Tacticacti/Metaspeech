@@ -10,7 +10,7 @@
 <button
 	tabindex="0"
 	data-testid={graph.title}
-	class="flex h-12 w-44 flex-row flex-wrap justify-between rounded-md border border-gray-400 p-1 px-3 hover:bg-gray-300 box-content"
+	class="box-content flex h-12 w-44 flex-row flex-wrap justify-between rounded-md border border-gray-400 p-1 px-3 hover:bg-gray-300"
 	on:click
 	on:mouseover
 	on:focus
