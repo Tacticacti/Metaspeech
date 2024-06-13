@@ -29,6 +29,8 @@ export const aggregateOptions_single: AggregateOption[] = [
 		name: 'Mean',
 		fn: (_: GroupedDataFrame, group: Group) => {
 			const filtered = group.values.filter((v) => typeof v === 'number') as number[];
+			if (filtered.length === 0) return '-';
+
 			const mean = getMean(filtered);
 			return to2Decimal(mean);
 		},
@@ -55,7 +57,6 @@ export const aggregateOptions_single: AggregateOption[] = [
 			const mean = getMean(filtered);
 			const sd = getSD(filtered);
 			const se = sd / Math.sqrt(filtered.length);
-			console.log(mean, sd, se, filtered.length);
 
 			return `${to2Decimal(mean)} ± ${to2Decimal(se)}`;
 		},
@@ -180,8 +181,6 @@ function getMap(
 	selectedOption: AggregateOption,
 	keySets: KeySet[]
 ): Map<string, string> {
-	if (selectedOption === undefined) return new Map();
-
 	const map = new Map<string, string>();
 
 	for (const group of data.groups) {
@@ -313,7 +312,7 @@ function getCell(row: number, col: number, meta: TableMeta): Cell {
 
 	// cell is a data cell
 	return {
-		content: meta.map.get(JSON.stringify(signature)) ?? meta.selectedOption?.default ?? '-',
+		content: meta.map.get(JSON.stringify(signature)) ?? meta.selectedOption.default,
 		rowSpan: 1,
 		colSpan: 1,
 		class: 'data',
@@ -368,7 +367,6 @@ function getKeySignature(row: number, col: number, meta: TableMeta): DataType[] 
 function keyToString(key: DataType, keySet: KeySet): string {
 	const groupBy = keySet.col.groupBy as GroupBy;
 
-	if (key === undefined) return '';
 	if (groupBy.type === 'binned' && groupBy.size > 1) {
 		const size = groupBy.size;
 		const index = key as number;
@@ -378,5 +376,5 @@ function keyToString(key: DataType, keySet: KeySet): string {
 
 		return `[${start}-${end})`;
 	}
-	return key.toString();
+	return key!.toString();
 }

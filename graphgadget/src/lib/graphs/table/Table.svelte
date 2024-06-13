@@ -17,9 +17,9 @@
 
 <div class="w-screen">
 	<div>
-		<select bind:value={selectedOption}>
+		<select bind:value={selectedOption} data-testid="aggregate">
 			{#each aggregateOptions as option}
-				<option value={option}>{option.name}</option>
+				<option value={option} data-testid={option.name}>{option.name}</option>
 			{/each}
 		</select>
 	</div>
@@ -29,7 +29,12 @@
 			<tr>
 				{#each row as cell}
 					{#if !cell.skip}
-						<td colspan={cell.colSpan} rowspan={cell.rowSpan} class={cell.class}>
+						<td
+							colspan={cell.colSpan}
+							rowspan={cell.rowSpan}
+							class={cell.class}
+							data-testid="cell-{cell.content}"
+						>
 							{cell.content}
 						</td>
 					{/if}
