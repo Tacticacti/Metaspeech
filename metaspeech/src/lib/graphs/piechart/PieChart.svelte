@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import type { GroupedDataFrame } from '$lib/Types';
-	import { calculateRelativeFrequency, titleText } from '$lib/graphs/sharedFunctions';
+	import { calculateRelativeFrequency, getTitleText } from '$lib/graphs/sharedFunctions';
 	import {
 		Chart,
 		PieController,
@@ -60,53 +60,59 @@
 	}
 
 	/**
-	 * Initialize the pie chart.
-	 * This function initializes the Chart.js pie chart with the given data and options.
+	 * Draw a white background on the canvas before rendering the chart.
+	 *
+	 * @param chart - The Chart.js chart instance.
+	 */
+	function drawWhiteBackground(chart: Chart) {
+		const ctx = chart.canvas.getContext('2d');
+		if (ctx) {
+			ctx.save();
+			ctx.fillStyle = 'white';
+			ctx.fillRect(0, 0, chart.width, chart.height);
+			ctx.restore();
+		} else {
+			console.error('Failed to get 2D context for chart canvas');
+		}
+	}
+
+	/**
+	 * Initialize the Chart.js pie chart.
 	 */
 	function initChart() {
 		// Ensure canvas and data are defined before proceeding
-		if (canvas && data) {
-			const ctx = canvas.getContext('2d');
-			// Check if the context is successfully retrieved
-			if (ctx) {
-				// Destroy any existing chart instance to avoid duplicates
-				if (chart) chart.destroy();
-				chart = new Chart(ctx, {
-					type: 'pie',
-					data: generatePieChartData(data),
-					options: {
-						responsive: false,
-						maintainAspectRatio: false,
-						plugins: {
-							legend: {
-								position: 'top'
-							},
-							title: {
-								display: true,
-								text: titleText(data) // Set the title of the chart
-							}
-						}
+		if (!canvas || !data) return;
+
+		const ctx = canvas.getContext('2d');
+		// Check if the context is successfully retrieved
+		if (!ctx) return;
+
+		// Destroy any existing chart instance to avoid duplicates
+		if (chart) chart.destroy();
+
+		chart = new Chart(ctx, {
+			type: 'pie',
+			data: generatePieChartData(data),
+			options: {
+				responsive: false,
+				maintainAspectRatio: false,
+				plugins: {
+					legend: {
+						position: 'top'
 					},
-					plugins: [
-						{
-							id: 'whiteBackground',
-							beforeDraw: (chart) => {
-								const ctx = chart.canvas.getContext('2d');
-								if (ctx) {
-									// Draw a white background before rendering the chart
-									ctx.save();
-									ctx.fillStyle = 'white';
-									ctx.fillRect(0, 0, chart.width, chart.height);
-									ctx.restore();
-								} else {
-									console.error('Failed to get 2D context for chart canvas');
-								}
-							}
-						}
-					]
-				});
-			}
-		}
+					title: {
+						display: true,
+						text: getTitleText(data) // Set the title of the chart
+					}
+				}
+			},
+			plugins: [
+				{
+					id: 'whiteBackground',
+					beforeDraw: drawWhiteBackground
+				}
+			]
+		});
 	}
 
 	// Reactive statement to update the chart when data or canvas changes

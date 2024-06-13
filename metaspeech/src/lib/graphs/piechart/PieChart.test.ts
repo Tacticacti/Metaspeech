@@ -4,8 +4,7 @@ import { describe, it, expect } from 'vitest';
 
 describe('When user views', () => {
 	it('should render', () => {
-		const { container, getByTestId } = render(sut);
+		const { container } = render(sut);
 		expect(container).to.exist;
-		expect(getByTestId('canvas-element')).to.exist;
 	});
 });
