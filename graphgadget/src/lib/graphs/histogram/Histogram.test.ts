@@ -10,24 +10,24 @@ describe('When user views', () => {
 		const df = new DataFrame();
 		df.set(fromText('age,cars\n18,1\n32,4\n18,2'));
 		const columns = get(df.columns);
-        columns[1].aggregate = true;
-        columns[0].groupBy = { type: 'specific' }
+		columns[1].aggregate = true;
+		columns[0].groupBy = { type: 'specific' };
 
-		const { container, getByTestId } = render(sut, {data: df.groupBy()});
+		const { container, getByTestId } = render(sut, { data: df.groupBy() });
 		expect(container).to.exist;
 		expect(getByTestId('canvas-element')).to.exist;
 	});
-	it(' check if sum and mean exists', async() => {
+	it(' check if sum and mean exists', async () => {
 		const df = new DataFrame();
 		df.set(fromText('age,cars\n18,1\n32,4\n18,2'));
 		const columns = get(df.columns);
 		const user = userEvent.setup();
 
-        columns[1].aggregate = true;
-        columns[0].groupBy = { type: 'specific' }
+		columns[1].aggregate = true;
+		columns[0].groupBy = { type: 'specific' };
 
-		const { getByTestId } = render(sut, {data: df.groupBy()});
-		
+		const { getByTestId } = render(sut, { data: df.groupBy() });
+
 		const sumButton = getByTestId('aggregation-sum');
 		const meanButton = getByTestId('aggregation-mean');
 
@@ -40,15 +40,15 @@ describe('When user views', () => {
 		expect(meanButton).toBeChecked();
 		expect(sumButton).not.toBeChecked();
 	});
-	it(' check if abs freq and rel freq exists', async() => {
+	it(' check if abs freq and rel freq exists', async () => {
 		const df = new DataFrame();
 		df.set(fromText('age,cars\n18,1\n32,4\n18,2'));
 		const columns = get(df.columns);
 		const user = userEvent.setup();
-        columns[0].groupBy = { type: 'specific' }
+		columns[0].groupBy = { type: 'specific' };
 
-		const { getByTestId } = render(sut, {data: df.groupBy()});
-		
+		const { getByTestId } = render(sut, { data: df.groupBy() });
+
 		const absButton = getByTestId('nonaggregation-Absolute Frequency');
 		const relButton = getByTestId('nonaggregation-Relative Frequency');
 

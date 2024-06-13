@@ -9,7 +9,12 @@ export function titleText(data: GroupedDataFrame): string {
 	if (data.groupedColumns.length === 0) {
 		return 'Total Frequency';
 	}
-	let title: string = (data.aggregateColumn ? data.aggregateColumn.name : 'Frequency of ') + ' x ';
+	let title: string;
+	if (data.aggregateColumn) {
+		title = data.aggregateColumn.name + ' x ';
+	} else {
+		title = 'Frequency of ';
+	}
 	if (data.groupedColumns.length > 1) {
 		title += '(' + data.groupedColumns.map((column) => column.name).join(', ') + ')';
 	} else {
@@ -32,6 +37,9 @@ export function titleText(data: GroupedDataFrame): string {
  * @returns scale string
  */
 export function scaleXAxisText(data: GroupedDataFrame): string {
+	if (data.groupedColumns.length === 0) {
+		return 'all';
+	}
 	if (data.groupedColumns.length > 1) {
 		return 'Group: (' + data.groupedColumns.map((column) => column.name).join(', ') + ')';
 	}

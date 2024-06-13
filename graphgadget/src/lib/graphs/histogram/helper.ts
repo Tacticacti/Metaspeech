@@ -5,7 +5,7 @@ import {
 	calculateRelativeFrequency
 } from '$lib/graphs/sharedFunctions';
 import type { GroupedDataFrame } from '$lib/Types';
-import { type ChartConfiguration, type ChartDataset, type Plugin } from 'chart.js';
+import { type ChartConfiguration, type ChartDataset } from 'chart.js';
 import { titleText, scaleXAxisText, scaleYAxisText } from '$lib/graphs/sharedFunctions';
 
 /**
@@ -55,12 +55,16 @@ export function createDatasets(data: GroupedDataFrame, values: number[], selecte
  * @param selectedFunction current selected function
  * @returns label for datasets
  */
-export function createDatasetsLabel(data: GroupedDataFrame, values: number[], selectedFunction: string){
-	return data.aggregateColumn						//not sure if this is readable
-	? data.aggregateColumn.name
-	: selectedFunction == 'Absolute Frequency'
-		? 'Count'
-		: 'Percentage'
+export function createDatasetsLabel(
+	data: GroupedDataFrame,
+	values: number[],
+	selectedFunction: string
+) {
+	return data.aggregateColumn //not sure if this is readable
+		? data.aggregateColumn.name
+		: selectedFunction == 'Absolute Frequency'
+			? 'Count'
+			: 'Percentage';
 }
 
 /**
