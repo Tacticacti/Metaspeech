@@ -19,29 +19,24 @@
 	let canvas: HTMLCanvasElement;
 
 	afterUpdate(() => {
-		let labels: string[] = [];
-		let values: number[] = [];
-		[labels, values] = handleData(selectedFunction, data);
+		const [labels, values] = handleData(selectedFunction, data);
 
 		let datasets = createDatasets(data, values, selectedFunction);
 
 		const cfg: ChartConfiguration = createConfig(labels, datasets, data, selectedFunction);
 
-		if (chart) {
-			chart.data.labels = labels;
-			chart.data.datasets = datasets;
-			chart.options.scales = {
-				y: {
-					title: {
-						display: true,
-						text: getScaleYAxisText(data, selectedFunction)
-					}
+		chart ??= new Chart(canvas, cfg);
+		chart.data.labels = labels;
+		chart.data.datasets = datasets;
+		chart.options.scales = {
+			y: {
+				title: {
+					display: true,
+					text: getScaleYAxisText(data, selectedFunction)
 				}
-			};
-			chart.update();
-		} else {
-			chart = new Chart(canvas, cfg);
-		}
+			}
+		};
+		chart.update();
 	});
 
 	onDestroy(() => {
