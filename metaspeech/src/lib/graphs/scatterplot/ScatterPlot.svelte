@@ -4,7 +4,6 @@
 	import { afterUpdate, onMount, onDestroy } from 'svelte';
 	import { Chart, type ChartConfiguration } from 'chart.js/auto';
 	import Export from '$lib/components/exporter/GraphImageExport.svelte';
-	import { setColor } from '$lib/graphs/utils/CanvasUtils';
 	import { getScatterDatasets, getXAxisCol, getLegendCol } from '$lib/graphs/scatterplot/ScatterPlotController';
 
 	let canvas: HTMLCanvasElement;
@@ -41,71 +40,64 @@
 			beforeDraw: setColor
 		};
 
-		const cfg: ChartConfiguration = {
+		const cfg : ChartConfiguration = {
 			type: 'scatter',
 			data: {
-				labels: [],
 				datasets: []
 			},
-
-			options: {
-				plugins: {
-					// @ts-expect-error Needs a specific type for plugin
-					customCanvasBackgroundColor: {
-						color: 'white'
-					},
-					title: {
-						display: true,
-						text: y_axis + ' x ' + x_axis
-					},
-					legend: {
-						display: legendCol !== undefined,
-						position: 'right',
-						title: {
-							display: true,
-							text: legend,
-						},
-						labels: {
-							usePointStyle: true
-						}
-					}
-				},
-				scales: {
-					x: {
-						title: {
-							display: true,
-							text: x_axis
-						}
-					},
-					y: {
-						title: {
-							display: true,
-							text: y_axis
-						}
-					}
-				}
-			},
-
-			// @ts-expect-error plugin needs a type same as above
+			
 			plugins: [plugin]
 		};
 
 		chart = new Chart(canvas, cfg);
 	});
 
-
-	// called when datasets change
 	afterUpdate(() => {
-		for (const ds of datasets) {
-			chart.data.datasets.push({
+		chart.options = {
+			plugins: {
+				customCanvasBackgroundColor: {
+					color: 'white'
+				},
+				title: {
+					display: true,
+					text: y_axis + ' x ' + x_axis
+				},
+				legend: {
+					display: legendCol !== undefined,
+					position: 'right',
+					title: {
+						display: true,
+						text: legend,
+					},
+					labels: {
+						usePointStyle: true
+					}
+				}
+			},
+			scales: {
+				x: {
+					title: {
+						display: true,
+						text: x_axis
+					}
+				},
+				y: {
+					title: {
+						display: true,
+						text: y_axis
+					}
+				}
+			}
+		};
+
+		chart.data.datasets = datasets.map(ds => {
+			return {
 				data: ds.data,
 				label: ds.label,
 				...ds.style,
 				radius: 7
-			});
-		}
-
-		chart.update();
+			}
+		});
 	});
 
 	onDestroy(() => {
