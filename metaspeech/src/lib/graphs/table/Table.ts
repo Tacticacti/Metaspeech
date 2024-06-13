@@ -1,10 +1,16 @@
 import type { GroupedDataFrame, Group, DataType, Column, GroupBy } from '$lib/Types';
 
+/**
+ * The type of the aggregate options.
+ */
 export type AggregateOption = {
 	name: string;
 	fn: (data: GroupedDataFrame, group: Group) => string;
 	default: string;
 };
+/**
+ * The aggregate options for when no aggregate column is selected.
+ */
 export const aggregateOptions_none: AggregateOption[] = [
 	{
 		name: 'Count',
@@ -24,6 +30,9 @@ export const aggregateOptions_none: AggregateOption[] = [
 		default: '0%'
 	}
 ];
+/**
+ * The aggregate options for when a single aggregate column is selected.
+ */
 export const aggregateOptions_single: AggregateOption[] = [
 	{
 		name: 'Mean',
@@ -94,6 +103,11 @@ function getMean(values: number[]): number {
 	return getSum(values) / values.length;
 }
 
+/**
+ * Gets the standard deviation of the given values.
+ * @param values the values to get the standard deviation from
+ * @returns The standard deviation of the values
+ */
 function getSD(values: number[]): number {
 	const mean = getMean(values);
 	return Math.sqrt(values.reduce((acc, v) => acc + (v - mean) ** 2, 0) / values.length);
