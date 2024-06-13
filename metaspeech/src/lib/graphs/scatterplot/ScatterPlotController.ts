@@ -19,7 +19,7 @@ export function getLegendCol(groupedColumns: Column[], xCol: Column): Column | u
 }
 
 function getIndicesOfColumns(
-	groupedData: GroupedDataFrame,
+	groupedColumns: Column[],
 	xAxisCol: Column,
 	legendCol: Column | undefined
 ): [number, number] {
@@ -27,7 +27,7 @@ function getIndicesOfColumns(
 		indexX = -1,
 		indexLegend = -1;
 
-	for (const col of groupedData.groupedColumns) {
+	for (const col of groupedColumns) {
 		if (col === xAxisCol) {
 			indexX = i;
 		} else if (col === legendCol) {
@@ -45,7 +45,7 @@ function getScatterMap(
 	xAxisCol: Column,
 	legendCol: Column | undefined
 ): Map<string, [number, number][]> {
-	const [indexX, indexLegend] = getIndicesOfColumns(groupedData, xAxisCol, legendCol);
+	const [indexX, indexLegend] = getIndicesOfColumns(groupedData.groupedColumns, xAxisCol, legendCol);
 	const map = new Map<string, [number, number][]>();
 
 	for (const group of groupedData.groups) {
@@ -97,31 +97,3 @@ export function getScatterDatasets(
 
 	return scatterDataset;
 }
-
-// return [
-// 	{
-// 		data: [
-// 			[19, 10],
-// 			[20, 30],
-// 			[42, 32],
-// 			[50, 33]
-// 		],
-// 		label: 'Male',
-// 		backgroundColor: 'rgba(51, 50, 200, 1)',
-// 		borderColor: 'rgba(51, 50, 200, 1)',
-// 		pointStyle: 'cross'
-// 	},
-// 	{
-// 		data: [
-// 			[19, 20],
-// 			[19, 40],
-// 			[40, 40],
-// 			[52, 30],
-// 			[60, 50]
-// 		],
-// 		label: 'Female',
-// 		backgroundColor: 'rgba(255, 99, 132, 1)',
-// 		borderColor: 'rgba(255, 99, 132, 1)',
-// 		pointStyle: 'rect'
-// 	}
-// ];
