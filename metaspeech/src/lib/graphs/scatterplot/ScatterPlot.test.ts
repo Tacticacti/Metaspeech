@@ -76,7 +76,7 @@ describe('When user views', () => {
 		expect(queryByTestId('scatter-swap-columns')).not.toBeInTheDocument;
 	});
 
-	it('has a numeric legend, button does not show', () => {
+	it('has a numeric legend, so shows', () => {
 		const data: GroupedDataFrame = {
 			groups: [],
 			groupedColumns: [columns[0], columns[1]],
