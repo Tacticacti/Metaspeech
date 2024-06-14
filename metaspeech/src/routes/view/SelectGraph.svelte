@@ -1,9 +1,10 @@
 <script lang="ts">
 	import SelectGraphButton from './SelectGraphButton.svelte';
 	import { graphs } from '$lib/Constants';
-	import type { GraphMeta } from '$lib/Types';
+	import type { GraphMeta, GroupedDataFrame } from '$lib/Types';
 
 	export let selected: GraphMeta | undefined = undefined;
+	export let data: GroupedDataFrame;
 	let displayed: GraphMeta | undefined = undefined;
 
 	function show(graph: GraphMeta, isSelected: boolean) {
@@ -12,7 +13,9 @@
 	}
 </script>
 
-<div class="flex w-full flex-col items-start justify-between border-2 bg-offwhite p-5 lg:flex-row">
+<div
+	class="flex w-full flex-col items-start justify-between border-2 bg-offwhite p-5 align-baseline lg:flex-row"
+>
 	<div class="bg-aqua flex h-full w-full flex-col items-start p-4 lg:w-1/2">
 		<div data-testid="name-chart" class="p-2 text-lg font-bold">
 			{displayed?.title || selected?.title || 'Select a graph'}
@@ -27,6 +30,7 @@
 			{#each graphs as item}
 				<SelectGraphButton
 					graph={item}
+					{data}
 					on:click={() => show(item, true)}
 					on:mouseover={() => show(item, false)}
 					on:focus={() => show(item, false)}

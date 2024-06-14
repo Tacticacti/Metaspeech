@@ -4,7 +4,7 @@
 	import logo from '$assets/MetaSpeechNavLogo.svg';
 </script>
 
-<Footer footerType="logo" class="w-full rounded-none border-none bg-darkblue ">
+<Footer footerType="logo" class="w-full rounded-none border-none bg-darkblue font-Jost">
 	<FooterBrand href="/" src={logo} alt="Flowbite Logo" />
 	<FooterCopyright href="/" by={APP_NAME} year={COPYRIGHT_YEAR} />
 </Footer>

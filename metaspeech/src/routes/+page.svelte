@@ -6,6 +6,7 @@
 	import type { DataFile } from '$lib/Types';
 	import { Label, Checkbox } from 'flowbite-svelte';
 	import logo from '$assets/MetaSpeechHomeLogo.svg';
+	import Card from '$components/Card.svelte';
 
 	let shouldStoreData = false;
 
@@ -51,7 +52,7 @@
 	<img src={logo} alt="Logo" class="mx-auto h-[15vw] w-[30%] p-3" />
 </header>
 
-<div class="flex justify-center gap-5 bg-darkblue p-5">
+<div class="flex justify-center gap-5 p-5">
 	<Importer on:input={handleInput} id="import-data" data-testid="import" />
 	<label
 		class="my-2 inline-block cursor-pointer rounded-lg border border-gray-300 bg-gray-100 px-4 py-2 text-lg font-bold text-gray-800 shadow-md transition-colors duration-300 ease-in-out hover:bg-gray-200 hover:text-blue-500"
@@ -78,17 +79,11 @@
 <div class="p-5">
 	<h2 class="text-xl font-bold text-darkblue">Your go-to tool for intuitive data visualization</h2>
 	<h3 class="text-gray-500">How it works</h3>
-	<div class="flex flex-col items-center justify-around md:flex-row">
-		<div class="m-2 max-w-xs rounded-lg bg-gray-200 p-5 text-center shadow-md">
-			<p>Upload your data as a TSV, JSON, XLS, or TXT in the correct format.</p>
-		</div>
-		<p class="m-2 rotate-90 transform text-4xl text-darkblue md:m-0 md:rotate-0">&rarr;</p>
-		<div class="m-2 max-w-xs rounded-lg bg-gray-200 p-5 text-center shadow-md">
-			<p>Select which parameters and graph you want us to create.</p>
-		</div>
-		<p class="m-2 rotate-90 transform text-4xl text-darkblue md:m-0 md:rotate-0">&rarr;</p>
-		<div class="m-2 max-w-xs rounded-lg bg-gray-200 p-5 text-center shadow-md">
-			<p>Either look at your graph in the browser or download it as a JPEG or PNG.</p>
-		</div>
+	<div class="mt-5 flex flex-col items-center justify-around md:flex-row">
+		<Card text={'Upload your data as a TSV, JSON, XLS, or TXT in the correct format.'} />
+		<p class="mx-10 rotate-90 transform text-4xl text-darkblue md:m-0 md:rotate-0">&rarr;</p>
+		<Card text={'Select which parameters and graph you want us to create.'} />
+		<p class="mx-10 rotate-90 transform text-4xl text-darkblue md:m-0 md:rotate-0">&rarr;</p>
+		<Card text={'Either look at your graph in the browser or download it as a JPEG or PNG.'} />
 	</div>
 </div>

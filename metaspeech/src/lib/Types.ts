@@ -110,3 +110,15 @@ export type ScatterDataset = {
 	label: string;
 	style: ScatterStyle;
 };
+
+/**
+ * Reasons why a graph would not be able to be rendered
+ */
+export const noRenderReasons: Record<string, string> = {
+	Table: 'Unknown reason for not rendering.',
+	Histogram: 'Unknown reason for not rendering.',
+	'Pie Chart': "Cannot be shown if the 'show' is not count/percentage or if group is empty.",
+	Scatter:
+		'Cannot be shown if the group has no numeric columns in the group or if the column to show is count/percentage.',
+	'Box Plot': 'Can only be shown if a total of one column in group. The column needs to be numeric.'
+};
