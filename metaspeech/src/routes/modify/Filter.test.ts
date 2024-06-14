@@ -5,6 +5,7 @@ import * as h from './Filter.help';
 import { df } from '$lib/Store';
 import { fromText } from '$lib/dataframe/DataFrame';
 
+
 beforeEach(() => {
 	vi.clearAllMocks();
 });
@@ -237,3 +238,53 @@ describe('range filtering', () => {
 		expect(df.get()).toEqual(fromText('a,b,c\n2,3,4\n3,4,5'));
 	});
 });
+describe('error modal', () => {
+	it('should display an error modal when no matches are found', async () => {
+		df.set(fromText('a,b,c\n1,2,3\n2,3,4\n3,4,5'));
+
+		const r = render(sut);
+		await h.openFilterWindow(r);
+
+		await h.setColumnSelect(r, '0');
+		await h.setUseRangeCheckbox(r, false);
+
+		const textFilterInput = h.getTextFilterInput(r)!;
+		textFilterInput.value = '10'; // Value that doesn't match any row
+		await fireEvent.input(textFilterInput);
+
+		await h.removeMatching(r);
+
+		// Check if the error modal is displayed
+		const errorModal = await r.findByTestId('error-modal');
+		expect(errorModal).toBeDefined();
+		expect(errorModal.textContent).toContain('No matching rows found for value "10" in column "a". Close');
+	});
+	it('should close the error modal when the close button is clicked', async () => {
+		df.set(fromText('a,b,c\n1,2,3\n2,3,4\n3,4,5'));
+	
+		const r = render(sut);
+		await h.openFilterWindow(r);
+	
+		await h.setColumnSelect(r, '0');
+		await h.setUseRangeCheckbox(r, false);
+	
+		const textFilterInput = h.getTextFilterInput(r)!;
+		textFilterInput.value = '10'; // Value that doesn't match any row
+		await fireEvent.input(textFilterInput);
+	
+		await h.removeMatching(r);
+	
+		// Check if the error modal is displayed
+		const errorModal = await r.findByTestId('error-modal');
+		expect(errorModal).toBeDefined();
+	
+		// Close the modal
+		const closeButton = await r.findByTestId('close-button');
+		await fireEvent.click(closeButton);
+	
+		// Check if the modal is closed
+		expect(r.queryByTestId('error-modal')).toBeNull();
+	});
+	
+});
+

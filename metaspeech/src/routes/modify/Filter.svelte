@@ -2,8 +2,10 @@
 	import { type DataType } from '$lib/Types';
 	import { df } from '$lib/Store';
 	import { afterUpdate } from 'svelte';
+	import { get } from 'svelte/store';
 	import { Button, Checkbox, Input, Select } from 'flowbite-svelte';
 	import filterImg from '$assets/icons/filter.png';
+	import ErrorModal from '$components/ErrorModal.svelte';
 
 	const columns = df.columns;
 
@@ -13,6 +15,8 @@
 	let useRangeChecked: boolean = true;
 	let min: number = 0;
 	let max: number = 0;
+	let errorMessage: string | null = null;
+	let isModalVisible = false;
 
 	$: selectedColumn = $columns[selectedIndex];
 	$: columnNames = $columns.map((col) => col.name);
@@ -30,10 +34,18 @@
 	 * @param useMatching if true, remove rows that match the filter value. if false, remove rows that do not match the filter value.
 	 */
 	function filter(useMatching: boolean) {
-		df.filter((row) => {
+		const originalRows = get(df.rows);
+		const newRows = originalRows.filter((row) => {
 			const value = row[selectedIndex];
 			return matches(value) !== useMatching;
 		});
+
+		if (newRows.length === originalRows.length) {
+			errorMessage = `No matching rows found for value "${filterValue}" in column "${selectedColumn.name}".`;
+			isModalVisible = true;
+		} else {
+			df.filter((row) => matches(row[selectedIndex]) !== useMatching);
+		}
 	}
 
 	/**
@@ -49,13 +61,21 @@
 
 		return (value?.toString() ?? '') === filterValue;
 	}
+
+	/**
+	 * Close the error modal and reset the error message.
+	 */
+	function closeModal() {
+		isModalVisible = false;
+		errorMessage = null;
+	}
 </script>
 
 <Button
 	class="max-h-14 max-w-32 rounded-lg bg-darkblue px-12 py-4 font-bold text-offwhite hover:bg-blue-900"
 	on:click={() => (isOpen = !isOpen)}
 >
-	<img src={filterImg} class=" mr-4 h-8 w-8 invert" alt="Filter icon" />
+	<img src={filterImg} class="mr-4 h-8 w-8 invert" alt="Filter icon" />
 	Filter
 </Button>
 
@@ -119,3 +139,5 @@
 		</div>
 	</div>
 {/if}
+
+<ErrorModal message={errorMessage} visible={isModalVisible} on:close={closeModal} />
