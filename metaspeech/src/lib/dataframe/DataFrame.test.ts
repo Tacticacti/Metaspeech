@@ -170,7 +170,10 @@ describe('importing a DataFrame', () => {
 				{ name: 'a', type: 'number', hasMissing: false },
 				{ name: 'b', type: 'number', hasMissing: true }
 			],
-			rows: [[1, 2], [3, undefined]]
+			rows: [
+				[1, 2],
+				[3, undefined]
+			]
 		});
 	});
 
