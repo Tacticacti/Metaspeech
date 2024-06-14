@@ -234,7 +234,7 @@ export function getKeySets(data: GroupedDataFrame): KeySet[] {
 		} else {
 			unique = unique.sort();
 		}
-		
+
 		keySets.push({ unique, col, i });
 	}
 
