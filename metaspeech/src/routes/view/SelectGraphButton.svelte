@@ -36,7 +36,11 @@
 	<div class="self-center text-lg font-bold">{graph.title}</div>
 </button>
 {#if disable}
-	<Tooltip placement="top" class="z-0 w-48 bg-gray-600 text-sm font-light opacity-90" data-testid={graph.title+'-tooltip'}>
+	<Tooltip
+		placement="top"
+		class="z-0 w-48 bg-gray-600 text-sm font-light opacity-90"
+		data-testid={graph.title + '-tooltip'}
+	>
 		{noRenderReasons[graph.title] || 'unknown reasons why disabled'}
 	</Tooltip>
 {/if}
