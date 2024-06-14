@@ -6,6 +6,7 @@
 	import type { DataFile } from '$lib/Types';
 	import { Label, Checkbox } from 'flowbite-svelte';
 	import logo from '$assets/MetaSpeechHomeLogo.svg';
+	import Card from '$components/Card.svelte';
 
 	let shouldStoreData = false;
 
@@ -78,42 +79,11 @@
 <div class="p-5">
 	<h2 class="text-xl font-bold text-darkblue">Your go-to tool for intuitive data visualization</h2>
 	<h3 class="text-gray-500">How it works</h3>
-	<div class="flex flex-col items-center justify-around md:flex-row mt-5">
-		<div class="card max-w-xs min-h-32 bg-gradient-to-br from-[#3D4F75]  to-[#637290] rounded-lg text-white overflow-hidden relative transform-gpu perspective-1000 transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] hover:rotate-y-10 hover:rotate-x-10 hover:scale-105 hover:shadow-lg">
-			<div class="card-content p-5 pt-8 relative z-10 flex flex-col gap-2.5 items-center justify-center text-center h-full">
-			  <p class="card-title font-bold">Upload your data as a TSV, JSON, XLS, or TXT in the correct format.</p>
-			</div>
-			<div class="card-before absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent to-black/10 transition-transform duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] z-0"></div>
-			<div class="card-after absolute top-0 right-0 w-full h-full bg-gradient-to-b from-transparent to-black/10 transition-transform duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] z-0"></div>
-		</div>
+	<div class="mt-5 flex flex-col items-center justify-around md:flex-row">
+		<Card text={'Upload your data as a TSV, JSON, XLS, or TXT in the correct format.'} />
 		<p class="mx-10 rotate-90 transform text-4xl text-darkblue md:m-0 md:rotate-0">&rarr;</p>
-		<div class="card max-w-xs min-h-32 bg-gradient-to-br from-[#3D4F75]  to-[#637290] rounded-lg text-white overflow-hidden relative transform-gpu perspective-1000 transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] hover:rotate-y-10 hover:rotate-x-10 hover:scale-105 hover:shadow-lg">
-			<div class="card-content p-5 pt-8 relative z-10 flex flex-col gap-2.5 items-center justify-center text-center h-full">
-			  <p class="card-title font-bold">Select which parameters and graph you want us to create.</p>
-			</div>
-			<div class="card-before absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent to-black/10 transition-transform duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] z-0"></div>
-			<div class="card-after absolute top-0 right-0 w-full h-full bg-gradient-to-b from-transparent to-black/10 transition-transform duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] z-0"></div>
-		</div>
+		<Card text={'Select which parameters and graph you want us to create.'} />
 		<p class="mx-10 rotate-90 transform text-4xl text-darkblue md:m-0 md:rotate-0">&rarr;</p>
-		<div class="card max-w-xs min-h-32 bg-gradient-to-br from-[#3D4F75]  to-[#637290] rounded-lg text-white overflow-hidden relative transform-gpu perspective-1000 transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] hover:rotate-y-10 hover:rotate-x-10 hover:scale-105 hover:shadow-lg">
-			<div class="card-content p-5 pt-8 relative z-10 flex flex-col gap-2.5 items-center justify-center text-center h-full">
-			  <p class="card-title font-bold">Either look at your graph in the browser or download it as a JPEG or PNG.</p>
-			</div>
-			<div class="card-before absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent to-black/10 transition-transform duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] z-0"></div>
-			<div class="card-after absolute top-0 right-0 w-full h-full bg-gradient-to-b from-transparent to-black/10 transition-transform duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] z-0"></div>
-		</div>
+		<Card text={'Either look at your graph in the browser or download it as a JPEG or PNG.'} />
 	</div>
 </div>
-
-<style>
-	.card:hover {
-	  transform: rotateY(10deg) rotateX(10deg) scale(1.05);
-	}
-	.card:hover .card-before {
-	  transform: translateX(-100%);
-	}
-	
-	.card:hover .card-after {
-	  transform: translateX(100%);
-	}
-</style>

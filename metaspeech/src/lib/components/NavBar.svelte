@@ -86,7 +86,10 @@
 				</NavUl>
 				<!-- progress bar below the nav bar options -->
 				<div class="h-2.5 w-full rounded-full bg-gray-200 dark:bg-gray-700">
-					<div class="h-2.5 rounded-full bg-blue-400 transition-all duration-500" style="width: {getProgress(currentPage)}" />
+					<div
+						class="h-2.5 rounded-full bg-blue-400 transition-all duration-500"
+						style="width: {getProgress(currentPage)}"
+					/>
 				</div>
 			</div>
 			<div class="ml-44" />

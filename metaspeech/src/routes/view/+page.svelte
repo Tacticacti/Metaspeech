@@ -12,9 +12,11 @@
 	<title>Visualisations - {APP_NAME}</title>
 </svelte:head>
 
-<main class="bg-lightblue flex justify-center w-full">
+<main class="flex w-full justify-center bg-lightblue">
 	<div class="w-[80vw]">
-		<div class="m-5 flex min-w-[100vh] h-full max-h-full min-h-[100vh] flex-col items-center justify-center pt-16">
+		<div
+			class="m-5 flex h-full max-h-full min-h-[100vh] min-w-[100vh] flex-col items-center justify-center pt-16"
+		>
 			<SelectGraph bind:selected={selectedGraph} {data} />
 			{#if selectedGraph}
 				<div class="mt-5 flex w-full justify-center">

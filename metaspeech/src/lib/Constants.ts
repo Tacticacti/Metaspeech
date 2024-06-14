@@ -61,7 +61,7 @@ export const graphs: GraphMeta[] = [
 		description:
 			'In descriptive statistics, a box plot or boxplot is a type of chart often used in explanatory data analysis. Box plots visually show the distribution of numerical data and skewness by displaying the data quartiles (or percentiles) and averages.',
 		img: BoxPlot_img,
-		canRender: (data) => data.groupedColumns.length === 1,
+		canRender: (data) => data.groupedColumns.length === 1 && data.groupedColumns.some((col) => col.type === 'number'),
 		graph: BoxPlot
 	}
 ];

@@ -59,7 +59,7 @@
 <div class="flex h-[90vh] flex-col items-center justify-around">
 	<div class="flex w-full justify-center border-4 py-5">
 		<div class="mx-20 flex w-full max-w-[100vh] flex-col items-center">
-			<span class="text-xl font-bold flex items-center">
+			<span class="flex items-center text-xl font-bold">
 				GROUP BY
 				<button><img src={info} alt="info icon" class="ml-2 h-8" data-testid="info-icon" /></button>
 				<Tooltip
@@ -75,7 +75,7 @@
 					<span class=" mb-2 flex w-full min-w-96 items-center justify-between">
 						<label class="flex items-center">
 							<input
-								class="mr-2 h-5 w-5 border-2 rounded-sm transition-all duration-200 ease-in-out"
+								class="mr-2 h-5 w-5 rounded-sm border-2 transition-all duration-200 ease-in-out"
 								type="checkbox"
 								on:input={(e) => selectColumnForGrouping(column, e.currentTarget.checked)}
 								checked={Boolean(column.groupBy)}
@@ -104,7 +104,7 @@
 		<div class="size-3 h-full rounded-lg bg-gray-200"></div>
 
 		<div class="mx-20 flex w-full max-w-[100vh] flex-col items-center">
-			<span class="text-xl font-bold flex items-center">
+			<span class="flex items-center text-xl font-bold">
 				SHOW
 				<button><img src={info} alt="info icon" class="ml-2 h-8" data-testid="info-icon" /></button>
 				<Tooltip

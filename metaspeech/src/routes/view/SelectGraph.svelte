@@ -13,7 +13,9 @@
 	}
 </script>
 
-<div class="flex w-full align-baseline flex-col items-start justify-between border-2 bg-offwhite p-5 lg:flex-row">
+<div
+	class="flex w-full flex-col items-start justify-between border-2 bg-offwhite p-5 align-baseline lg:flex-row"
+>
 	<div class="bg-aqua flex h-full w-full flex-col items-start p-4 lg:w-1/2">
 		<div data-testid="name-chart" class="p-2 text-lg font-bold">
 			{displayed?.title || selected?.title || 'Select a graph'}
