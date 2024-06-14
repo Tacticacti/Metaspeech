@@ -8,14 +8,14 @@
 	export let graph: GraphMeta;
 	export let data: GroupedDataFrame;
 
-	let disable = false
+	let disable = false;
 	const noRenderReasons: Record<string, string> = {
-		"Table": "Unknown reason for not rendering.",
-		"Histogram": "Unknown reason for not rendering.",
-		"Pie Chart": "Cannot be shown if the 'show' is not count/percentage.",
-		"Scatter": "Cannot be shown if the group has no numeric columns.",
-		"Box plot": "Can only be shown if one numeric column in group."
-	}
+		Table: 'Unknown reason for not rendering.',
+		Histogram: 'Unknown reason for not rendering.',
+		'Pie Chart': "Cannot be shown if the 'show' is not count/percentage.",
+		Scatter: 'Cannot be shown if the group has no numeric columns.',
+		'Box Plot': 'Can only be shown if one numeric column in group.'
+	};
 
 	function canRender(): boolean {
 		disable = !graph.canRender(data);
@@ -36,10 +36,7 @@
 	<div class="self-center text-lg font-bold">{graph.title}</div>
 </button>
 {#if disable}
-	<Tooltip
-		placement="top"
-		class="z-0 w-48 bg-gray-600 text-sm font-light opacity-90"
-	>
-		{noRenderReasons[graph.title] || "unknown reasons why disabled"}
+	<Tooltip placement="top" class="z-0 w-48 bg-gray-600 text-sm font-light opacity-90" data-testid={graph.title+'-tooltip'}>
+		{noRenderReasons[graph.title] || 'unknown reasons why disabled'}
 	</Tooltip>
 {/if}
