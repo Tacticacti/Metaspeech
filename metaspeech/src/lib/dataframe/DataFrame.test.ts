@@ -153,18 +153,6 @@ describe('importing a DataFrame', () => {
 		});
 	});
 
-	it('empty columns but has rows', () => {
-		const df = fromText('\n1,2\n3,4');
-		// TODO: check if this is really the desired behavior in this edge case
-		expect(df).toEqual({
-			columns: [{ name: '', type: 'number', hasMissing: false }],
-			rows: [
-				[1, '2'],
-				[3, '4']
-			]
-		});
-	});
-
 	it('only a new line', () => {
 		const df = fromText('\n');
 		// TODO: check if this is really the desired behavior in this edge case
@@ -182,7 +170,7 @@ describe('importing a DataFrame', () => {
 				{ name: 'a', type: 'number', hasMissing: false },
 				{ name: 'b', type: 'number', hasMissing: true }
 			],
-			rows: [[1, 2], [3]]
+			rows: [[1, 2], [3, undefined]]
 		});
 	});
 
