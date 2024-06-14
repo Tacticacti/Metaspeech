@@ -5,7 +5,7 @@
 	import type { DataFrameLike } from '$lib/Types';
 	import { UnsupportedFileError } from '$lib/Types';
 	import { GetFileExtension } from '$components/importer/scripts/FileParser';
-	import ErrorModal from './ErrorModal.svelte';
+	import ErrorModal from '$components/ErrorModal.svelte';
 
 	const dispatch = createEventDispatcher<{
 		input: DataFile;
