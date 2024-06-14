@@ -237,3 +237,182 @@ describe('range filtering', () => {
 		expect(df.get()).toEqual(fromText('a,b,c\n2,3,4\n3,4,5'));
 	});
 });
+describe('error modal for no match', () => {
+	it('should display an error modal when no matches are found', async () => {
+		df.set(fromText('a,b,c\n1,2,3\n2,3,4\n3,4,5'));
+
+		const r = render(sut);
+		await h.openFilterWindow(r);
+
+		await h.setColumnSelect(r, '0');
+		await h.setUseRangeCheckbox(r, false);
+
+		const textFilterInput = h.getTextFilterInput(r)!;
+		textFilterInput.value = '10'; // Value that doesn't match any row
+		await fireEvent.input(textFilterInput);
+
+		await h.removeMatching(r);
+
+		// Check if the error modal is displayed
+		const errorModal = await r.findByTestId('error-modal');
+		expect(errorModal).toBeDefined();
+		expect(errorModal.textContent).toContain(
+			'No matching rows found for value "10" in column "a". Close'
+		);
+	});
+	it('should display an error modal when no matches are found for the given range', async () => {
+		df.set(fromText('a,b,c\n1,2,3\n2,3,4\n3,4,5'));
+
+		const r = render(sut);
+		await h.openFilterWindow(r);
+
+		await h.setColumnSelect(r, '0');
+		await h.setUseRangeCheckbox(r, true);
+
+		const minRangeInput = h.getMinRangeInput(r)!;
+		const maxRangeInput = h.getMaxRangeInput(r)!;
+
+		// Set range values that don't match any row
+		minRangeInput.value = '10';
+		maxRangeInput.value = '20';
+		await fireEvent.input(minRangeInput);
+		await fireEvent.input(maxRangeInput);
+
+		await h.removeMatching(r);
+
+		// Check if the error modal is displayed
+		const errorModal = await r.findByTestId('error-modal');
+		expect(errorModal).toBeDefined();
+		expect(errorModal.textContent).toContain(
+			'No matching rows found for range 10-20 in column "a".'
+		);
+	});
+	it('should close the error modal when the close button is clicked', async () => {
+		df.set(fromText('a,b,c\n1,2,3\n2,3,4\n3,4,5'));
+
+		const r = render(sut);
+		await h.openFilterWindow(r);
+
+		await h.setColumnSelect(r, '0');
+		await h.setUseRangeCheckbox(r, false);
+
+		const textFilterInput = h.getTextFilterInput(r)!;
+		textFilterInput.value = '10'; // Value that doesn't match any row
+		await fireEvent.input(textFilterInput);
+
+		await h.removeMatching(r);
+
+		// Check if the error modal is displayed
+		const errorModal = await r.findByTestId('error-modal');
+		expect(errorModal).toBeDefined();
+
+		// Close the modal
+		const closeButton = await r.findByTestId('close-button');
+		await fireEvent.click(closeButton);
+
+		// Check if the modal is closed
+		expect(r.queryByTestId('error-modal')).toBeNull();
+	});
+});
+describe('error modal for invalid inputs', () => {
+	it('should display an error modal when range values are invalid', async () => {
+		df.set(fromText('a,b,c\n1,2,3\n2,3,4\n3,4,5'));
+
+		const r = render(sut);
+		await h.openFilterWindow(r);
+
+		await h.setColumnSelect(r, '0');
+		await h.setUseRangeCheckbox(r, true);
+
+		const minRangeInput = h.getMinRangeInput(r)!;
+		const maxRangeInput = h.getMaxRangeInput(r)!;
+
+		// Set invalid range values
+		minRangeInput.value = 'invalid';
+		maxRangeInput.value = 'invalid';
+		await fireEvent.input(minRangeInput);
+		await fireEvent.input(maxRangeInput);
+
+		await h.removeMatching(r);
+
+		// Check if the error modal is displayed
+		const errorModal = await r.findByTestId('error-modal');
+		expect(errorModal).toBeDefined();
+		expect(errorModal.textContent).toContain('Please enter valid range values.');
+	});
+
+	it('should display an error modal when range values are empty', async () => {
+		df.set(fromText('a,b,c\n1,2,3\n2,3,4\n3,4,5'));
+
+		const r = render(sut);
+		await h.openFilterWindow(r);
+
+		await h.setColumnSelect(r, '0');
+		await h.setUseRangeCheckbox(r, true);
+
+		const minRangeInput = h.getMinRangeInput(r)!;
+		const maxRangeInput = h.getMaxRangeInput(r)!;
+
+		// Set empty range values
+		minRangeInput.value = '';
+		maxRangeInput.value = '';
+		await fireEvent.input(minRangeInput);
+		await fireEvent.input(maxRangeInput);
+
+		await h.removeMatching(r);
+
+		// Check if the error modal is displayed
+		const errorModal = await r.findByTestId('error-modal');
+		expect(errorModal).toBeDefined();
+		expect(errorModal.textContent).toContain('Please enter valid range values.');
+	});
+
+	it('should display an error modal when min value is greater than max value', async () => {
+		df.set(fromText('a,b,c\n1,2,3\n2,3,4\n3,4,5'));
+
+		const r = render(sut);
+		await h.openFilterWindow(r);
+
+		await h.setColumnSelect(r, '0');
+		await h.setUseRangeCheckbox(r, true);
+
+		const minRangeInput = h.getMinRangeInput(r)!;
+		const maxRangeInput = h.getMaxRangeInput(r)!;
+
+		// Set min value greater than max value
+		minRangeInput.value = '10';
+		maxRangeInput.value = '5';
+		await fireEvent.input(minRangeInput);
+		await fireEvent.input(maxRangeInput);
+
+		await h.removeMatching(r);
+
+		// Check if the error modal is displayed
+		const errorModal = await r.findByTestId('error-modal');
+		expect(errorModal).toBeDefined();
+		expect(errorModal.textContent).toContain('Please enter valid range values.');
+	});
+
+	it('should display an error modal when filter value is empty', async () => {
+		df.set(fromText('a,b,c\n1,2,3\n2,3,4\n3,4,5'));
+
+		const r = render(sut);
+		await h.openFilterWindow(r);
+
+		await h.setColumnSelect(r, '0');
+		await h.setUseRangeCheckbox(r, false);
+
+		const textFilterInput = h.getTextFilterInput(r)!;
+
+		// Set empty filter value
+		textFilterInput.value = '';
+		await fireEvent.input(textFilterInput);
+
+		await h.removeMatching(r);
+
+		// Check if the error modal is displayed
+		const errorModal = await r.findByTestId('error-modal');
+		expect(errorModal).toBeDefined();
+		expect(errorModal.textContent).toContain('Please enter a value to filter.');
+	});
+});
