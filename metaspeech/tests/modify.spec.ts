@@ -6,7 +6,7 @@ import {
 	tsvCorruptedTestData,
 	jsonTestData,
 	jsonCorruptedTestData
-} from './test.help';
+} from './testData.help';
 
 test.describe('Modify page tests', () => {
 	test.describe('Page layout tests', () => {

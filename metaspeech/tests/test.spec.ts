@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 import * as helper from './test.help';
-import { tsvTestData } from './test.help';
+import { tsvTestData } from './testData.help';
 
 test.describe('Initial page tests', () => {
 	test.beforeEach(async ({ page }) => {
