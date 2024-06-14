@@ -10,6 +10,7 @@
 		getLegendCol
 	} from '$lib/graphs/scatterplot/ScatterPlotController';
 	import { setColor } from '$lib/graphs/utils/CanvasUtils';
+	import { sortGroups } from '$lib/dataframe/DataFrame';
 
 	let canvas: HTMLCanvasElement;
 	let chart: Chart;
@@ -19,6 +20,8 @@
 	const yAxisCol = data.aggregateColumn!;
 	let xAxisCol = getXAxisCol(data.groupedColumns);
 	let legendCol = getLegendCol(data.groupedColumns, xAxisCol);
+
+	$: sortGroups(data.groups);
 
 	$: y_axis = yAxisCol.name;
 	$: x_axis = xAxisCol.name;

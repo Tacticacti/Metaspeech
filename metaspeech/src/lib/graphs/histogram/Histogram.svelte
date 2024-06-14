@@ -8,7 +8,7 @@
 	import { createConfig, createDatasets, handleData } from './helper';
 
 	export let data: GroupedDataFrame;
-	data.groups = sortGroups(data.groups);
+	$: sortGroups(data.groups);
 	let aggregationHappens: boolean = data.aggregateColumn !== undefined;
 
 	let selectedFunction: string = 'sum';

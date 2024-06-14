@@ -1,4 +1,5 @@
-import type { GroupedDataFrame, Group, DataType, Column, GroupBy } from '$lib/Types';
+import type { GroupedDataFrame, Group, DataType, Column } from '$lib/Types';
+import { keyToString } from '$lib/graphs/sharedFunctions';
 
 /**
  * The type of the aggregate options.
@@ -299,7 +300,7 @@ function getCell(row: number, col: number, meta: TableMeta): Cell {
 	// cell is a header cell in the top bar
 	if (row < keysTop) {
 		const index = row * 2;
-		const content = keyToString(signature[index], meta.keySets[index]);
+		const content = keyToString(signature[index], meta.keySets[index].col.groupBy!);
 		const prev = getCell(row, col - 1, meta);
 		return {
 			content,
@@ -315,7 +316,7 @@ function getCell(row: number, col: number, meta: TableMeta): Cell {
 	// cell is a header cell in the left bar
 	if (col < keysLeft) {
 		const index = col * 2 + 1;
-		const content = keyToString(signature[index], meta.keySets[index]);
+		const content = keyToString(signature[index], meta.keySets[index].col.groupBy!);
 		const prev = getCell(row - 1, col, meta);
 		return {
 			content,
@@ -369,27 +370,4 @@ function getKeySignature(row: number, col: number, meta: TableMeta): DataType[] 
 		result[i] = unique[index];
 	}
 	return result;
-}
-
-/**
- * Converts the key to a string.
- * @example
- * keyToString(2, { col: { groupBy: { type: 'binned', size: 10 } } }) => '[20-29)'
- * @param key The key to convert to a string
- * @param keySet The keyset the key belongs to
- * @returns The key as a string
- */
-function keyToString(key: DataType, keySet: KeySet): string {
-	const groupBy = keySet.col.groupBy as GroupBy;
-
-	if (groupBy.type === 'binned' && groupBy.size > 1) {
-		const size = groupBy.size;
-		const index = key as number;
-
-		const start = index * size;
-		const end = start + size - 1;
-
-		return `[${start}-${end})`;
-	}
-	return key?.toString() ?? '-';
 }

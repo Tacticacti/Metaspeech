@@ -11,12 +11,15 @@
 		CategoryScale,
 		LinearScale
 	} from 'chart.js';
+	import { sortGroups } from '$lib/dataframe/DataFrame';
 
 	// Register necessary Chart.js components
 	Chart.register(PieController, ArcElement, Tooltip, Legend, CategoryScale, LinearScale);
 
 	// Svelte prop to receive the data
 	export let data: GroupedDataFrame;
+
+	$: sortGroups(data.groups);
 
 	let chart: Chart | null = null;
 	let canvas: HTMLCanvasElement | null = null;
