@@ -5,7 +5,7 @@
 	/**
 	 * The error message to display in the modal
 	 */
-	export let message: string;
+	export let message: string | null;
 	/**
 	 * Whether the modal is visible
 	 */
