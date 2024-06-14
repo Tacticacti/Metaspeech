@@ -60,7 +60,7 @@
 </svelte:head>
 
 {#if pages.map((p) => p.path).includes(currentPage)}
-	<div class="nav-m0 relative h-20 w-full">
+	<div class="nav-m0 relative h-20 w-full font-Jost">
 		<Navbar class="fixed z-20 grid grid-cols-1 border-b bg-darkblue py-2.5 text-blue-200 ">
 			<NavBrand href="/">
 				<img src={logo} class="me-3 h-6 pl-0 sm:h-9" alt="GG logo" />
@@ -86,7 +86,7 @@
 				</NavUl>
 				<!-- progress bar below the nav bar options -->
 				<div class="h-2.5 w-full rounded-full bg-gray-200 dark:bg-gray-700">
-					<div class="h-2.5 rounded-full bg-blue-400" style="width: {getProgress(currentPage)}" />
+					<div class="h-2.5 rounded-full bg-blue-400 transition-all duration-500" style="width: {getProgress(currentPage)}" />
 				</div>
 			</div>
 			<div class="ml-44" />
