@@ -187,6 +187,71 @@ test.describe('Modify page tests', () => {
 			await expect(helper.getTableCell(page, '2')).not.toBeVisible();
 			await expect(helper.getTableCell(page, '3')).not.toBeVisible();
 		});
+
+		test.describe('Invalid filter inputs', () => {
+			test.beforeEach(async ({ page }) => {
+				await expect(helper.getErrorModal(page)).not.toBeVisible();
+				await expect(helper.getCloseErrorModal(page)).not.toBeVisible();
+			});
+
+			test('Test no matching values in string filter', async ({ page }) => {
+				const errorModal = helper.getErrorModal(page);
+				const closeButton = helper.getCloseErrorModal(page);
+
+				await helper.getRangeCheckbox(page).uncheck();
+				await helper.getTextFilterInput(page).fill('10');
+				await helper.getRemoveMatchingButton(page).click();
+
+				await expect(errorModal).toBeVisible();
+				await expect(closeButton).toBeVisible();
+				await expect(errorModal).toHaveText(
+					'No matching rows found for value "10" in column "Id". Close'
+				);
+			});
+
+			test('Test no matching range in string filter', async ({ page }) => {
+				const errorModal = helper.getErrorModal(page);
+				const closeButton = helper.getCloseErrorModal(page);
+
+				await helper.getMinRangeInput(page).fill('5');
+				await helper.getMaxRangeInput(page).fill('10');
+				await helper.getRemoveMatchingButton(page).click();
+
+				await expect(errorModal).toBeVisible();
+				await expect(closeButton).toBeVisible();
+				await expect(errorModal).toHaveText(
+					'No matching rows found for range 5-10 in column "Id". Close'
+				);
+			});
+
+			test('Test invalid range where min > max', async ({ page }) => {
+				const errorModal = helper.getErrorModal(page);
+				const closeButton = helper.getCloseErrorModal(page);
+
+				await helper.getMinRangeInput(page).fill('10');
+				await helper.getMaxRangeInput(page).fill('1');
+				await helper.getRemoveMatchingButton(page).click();
+
+				await expect(errorModal).toBeVisible();
+				await expect(closeButton).toBeVisible();
+				await expect(errorModal).toHaveText('Please enter valid range values. Close');
+			});
+
+			test('Test invalid range where min and max values are empty', async ({ page }) => {
+				const errorModal = helper.getErrorModal(page);
+				const closeButton = helper.getCloseErrorModal(page);
+
+				await helper.getRemoveMatchingButton(page).click();
+
+				await expect(errorModal).toBeVisible();
+				await expect(closeButton).toBeVisible();
+				await expect(errorModal).toHaveText('Please enter valid range values. Close');
+			});
+
+			test.afterEach(async ({ page }) => {
+				await helper.getCloseErrorModal(page).click();
+			});
+		});
 	});
 
 	test.describe('Warning for null value tests', () => {
