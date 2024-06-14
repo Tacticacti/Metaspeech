@@ -156,7 +156,7 @@ export function keyArrayToString(arr: DataType[], columns: Column[]): string {
 		})
 		.join(',');
 
-	return `(${keysList})`;
+	return `[${keysList}]`;
 }
 
 /**
@@ -168,6 +168,10 @@ export function keyArrayToString(arr: DataType[], columns: Column[]): string {
  * @returns The key as a string
  */
 export function keyToString(key: DataType, groupBy: GroupBy): string {
+	if (key === undefined) {
+		return '-';
+	}
+
 	if (groupBy.type === 'binned' && groupBy.size > 1) {
 		const size = groupBy.size;
 		const index = key as number;
@@ -177,5 +181,6 @@ export function keyToString(key: DataType, groupBy: GroupBy): string {
 
 		return `[${start}-${end}]`;
 	}
-	return key?.toString() ?? '-';
+
+	return key!.toString() ?? '-';
 }

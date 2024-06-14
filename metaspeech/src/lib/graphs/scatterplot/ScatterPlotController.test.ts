@@ -59,28 +59,28 @@ describe('get scatter datasets test', () => {
 			name: 'Age',
 			type: 'number',
 			hasMissing: false,
-			groupBy: undefined,
+			groupBy: { type: 'specific' },
 			aggregate: false
 		},
 		{
 			name: 'Group',
 			type: 'number',
 			hasMissing: false,
-			groupBy: undefined,
+			groupBy: { type: 'specific' },
 			aggregate: false
 		},
 		{
 			name: 'Gender',
 			type: 'string',
 			hasMissing: false,
-			groupBy: undefined,
+			groupBy: { type: 'specific' },
 			aggregate: false
 		},
 		{
 			name: 'WER',
 			type: 'number',
 			hasMissing: false,
-			groupBy: undefined,
+			groupBy: { type: 'specific' },
 			aggregate: false
 		}
 	];
@@ -312,7 +312,7 @@ describe('get scatter datasets test', () => {
 				style: styles[1]
 			},
 			{
-				label: '',
+				label: '-',
 				data: [[100, 1]],
 				style: styles[0]
 			}
@@ -321,5 +321,65 @@ describe('get scatter datasets test', () => {
 		expect(
 			getScatterDatasets(groupedFrame, allColumns[0], allColumns[2], [styles[0], styles[1]])
 		).toEqual(expected);
+	});
+
+	it('WER vs age, BINNED group legend', () => {
+		allColumns[2].groupBy = { type: 'binned', size: 3 };
+
+		const groupedFrame: GroupedDataFrame = {
+			groups: [
+				{
+					keys: [19, 0],
+					values: [30, 40, 20]
+				},
+				{
+					keys: [39, 1],
+					values: [80, 40]
+				},
+				{
+					keys: [89, 0],
+					values: [2, 60, 90, 120]
+				},
+				{
+					keys: [100, undefined],
+					values: [1]
+				}
+			],
+			groupedColumns: [allColumns[0], allColumns[2]],
+			aggregateColumn: allColumns[3]
+		};
+
+		const expected: ScatterDataset[] = [
+			{
+				label: '[0-2]',
+				data: [
+					[19, 30],
+					[19, 40],
+					[19, 20],
+					[89, 2],
+					[89, 60],
+					[89, 90],
+					[89, 120]
+				],
+				style: styles[0]
+			},
+			{
+				label: '[3-5]',
+				data: [
+					[39, 80],
+					[39, 40]
+				],
+				style: styles[1]
+			},
+			{
+				label: '-',
+				data: [[100, 1]],
+				style: styles[2]
+			}
+		];
+
+		expect(getScatterDatasets(groupedFrame, allColumns[0], allColumns[2], styles)).toEqual(
+			expected
+		);
 	});
 });
