@@ -170,6 +170,10 @@ export class DataFrame {
 		});
 	}
 
+	/**
+	 * Join two DataFrames. The columns of the second DataFrame are appended to the first DataFrame.
+	 * @param df The DataFrame to join with.
+	 */
 	join(df: DataFrameLike): void {
 		const columns1 = get(this.columns);
 		const rows1 = get(this.rows);
@@ -346,6 +350,12 @@ function toDataFrameLike(cols: string[], rows: unknown[][]): DataFrameLike {
 	return df;
 }
 
+/**
+ * Get the column metadata for a DataFrame.
+ * @param cols The names of the columns.
+ * @param rows The rows of the DataFrame.
+ * @returns The column metadata's.
+ */
 function getColumnMetas(cols: string[], rows: unknown[][]): Column[] {
 	const columnMetas: Column[] = [];
 
@@ -395,7 +405,17 @@ function hasMissingValues(arr: unknown[], length: number): boolean {
  * @returns The column metadata.
  */
 function cast2DArray(types: DataTypeString[], arr: unknown[][]): DataType[][] {
-	return arr.map((row) => row.map((cell, i) => castCell(types[i], cell)));
+	const result = [];
+
+	for (const row of arr) {
+		const newRow = [];
+		for (let i = 0; i < types.length; i++) {
+			newRow.push(castCell(types[i], row[i]));
+		}
+		result.push(newRow);
+	}
+
+	return result;
 }
 
 /**
@@ -480,12 +500,24 @@ export function fromObjects(collection: { [i: string]: unknown }[]): DataFrameLi
 	return toDataFrameLike(columns, rows);
 }
 
+/**
+ * Create a DataFrame from an array of arrays.
+ * The first array should be the column names.
+ * @param array The array of arrays to create the DataFrame from.
+ * @returns A DataFrame.
+ */
 export function fromArrays(array: unknown[][]): DataFrameLike {
 	const cols = array.splice(0, 1)[0] as string[];
 	return toDataFrameLike(cols, array);
 }
 // #endregion
 
+/**
+ * Create a Grouper function from a GroupBy object.
+ * @param value The GroupBy object.
+ * @param index The index of the column to group by.
+ * @returns The Grouper function.
+ */
 function toGrouper(value: GroupBy, index: number): Grouper {
 	switch (value.type) {
 		case 'specific':

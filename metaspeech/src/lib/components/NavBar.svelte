@@ -28,6 +28,11 @@
 		}
 	];
 
+	/**
+	 * Gets the progress of the current page
+	 * This is shown in the progress bar just below the nav bar.
+	 * @param route The current route
+	 */
 	function getProgress(route: string): string {
 		if (route === '/modify') {
 			return '29%';
@@ -40,6 +45,10 @@
 		return '8%';
 	}
 
+	/**
+	 * Gets the page name associated with the route
+	 * @param route The current route
+	 */
 	function getPageName(route: string): string {
 		const page = pages.find((p) => p.path === route);
 		return page ? page.name + ' - ' + APP_NAME : APP_NAME;

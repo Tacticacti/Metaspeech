@@ -10,10 +10,18 @@
 
 	$: selectColumnForAggregation(aggregateBy);
 
+	/**
+	 * Resets the aggregateBy value to -1 i.e. Frequency
+	 */
 	function resetAggregateBy() {
 		aggregateBy = -1;
 	}
 
+	/**
+	 * Selects a column for grouping
+	 * @param column Column to select
+	 * @param select Whether to select or deselect the column
+	 */
 	function selectColumnForGrouping(column: Column, select: boolean) {
 		column.groupBy = select
 			? column.type === 'number'
@@ -23,6 +31,10 @@
 		df.forceStoreUpdate();
 	}
 
+	/**
+	 * Translates the index of the column to the index of the column in the columns array
+	 * @param index Index of the column
+	 */
 	function translateIndex(index: number) {
 		let count = -1;
 		for (let i = 0; i < $columns.length; i++) {
@@ -81,7 +93,7 @@
 		<div class="size-3 h-full rounded-lg bg-gray-200"></div>
 
 		<div class="mx-20 flex w-full max-w-[100vh] flex-col items-center">
-			<span class="text-xl font-bold"> SELECT </span>
+			<span class="text-xl font-bold"> SHOW </span>
 			<div class="mt-5 flex w-fit flex-col">
 				<label class="mb-2">
 					<input
@@ -90,7 +102,7 @@
 						bind:group={aggregateBy}
 						value={-1}
 					/>
-					Frequency
+					Count
 				</label>
 				<div class="mb-2 size-1 w-full rounded-lg bg-gray-300"></div>
 				{#each aggregatableColumns as column, index}
