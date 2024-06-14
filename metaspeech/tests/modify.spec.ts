@@ -63,8 +63,8 @@ test.describe('Modify page tests', () => {
 
 		test('Test if filter options contain expected information', async ({ page }) => {
 			await expect(helper.getRangeCheckbox(page)).toBeChecked();
-			await expect(helper.getMinRangeInput(page)).toHaveValue('0');
-			await expect(helper.getMaxRangeInput(page)).toHaveValue('0');
+			await expect(helper.getMinRangeInput(page)).toHaveValue('');
+			await expect(helper.getMaxRangeInput(page)).toHaveValue('');
 		});
 
 		test('Test changing filter column', async ({ page }) => {

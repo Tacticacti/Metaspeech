@@ -13,8 +13,8 @@
 	let selectedIndex = 0;
 	let filterValue: string = '';
 	let useRangeChecked: boolean = true;
-	let min: number = 0;
-	let max: number = 0;
+	let min: string = '';
+	let max: string = '';
 	let errorMessage: string | null = null;
 	let isModalVisible = false;
 
@@ -30,10 +30,35 @@
 	});
 
 	/**
+	 * Validate the input values and set error messages if invalid
+	 * @returns true if the inputs are valid, false otherwise
+	 */
+	function validateInputs(): boolean {
+		const minVal = parseFloat(min);
+		const maxVal = parseFloat(max);
+
+		const invalidRange =
+			useRange &&
+			(isNaN(minVal) || isNaN(maxVal) || min.trim() === '' || max.trim() === '' || minVal > maxVal);
+		const invalidValue = !useRange && !filterValue.trim();
+
+		if (invalidRange || invalidValue) {
+			errorMessage = invalidRange
+				? 'Please enter valid range values.'
+				: 'Please enter a value to filter.';
+			isModalVisible = true;
+			return false;
+		}
+		return true;
+	}
+
+	/**
 	 * Filter the data based on the selected column and the filter value
 	 * @param useMatching if true, remove rows that match the filter value. if false, remove rows that do not match the filter value.
 	 */
 	function filter(useMatching: boolean) {
+		if (!validateInputs()) return;
+
 		const originalRows = get(df.rows);
 		const newRows = originalRows.filter((row) => {
 			const value = row[selectedIndex];
@@ -41,7 +66,9 @@
 		});
 
 		if (newRows.length === originalRows.length) {
-			errorMessage = `No matching rows found for value "${filterValue}" in column "${selectedColumn.name}".`;
+			errorMessage = useRange
+				? `No matching rows found for range ${min}-${max} in column "${selectedColumn.name}".`
+				: `No matching rows found for value "${filterValue}" in column "${selectedColumn.name}".`;
 			isModalVisible = true;
 		} else {
 			df.filter((row) => matches(row[selectedIndex]) !== useMatching);
@@ -56,7 +83,9 @@
 	function matches(value: DataType): boolean {
 		if (useRange) {
 			const num = value as number;
-			return num >= min && num <= max;
+			const minValue = parseFloat(min);
+			const maxValue = parseFloat(max);
+			return num >= minValue && num <= maxValue;
 		}
 
 		return (value?.toString() ?? '') === filterValue;
