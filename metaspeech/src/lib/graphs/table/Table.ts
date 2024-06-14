@@ -236,7 +236,7 @@ export function getKeySets(data: GroupedDataFrame): KeySet[] {
 			const temp = unique.filter((k) => typeof k === 'number') as number[];
 			unique = temp.sort((a, b) => a - b);
 		} else {
-			unique = unique.filter((k) => typeof k !== 'undefined').sort();
+			unique = unique.sort();
 		}
 
 		keySets.push({ unique, col, i });
@@ -391,5 +391,5 @@ function keyToString(key: DataType, keySet: KeySet): string {
 
 		return `[${start}-${end})`;
 	}
-	return key!.toString();
+	return key?.toString() ?? '-';
 }
