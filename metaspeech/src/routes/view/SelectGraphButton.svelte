@@ -13,7 +13,7 @@
 		Table: 'Unknown reason for not rendering.',
 		Histogram: 'Unknown reason for not rendering.',
 		'Pie Chart': "Cannot be shown if the 'show' is not count/percentage.",
-		Scatter: 'Cannot be shown if the group has no numeric columns.',
+		Scatter: 'Cannot be shown if the group has no numeric columns in the group.',
 		'Box Plot': 'Can only be shown if one numeric column in group.'
 	};
 
@@ -41,6 +41,6 @@
 		class="z-0 w-48 bg-gray-600 text-sm font-light opacity-90"
 		data-testid={graph.title + '-tooltip'}
 	>
-		{noRenderReasons[graph.title] || 'unknown reasons why disabled'}
+		{noRenderReasons[graph.title] || 'unknown reason why disabled'}
 	</Tooltip>
 {/if}
