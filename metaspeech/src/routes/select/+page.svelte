@@ -81,7 +81,7 @@
 		<div class="size-3 h-full rounded-lg bg-gray-200"></div>
 
 		<div class="mx-20 flex w-full max-w-[100vh] flex-col items-center">
-			<span class="text-xl font-bold"> SELECT </span>
+			<span class="text-xl font-bold"> SHOW </span>
 			<div class="mt-5 flex w-fit flex-col">
 				<label class="mb-2">
 					<input
@@ -90,7 +90,7 @@
 						bind:group={aggregateBy}
 						value={-1}
 					/>
-					Frequency
+					Count
 				</label>
 				<div class="mb-2 size-1 w-full rounded-lg bg-gray-300"></div>
 				{#each aggregatableColumns as column, index}

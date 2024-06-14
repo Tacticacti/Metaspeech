@@ -213,7 +213,7 @@ export class DataFrame {
 			while (row.length < cols.length) {
 				row.push(undefined);
 			}
-		});
+		});	
 
 		this._columns.set(cols);
 		this._rows.set(rows);
@@ -395,7 +395,17 @@ function hasMissingValues(arr: unknown[], length: number): boolean {
  * @returns The column metadata.
  */
 function cast2DArray(types: DataTypeString[], arr: unknown[][]): DataType[][] {
-	return arr.map((row) => row.map((cell, i) => castCell(types[i], cell)));
+	const result = [];
+	
+	for (const row of arr) {
+		const newRow = [];
+		for (let i = 0; i < types.length; i++) {
+			newRow.push(castCell(types[i], row[i])); 
+		}
+		result.push(newRow);
+	}
+
+	return result;
 }
 
 /**
