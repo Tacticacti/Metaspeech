@@ -72,9 +72,16 @@ To run the project you need to follow the following steps:
 The project is structured as follows:
 - metaspeech: 
     - src: 
-        - lib: contains Svelte components and TypeScript modules.
-        - routes: contains the pages. For example, `routes/modify/+page.svelte` is the page: `/modify`.
-    - static: contains static assets such as icons.
+        - lib:
+          - assets: contains images and icons
+          - components: contains components that are shared between pages
+          - dataframe: contains the dataframe that is used troughout the project
+          - graphs: contains the graph implementations
+          - Constants.ts: contains shared application constants
+          - Store.ts: shared data store
+          - Types.ts: shared types
+        - routes: contains page specific components and the pages. For example, `routes/modify/+page.svelte` is the page: `/modify`.
+    - static: contains static assets such as favicon.
     - tests: contains system tests.
 
 ## 🎨 Styling

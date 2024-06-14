@@ -10,10 +10,18 @@
 
 	$: selectColumnForAggregation(aggregateBy);
 
+	/**
+	 * Resets the aggregateBy value to -1 i.e. Frequency
+	 */
 	function resetAggregateBy() {
 		aggregateBy = -1;
 	}
 
+	/**
+	 * Selects a column for grouping
+	 * @param column Column to select
+	 * @param select Whether to select or deselect the column
+	 */
 	function selectColumnForGrouping(column: Column, select: boolean) {
 		column.groupBy = select
 			? column.type === 'number'
@@ -23,6 +31,10 @@
 		df.forceStoreUpdate();
 	}
 
+	/**
+	 * Translates the index of the column to the index of the column in the columns array
+	 * @param index Index of the column
+	 */
 	function translateIndex(index: number) {
 		let count = -1;
 		for (let i = 0; i < $columns.length; i++) {

@@ -8,6 +8,7 @@ export type AggregateOption = {
 	fn: (data: GroupedDataFrame, group: Group) => string;
 	default: string;
 };
+
 /**
  * The aggregate options for when no aggregate column is selected.
  */
@@ -30,6 +31,7 @@ export const aggregateOptions_none: AggregateOption[] = [
 		default: '0%'
 	}
 ];
+
 /**
  * The aggregate options for when a single aggregate column is selected.
  */
@@ -133,11 +135,13 @@ type Cell = {
 	class: 'header' | 'data' | undefined;
 	skip: boolean;
 };
+
 type KeySet = {
 	unique: DataType[];
 	col: Column;
 	i: number;
 };
+
 type TableMeta = {
 	headerShape: [number, number];
 	shape: [number, number];
