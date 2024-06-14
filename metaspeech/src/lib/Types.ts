@@ -90,3 +90,23 @@ export type DataFrameLike = {
 	columns: Column[];
 	rows: DataType[][];
 };
+
+// Scatter plot types
+
+/**
+ * A type that has the style of a dataset in a scatter plot, e.g. red circles
+ */
+export type ScatterStyle = {
+	backgroundColor: string;
+	borderColor: string;
+	pointStyle: string;
+};
+
+/**
+ * A type that represents a dataset for a scatter plot
+ */
+export type ScatterDataset = {
+	data: [number, number][];
+	label: string;
+	style: ScatterStyle;
+};
