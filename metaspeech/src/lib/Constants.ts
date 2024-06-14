@@ -1,4 +1,4 @@
-import type { GraphMeta } from '$lib/Types';
+import type { GraphMeta, ScatterStyle } from '$lib/Types';
 import Histogram from './graphs/histogram/Histogram.svelte';
 import BoxPlot from './graphs/boxplot/BoxPlot.svelte';
 import PieChart from './graphs/piechart/PieChart.svelte';
@@ -53,7 +53,9 @@ export const graphs: GraphMeta[] = [
 			'A scatterplot shows the relationship between two quantitative variables measured for the same individuals. The values of one variable appear on the horizontal axis, and the values of the other variable appear on the vertical axis. Each individual in the data appears as a point on the graph.',
 		img: ScatterPlot_img,
 		canRender: (data) =>
-			data.groupedColumns && data.groupedColumns.some((col) => col.type === 'number'),
+			data.aggregateColumn !== undefined &&
+			data.groupedColumns &&
+			data.groupedColumns.some((col) => col.type === 'number'),
 		graph: ScatterPlot
 	},
 	{
@@ -63,5 +65,61 @@ export const graphs: GraphMeta[] = [
 		img: BoxPlot_img,
 		canRender: (data) => data.groupedColumns.length === 1,
 		graph: BoxPlot
+	}
+];
+
+/**
+ * Ten custom dataset styles for the scatterplot
+ */
+export const scatterStyles: ScatterStyle[] = [
+	{
+		backgroundColor: 'blue',
+		borderColor: 'blue',
+		pointStyle: 'circle'
+	},
+	{
+		backgroundColor: 'red',
+		borderColor: 'red',
+		pointStyle: 'cross'
+	},
+	{
+		backgroundColor: 'orange',
+		borderColor: 'orange',
+		pointStyle: 'crossRot'
+	},
+	{
+		backgroundColor: 'black',
+		borderColor: 'black',
+		pointStyle: 'dash'
+	},
+	{
+		backgroundColor: 'purple',
+		borderColor: 'purple',
+		pointStyle: 'line'
+	},
+	{
+		backgroundColor: 'yellow',
+		borderColor: 'yellow',
+		pointStyle: 'rect'
+	},
+	{
+		backgroundColor: 'magenta',
+		borderColor: 'magenta',
+		pointStyle: 'rectRounded'
+	},
+	{
+		backgroundColor: 'cyan',
+		borderColor: 'cyan',
+		pointStyle: 'rectRot'
+	},
+	{
+		backgroundColor: 'brown',
+		borderColor: 'brown',
+		pointStyle: 'star'
+	},
+	{
+		backgroundColor: 'pink',
+		borderColor: 'pink',
+		pointStyle: 'triangle'
 	}
 ];
