@@ -19,7 +19,7 @@
 		>
 			<SelectGraph bind:selected={selectedGraph} {data} />
 			{#if selectedGraph}
-				<div class="mt-5 flex w-full justify-center">
+				<div class="mt-5 flex w-full justify-center" data-testid="graph-container">
 					<svelte:component this={selectedGraph.graph} {data} />
 				</div>
 			{:else}

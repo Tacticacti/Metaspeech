@@ -1,21 +1,19 @@
 <script lang="ts">
 	import type { GraphMeta, GroupedDataFrame } from '$lib/Types';
 	import { Tooltip } from 'flowbite-svelte';
+	import { noRenderReasons } from '$lib/Types';
 
 	/**
 	 * Graph object
 	 */
 	export let graph: GraphMeta;
+
+	/**
+	 * Data about the grouping of the graph
+	 */
 	export let data: GroupedDataFrame;
 
 	let disable = false;
-	const noRenderReasons: Record<string, string> = {
-		Table: 'Unknown reason for not rendering.',
-		Histogram: 'Unknown reason for not rendering.',
-		'Pie Chart': "Cannot be shown if the 'show' is not count/percentage.",
-		Scatter: 'Cannot be shown if the group has no numeric columns in the group.',
-		'Box Plot': 'Can only be shown if one numeric column in group.'
-	};
 
 	function canRender(): boolean {
 		disable = !graph.canRender(data);

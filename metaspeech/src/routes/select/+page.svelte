@@ -61,11 +61,18 @@
 		<div class="mx-20 flex w-full max-w-[100vh] flex-col items-center">
 			<span class="flex items-center text-xl font-bold">
 				GROUP BY
-				<button><img src={info} alt="info icon" class="ml-2 h-8" data-testid="info-icon" /></button>
+				<button
+					><img
+						src={info}
+						alt="info icon"
+						class="ml-2 h-8"
+						data-testid="info-icon-groupby"
+					/></button
+				>
 				<Tooltip
 					placement="top"
 					class="z-20 w-48 bg-gray-600 text-sm font-light opacity-90"
-					data-testid="info-bubble"
+					data-testid="info-bubble-groupby"
 				>
 					Select <span class="font-bold">any</span> columns that you want to group together.
 				</Tooltip>
@@ -106,11 +113,13 @@
 		<div class="mx-20 flex w-full max-w-[100vh] flex-col items-center">
 			<span class="flex items-center text-xl font-bold">
 				SHOW
-				<button><img src={info} alt="info icon" class="ml-2 h-8" data-testid="info-icon" /></button>
+				<button
+					><img src={info} alt="info icon" class="ml-2 h-8" data-testid="info-icon-show" /></button
+				>
 				<Tooltip
 					placement="top"
 					class="z-20 w-48 bg-gray-600 text-sm font-light opacity-90"
-					data-testid="info-bubble"
+					data-testid="info-bubble-show"
 				>
 					Select <span class="font-bold">one</span> numeric column to show for each subgroup.
 				</Tooltip>

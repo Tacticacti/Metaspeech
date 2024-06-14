@@ -81,4 +81,40 @@ describe('View', () => {
 		const tooltip = r.queryByTestId('Box Plot-tooltip');
 		expect(tooltip).to.exist;
 	});
+	it('description exists when hovering over graph', async () => {
+		const user = userEvent.setup();
+		df.set(fromText('col1,col2\n1,2'));
+		df.groupBy();
+		const r = render(sut);
+
+		const button = r.getByText('Box Plot');
+		await user.hover(button);
+
+		const description = r.queryByTestId('description-chart');
+		expect(description).to.exist;
+	});
+	it('name exists when hovering over graph', async () => {
+		const user = userEvent.setup();
+		df.set(fromText('col1,col2\n1,2'));
+		df.groupBy();
+		const r = render(sut);
+
+		const button = r.getByText('Box Plot');
+		await user.hover(button);
+
+		const name = r.queryByTestId('name-chart');
+		expect(name).to.exist;
+	});
+	it('container is rendered', async () => {
+		const user = userEvent.setup();
+		df.set(fromText('col1,col2\n1,2'));
+		df.groupBy();
+		const r = render(sut);
+
+		const button = r.getByText('Histogram');
+		await user.click(button);
+
+		const container = r.queryByTestId('graph-container');
+		expect(container).to.exist;
+	});
 });
