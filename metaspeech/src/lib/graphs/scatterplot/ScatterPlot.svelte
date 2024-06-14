@@ -63,7 +63,7 @@
 				},
 				title: {
 					display: true,
-					text: y_axis + ' x ' + x_axis
+					text: `${y_axis} against ${x_axis} ${legend ? 'grouped by ' + legend! : ''}`
 				},
 				legend: {
 					display: legendCol !== undefined,
