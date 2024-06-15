@@ -220,7 +220,7 @@ test.describe('Modify page tests', () => {
 				await expect(errorModal).toBeVisible();
 				await expect(closeButton).toBeVisible();
 				await expect(errorModal).toHaveText(
-					'No matching rows found for range 5-10 in column "Id". Close'
+					'No matching rows found for range 5-10 in column "Id". Close '
 				);
 			});
 
@@ -234,7 +234,7 @@ test.describe('Modify page tests', () => {
 
 				await expect(errorModal).toBeVisible();
 				await expect(closeButton).toBeVisible();
-				await expect(errorModal).toHaveText('Please enter valid range values. Close');
+				await expect(errorModal).toHaveText('Please enter valid range values. Close ');
 			});
 
 			test('Test invalid range where min and max values are empty', async ({ page }) => {

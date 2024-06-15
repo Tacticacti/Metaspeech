@@ -5,6 +5,10 @@
 	import { navigating } from '$app/stores';
 	import { df } from '$lib/Store';
 	import { onMount } from 'svelte';
+	import ErrorModal from '$components/ErrorModal.svelte';
+
+	let message = '';
+	let errorIsVisible = false;
 
 	onMount(() => {
 		loadSession();
@@ -30,9 +34,28 @@
 
 		df.set(parsed);
 	}
+
+	function handleError(e: unknown) {
+		errorIsVisible = true;
+		message = '';
+
+		if (e instanceof Error) {
+			message = e.message;
+			return;
+		}
+		if (e instanceof PromiseRejectionEvent) {
+			message = e.reason.message;
+			return;
+		}
+		if (e instanceof ErrorEvent) {
+			message = e.error.message;
+			return;
+		}
+		return;
+	}
 </script>
 
-<svelte:window on:error={console.error} />
+<svelte:window on:error={handleError} on:unhandledrejection={handleError} />
 
 <NavBar />
 <div class="flex min-h-screen flex-col bg-offwhite font-Jost">
@@ -41,3 +64,5 @@
 	</main>
 </div>
 <Footer />
+
+<ErrorModal bind:message bind:visible={errorIsVisible} on:close={() => (errorIsVisible = false)} />
