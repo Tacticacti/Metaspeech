@@ -99,6 +99,7 @@
 			options: {
 				responsive: false,
 				maintainAspectRatio: false,
+				events: [],
 				plugins: {
 					legend: {
 						position: 'top'

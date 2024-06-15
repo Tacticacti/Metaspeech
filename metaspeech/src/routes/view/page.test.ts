@@ -15,11 +15,11 @@ describe('View', () => {
 		df.groupBy();
 		const r = render(sut);
 
-		expect(r.getByText('Table')).to.exist;
-		expect(r.getByText('Histogram')).to.exist;
-		expect(r.getByText('Pie Chart')).to.exist;
-		expect(r.getByText('Scatter')).to.exist;
-		expect(r.getByText('Box Plot')).to.exist;
+		expect(r.getByTestId('Table')).to.exist;
+		expect(r.getByTestId('Histogram')).to.exist;
+		expect(r.getByTestId('Pie Chart')).to.exist;
+		expect(r.getByTestId('Scatter')).to.exist;
+		expect(r.getByTestId('Box Plot')).to.exist;
 	});
 	it('table should be enabled', async () => {
 		const user = userEvent.setup();
@@ -39,7 +39,7 @@ describe('View', () => {
 		df.groupBy();
 		const r = render(sut);
 
-		const button = r.getByText('Histogram');
+		const button = r.getByTestId('Histogram');
 		await user.hover(button);
 
 		const tooltip = r.queryByTestId('Histogram-tooltip');
@@ -51,7 +51,7 @@ describe('View', () => {
 		df.groupBy();
 		const r = render(sut);
 
-		const button = r.getByText('Pie Chart');
+		const button = r.getByTestId('Pie Chart');
 		await user.hover(button);
 
 		const tooltip = r.queryByTestId('Pie Chart-tooltip');
@@ -63,7 +63,7 @@ describe('View', () => {
 		df.groupBy();
 		const r = render(sut);
 
-		const button = r.getByText('Scatter');
+		const button = r.getByTestId('Scatter');
 		await user.hover(button);
 
 		const tooltip = r.queryByTestId('Scatter-tooltip');
@@ -75,7 +75,7 @@ describe('View', () => {
 		df.groupBy();
 		const r = render(sut);
 
-		const button = r.getByText('Box Plot');
+		const button = r.getByTestId('Box Plot');
 		await user.hover(button);
 
 		const tooltip = r.queryByTestId('Box Plot-tooltip');
@@ -87,7 +87,7 @@ describe('View', () => {
 		df.groupBy();
 		const r = render(sut);
 
-		const button = r.getByText('Box Plot');
+		const button = r.getByTestId('Box Plot');
 		await user.hover(button);
 
 		const description = r.queryByTestId('description-chart');
@@ -99,7 +99,7 @@ describe('View', () => {
 		df.groupBy();
 		const r = render(sut);
 
-		const button = r.getByText('Box Plot');
+		const button = r.getByTestId('Box Plot');
 		await user.hover(button);
 
 		const name = r.queryByTestId('name-chart');
@@ -111,7 +111,7 @@ describe('View', () => {
 		df.groupBy();
 		const r = render(sut);
 
-		const button = r.getByText('Histogram');
+		const button = r.getByTestId('Histogram');
 		await user.click(button);
 
 		const container = r.queryByTestId('graph-container');

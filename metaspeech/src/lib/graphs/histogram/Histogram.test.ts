@@ -28,11 +28,11 @@ describe('When user views', () => {
 
 		const { getByTestId } = render(sut, { data: df.groupBy() });
 
-		const sumButton = getByTestId('aggregation-sum');
-		const meanButton = getByTestId('aggregation-mean');
+		const sumButton = getByTestId('aggregation-Sum');
+		const meanButton = getByTestId('aggregation-Mean');
 
 		expect(sumButton).to.exist;
-		expect(sumButton).toBeChecked();
+		expect(meanButton).toBeChecked();
 		expect(meanButton).to.exist;
 
 		await user.click(meanButton);
@@ -49,8 +49,8 @@ describe('When user views', () => {
 
 		const { getByTestId } = render(sut, { data: df.groupBy() });
 
-		const absButton = getByTestId('nonaggregation-Absolute Frequency');
-		const relButton = getByTestId('nonaggregation-Relative Frequency');
+		const absButton = getByTestId('nonaggregation-Count');
+		const relButton = getByTestId('nonaggregation-Percentage');
 
 		expect(absButton).to.exist;
 		expect(relButton).to.exist;

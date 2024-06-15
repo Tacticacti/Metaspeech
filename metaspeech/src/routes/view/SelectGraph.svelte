@@ -3,9 +3,9 @@
 	import { graphs } from '$lib/Constants';
 	import type { GraphMeta, GroupedDataFrame } from '$lib/Types';
 
-	export let selected: GraphMeta | undefined = undefined;
+	export let selected: GraphMeta | undefined = graphs[0];
 	export let data: GroupedDataFrame;
-	let displayed: GraphMeta | undefined = undefined;
+	let displayed: GraphMeta | undefined = graphs[0];
 
 	function show(graph: GraphMeta, isSelected: boolean) {
 		if (isSelected) selected = graph;
