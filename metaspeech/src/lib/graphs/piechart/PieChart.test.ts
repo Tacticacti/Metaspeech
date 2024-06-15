@@ -14,7 +14,9 @@ describe('PieChart', () => {
 			{ keys: ['F'], values: [35, 45, 55] },
 			{ keys: ['G'], values: [40, 50, 60] }
 		],
-		groupedColumns: [{ name: 'Category', type: 'string', hasMissing: false }],
+		groupedColumns: [
+			{ name: 'Category', type: 'string', hasMissing: false, groupBy: { type: 'specific' } }
+		],
 		aggregateColumn: { name: 'Value', type: 'number', hasMissing: false }
 	};
 
