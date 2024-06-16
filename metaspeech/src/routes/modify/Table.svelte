@@ -72,4 +72,6 @@
 		{/each}
 	</div>
 </CustomVirtualList>
-<p class=" text-lg font-semibold">Showing {start}-{end} of {$rows.length} rows</p>
+<p class=" my-4 text-lg font-semibold text-gray-400">
+	Showing {start}-{end} of {$rows.length} rows
+</p>

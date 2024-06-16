@@ -122,7 +122,7 @@ export function createConfig(
 					display: true,
 					// Checks if there are colums selected, if not then this is just Absolute Frequency
 					// Else the title is the values x group of columns
-					text: getTitleText(data)
+					text: getTitleText(data, selectedFunction)
 				}
 			},
 			scales: {
