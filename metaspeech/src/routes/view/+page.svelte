@@ -12,7 +12,7 @@
 	<title>Visualisations - {APP_NAME}</title>
 </svelte:head>
 
-<div class="flex h-full w-full justify-center bg-lightblue">
+<div class="flex h-full min-h-screen w-full justify-center bg-lightblue">
 	<div class="w-[80vw]">
 		<div class="">
 			<SelectGraph bind:selected={selectedGraph} {data} />
