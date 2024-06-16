@@ -33,13 +33,13 @@ function setColor(chart, ignored: string, options: ChartOptions) {
  */
 export function handleData(selectedFunction: string, data: GroupedDataFrame): [string[], number[]] {
 	switch (selectedFunction) {
-		case 'sum':
+		case 'Sum':
 			return calculateSum(data);
-		case 'mean':
+		case 'Mean':
 			return calculateMean(data);
-		case 'Absolute Frequency':
+		case 'Count':
 			return calculateAbsoluteFrequency(data);
-		case 'Relative Frequency':
+		case 'Percentage':
 			return calculateRelativeFrequency(data);
 	}
 	return [[], []];
@@ -77,11 +77,13 @@ export function createDatasetsLabel(
 	values: number[],
 	selectedFunction: string
 ) {
-	return data.aggregateColumn //not sure if this is readable
-		? data.aggregateColumn.name
-		: selectedFunction == 'Absolute Frequency'
-			? 'Count'
-			: 'Percentage';
+	if (data.aggregateColumn) {
+		return data.aggregateColumn.name;
+	}
+	if (selectedFunction === 'Count') {
+		return 'Count';
+	}
+	return 'Percentage';
 }
 
 /**

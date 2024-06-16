@@ -25,19 +25,19 @@ export const COPYRIGHT_YEAR = 2024;
  */
 export const graphs: GraphMeta[] = [
 	{
-		title: 'Table',
-		description: 'A table is a grid of data that can be sorted, filtered, and searched.',
-		img: Table_img,
-		canRender: () => true,
-		graph: Table
-	},
-	{
 		title: 'Histogram',
 		description:
 			'A histogram is a graphical representation of the distribution of numerical data. It groups data into bins and displays the frequency of data points in each bin using bars.',
 		img: Histogram_img,
 		canRender: () => true,
 		graph: Histogram
+	},
+	{
+		title: 'Table',
+		description: 'A table is a grid of data that can be sorted, filtered, and searched.',
+		img: Table_img,
+		canRender: () => true,
+		graph: Table
 	},
 	{
 		title: 'Pie Chart',
@@ -55,7 +55,10 @@ export const graphs: GraphMeta[] = [
 		canRender: (data) =>
 			data.aggregateColumn !== undefined &&
 			data.groupedColumns &&
-			data.groupedColumns.some((col) => col.type === 'number'),
+			data.groupedColumns.some(
+				(col) =>
+					col.type === 'number' && (col.groupBy?.type === 'specific' || col.groupBy!.size <= 1)
+			),
 		graph: ScatterPlot
 	},
 	{
@@ -63,11 +66,22 @@ export const graphs: GraphMeta[] = [
 		description:
 			'In descriptive statistics, a box plot or boxplot is a type of chart often used in explanatory data analysis. Box plots visually show the distribution of numerical data and skewness by displaying the data quartiles (or percentiles) and averages.',
 		img: BoxPlot_img,
-		canRender: (data) =>
-			data.groupedColumns.length === 1 && data.groupedColumns.some((col) => col.type === 'number'),
+		canRender: (data) => data.aggregateColumn !== undefined,
 		graph: BoxPlot
 	}
 ];
+
+/**
+ * Reasons why a graph would not be able to be rendered
+ */
+export const noRenderReasons: Record<string, string> = {
+	Table: 'Unknown reason for not rendering.',
+	Histogram: 'Unknown reason for not rendering.',
+	'Pie Chart': "Cannot be shown if the 'show' is not count/percentage or if group is empty.",
+	Scatter:
+		'Cannot be shown if no number column without binning is selected for grouping or if the column to show is count/percentage.',
+	'Box Plot': 'Cannot be shown if no column is selected to show.'
+};
 
 /**
  * Ten custom dataset styles for the scatterplot

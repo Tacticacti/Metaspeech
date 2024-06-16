@@ -166,7 +166,7 @@ describe('calculate mean tests', () => {
 
 		const [labels, values] = calculateMean(groupedDf);
 
-		expect(labels).toStrictEqual(['[18]']);
+		expect(labels).toStrictEqual(['18']);
 		expect(values).toStrictEqual([1]);
 	});
 	it('2 entries', () => {
@@ -181,7 +181,7 @@ describe('calculate mean tests', () => {
 
 		const [labels, values] = calculateMean(groupedDf);
 
-		expect(labels).toStrictEqual(['[18]']);
+		expect(labels).toStrictEqual(['18']);
 		expect(values).toStrictEqual([2]);
 	});
 	it('2 different entries', () => {
@@ -196,30 +196,10 @@ describe('calculate mean tests', () => {
 
 		const [labels, values] = calculateMean(groupedDf);
 
-		expect(labels).toStrictEqual(['[18]', '[22]']);
+		expect(labels).toStrictEqual(['18', '22']);
 		expect(values).toStrictEqual([1, 3]);
 	});
-	// it('no entries', () => {                                 //current dataframe doesn't support this
-	//     const df = new DataFrame();
-	// 	df.set(fromText('age,cars'));
 
-	//     const columns = get(df.columns);
-	//     console.log('test');
-
-	//     console.log(columns);
-
-	//     columns[1].aggregate = true;
-	//     columns[0].groupBy = { type: 'specific' }
-
-	//     const groupedDf = df.groupBy();
-	//     let labels: string[];
-	//     let values: number[];
-
-	//     [labels, values] = calculateMean(groupedDf);
-
-	//     expect(labels).toStrictEqual([]);
-	//     expect(values).toStrictEqual([]);
-	// });
 	it('mixed', () => {
 		const df = new DataFrame();
 		df.set(fromText('age,cars\n18,1\n32,4\n18,2\n17,1\n17,1\n16,0'));
@@ -232,7 +212,7 @@ describe('calculate mean tests', () => {
 
 		const [labels, values] = calculateMean(groupedDf);
 
-		expect(labels).toStrictEqual(['[18]', '[32]', '[17]', '[16]']);
+		expect(labels).toStrictEqual(['18', '32', '17', '16']);
 		expect(values).toStrictEqual([1.5, 4, 1, 0]);
 	});
 });
@@ -250,7 +230,7 @@ describe('calculate sum tests', () => {
 
 		const [labels, values] = calculateSum(groupedDf);
 
-		expect(labels).toStrictEqual(['[18]']);
+		expect(labels).toStrictEqual(['18']);
 		expect(values).toStrictEqual([1]);
 	});
 	it('2 entries', () => {
@@ -265,7 +245,7 @@ describe('calculate sum tests', () => {
 
 		const [labels, values] = calculateSum(groupedDf);
 
-		expect(labels).toStrictEqual(['[18]']);
+		expect(labels).toStrictEqual(['18']);
 		expect(values).toStrictEqual([4]);
 	});
 	it('2 different entries', () => {
@@ -280,7 +260,7 @@ describe('calculate sum tests', () => {
 
 		const [labels, values] = calculateSum(groupedDf);
 
-		expect(labels).toStrictEqual(['[18]', '[22]']);
+		expect(labels).toStrictEqual(['18', '22']);
 		expect(values).toStrictEqual([1, 3]);
 	});
 	it('mixed', () => {
@@ -295,7 +275,7 @@ describe('calculate sum tests', () => {
 
 		const [labels, values] = calculateSum(groupedDf);
 
-		expect(labels).toStrictEqual(['[18]', '[32]', '[17]', '[16]']);
+		expect(labels).toStrictEqual(['18', '32', '17', '16']);
 		expect(values).toStrictEqual([3, 4, 2, 0]);
 	});
 });
@@ -312,7 +292,7 @@ describe('calculate abs freq tests', () => {
 
 		const [labels, values] = calculateAbsoluteFrequency(groupedDf);
 
-		expect(labels).toStrictEqual(['[18]']);
+		expect(labels).toStrictEqual(['18']);
 		expect(values).toStrictEqual([1]);
 	});
 	it('2 entries', () => {
@@ -326,7 +306,7 @@ describe('calculate abs freq tests', () => {
 
 		const [labels, values] = calculateAbsoluteFrequency(groupedDf);
 
-		expect(labels).toStrictEqual(['[18]']);
+		expect(labels).toStrictEqual(['18']);
 		expect(values).toStrictEqual([2]);
 	});
 	it('2 different entries', () => {
@@ -340,7 +320,7 @@ describe('calculate abs freq tests', () => {
 
 		const [labels, values] = calculateAbsoluteFrequency(groupedDf);
 
-		expect(labels).toStrictEqual(['[18]', '[22]']);
+		expect(labels).toStrictEqual(['18', '22']);
 		expect(values).toStrictEqual([1, 1]);
 	});
 	it('mixed', () => {
@@ -354,7 +334,7 @@ describe('calculate abs freq tests', () => {
 
 		const [labels, values] = calculateAbsoluteFrequency(groupedDf);
 
-		expect(labels).toStrictEqual(['[18]', '[32]', '[17]', '[16]']);
+		expect(labels).toStrictEqual(['18', '32', '17', '16']);
 		expect(values).toStrictEqual([2, 1, 2, 1]);
 	});
 });
@@ -371,7 +351,7 @@ describe('calculate rel freq tests', () => {
 
 		const [labels, values] = calculateRelativeFrequency(groupedDf);
 
-		expect(labels).toStrictEqual(['[18]']);
+		expect(labels).toStrictEqual(['18']);
 		expect(values).toStrictEqual([100]);
 	});
 	it('2 entries', () => {
@@ -385,7 +365,7 @@ describe('calculate rel freq tests', () => {
 
 		const [labels, values] = calculateRelativeFrequency(groupedDf);
 
-		expect(labels).toStrictEqual(['[18]']);
+		expect(labels).toStrictEqual(['18']);
 		expect(values).toStrictEqual([100]);
 	});
 	it('2 different entries', () => {
@@ -399,7 +379,7 @@ describe('calculate rel freq tests', () => {
 
 		const [labels, values] = calculateRelativeFrequency(groupedDf);
 
-		expect(labels).toStrictEqual(['[18]', '[22]']);
+		expect(labels).toStrictEqual(['18', '22']);
 		expect(values).toStrictEqual([50, 50]);
 	});
 	it('mixed', () => {
@@ -413,7 +393,7 @@ describe('calculate rel freq tests', () => {
 
 		const [labels, values] = calculateRelativeFrequency(groupedDf);
 
-		expect(labels).toStrictEqual(['[18]', '[32]', '[17]', '[16]']);
+		expect(labels).toStrictEqual(['18', '32', '17', '16']);
 		expect(values).toStrictEqual([(2 / 6) * 100, (1 / 6) * 100, (2 / 6) * 100, (1 / 6) * 100]);
 	});
 });

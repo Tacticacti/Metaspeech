@@ -30,7 +30,7 @@ describe('When user views', () => {
 
 		expect(select).to.exist;
 		expect(select.options.length).toBe(2);
-		expect(select.value).toBe('Sum');
+		expect(select.value).toBe('Mean');
 	});
 	it(' check if abs freq and rel freq exists', () => {
 		const df = new DataFrame();
@@ -44,5 +44,6 @@ describe('When user views', () => {
 
 		expect(select).to.exist;
 		expect(select.options.length).toBe(2);
+		expect(select.value).toBe('Count');
 	});
 });

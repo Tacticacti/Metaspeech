@@ -5,7 +5,6 @@
 	import { get } from 'svelte/store';
 	import { Button, Checkbox, Input, Select } from 'flowbite-svelte';
 	import filterImg from '$assets/icons/filter.png';
-	import ErrorModal from '$components/ErrorModal.svelte';
 
 	const columns = df.columns;
 
@@ -15,8 +14,6 @@
 	let useRangeChecked: boolean = true;
 	let min: string = '';
 	let max: string = '';
-	let errorMessage: string | null = null;
-	let isModalVisible = false;
 
 	$: selectedColumn = $columns[selectedIndex];
 	$: columnNames = $columns.map((col) => col.name);
@@ -33,7 +30,7 @@
 	 * Validate the input values and set error messages if invalid
 	 * @returns true if the inputs are valid, false otherwise
 	 */
-	function validateInputs(): boolean {
+	function validateInputs() {
 		const minVal = parseFloat(min);
 		const maxVal = parseFloat(max);
 
@@ -42,14 +39,12 @@
 			(isNaN(minVal) || isNaN(maxVal) || min.trim() === '' || max.trim() === '' || minVal > maxVal);
 		const invalidValue = !useRange && !filterValue.trim();
 
-		if (invalidRange || invalidValue) {
-			errorMessage = invalidRange
-				? 'Please enter valid range values.'
-				: 'Please enter a value to filter.';
-			isModalVisible = true;
-			return false;
+		if (invalidRange) {
+			throw new Error('Please enter valid range values.');
 		}
-		return true;
+		if (invalidValue) {
+			throw new Error('Please enter a value to filter');
+		}
 	}
 
 	/**
@@ -57,21 +52,19 @@
 	 * @param useMatching if true, remove rows that match the filter value. if false, remove rows that do not match the filter value.
 	 */
 	function filter(useMatching: boolean) {
-		if (!validateInputs()) return;
+		validateInputs();
 
-		const originalRows = get(df.rows);
-		const newRows = originalRows.filter((row) => {
-			const value = row[selectedIndex];
-			return matches(value) !== useMatching;
-		});
+		const originalCount = get(df.rows).length;
 
-		if (newRows.length === originalRows.length) {
-			errorMessage = useRange
+		df.filter((row) => matches(row[selectedIndex]) !== useMatching);
+
+		const newCount = get(df.rows).length;
+
+		if (newCount === originalCount) {
+			const errorMessage = useRange
 				? `No matching rows found for range ${min}-${max} in column "${selectedColumn.name}".`
 				: `No matching rows found for value "${filterValue}" in column "${selectedColumn.name}".`;
-			isModalVisible = true;
-		} else {
-			df.filter((row) => matches(row[selectedIndex]) !== useMatching);
+			throw new Error(errorMessage);
 		}
 	}
 
@@ -89,14 +82,6 @@
 		}
 
 		return (value?.toString() ?? '') === filterValue;
-	}
-
-	/**
-	 * Close the error modal and reset the error message.
-	 */
-	function closeModal() {
-		isModalVisible = false;
-		errorMessage = null;
 	}
 </script>
 
@@ -168,5 +153,3 @@
 		</div>
 	</div>
 {/if}
-
-<ErrorModal message={errorMessage} visible={isModalVisible} on:close={closeModal} />

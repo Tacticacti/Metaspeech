@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { GraphMeta, GroupedDataFrame } from '$lib/Types';
 	import { Tooltip } from 'flowbite-svelte';
-	import { noRenderReasons } from '$lib/Types';
+	import { noRenderReasons } from '$lib/Constants';
 
 	/**
 	 * Graph object
@@ -35,7 +35,7 @@
 </button>
 {#if disable}
 	<Tooltip
-		placement="top"
+		placement="left"
 		class="z-0 w-48 bg-gray-600 text-sm font-light opacity-90"
 		data-testid={graph.title + '-tooltip'}
 	>

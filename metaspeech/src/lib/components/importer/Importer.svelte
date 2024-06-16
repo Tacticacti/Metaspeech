@@ -5,14 +5,10 @@
 	import type { DataFrameLike } from '$lib/Types';
 	import { UnsupportedFileError } from '$lib/Types';
 	import { GetFileExtension } from '$components/importer/scripts/FileParser';
-	import ErrorModal from '$components/ErrorModal.svelte';
 
 	const dispatch = createEventDispatcher<{
 		input: DataFile;
 	}>();
-
-	export let errorMessage: string | null = null;
-	export let isModalVisible = false;
 
 	/**
 	 * Handle the input event by parsing the file and dispatching the input event.
@@ -21,8 +17,6 @@
 	 * @param event - The input event triggered when a file is selected.
 	 */
 	async function onInput(event: Event) {
-		errorMessage = null; // Reset error message
-
 		// Get the file from the input event
 		const input = event.target as HTMLInputElement;
 		const file = input.files?.[0];
@@ -30,7 +24,7 @@
 
 		try {
 			// Parse the file
-			const data: DataFrameLike = JSON.parse(JSON.stringify(await Parse(file)));
+			const data: DataFrameLike = await Parse(file);
 
 			const bundle = {
 				data,
@@ -41,21 +35,13 @@
 		} catch (error) {
 			// Handle unsupported file error and other errors
 			if (error instanceof UnsupportedFileError) {
-				errorMessage = `Invalid file input! .${GetFileExtension(file)} is not supported in this application!`;
-			} else {
-				errorMessage = 'An unknown error occurred while processing the file.';
+				throw new Error(
+					`Invalid file input. '.${GetFileExtension(file)}' is not supported in this application.`
+				);
 			}
-			// Show the error modal
-			isModalVisible = true;
-		}
-	}
 
-	/**
-	 * Close the error modal and reset the error message.
-	 */
-	function closeModal() {
-		isModalVisible = false;
-		errorMessage = null;
+			throw new Error('An unknown error occurred while processing the file.');
+		}
 	}
 </script>
 
@@ -67,5 +53,3 @@
 	hidden
 	{...$$restProps}
 />
-
-<ErrorModal message={errorMessage} visible={isModalVisible} on:close={closeModal} />
