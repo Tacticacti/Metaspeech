@@ -35,7 +35,7 @@
 <svelte:window on:error={console.error} />
 
 <NavBar />
-<div class="flex min-h-screen flex-col bg-offwhite font-Jost">
+<div class="flex h-full min-h-full flex-col bg-offwhite font-Jost">
 	<main class="flex flex-1 flex-col">
 		<slot />
 	</main>

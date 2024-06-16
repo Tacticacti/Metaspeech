@@ -6,13 +6,15 @@
 	import { onDestroy } from 'svelte';
 	import { getScaleYAxisText } from '$lib/graphs/sharedFunctions';
 	import { createConfig, createDatasets, handleData } from './helper';
+	import GraphContainer from '../GraphContainer.svelte';
+	import Export from '$lib/components/exporter/GraphImageExport.svelte';
 
 	export let data: GroupedDataFrame;
 	$: sortGroups(data.groups);
 	let aggregationHappens: boolean = data.aggregateColumn !== undefined;
 
-	let selectedFunction: string = 'sum';
-	let possibleFunctionsForAggregation: string[] = ['sum', 'mean'];
+	let selectedFunction: string = 'Sum';
+	let possibleFunctionsForAggregation: string[] = ['Sum', 'Mean'];
 	let possibleFunctionsForNonAggregation: string[] = ['Absolute Frequency', 'Relative Frequency'];
 
 	let chart: Chart;
@@ -44,33 +46,32 @@
 	});
 </script>
 
-<div class="flex flex-col">
-	{#if aggregationHappens}
-		{#each possibleFunctionsForAggregation as func}
-			<label>
-				{func}
-				<input
-					data-testid="aggregation-{func}"
-					type="radio"
-					bind:group={selectedFunction}
-					value={func}
-				/>
-			</label>
-		{/each}
-	{:else}
-		{#each possibleFunctionsForNonAggregation as func}
-			<label>
-				{func}
-				<input
-					data-testid="nonaggregation-{func}"
-					type="radio"
-					bind:group={selectedFunction}
-					value={func}
-				/>
-			</label>
-		{/each}
-	{/if}
-</div>
-<div class="flex w-[60%] flex-col items-center">
-	<canvas data-testid="canvas-element" bind:this={canvas} />
-</div>
+<GraphContainer>
+	<div slot="option-slot" class="flex w-full items-center justify-around">
+		<div>
+			{#if aggregationHappens}
+				<select
+					bind:value={selectedFunction}
+					class="my-2 inline-block cursor-pointer rounded-lg border border-gray-300 bg-gray-100 px-4 py-2 text-sm font-semibold text-gray-800 shadow-md transition-colors duration-300 ease-in-out"
+					data-testid="aggregation-select"
+				>
+					{#each possibleFunctionsForAggregation as func}
+						<option value={func} data-testid="aggregation-{func}">{func}</option>
+					{/each}
+				</select>
+			{:else}
+				<select bind:value={selectedFunction} data-testid="nonaggregation-select">
+					{#each possibleFunctionsForNonAggregation as func}
+						<option value={func} data-testid="nonaggregation-{func}">{func}</option>
+					{/each}
+				</select>
+			{/if}
+		</div>
+		<div class="flex justify-center">
+			<Export {chart} />
+		</div>
+	</div>
+	<div slot="graph-slot">
+		<canvas data-testid="canvas-element" bind:this={canvas} />
+	</div>
+</GraphContainer>
