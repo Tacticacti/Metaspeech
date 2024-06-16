@@ -10,7 +10,6 @@
 </script>
 
 <div class="p-5 text-center">
-	<!-- <h2 class="mb-4 text-xl font-bold text-white">Download your graph here:</h2> -->
 	<div class="flex justify-center space-x-4">
 		<PngButton {chart} />
 		<JpgButton {chart} />
