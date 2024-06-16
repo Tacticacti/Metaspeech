@@ -28,6 +28,9 @@
 		const cfg: ChartConfiguration = createConfig(labels, datasets, data, selectedFunction);
 
 		chart ??= new Chart(canvas, cfg);
+
+		chart.options.plugins!.title!.text = cfg.options!.plugins!.title!.text;
+
 		chart.data.labels = labels;
 		chart.data.datasets = datasets;
 		chart.options.scales = {

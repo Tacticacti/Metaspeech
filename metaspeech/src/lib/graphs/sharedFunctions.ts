@@ -5,12 +5,17 @@ import type { GroupedDataFrame, Group, DataType, GroupBy, Column } from '$lib/Ty
  * @param data current dataframe
  * @returns title string
  */
-export function getTitleText(data: GroupedDataFrame): string {
+export function getTitleText(
+	data: GroupedDataFrame,
+	selectedFunction: string | null = null
+): string {
 	if (data.groupedColumns.length === 0) {
 		return 'Total Frequency';
 	}
 	let title: string;
-	if (data.aggregateColumn) title = data.aggregateColumn.name + ' x ';
+	if (data.aggregateColumn && selectedFunction)
+		title = selectedFunction + ' ' + data.aggregateColumn.name + ' x ';
+	else if (data.aggregateColumn) title = data.aggregateColumn.name + ' x ';
 	else title = 'Frequency of ';
 
 	if (data.groupedColumns.length > 1)
