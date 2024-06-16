@@ -1,7 +1,7 @@
 # Software Project: Speech Dataset Visualization
-This project is a part of the TU Delft 2023/2024 Software Project. During which a web application 'Graph Gadget' (name subject to change) was developed.
+This project is a part of the TU Delft 2023/2024 Software Project. During which a web application 'MetaSpeech' (name subject to change) was developed.
 
-Graph Gadget is a website that visualizes, primarily but not limited to, speech meta data.
+MetaSpeech is a website that visualizes, primarily but not limited to, speech meta data.
 
 ![main pipeline](https://gitlab.ewi.tudelft.nl/cse2000-software-project/2023-2024/cluster-s/15a/code/badges/main/pipeline.svg?ignore_skipped=true&key_text=main+pipeline&key_width=90)
 ![main statement coverage](https://gitlab.ewi.tudelft.nl/cse2000-software-project/2023-2024/cluster-s/15a/code/badges/main/coverage.svg?key_text=main+statement+coverage&key_width=157)
@@ -18,11 +18,11 @@ Graph Gadget is a website that visualizes, primarily but not limited to, speech 
 [![Tailwind css](https://img.shields.io/badge/Tailwind_CSS-06B6D4?logo=tailwindcss&labelColor=gray)](https://tailwindcss.com/)
 
 ## Contents
-1. [**⚡ Getting started**](#⚡-getting-started)
-2. [**🔗 Useful links**](#🔗-useful-links)
-3. [**🏗️ Project structure**](#🏗️-project-structure)
-4. [**🎨 Styling**](#🎨-styling)
-5. [**🧪 Testing**](#🧪-testing)
+1. [**⚡ Getting started**](#-getting-started)
+2. [**🔗 Useful links**](#-useful-links)
+3. [**🏗️ Project structure**](#%EF%B8%8F-project-structure)
+4. [**🎨 Styling**](#-styling)
+5. [**🧪 Testing**](#-testing)
 6. [**ℹ️ About us**](#ℹ️-about-us)
 
 ## ⚡ Getting started
@@ -30,11 +30,11 @@ Graph Gadget is a website that visualizes, primarily but not limited to, speech 
 To run the project you need to follow the following steps:
 
 1. **Clone the git repository to your local machine**
-2. **Open the terminal into the graphgadget subfolder:**
+2. **Open the terminal into the metaspeech subfolder:**
    - Open your terminal.
-   - Use the `cd` command to navigate to the 'graphgadget' folder.
+   - Use the `cd` command to navigate to the 'metaspeech' folder.
      ```bash
-     cd /path/to/the/project/graphgadget
+     cd /path/to/the/project/metaspeech
      ```
 3. **Install dependencies:**
    - If this is your first time running the project, install the necessary dependencies by running:
@@ -70,11 +70,18 @@ To run the project you need to follow the following steps:
 
 ## 🏗️ Project structure
 The project is structured as follows:
-- graphgadget: 
+- metaspeech: 
     - src: 
-        - lib: contains Svelte components and TypeScript modules.
-        - routes: contains the pages. For example, `routes/modify/+page.svelte` is the page: `/modify`.
-    - static: contains static assets such as icons.
+        - lib:
+          - assets: contains images and icons
+          - components: contains components that are shared between pages
+          - dataframe: contains the dataframe that is used troughout the project
+          - graphs: contains the graph implementations
+          - Constants.ts: contains shared application constants
+          - Store.ts: shared data store
+          - Types.ts: shared types
+        - routes: contains page specific components and the pages. For example, `routes/modify/+page.svelte` is the page: `/modify`.
+    - static: contains static assets such as favicon.
     - tests: contains system tests.
 
 ## 🎨 Styling
@@ -103,7 +110,7 @@ For end-to-end tests we use:
 
 End-to-end (E2E) testing is a Software testing methodology to test a functional and data application flow consisting of several sub-systems working together from start to end. - [Microsoft](https://microsoft.github.io/code-with-engineering-playbook/automated-testing/e2e-testing/)
 
-E2E tests can be found in the `/graphgadget/tests` folder.
+E2E tests can be found in the `/metaspeech/tests` folder.
 
 ## ℹ️ About us
 This project was a part of the TU Delft 2023/2024 Software Project. The following people were a part of this project:
