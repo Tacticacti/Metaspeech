@@ -11,9 +11,9 @@
 	$: sortGroups(data.groups);
 	let aggregationHappens: boolean = data.aggregateColumn !== undefined;
 
-	let selectedFunction: string = 'sum';
-	let possibleFunctionsForAggregation: string[] = ['sum', 'mean'];
-	let possibleFunctionsForNonAggregation: string[] = ['Absolute Frequency', 'Relative Frequency'];
+	let selectedFunction: string = aggregationHappens ? 'Mean' : 'Count';
+	let possibleFunctionsForAggregation: string[] = ['Mean', 'Sum'];
+	let possibleFunctionsForNonAggregation: string[] = ['Count', 'Percentage'];
 
 	let chart: Chart;
 	let canvas: HTMLCanvasElement;
@@ -36,11 +36,12 @@
 				}
 			}
 		};
+
 		chart.update();
 	});
 
 	onDestroy(() => {
-		if (chart) chart.destroy();
+		chart?.destroy();
 	});
 </script>
 

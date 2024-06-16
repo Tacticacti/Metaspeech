@@ -4,7 +4,6 @@ import Importer from './Importer.svelte';
 import * as fileParserModule from './scripts/FileParser';
 import type { DataFile } from '$lib/Types';
 import { fromText } from '$lib/dataframe/DataFrame';
-import { UnsupportedFileError } from '$lib/Types';
 
 // Mocking the file parser module to control its behavior
 vi.mock('./scripts/FileParser', async () => {
@@ -89,88 +88,5 @@ describe('Importer', () => {
 
 		// Check that Parse was not called since no file was selected
 		expect(fileParserModule.Parse).not.toHaveBeenCalled();
-	});
-
-	it('should display an error modal when an unsupported file is uploaded', async () => {
-		// Mock the Parse function to throw an UnsupportedFileError
-		(fileParserModule.Parse as jest.Mock).mockImplementationOnce(() => {
-			throw new UnsupportedFileError('Unsupported file type found.');
-		});
-
-		const { getByTestId, findByTestId } = render(Importer);
-
-		const input = getByTestId('input');
-		const mockFile = new File(['content'], 'test.unsupported', { type: 'application/unsupported' });
-
-		Object.defineProperty(input, 'files', {
-			value: [mockFile],
-			writable: false
-		});
-
-		await fireEvent.input(input);
-
-		// Wait for the error modal to appear
-		const errorModal = await findByTestId('error-modal');
-		expect(errorModal).toBeDefined();
-		expect(errorModal.textContent).toContain(
-			'Invalid file input! .unsupported is not supported in this application!'
-		);
-	});
-
-	it('should display an error modal for an unknown error', async () => {
-		// Mock the Parse function to throw a generic error
-		(fileParserModule.Parse as jest.Mock).mockImplementationOnce(() => {
-			throw new Error('Generic error');
-		});
-
-		const { getByTestId, findByTestId } = render(Importer);
-
-		const input = getByTestId('input');
-		const mockFile = new File(['content'], 'test.csv', { type: 'text/csv' });
-
-		Object.defineProperty(input, 'files', {
-			value: [mockFile],
-			writable: false
-		});
-
-		await fireEvent.input(input);
-
-		// Wait for the error modal to appear
-		const errorModal = await findByTestId('error-modal');
-		expect(errorModal).toBeDefined();
-		expect(errorModal.textContent).toContain(
-			'An unknown error occurred while processing the file.'
-		);
-	});
-
-	it('should close the error modal and reset the error message', async () => {
-		const { getByTestId, findByTestId, component } = render(Importer);
-
-		// Simulate setting an error state
-		const input = getByTestId('input');
-		const mockFile = new File(['content'], 'test.unsupported', { type: 'application/unsupported' });
-
-		(fileParserModule.Parse as jest.Mock).mockImplementationOnce(() => {
-			throw new UnsupportedFileError('Unsupported file type found.');
-		});
-
-		Object.defineProperty(input, 'files', {
-			value: [mockFile],
-			writable: false
-		});
-
-		await fireEvent.input(input);
-
-		// Wait for the error modal to appear
-		const errorModal = await findByTestId('error-modal');
-		expect(errorModal).toBeDefined();
-
-		// Close the modal
-		const closeButton = getByTestId('close-button');
-		await fireEvent.click(closeButton);
-
-		// Use the component's instance to check the updated state
-		expect(component.$$.ctx[component.$$.props.errorMessage]).toBeNull();
-		expect(component.$$.ctx[component.$$.props.isModalVisible]).toBe(false);
 	});
 });

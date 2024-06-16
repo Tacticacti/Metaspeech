@@ -18,8 +18,8 @@ describe('handleData tests', () => {
 
 		const groupedDf = df.groupBy();
 
-		const [labels, values] = handleData('sum', groupedDf);
-		expect(labels).toStrictEqual(['[18]', '[32]']);
+		const [labels, values] = handleData('Sum', groupedDf);
+		expect(labels).toStrictEqual(['18', '32']);
 		expect(values).toStrictEqual([3, 4]);
 	});
 	it('check if mean is executed and gives correct output', () => {
@@ -32,9 +32,9 @@ describe('handleData tests', () => {
 
 		const groupedDf = df.groupBy();
 
-		const [labels, values] = handleData('sum', groupedDf);
+		const [labels, values] = handleData('Sum', groupedDf);
 
-		expect(labels).toStrictEqual(['[18]', '[32]']);
+		expect(labels).toStrictEqual(['18', '32']);
 		expect(values).toStrictEqual([1, 4]);
 	});
 	it('check if abs freq is executed and gives correct output', () => {
@@ -47,9 +47,9 @@ describe('handleData tests', () => {
 
 		const groupedDf = df.groupBy();
 
-		const [labels, values] = handleData('Absolute Frequency', groupedDf);
+		const [labels, values] = handleData('Count', groupedDf);
 
-		expect(labels).toStrictEqual(['[18]', '[32]']);
+		expect(labels).toStrictEqual(['18', '32']);
 		expect(values).toStrictEqual([2, 1]);
 	});
 	it('check if rel freq is executed and gives correct output', () => {
@@ -62,9 +62,9 @@ describe('handleData tests', () => {
 
 		const groupedDf = df.groupBy();
 
-		const [labels, values] = handleData('Relative Frequency', groupedDf);
+		const [labels, values] = handleData('Percentage', groupedDf);
 
-		expect(labels).toStrictEqual(['[18]', '[32]']);
+		expect(labels).toStrictEqual(['18', '32']);
 		expect(values).toStrictEqual([(2 / 3) * 100, (1 / 3) * 100]);
 	});
 	it('non function returns empty lists', () => {
@@ -109,7 +109,7 @@ describe('createDatasets tests', () => {
 
 		const groupedDf = df.groupBy();
 		const values: number[] = [5, 7];
-		const selectedFunction: string = 'Absolute Frequency';
+		const selectedFunction: string = 'Count';
 
 		const datasets = createDatasets(groupedDf, values, selectedFunction);
 		expect(datasets).to.exist;
@@ -141,7 +141,7 @@ describe('createDatasetsLabel tests', () => {
 
 		const groupedDf = df.groupBy();
 		const values: number[] = [5, 7];
-		const selectedFunction: string = 'Absolute Frequency';
+		const selectedFunction: string = 'Count';
 
 		const label = createDatasetsLabel(groupedDf, values, selectedFunction);
 		expect(label).toBe('Count');
@@ -155,7 +155,7 @@ describe('createDatasetsLabel tests', () => {
 
 		const groupedDf = df.groupBy();
 		const values: number[] = [5, 7];
-		const selectedFunction: string = 'Relative Frequency';
+		const selectedFunction: string = 'Percentage';
 
 		const label = createDatasetsLabel(groupedDf, values, selectedFunction);
 		expect(label).toBe('Percentage');
