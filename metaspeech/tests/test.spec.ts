@@ -42,7 +42,7 @@ test.describe('Initial page tests', () => {
 			await expect(errorModal).toBeVisible();
 			await expect(closeButton).toBeVisible();
 			await expect(errorModal).toHaveText(
-				'Invalid file input. .notSupported is not supported in this application. Close '
+				"Invalid file input. '.notSupported' is not supported in this application. Close "
 			);
 		});
 

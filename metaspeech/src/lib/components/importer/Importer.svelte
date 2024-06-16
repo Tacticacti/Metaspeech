@@ -36,7 +36,7 @@
 			// Handle unsupported file error and other errors
 			if (error instanceof UnsupportedFileError) {
 				throw new Error(
-					`Invalid file input. .${GetFileExtension(file)} is not supported in this application.`
+					`Invalid file input. '.${GetFileExtension(file)}' is not supported in this application.`
 				);
 			}
 
