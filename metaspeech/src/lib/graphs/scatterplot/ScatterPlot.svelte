@@ -93,8 +93,7 @@
 						text: y_axis
 					}
 				}
-			},
-			events: []
+			}
 		};
 
 		chart.data.datasets = datasets.map((ds) => {

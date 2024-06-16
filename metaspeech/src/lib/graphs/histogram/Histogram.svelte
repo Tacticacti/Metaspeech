@@ -37,8 +37,6 @@
 			}
 		};
 
-		chart.options.events = [];
-
 		chart.update();
 	});
 
