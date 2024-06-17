@@ -150,6 +150,9 @@ export function getChartConfig(boxplotData: ChartData, data: GroupedDataFrame): 
 		id: 'customCanvasBackgroundColor',
 		beforeDraw: setColor
 	};
+
+	let legendText = data.groupedColumns[0].name;
+	if (data.groupedColumns.length === 2) legendText = data.groupedColumns[1].name;
 	const cfg: ChartConfiguration = {
 		type: 'boxplot',
 		data: boxplotData,
@@ -170,7 +173,7 @@ export function getChartConfig(boxplotData: ChartData, data: GroupedDataFrame): 
 					position: 'right',
 					title: {
 						display: true,
-						text: data.groupedColumns[0].name
+						text: legendText
 					},
 					labels: {
 						usePointStyle: true
@@ -187,7 +190,7 @@ export function getChartConfig(boxplotData: ChartData, data: GroupedDataFrame): 
 				x: {
 					title: {
 						display: true,
-						text: 'x axis'
+						text: data.groupedColumns[0].name
 					}
 				}
 			}
