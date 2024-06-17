@@ -80,4 +80,22 @@ describe('Select Visuals', () => {
 		const columns = get(df.columns);
 		expect(columns[0].groupBy).toBe(undefined);
 	});
+	it('Hovering over grouby info button shows message', async () => {
+		const user = userEvent.setup();
+		const r = render(sut);
+
+		const button = h.getInfoButton(r, 'groupby')!;
+		await user.hover(button);
+
+		expect(h.getInfoBubble(r, 'groupby')).to.exist;
+	});
+	it('Hovering over show info button shows message', async () => {
+		const user = userEvent.setup();
+		const r = render(sut);
+
+		const button = h.getInfoButton(r, 'show')!;
+		await user.hover(button);
+
+		expect(h.getInfoBubble(r, 'show')).to.exist;
+	});
 });

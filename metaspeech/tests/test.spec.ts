@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 import * as helper from './test.help';
-import { tsvTestData } from './test.help';
+import { tsvTestData } from './testData.help';
 
 test.describe('Initial page tests', () => {
 	test.beforeEach(async ({ page }) => {
@@ -22,6 +22,42 @@ test.describe('Initial page tests', () => {
 		await expect(helper.getNavBar(page)).toBeVisible();
 		await expect(helper.getFooter(page)).toBeVisible();
 		await expect(helper.getErrorModal(page)).not.toBeVisible();
+		await expect(helper.getCloseErrorModal(page)).not.toBeVisible();
+	});
+
+	test.describe('File input fails for invalid file type', () => {
+		test.beforeEach(async ({ page }) => {
+			await page.goto('/');
+			await helper.getImporterInput(page).setInputFiles({
+				name: 'example.notSupported',
+				mimeType: 'notSupported',
+				buffer: Buffer.from(tsvTestData)
+			});
+		});
+
+		test('error is shown', async ({ page }) => {
+			const errorModal = helper.getErrorModal(page);
+			const closeButton = helper.getCloseErrorModal(page);
+
+			await expect(errorModal).toBeVisible();
+			await expect(closeButton).toBeVisible();
+			await expect(errorModal).toHaveText(
+				"Invalid file input. '.notSupported' is not supported in this application. Close "
+			);
+		});
+
+		test('error can be closed', async ({ page }) => {
+			const errorModal = helper.getErrorModal(page);
+			const closeButton = helper.getCloseErrorModal(page);
+
+			await expect(errorModal).toBeVisible();
+			await expect(closeButton).toBeVisible();
+
+			await closeButton.click();
+
+			await expect(errorModal).not.toBeVisible();
+			await expect(closeButton).not.toBeVisible();
+		});
 	});
 });
 

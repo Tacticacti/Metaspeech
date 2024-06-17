@@ -5,7 +5,11 @@ import { getTitleText } from "../sharedFunctions";
 import { possibleBoxplotColours } from "$lib/Constants";
 
 
-
+/**
+ * generates datasets for the boxplot. when 1 column is selected: trivial. when 2 columns are selected: tricky.
+ * @param data current grouped dataframe    
+ * @returns datasets
+ */
 export function getBoxPlotData(data: GroupedDataFrame){
     if(data.groupedColumns.length < 1 || data.groupedColumns.length> 2) return undefined;
     if(data.groupedColumns.length === 1){
@@ -27,6 +31,7 @@ export function getBoxPlotData(data: GroupedDataFrame){
 		}
     
     }
+    // need 3d array for values 
     let arr: number[][][] = getArrayForDatasets(data);
     const[keyToIndex1, keyToIndex2] = keyToIndexMap(data);
 
@@ -51,6 +56,11 @@ export function getBoxPlotData(data: GroupedDataFrame){
     }
 }
 
+/**
+ * maps keys from groups to a index, which will be used in a array
+ * @param data current grouped dataframe
+ * @returns returns 2 maps, because there are only supposed to be 2 dataTypes in 1 key, because otherwise this function wouldn't be called
+ */
 export function keyToIndexMap(data: GroupedDataFrame){
     let keyToIndex1 = new Map<DataType, number>();
     let keyToIndex2 = new Map<DataType, number>();
@@ -65,6 +75,12 @@ export function keyToIndexMap(data: GroupedDataFrame){
     }
     return [keyToIndex1, keyToIndex2];
 }
+
+/**
+ * maps all values to 3d array so that it is easier to create datasets  
+ * @param data current grouped data frame   
+ * @returns 3d array
+ */
 export function getArrayForDatasets(data: GroupedDataFrame){
 
     const[keyToIndex1, keyToIndex2] = keyToIndexMap(data);
@@ -79,11 +95,16 @@ export function getArrayForDatasets(data: GroupedDataFrame){
     }
     for(let i = 0; i < data.groups.length; i++){
         let group: Group = data.groups[i];
-        arr[keyToIndex1.get(group.keys[0]) as number][keyToIndex2.get(group.keys[1]) as number] = group.values.filter(val => val !== null) as number[];
+        arr[keyToIndex1.get(group.keys[0]) as number][keyToIndex2.get(group.keys[1]) as number] = group.values as number[];
     }
     return arr;
 }
 
+/**
+ * flips all keys in groups. ['a', 2] => [2, 'a'].
+ * @param data current grouped data frame   
+ * @returns new grouped data frame
+ */
 export function flipKeys(data: GroupedDataFrame){
     
     let groups = data.groups;
@@ -104,6 +125,12 @@ export function flipKeys(data: GroupedDataFrame){
     return data;
 }
 
+/**
+ * exports config for chart
+ * @param boxplotData current box plot data, which includes labels and datasets 
+ * @param data current grouped data frame
+ * @returns config
+ */
 export function getChartConfig(boxplotData: any, data: GroupedDataFrame): ChartConfiguration{
     const plugin = {
         id: 'customCanvasBackgroundColor',

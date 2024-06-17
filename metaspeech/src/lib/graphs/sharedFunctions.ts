@@ -1,16 +1,21 @@
-import type { GroupedDataFrame, Group } from '$lib/Types';
+import type { GroupedDataFrame, Group, DataType, GroupBy, Column } from '$lib/Types';
 
 /**
  * generates title for graph from current dataframe
  * @param data current dataframe
  * @returns title string
  */
-export function getTitleText(data: GroupedDataFrame): string {
+export function getTitleText(
+	data: GroupedDataFrame,
+	selectedFunction: string | null = null
+): string {
 	if (data.groupedColumns.length === 0) {
 		return 'Total Frequency';
 	}
 	let title: string;
-	if (data.aggregateColumn) title = data.aggregateColumn.name + ' x ';
+	if (data.aggregateColumn && selectedFunction)
+		title = selectedFunction + ' ' + data.aggregateColumn.name + ' x ';
+	else if (data.aggregateColumn) title = data.aggregateColumn.name + ' x ';
 	else title = 'Frequency of ';
 
 	if (data.groupedColumns.length > 1)
@@ -63,7 +68,7 @@ export function calculateMean(data: GroupedDataFrame): [string[], number[]] {
 	const values: number[] = [];
 	for (let i = 0; i < data.groups.length; i++) {
 		const group: Group = data.groups[i];
-		const name: string = JSON.stringify(group.keys);
+		const name: string = keyArrayToString(group.keys, data.groupedColumns);
 		bins.push(name);
 		let sum: number = 0;
 		for (let j = 0; j < group.values.length; j++) {
@@ -86,7 +91,7 @@ export function calculateSum(data: GroupedDataFrame): [string[], number[]] {
 	const values: number[] = [];
 	for (let i = 0; i < data.groups.length; i++) {
 		const group: Group = data.groups[i];
-		const name: string = JSON.stringify(group.keys);
+		const name: string = keyArrayToString(group.keys, data.groupedColumns);
 
 		bins.push(name);
 		let sum: number = 0;
@@ -110,7 +115,7 @@ export function calculateAbsoluteFrequency(data: GroupedDataFrame): [string[], n
 	const values: number[] = [];
 	for (let i = 0; i < data.groups.length; i++) {
 		const group: Group = data.groups[i];
-		const name: string = JSON.stringify(group.keys);
+		const name: string = keyArrayToString(group.keys, data.groupedColumns);
 
 		bins.push(name);
 		values.push(group.values.length);
@@ -129,7 +134,7 @@ export function calculateRelativeFrequency(data: GroupedDataFrame): [string[], n
 	let total: number = 0;
 	for (let i = 0; i < data.groups.length; i++) {
 		const group: Group = data.groups[i];
-		const name: string = JSON.stringify(group.keys);
+		const name: string = keyArrayToString(group.keys, data.groupedColumns);
 
 		bins.push(name);
 
@@ -140,4 +145,47 @@ export function calculateRelativeFrequency(data: GroupedDataFrame): [string[], n
 		values.push((group.values.length / total) * 100);
 	}
 	return [bins, values];
+}
+
+/**
+ * Converts an array of keys to a string.
+ * @param arr The array of keys to convert to a string
+ * @param columns The array of columns with grouping information
+ * @returns The final key as a string
+ */
+export function keyArrayToString(arr: DataType[], columns: Column[]): string {
+	const keysList = arr
+		.map((key, i) => {
+			const groupBy = columns[i].groupBy;
+			return keyToString(key, groupBy!);
+		})
+		.join(', ');
+
+	return keysList;
+}
+
+/**
+ * Converts the key to a string.
+ * @example
+ * keyToString(2, { type: 'binned', size: 10 }) => '[20-29]'
+ * @param key The key to convert to a string
+ * @param groupBy The group by options for that key
+ * @returns The key as a string
+ */
+export function keyToString(key: DataType, groupBy: GroupBy): string {
+	if (key === undefined || key === null) {
+		return '-';
+	}
+
+	if (groupBy.type === 'binned' && groupBy.size > 1) {
+		const size = groupBy.size;
+		const index = key as number;
+
+		const start = index * size;
+		const end = start + size - 1;
+
+		return `[${start}-${end}]`;
+	}
+
+	return key.toString();
 }

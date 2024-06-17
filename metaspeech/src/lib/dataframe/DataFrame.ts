@@ -117,7 +117,9 @@ export class DataFrame {
 		}
 
 		const groups = Array.from(map.entries()).map(([key, arr]) => {
-			const keys = JSON.parse(key);
+			// JSON turns undefined into null, so we need to turn it back into undefined
+			const parsed = JSON.parse(key) as (DataType | null)[];
+			const keys = parsed.map((k) => k ?? undefined) as DataType[];
 			return { keys, values: arr };
 		}) as Group[];
 
@@ -211,13 +213,12 @@ export class DataFrame {
 	 */
 	set(df: DataFrameLike): void {
 		const cols = df.columns ?? [];
-		const rows = df.rows ?? [];
+		let rows = df.rows ?? [];
 
-		rows.forEach((row) => {
-			while (row.length < cols.length) {
-				row.push(undefined);
-			}
-		});
+		rows = cast2DArray(
+			cols.map((c) => c.type),
+			rows
+		);
 
 		this._columns.set(cols);
 		this._rows.set(rows);

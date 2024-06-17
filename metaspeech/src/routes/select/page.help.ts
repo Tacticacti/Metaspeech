@@ -20,3 +20,11 @@ export function getRadios(r: RenderResult<sut>) {
 export function getBinByPlaceHolder(r: RenderResult<sut>, placeholder: string) {
 	return r.queryByPlaceholderText(placeholder) as HTMLElement | null;
 }
+
+export function getInfoButton(r: RenderResult<sut>, id: string) {
+	return r.queryByTestId('info-icon-' + id) as HTMLElement | null;
+}
+
+export function getInfoBubble(r: RenderResult<sut>, id: string) {
+	return r.queryByTestId('info-bubble-' + id) as HTMLElement | null;
+}

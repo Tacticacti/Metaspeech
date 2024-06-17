@@ -1,4 +1,5 @@
 import type { GroupedDataFrame, Column, ScatterStyle, ScatterDataset } from '$lib/Types';
+import { keyToString } from '$lib/graphs/sharedFunctions';
 
 /**
  * Gets the column that should be in the x-axis
@@ -67,7 +68,7 @@ function getScatterMap(
 
 		if (legendCol !== undefined) {
 			// Use legend value as key, if defined
-			key = group.keys[indexLegend]?.toString() ?? '';
+			key = keyToString(group.keys[indexLegend], legendCol!.groupBy!) ?? '';
 		}
 
 		for (const val of group.values) {

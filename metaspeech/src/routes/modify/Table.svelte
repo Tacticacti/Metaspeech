@@ -57,7 +57,7 @@
 				class="scrollbar-hide scrollbar-hide::-webkit-scrollbar w-full min-w-48 overflow-x-scroll border bg-offwhite p-4 hover:bg-gray-300"
 				data-testid="{cell}-cell"
 			>
-				{cell}
+				{cell ?? ''}
 			</div>
 		{/each}
 	</div>
@@ -67,9 +67,11 @@
 				class="scrollbar-hide scrollbar-hide::-webkit-scrollbar w-full min-w-48 overflow-x-scroll border bg-blue-100 p-4 hover:bg-blue-200"
 				data-testid="{cell}-cell"
 			>
-				{cell}
+				{cell ?? ''}
 			</div>
 		{/each}
 	</div>
 </CustomVirtualList>
-<p class=" text-lg font-semibold">Showing {start}-{end} of {$rows.length} rows</p>
+<p class=" my-4 text-lg font-semibold text-gray-400">
+	Showing {start}-{end} of {$rows.length} rows
+</p>

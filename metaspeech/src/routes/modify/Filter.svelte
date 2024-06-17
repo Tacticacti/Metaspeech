@@ -2,6 +2,7 @@
 	import { type DataType } from '$lib/Types';
 	import { df } from '$lib/Store';
 	import { afterUpdate } from 'svelte';
+	import { get } from 'svelte/store';
 	import { Button, Checkbox, Input, Select } from 'flowbite-svelte';
 	import filterImg from '$assets/icons/filter.png';
 
@@ -11,8 +12,8 @@
 	let selectedIndex = 0;
 	let filterValue: string = '';
 	let useRangeChecked: boolean = true;
-	let min: number = 0;
-	let max: number = 0;
+	let min: string = '';
+	let max: string = '';
 
 	$: selectedColumn = $columns[selectedIndex];
 	$: columnNames = $columns.map((col) => col.name);
@@ -26,14 +27,45 @@
 	});
 
 	/**
+	 * Validate the input values and set error messages if invalid
+	 * @returns true if the inputs are valid, false otherwise
+	 */
+	function validateInputs() {
+		const minVal = parseFloat(min);
+		const maxVal = parseFloat(max);
+
+		const invalidRange =
+			useRange &&
+			(isNaN(minVal) || isNaN(maxVal) || min.trim() === '' || max.trim() === '' || minVal > maxVal);
+		const invalidValue = !useRange && !filterValue.trim();
+
+		if (invalidRange) {
+			throw new Error('Please enter valid range values.');
+		}
+		if (invalidValue) {
+			throw new Error('Please enter a value to filter');
+		}
+	}
+
+	/**
 	 * Filter the data based on the selected column and the filter value
 	 * @param useMatching if true, remove rows that match the filter value. if false, remove rows that do not match the filter value.
 	 */
 	function filter(useMatching: boolean) {
-		df.filter((row) => {
-			const value = row[selectedIndex];
-			return matches(value) !== useMatching;
-		});
+		validateInputs();
+
+		const originalCount = get(df.rows).length;
+
+		df.filter((row) => matches(row[selectedIndex]) !== useMatching);
+
+		const newCount = get(df.rows).length;
+
+		if (newCount === originalCount) {
+			const errorMessage = useRange
+				? `No matching rows found for range ${min}-${max} in column "${selectedColumn.name}".`
+				: `No matching rows found for value "${filterValue}" in column "${selectedColumn.name}".`;
+			throw new Error(errorMessage);
+		}
 	}
 
 	/**
@@ -44,7 +76,9 @@
 	function matches(value: DataType): boolean {
 		if (useRange) {
 			const num = value as number;
-			return num >= min && num <= max;
+			const minValue = parseFloat(min);
+			const maxValue = parseFloat(max);
+			return num >= minValue && num <= maxValue;
 		}
 
 		return (value?.toString() ?? '') === filterValue;
@@ -55,7 +89,7 @@
 	class="max-h-14 max-w-32 rounded-lg bg-darkblue px-12 py-4 font-bold text-offwhite hover:bg-blue-900"
 	on:click={() => (isOpen = !isOpen)}
 >
-	<img src={filterImg} class=" mr-4 h-8 w-8 invert" alt="Filter icon" />
+	<img src={filterImg} class="mr-4 h-8 w-8 invert" alt="Filter icon" />
 	Filter
 </Button>
 

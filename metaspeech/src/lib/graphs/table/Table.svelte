@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { GroupedDataFrame } from '$lib/Types';
+	import GraphContainer from '../GraphContainer.svelte';
 	import {
 		aggregateOptions_none,
 		aggregateOptions_single,
@@ -14,47 +15,56 @@
 	$: table = createTable(data, selectedOption);
 </script>
 
-<div class="w-screen">
-	<div>
-		<select bind:value={selectedOption} data-testid="aggregate">
+<GraphContainer>
+	<div slot="option-slot">
+		<select
+			bind:value={selectedOption}
+			data-testid="aggregate"
+			class="my-2 inline-block cursor-pointer rounded-lg border border-gray-300 bg-gray-100 px-4 py-2 text-sm font-semibold text-gray-800 shadow-md transition-colors duration-300 ease-in-out"
+		>
 			{#each aggregateOptions as option}
 				<option value={option} data-testid={option.name}>{option.name}</option>
 			{/each}
 		</select>
 	</div>
-
-	<table class="max-w-screen overflow-auto">
-		{#each table as row}
-			<tr>
-				{#each row as cell}
-					{#if !cell.skip}
-						<td
-							colspan={cell.colSpan}
-							rowspan={cell.rowSpan}
-							class={cell.class}
-							data-testid="cell-{cell.content}"
-						>
-							{cell.content}
-						</td>
-					{/if}
-				{/each}
-			</tr>
-		{/each}
-	</table>
-</div>
+	<div slot="graph-slot" class="mb-10 overflow-x-auto">
+		<table class="">
+			{#each table as row}
+				<tr>
+					{#each row as cell}
+						{#if !cell.skip}
+							<td
+								colspan={cell.colSpan}
+								rowspan={cell.rowSpan}
+								class={cell.class}
+								data-testid="cell-{cell.content}"
+							>
+								{cell.content}
+							</td>
+						{/if}
+					{/each}
+				</tr>
+			{/each}
+		</table>
+	</div>
+</GraphContainer>
 
 <style>
 	table {
 		border-collapse: collapse;
+		table-layout: auto;
+		width: 100%;
 	}
 
 	td {
 		border: 1px solid black;
 		padding: 5px;
+		overflow: hidden;
+		white-space: nowrap;
 	}
 
 	td.header {
-		background-color: #f0f0f0;
+		background-color: #d1d1d1;
 	}
 
 	td.data {

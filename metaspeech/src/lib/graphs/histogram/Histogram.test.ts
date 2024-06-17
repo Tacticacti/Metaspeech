@@ -3,7 +3,6 @@ import sut from '$lib/graphs/histogram/Histogram.svelte';
 import { describe, it, expect } from 'vitest';
 import { DataFrame, fromText } from '$lib/dataframe/DataFrame';
 import { get } from 'svelte/store';
-import userEvent from '@testing-library/user-event';
 
 describe('When user views', () => {
 	it('should render', () => {
@@ -17,52 +16,34 @@ describe('When user views', () => {
 		expect(container).to.exist;
 		expect(getByTestId('canvas-element')).to.exist;
 	});
-	it(' check if sum and mean exists', async () => {
+	it(' check if sum and mean exists', () => {
 		const df = new DataFrame();
 		df.set(fromText('age,cars\n18,1\n32,4\n18,2'));
 		const columns = get(df.columns);
-		const user = userEvent.setup();
 
 		columns[1].aggregate = true;
 		columns[0].groupBy = { type: 'specific' };
 
 		const { getByTestId } = render(sut, { data: df.groupBy() });
 
-		const sumButton = getByTestId('aggregation-sum');
-		const meanButton = getByTestId('aggregation-mean');
+		const select = getByTestId('aggregation-select') as HTMLSelectElement;
 
-		expect(sumButton).to.exist;
-		expect(sumButton).toBeChecked();
-		expect(meanButton).to.exist;
-
-		await user.click(meanButton);
-
-		expect(meanButton).toBeChecked();
-		expect(sumButton).not.toBeChecked();
+		expect(select).to.exist;
+		expect(select.options.length).toBe(2);
+		expect(select.value).toBe('Mean');
 	});
-	it(' check if abs freq and rel freq exists', async () => {
+	it(' check if abs freq and rel freq exists', () => {
 		const df = new DataFrame();
 		df.set(fromText('age,cars\n18,1\n32,4\n18,2'));
 		const columns = get(df.columns);
-		const user = userEvent.setup();
 		columns[0].groupBy = { type: 'specific' };
 
 		const { getByTestId } = render(sut, { data: df.groupBy() });
 
-		const absButton = getByTestId('nonaggregation-Absolute Frequency');
-		const relButton = getByTestId('nonaggregation-Relative Frequency');
+		const select = getByTestId('nonaggregation-select') as HTMLSelectElement;
 
-		expect(absButton).to.exist;
-		expect(relButton).to.exist;
-
-		await user.click(absButton);
-
-		expect(absButton).toBeChecked();
-		expect(relButton).not.toBeChecked();
-
-		await user.click(relButton);
-
-		expect(relButton).toBeChecked();
-		expect(absButton).not.toBeChecked();
+		expect(select).to.exist;
+		expect(select.options.length).toBe(2);
+		expect(select.value).toBe('Count');
 	});
 });

@@ -2,11 +2,10 @@
 <script lang="ts">
 	import { Chart, type ChartConfiguration, LinearScale, CategoryScale } from 'chart.js';
 	import { BoxPlotController, BoxAndWiskers } from '@sgratzl/chartjs-chart-boxplot';
-	import { onMount, onDestroy, afterUpdate } from 'svelte';
+	import { onDestroy, afterUpdate } from 'svelte';
 	import type { GroupedDataFrame } from '$lib/Types';
 	import { flipKeys, getBoxPlotData, getChartConfig } from './helper';
 	import { sortGroups } from '$lib/dataframe/DataFrame';
-	import { setColor } from '../utils/CanvasUtils';
 
 	export let data: GroupedDataFrame;
 
@@ -17,7 +16,6 @@
 
 
 	afterUpdate(() => {
-		console.log('happens');
 		
 		data.groups = sortGroups(data.groups);
 		const boxplotData = getBoxPlotData(data);

@@ -11,6 +11,9 @@
 		CategoryScale,
 		LinearScale
 	} from 'chart.js';
+	import { sortGroups } from '$lib/dataframe/DataFrame';
+	import GraphContainer from '../GraphContainer.svelte';
+	import Export from '$lib/components/exporter/GraphImageExport.svelte';
 
 	// Register necessary Chart.js components
 	Chart.register(PieController, ArcElement, Tooltip, Legend, CategoryScale, LinearScale);
@@ -18,7 +21,9 @@
 	// Svelte prop to receive the data
 	export let data: GroupedDataFrame;
 
-	let chart: Chart | null = null;
+	$: sortGroups(data.groups);
+
+	let chart: Chart;
 	let canvas: HTMLCanvasElement | null = null;
 
 	/**
@@ -128,16 +133,17 @@
 	});
 </script>
 
-{#if data?.groups.length > 0}
-	<!-- Bind the canvas element to the canvas variable for later use -->
-	<canvas bind:this={canvas} width="400" height="400" data-testid="canvas-element" class="mb-4"
-	></canvas>
-{:else}
-	<p>No data available to display</p>
-{/if}
-
-<style>
-	.mb-4 {
-		margin-bottom: 1rem;
-	}
-</style>
+<GraphContainer>
+	<div slot="graph-slot" class="flex justify-center">
+		{#if data?.groups.length > 0}
+			<!-- Bind the canvas element to the canvas variable for later use -->
+			<canvas bind:this={canvas} width="400" height="400" data-testid="canvas-element" class="mb-4"
+			></canvas>
+		{:else}
+			<p>No data available to display</p>
+		{/if}
+	</div>
+	<div slot="option-slot">
+		<Export {chart} />
+	</div>
+</GraphContainer>

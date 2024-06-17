@@ -10,6 +10,8 @@
 		getLegendCol
 	} from '$lib/graphs/scatterplot/ScatterPlotController';
 	import { setColor } from '$lib/graphs/utils/CanvasUtils';
+	import { sortGroups } from '$lib/dataframe/DataFrame';
+	import GraphContainer from '../GraphContainer.svelte';
 
 	let canvas: HTMLCanvasElement;
 	let chart: Chart;
@@ -19,6 +21,8 @@
 	const yAxisCol = data.aggregateColumn!;
 	let xAxisCol = getXAxisCol(data.groupedColumns);
 	let legendCol = getLegendCol(data.groupedColumns, xAxisCol);
+
+	$: sortGroups(data.groups);
 
 	$: y_axis = yAxisCol.name;
 	$: x_axis = xAxisCol.name;
@@ -112,24 +116,24 @@
 	});
 </script>
 
-<div class="w-1200 flex w-full flex-col items-center">
-	<canvas data-testid="canvas-element" bind:this={canvas} class="mb-4" />
-
-	{#if legendCol?.type === 'number'}
-		<button
-			data-testid="scatter-swap-columns"
-			on:click={swapGroupColumns}
-			class="my-2 inline-block cursor-pointer rounded-lg border border-gray-300 bg-gray-100 px-4 py-2 text-lg font-bold text-gray-800 shadow-md transition-colors duration-300 ease-in-out hover:bg-gray-200 hover:text-blue-500"
-		>
-			Swap x-axis and legend
-		</button>
-	{/if}
-
-	<Export {chart} />
-</div>
-
-<style>
-	.w-1200 {
-		width: 1200px;
-	}
-</style>
+<GraphContainer>
+	<div slot="option-slot" class="flex w-full items-center justify-around">
+		<div>
+			{#if legendCol?.type === 'number'}
+				<button
+					data-testid="scatter-swap-columns"
+					on:click={swapGroupColumns}
+					class="my-2 inline-block cursor-pointer rounded-lg border border-gray-300 bg-gray-100 px-4 py-2 text-sm font-semibold text-gray-800 shadow-md transition-colors duration-300 ease-in-out hover:bg-gray-200 hover:text-blue-500"
+				>
+					Swap x-axis and legend
+				</button>
+			{/if}
+		</div>
+		<div class="flex justify-center">
+			<Export {chart} />
+		</div>
+	</div>
+	<div slot="graph-slot">
+		<canvas data-testid="canvas-element" bind:this={canvas} class="mb-4" />
+	</div>
+</GraphContainer>

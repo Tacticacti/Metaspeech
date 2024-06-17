@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import * as helper from './test.help';
-import { tsvTestDataThree } from './test.help';
+import { tsvTestDataThree } from './testData.help';
 
 test.describe('Chart tests', () => {
 	test.describe('Scatter plot tests', () => {

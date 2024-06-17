@@ -1,22 +1,27 @@
 import { fireEvent, render } from '@testing-library/svelte';
 import { afterEach, describe, it, expect, vi } from 'vitest';
-import sut from './Importer.svelte';
+import Importer from './Importer.svelte';
 import * as fileParserModule from './scripts/FileParser';
 import type { DataFile } from '$lib/Types';
 import { fromText } from '$lib/dataframe/DataFrame';
 
 // Mocking the file parser module to control its behavior
-vi.mock('./scripts/FileParser', () => ({
-	Parse: vi.fn(() => Promise.resolve(fromText('a,b\n1,2\n3,4\n5,6')))
-}));
+vi.mock('./scripts/FileParser', async () => {
+	const originalModule = await vi.importActual<typeof fileParserModule>('./scripts/FileParser');
+	return {
+		...originalModule,
+		Parse: vi.fn(() => Promise.resolve(fromText('a,b\n1,2\n3,4\n5,6')))
+	};
+});
 
 describe('Page', () => {
 	it('should render', () => {
-		const { container } = render(sut);
+		const { container } = render(Importer);
 		expect(container).to.exist;
 	});
+
 	it('check for input', () => {
-		const { getByTestId } = render(sut);
+		const { getByTestId } = render(Importer);
 
 		const input = getByTestId('input');
 		expect(input).toBeDefined();
@@ -31,7 +36,7 @@ describe('Importer', () => {
 
 	it('should call Parse when a file is input and dispatch the result', async () => {
 		// Render the Importer component and destructure utility functions from the returned object
-		const { getByTestId, component } = render(sut);
+		const { getByTestId, component } = render(Importer);
 
 		const input = getByTestId('input');
 
@@ -66,7 +71,7 @@ describe('Importer', () => {
 	});
 
 	it('should not call Parse if no file is selected', async () => {
-		const { getByTestId } = render(sut);
+		const { getByTestId } = render(Importer);
 		const input = getByTestId('input');
 
 		// Simulate the input event with no file selected

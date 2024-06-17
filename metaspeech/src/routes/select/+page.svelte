@@ -7,16 +7,7 @@
 
 	const columns = df.columns;
 	$: aggregatableColumns = $columns.filter((c) => c.type === 'number' && !c.groupBy);
-	let aggregateBy: number = $columns.findIndex((c) => c.aggregate);
-
-	$: selectColumnForAggregation(aggregateBy);
-
-	/**
-	 * Resets the aggregateBy value to -1 i.e. Frequency
-	 */
-	function resetAggregateBy() {
-		aggregateBy = -1;
-	}
+	$: aggregateBy = $columns.find((c) => c.aggregate);
 
 	/**
 	 * Selects a column for grouping
@@ -29,30 +20,33 @@
 				? { type: 'binned', size: 1 }
 				: { type: 'specific' }
 			: undefined;
+		column.aggregate = false;
 		df.forceStoreUpdate();
 	}
 
 	/**
-	 * Translates the index of the column to the index of the column in the columns array
-	 * @param index Index of the column
+	 * Selects a column for showing
+	 * @param column Column to select
 	 */
-	function translateIndex(index: number) {
-		let count = -1;
-		for (let i = 0; i < $columns.length; i++) {
-			if ($columns[i].type === 'number' && $columns[i].groupBy === undefined) {
-				count++;
-				if (count == index) {
-					return i;
-				}
-			}
-		}
-		return -1;
+	function selectColumnForShowing(column: Column | undefined) {
+		$columns.forEach((c) => (c.aggregate = c === column));
+		df.forceStoreUpdate();
 	}
-	function selectColumnForAggregation(index: number) {
-		index = translateIndex(index);
-		for (let i = 0; i < $columns.length; i++) {
-			$columns[i].aggregate = i === index;
-		}
+
+	/**
+	 * Determines if the column should show binning options
+	 * @param column Column to check
+	 * @returns Whether the column should show binning options
+	 */
+	function shouldShowBinning(
+		column: Column
+	): column is Column & { groupBy: { type: 'binned'; size: number } } {
+		if (!column.groupBy || column.type !== 'number') return false;
+
+		if (column.groupBy.type === 'binned') return true;
+
+		column.groupBy = { type: 'binned', size: 1 };
+		return true;
 	}
 </script>
 
@@ -61,11 +55,18 @@
 		<div class="mx-20 flex w-full max-w-[100vh] flex-col items-center">
 			<span class="flex items-center text-xl font-bold">
 				GROUP BY
-				<button><img src={info} alt="info icon" class="ml-2 h-8" data-testid="info-icon" /></button>
+				<button
+					><img
+						src={info}
+						alt="info icon"
+						class="ml-2 h-8"
+						data-testid="info-icon-groupby"
+					/></button
+				>
 				<Tooltip
 					placement="top"
 					class="z-20 w-48 bg-gray-600 text-sm font-light opacity-90"
-					data-testid="info-bubble"
+					data-testid="info-bubble-groupby"
 				>
 					Select <span class="font-bold">any</span> columns that you want to group together.
 				</Tooltip>
@@ -79,13 +80,12 @@
 								type="checkbox"
 								on:input={(e) => selectColumnForGrouping(column, e.currentTarget.checked)}
 								checked={Boolean(column.groupBy)}
-								on:change={resetAggregateBy}
 							/>
 							<span class="w-36 truncate">
 								{column.name}
 							</span>
 						</label>
-						{#if column.groupBy && column.groupBy.type === 'binned'}
+						{#if shouldShowBinning(column)}
 							<div class="ml-10">
 								<span>Bin Size:</span>
 								<input
@@ -106,11 +106,13 @@
 		<div class="mx-20 flex w-full max-w-[100vh] flex-col items-center">
 			<span class="flex items-center text-xl font-bold">
 				SHOW
-				<button><img src={info} alt="info icon" class="ml-2 h-8" data-testid="info-icon" /></button>
+				<button
+					><img src={info} alt="info icon" class="ml-2 h-8" data-testid="info-icon-show" /></button
+				>
 				<Tooltip
 					placement="top"
 					class="z-20 w-48 bg-gray-600 text-sm font-light opacity-90"
-					data-testid="info-bubble"
+					data-testid="info-bubble-show"
 				>
 					Select <span class="font-bold">one</span> numeric column to show for each subgroup.
 				</Tooltip>
@@ -120,19 +122,21 @@
 					<input
 						class="mr-1 h-5 w-5 border-2 transition-all duration-200 ease-in-out"
 						type="radio"
-						bind:group={aggregateBy}
-						value={-1}
+						name="show"
+						checked={!aggregateBy}
+						on:input={() => selectColumnForShowing(undefined)}
 					/>
 					Count / Percentage
 				</label>
 				<div class="mb-2 size-1 w-full rounded-lg bg-gray-300"></div>
-				{#each aggregatableColumns as column, index}
+				{#each aggregatableColumns as column}
 					<label class="mb-2 flex items-center">
 						<input
 							class="mr-2 h-5 w-5 border-2 transition-all duration-200 ease-in-out"
 							type="radio"
-							bind:group={aggregateBy}
-							value={index}
+							name="show"
+							checked={column.aggregate}
+							on:input={() => selectColumnForShowing(column)}
 						/>
 						<span class="w-64 truncate">
 							{column.name}
