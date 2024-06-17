@@ -14,7 +14,7 @@ export function copyTableToClipboardAsLaTeX(table: Cell[][]): void {
 	}
 
 	// add the bottom line and end the table
-	text += '\\hline \n';
+	text += '\\hline\n';
 	text += '\\end{tabular}';
 
 	navigator.clipboard.writeText(text);
@@ -51,7 +51,7 @@ function writeRow(row: Cell[]): string {
 	}
 
 	text = text.slice(0, -3);
-	text += ' \\\\ \n';
+	text += ' \\\\\n';
 	return text;
 }
 
