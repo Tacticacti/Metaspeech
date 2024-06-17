@@ -152,7 +152,7 @@ export function getChartConfig(boxplotData: ChartData, data: GroupedDataFrame): 
 	};
 
 	let legendText = data.groupedColumns[0].name;
-	if(data.groupedColumns.length === 2) legendText = data.groupedColumns[1].name
+	if (data.groupedColumns.length === 2) legendText = data.groupedColumns[1].name;
 	const cfg: ChartConfiguration = {
 		type: 'boxplot',
 		data: boxplotData,
