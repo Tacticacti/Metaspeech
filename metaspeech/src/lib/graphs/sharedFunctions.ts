@@ -154,6 +154,7 @@ export function calculateRelativeFrequency(data: GroupedDataFrame): [string[], n
  * @returns The final key as a string
  */
 export function keyArrayToString(arr: DataType[], columns: Column[]): string {
+	
 	const keysList = arr
 		.map((key, i) => {
 			const groupBy = columns[i].groupBy;

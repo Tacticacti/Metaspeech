@@ -1,7 +1,7 @@
-import type { DataType, Group, GroupedDataFrame } from '$lib/Types';
+import type { DataType, Group, GroupBy, GroupedDataFrame } from '$lib/Types';
 import type { ChartConfiguration, ChartData } from 'chart.js';
 import { setColor } from '../utils/CanvasUtils';
-import { getTitleText } from '../sharedFunctions';
+import { getTitleText, keyArrayToString, keyToString } from '../sharedFunctions';
 import { possibleBoxplotColours } from '$lib/Constants';
 
 /**
@@ -36,8 +36,12 @@ export function getBoxPlotData(data: GroupedDataFrame) {
 	const datasets = [];
 
 	for (let i = 0; i < arr.length; i++) {
+		let label = [...keyToIndex1.keys()][i] as string;
+		if(data?.groupedColumns[0]?.groupBy){
+			label = keyToString([...keyToIndex1.keys()][i], data.groupedColumns[0].groupBy as GroupBy)
+		}
 		datasets.push({
-			label: [...keyToIndex1.keys()][i] as string,
+			label: label,
 			backgroundColor: possibleBoxplotColours[i % possibleBoxplotColours.length],
 			borderColor: possibleBoxplotColours[i % possibleBoxplotColours.length],
 			borderWidth: 1,
@@ -47,8 +51,14 @@ export function getBoxPlotData(data: GroupedDataFrame) {
 			data: arr[i]
 		});
 	}
+	let labels = [...keyToIndex2.keys()];
+	if(data?.groupedColumns[1]?.groupBy){
+		labels = [...keyToIndex2.keys()].map(key => key as DataType).map(key => keyToString(key, data.groupedColumns[1].groupBy as GroupBy))
+	}
+	console.log(labels);
+	
 	return {
-		labels: [...keyToIndex2.keys()],
+		labels: labels,
 		datasets: datasets
 	};
 }
@@ -103,11 +113,15 @@ export function getArrayForDatasets(data: GroupedDataFrame) {
  * @returns new grouped data frame
  */
 export function flipKeys(data: GroupedDataFrame) {
-	const groups = data.groups;
-
-	if (groups[0].keys.length !== 2) {
+	if(data.groupedColumns.length !== 2){
 		return data;
 	}
+
+	const temp = data.groupedColumns[0];
+	data.groupedColumns[0] = data.groupedColumns[1];
+	data.groupedColumns[1] = temp; 
+
+	const groups = data.groups;
 	for (let i = 0; i < groups.length; i++) {
 		const group = groups[i];
 
@@ -143,6 +157,17 @@ export function getChartConfig(boxplotData: ChartData, data: GroupedDataFrame): 
 					display: true,
 					text: getTitleText(data)
 					//'Boxplot of (' + $selectedColumns.join(', ') + ')'
+				},
+				legend: {
+					display: true,
+					position: 'right',
+					title: {
+						display: true,
+						text: data.groupedColumns[0].name
+					},
+					labels: {
+						usePointStyle: true
+					}
 				}
 			},
 			scales: {
@@ -150,6 +175,12 @@ export function getChartConfig(boxplotData: ChartData, data: GroupedDataFrame): 
 					title: {
 						display: true,
 						text: data.aggregateColumn?.name
+					}
+				},
+				x: {
+					title: {
+						display: true,
+						text: 'x axis'
 					}
 				}
 			}
