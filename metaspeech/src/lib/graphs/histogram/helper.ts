@@ -58,7 +58,7 @@ export function createDatasets(data: GroupedDataFrame, values: number[], selecte
 			label: createDatasetsLabel(data, values, selectedFunction),
 			data: values,
 			backgroundColor: 'rgba(51, 50, 200, 1)',
-			borderColor: 'rgba(255, 99, 132, 1)',
+			borderColor: 'rgba(0, 0, 0, 1)',
 			borderWidth: 1
 		}
 	];

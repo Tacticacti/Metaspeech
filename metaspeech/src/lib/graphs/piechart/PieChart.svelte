@@ -14,6 +14,8 @@
 	import { sortGroups } from '$lib/dataframe/DataFrame';
 	import GraphContainer from '../GraphContainer.svelte';
 	import Export from '$lib/components/exporter/GraphImageExport.svelte';
+	import EditChart from '../utils/EditChart.svelte';
+	import { setColor } from '../utils/CanvasUtils';
 
 	// Register necessary Chart.js components
 	Chart.register(PieController, ArcElement, Tooltip, Legend, CategoryScale, LinearScale);
@@ -65,23 +67,6 @@
 	}
 
 	/**
-	 * Draw a white background on the canvas before rendering the chart.
-	 *
-	 * @param chart - The Chart.js chart instance.
-	 */
-	function drawWhiteBackground(chart: Chart) {
-		const ctx = chart.canvas.getContext('2d');
-		if (!ctx) {
-			console.error('Failed to get 2D context for chart canvas');
-			return;
-		}
-		ctx.save();
-		ctx.fillStyle = 'white';
-		ctx.fillRect(0, 0, chart.width, chart.height);
-		ctx.restore();
-	}
-
-	/**
 	 * Initialize the Chart.js pie chart.
 	 */
 	function initChart() {
@@ -95,13 +80,21 @@
 		// Destroy any existing chart instance to avoid duplicates
 		if (chart) chart.destroy();
 
+		const plugin = {
+			id: 'customCanvasBackgroundColor',
+			beforeDraw: setColor
+		};
+
+		//@ts-expect-error idk man
 		chart = new Chart(ctx, {
 			type: 'pie',
 			data: generatePieChartData(data),
 			options: {
-				responsive: false,
-				maintainAspectRatio: false,
 				plugins: {
+					// @ts-expect-error Needs a specific type for plugin
+					customCanvasBackgroundColor: {
+						color: 'white'
+					},
 					legend: {
 						position: 'top'
 					},
@@ -111,12 +104,8 @@
 					}
 				}
 			},
-			plugins: [
-				{
-					id: 'whiteBackground',
-					beforeDraw: drawWhiteBackground
-				}
-			]
+			// @ts-expect-error plugin needs a type same as abov
+			plugins: [plugin]
 		});
 	}
 
@@ -134,16 +123,15 @@
 </script>
 
 <GraphContainer>
-	<div slot="graph-slot" class="flex justify-center">
+	<div slot="graph-slot" class="mx-auto w-[50%]">
 		{#if data?.groups.length > 0}
-			<!-- Bind the canvas element to the canvas variable for later use -->
-			<canvas bind:this={canvas} width="400" height="400" data-testid="canvas-element" class="mb-4"
-			></canvas>
+			<canvas bind:this={canvas} data-testid="canvas-element"></canvas>
 		{:else}
 			<p>No data available to display</p>
 		{/if}
 	</div>
-	<div slot="option-slot">
+	<div slot="option-slot" class="flex w-full items-center justify-around">
 		<Export {chart} />
+		<EditChart {chart} chartType="pie"></EditChart>
 	</div>
 </GraphContainer>
