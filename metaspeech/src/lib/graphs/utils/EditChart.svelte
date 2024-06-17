@@ -126,10 +126,14 @@
 					placeholder={'Enter title'}
 					bind:value={title}
 					data-testid="title-input"
-					class="w-[50%] border-darkblue rounded-md"
+					class="w-[50%] rounded-md border-darkblue"
 				/>
-				<div class="w-[25%] flex justify-end">
-					<input type="checkbox" bind:checked={hasTitle} class="mr-2 h-5 rounded-sm border-2 transition-all duration-200 ease-in-out"/>
+				<div class="flex w-[25%] justify-end">
+					<input
+						type="checkbox"
+						bind:checked={hasTitle}
+						class="mr-2 h-5 rounded-sm border-2 transition-all duration-200 ease-in-out"
+					/>
 				</div>
 			</div>
 			{#if ['histogram', 'scatter', 'boxplot'].includes(chartType)}
@@ -140,10 +144,14 @@
 						placeholder={'Enter x axis label'}
 						bind:value={xAxis}
 						data-testid="xaxis-input"
-						class="w-[50%] border-darkblue rounded-md"
+						class="w-[50%] rounded-md border-darkblue"
 					/>
-					<div class="w-[25%] flex justify-end">
-						<input type="checkbox" bind:checked={hasXLabel} class="mr-2 h-5 rounded-sm border-2 transition-all duration-200 ease-in-out"/>
+					<div class="flex w-[25%] justify-end">
+						<input
+							type="checkbox"
+							bind:checked={hasXLabel}
+							class="mr-2 h-5 rounded-sm border-2 transition-all duration-200 ease-in-out"
+						/>
 					</div>
 				</div>
 				<div class="flex items-center justify-between">
@@ -153,10 +161,14 @@
 						placeholder={'Enter y axis label'}
 						bind:value={yAxis}
 						data-testid="yaxis-input"
-						class="w-[50%] border-darkblue rounded-md"
+						class="w-[50%] rounded-md border-darkblue"
 					/>
-					<div class="w-[25%] flex justify-end">
-						<input type="checkbox" bind:checked={hasYLabel} class="mr-2 h-5 rounded-sm border-2 transition-all duration-200 ease-in-out"/>
+					<div class="flex w-[25%] justify-end">
+						<input
+							type="checkbox"
+							bind:checked={hasYLabel}
+							class="mr-2 h-5 rounded-sm border-2 transition-all duration-200 ease-in-out"
+						/>
 					</div>
 				</div>
 			{/if}
@@ -167,9 +179,9 @@
 					placeholder={'Enter text size'}
 					bind:value={fontSize}
 					data-testid="font-size-input"
-					class="w-[50%] border-darkblue rounded-md"
+					class="w-[50%] rounded-md border-darkblue"
 				/>
-				<div class="w-[25%]"/>
+				<div class="w-[25%]" />
 			</div>
 			{#if chartType === 'scatter'}
 				<div class="flex items-center justify-between">
@@ -179,9 +191,9 @@
 						placeholder={'Enter point radius'}
 						bind:value={pointRadius}
 						data-testid="point-radius-input"
-						class="w-[50%] border-darkblue rounded-md"
+						class="w-[50%] rounded-md border-darkblue"
 					/>
-					<div class="w-[25%]"/>
+					<div class="w-[25%]" />
 				</div>
 			{/if}
 			<div class="flex items-center justify-between">
