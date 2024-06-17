@@ -124,3 +124,5 @@ export const scatterStyles: ScatterStyle[] = [
 		pointStyle: 'triangle'
 	}
 ];
+//possible colours used in the boxplot
+export let possibleBoxplotColours = ['rgba(255,0,0,0.5)', 'rgba(125,125,0,0.5)', 'rgba(0,255,0,0.5)', 'rgba(0,125,125,0.5)', 'rgba(0,0,255,0.5)'];

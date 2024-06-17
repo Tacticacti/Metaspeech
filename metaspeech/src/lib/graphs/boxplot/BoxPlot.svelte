@@ -4,6 +4,9 @@
 	import { BoxPlotController, BoxAndWiskers } from '@sgratzl/chartjs-chart-boxplot';
 	import { onMount, onDestroy, afterUpdate } from 'svelte';
 	import type { GroupedDataFrame } from '$lib/Types';
+	import { flipKeys, getBoxPlotData, getChartConfig } from './helper';
+	import { sortGroups } from '$lib/dataframe/DataFrame';
+	import { setColor } from '../utils/CanvasUtils';
 
 	export let data: GroupedDataFrame;
 
@@ -14,61 +17,19 @@
 
 
 	afterUpdate(() => {
-		//let datasets = 
-		const boxplotData = {
-			// define label tree
-			labels: ['label1', 'label2'],
-			datasets: [
-				{
-					label: 'Dataset 1',
-					backgroundColor: 'rgba(0,255,0,0.5)',
-					borderColor: 'red',
-					borderWidth: 1,
-					outlierColor: '#999999',
-					padding: 0,
-					itemRadius: 5,
-					data: [[1, 2, 3, 2, 1]]
-				},
-				{
-					label: 'Dataset 2',
-					backgroundColor: 'rgba(255,0,0,0.5)',
-					borderColor: 'red',
-					borderWidth: 1,
-					outlierColor: '#999999',
-					padding: 0,
-					itemRadius: 5,
-					data: [[2, 3, 4, 5, 6, 5, 6], [2, 3, 4, 5, 6, 5, 6]]
-				}
-			]
-		};
-		const plugin = {
-			id: 'customCanvasBackgroundColor',
-			beforeDraw: 'white'
-		};
+		console.log('happens');
+		
+		data.groups = sortGroups(data.groups);
+		const boxplotData = getBoxPlotData(data);
+		
 
-		const cfg: ChartConfiguration = {
-			type: 'boxplot',
-			data: boxplotData,
+		const cfg: ChartConfiguration = getChartConfig(boxplotData, data);
 
-			options: {
-				plugins: {
-					// @ts-expect-error Needs a specific type for plugin
-					customCanvasBackgroundColor: {
-						color: 'white'
-					},
-					title: {
-						display: true,
-						text: 'title'
-							//'Boxplot of (' + $selectedColumns.join(', ') + ')'
-					}
-				}
-			},
+		chart ??= new Chart(canvas, cfg);
 
-			// @ts-expect-error plugin needs a type same as above
-			plugins: [plugin]
-		};
-
-		chart = new Chart(canvas, cfg);
+		//@ts-ignore
+		chart.data = boxplotData;
+		chart.update();
 	});
 
 	onDestroy(() => {
@@ -77,7 +38,9 @@
 
 </script>
 
+
 <div class="flex flex-col items-center">
+	<button on:click={() => data = flipKeys(data)}> Flip Axis</button>
 	<canvas data-testid="canvas-element" bind:this={canvas} class="mb-4" />
 </div>
 
