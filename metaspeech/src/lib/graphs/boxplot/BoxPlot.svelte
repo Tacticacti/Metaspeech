@@ -44,12 +44,6 @@
 					display: true,
 					text: data.groupedColumns[0].name
 				}
-			},
-			y: {
-				title: {
-					display: true,
-					text: data.aggregateColumn!.name
-				}
 			}
 		};
 		chart.update();
