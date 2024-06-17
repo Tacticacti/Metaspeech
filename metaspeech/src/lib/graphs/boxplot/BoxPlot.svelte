@@ -21,7 +21,7 @@
 
 		chart ??= new Chart(canvas, cfg);
 
-		//@ts-ignore
+		//@ts-expect-error not sure the type of this obj
 		chart.data = boxplotData;
 		chart.update();
 	});
@@ -32,7 +32,7 @@
 </script>
 
 <div class="flex flex-col items-center">
-	<button on:click={() => (data = flipKeys(data))}> Flip Axis</button>
+	<button data-testid="flip-button" on:click={() => (data = flipKeys(data))}> Flip Axis</button>
 	<canvas data-testid="canvas-element" bind:this={canvas} class="mb-4" />
 </div>
 

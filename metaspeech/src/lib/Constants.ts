@@ -142,7 +142,7 @@ export const scatterStyles: ScatterStyle[] = [
 	}
 ];
 //possible colours used in the boxplot
-export let possibleBoxplotColours = [
+export const possibleBoxplotColours = [
 	'rgba(255,0,0,0.5)',
 	'rgba(125,125,0,0.5)',
 	'rgba(0,255,0,0.5)',

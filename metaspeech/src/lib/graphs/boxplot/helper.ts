@@ -1,5 +1,5 @@
 import type { DataType, Group, GroupedDataFrame } from '$lib/Types';
-import type { ChartConfiguration } from 'chart.js';
+import type { ChartConfiguration, ChartData } from 'chart.js';
 import { setColor } from '../utils/CanvasUtils';
 import { getTitleText } from '../sharedFunctions';
 import { possibleBoxplotColours } from '$lib/Constants';
@@ -30,14 +30,14 @@ export function getBoxPlotData(data: GroupedDataFrame) {
 		};
 	}
 	// need 3d array for values
-	let arr: number[][][] = getArrayForDatasets(data);
+	const arr: number[][][] = getArrayForDatasets(data);
 	const [keyToIndex1, keyToIndex2] = keyToIndexMap(data);
 
-	let datasets = [];
+	const datasets = [];
 
 	for (let i = 0; i < arr.length; i++) {
 		datasets.push({
-			label: [...keyToIndex1.keys()][i],
+			label: [...keyToIndex1.keys()][i] as string,
 			backgroundColor: possibleBoxplotColours[i % possibleBoxplotColours.length],
 			borderColor: possibleBoxplotColours[i % possibleBoxplotColours.length],
 			borderWidth: 1,
@@ -59,10 +59,10 @@ export function getBoxPlotData(data: GroupedDataFrame) {
  * @returns returns 2 maps, because there are only supposed to be 2 dataTypes in 1 key, because otherwise this function wouldn't be called
  */
 export function keyToIndexMap(data: GroupedDataFrame) {
-	let keyToIndex1 = new Map<DataType, number>();
-	let keyToIndex2 = new Map<DataType, number>();
+	const keyToIndex1 = new Map<DataType, number>();
+	const keyToIndex2 = new Map<DataType, number>();
 	for (let i = 0; i < data.groups.length; i++) {
-		let group: Group = data.groups[i];
+		const group: Group = data.groups[i];
 		if (!keyToIndex1.has(group.keys[0])) {
 			keyToIndex1.set(group.keys[0], keyToIndex1.size);
 		}
@@ -81,16 +81,16 @@ export function keyToIndexMap(data: GroupedDataFrame) {
 export function getArrayForDatasets(data: GroupedDataFrame) {
 	const [keyToIndex1, keyToIndex2] = keyToIndexMap(data);
 
-	let arr: number[][][] = [];
+	const arr: number[][][] = [];
 	for (let i = 0; i < keyToIndex1.size; i++) {
-		let temp: number[][] = [];
+		const temp: number[][] = [];
 		for (let j = 0; j < keyToIndex2.size; j++) {
 			temp.push([]);
 		}
 		arr.push(temp);
 	}
 	for (let i = 0; i < data.groups.length; i++) {
-		let group: Group = data.groups[i];
+		const group: Group = data.groups[i];
 		arr[keyToIndex1.get(group.keys[0]) as number][keyToIndex2.get(group.keys[1]) as number] =
 			group.values.filter((val) => val !== undefined).map((val) => Number(val)) as number[];
 	}
@@ -103,19 +103,16 @@ export function getArrayForDatasets(data: GroupedDataFrame) {
  * @returns new grouped data frame
  */
 export function flipKeys(data: GroupedDataFrame) {
-	let groups = data.groups;
+	const groups = data.groups;
 
 	if (groups[0].keys.length !== 2) {
 		return data;
 	}
 	for (let i = 0; i < groups.length; i++) {
-		let group = groups[i];
+		const group = groups[i];
 
-		//@ts-ignore
-		let temp = group.keys[0];
-		//@ts-ignore
+		const temp = group.keys[0];
 		group.keys[0] = group.keys[1];
-		//@ts-ignore
 		group.keys[1] = temp;
 	}
 	return data;
@@ -127,7 +124,7 @@ export function flipKeys(data: GroupedDataFrame) {
  * @param data current grouped data frame
  * @returns config
  */
-export function getChartConfig(boxplotData: any, data: GroupedDataFrame): ChartConfiguration {
+export function getChartConfig(boxplotData: ChartData, data: GroupedDataFrame): ChartConfiguration {
 	const plugin = {
 		id: 'customCanvasBackgroundColor',
 		beforeDraw: setColor

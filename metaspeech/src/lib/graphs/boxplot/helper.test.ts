@@ -41,7 +41,7 @@ describe('getBoxPlotData tests', () => {
 		const groupedDf = df.groupBy();
 
 		const data = getBoxPlotData(groupedDf);
-		expect(data).to.exist;
+		expect(data).toBeDefined();
 		expect(data?.labels).toStrictEqual([18, 32]);
 		expect(data?.datasets[0].data).toStrictEqual([[1, 2], [4]]);
 	});
@@ -57,7 +57,7 @@ describe('getBoxPlotData tests', () => {
 		const groupedDf = df.groupBy();
 
 		const data = getBoxPlotData(groupedDf);
-		expect(data).to.exist;
+		expect(data).toBeDefined();
 		expect(data?.labels).toStrictEqual(['F', 'M']);
 		expect(data?.datasets.length).toBe(2);
 
@@ -114,7 +114,7 @@ describe('getArrayForDatasets tests', () => {
 		columns[0].groupBy = { type: 'specific' };
 		columns[1].groupBy = { type: 'specific' };
 
-		let groupedDf = df.groupBy();
+		const groupedDf = df.groupBy();
 
 		const arr = getArrayForDatasets(groupedDf);
 		expect(arr).toStrictEqual([
@@ -163,7 +163,6 @@ describe('flipKeys tests', () => {
 		columns[1].groupBy = { type: 'specific' };
 
 		let groupedDf = df.groupBy();
-		console.log(groupedDf.groups.map((g) => g.keys));
 
 		expect(groupedDf.groups[0].keys).toStrictEqual([18, 'F']);
 		expect(groupedDf.groups[1].keys).toStrictEqual([20, 'M']);
@@ -195,7 +194,7 @@ describe('getChartConfig tests', () => {
 
 		expect(config).toBeDefined();
 		expect(config.options?.plugins?.title?.text).toBe('cars x age');
-		//@ts-ignore
+		//@ts-expect-error don't know why there is type error
 		expect(config.options?.scales.y?.title?.text).toBe('cars');
 	});
 });
