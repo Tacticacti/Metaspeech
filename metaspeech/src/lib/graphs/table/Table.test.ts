@@ -3,7 +3,7 @@ import sut from '$lib/graphs/table/Table.svelte';
 import { vi, describe, it, expect } from 'vitest';
 import type { Column, DataType, Group, GroupBy, GroupedDataFrame } from '$lib/Types';
 import userEvent, { type UserEvent } from '@testing-library/user-event';
-import { copyTableToClipboardAsLaTeX } from './Export'
+import { copyTableToClipboardAsLaTeX } from './Export';
 
 function column(groupBy: GroupBy | undefined): Column {
 	return {
@@ -23,7 +23,7 @@ function selectOption(r: RenderResult<sut>, user: UserEvent, option: string): Pr
 	return user.selectOptions(r.getByTestId('aggregate'), r.getByTestId(option));
 }
 
-vi.mock('./Export')
+vi.mock('./Export');
 
 describe('When user views', () => {
 	it('should render', () => {
