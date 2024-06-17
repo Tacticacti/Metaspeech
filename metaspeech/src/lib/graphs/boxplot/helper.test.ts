@@ -82,7 +82,6 @@ describe('getArrayForDatasets tests', () => {
 		const groupedDf = df.groupBy();
 
 		const arr = getArrayForDatasets(groupedDf);
-		console.log(arr);
 
 		expect(arr).toStrictEqual([
 			[[1, 2], [3]],
@@ -193,8 +192,8 @@ describe('getChartConfig tests', () => {
 
 		const groupedDf = df.groupBy();
 		const data = getBoxPlotData(groupedDf);
-		console.log('aaaaaa');
 
+		// @ts-expect-error type error
 		const config = getChartConfig(data, groupedDf);
 
 		expect(config).toBeDefined();

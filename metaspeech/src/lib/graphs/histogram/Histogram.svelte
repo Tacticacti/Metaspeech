@@ -74,7 +74,7 @@
 			{/if}
 		</div>
 		<Export {chart} />
-		<EditChart {chart} chartType="histogram"></EditChart>
+		<EditChart {chart} chartType="histogram" />
 	</div>
 	<div slot="graph-slot">
 		<canvas data-testid="canvas-element" bind:this={canvas} />

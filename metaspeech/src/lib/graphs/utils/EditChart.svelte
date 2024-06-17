@@ -26,6 +26,10 @@
 	let hasXLabel: boolean = ['histogram', 'scatter', 'boxplot'].includes(chartType) ? true : false;
 	let hasYLabel: boolean = ['histogram', 'scatter', 'boxplot'].includes(chartType) ? true : false;
 
+	/**
+	 * Updates new values for all graphs
+	 * Has checks for some graphs as not all have same edit options
+	 */
 	function updateChart() {
 		if (title) updateTitle(title);
 		if (xAxis || yAxis) updateAxis(xAxis, yAxis);
@@ -36,6 +40,10 @@
 		chart.update();
 	}
 
+	/**
+	 * Updates background color of graphs
+	 * If the graphs is a histogram it also updates bar and border color
+	 */
 	function updateColor() {
 		if (!chart.options.plugins) return;
 		// @ts-expect-error the customBackground is assumed
@@ -47,12 +55,21 @@
 		});
 	}
 
+	/**
+	 * Updates the title for all graphs
+	 * @param title the string which contains the user input
+	 */
 	function updateTitle(title: string) {
-		if (!chart.options.plugins || !chart.options.plugins.title) return;
+		if (!chart.options.plugins?.title) return;
 		chart.options.plugins.title.display = hasTitle;
 		chart.options.plugins.title.text = title;
 	}
 
+	/**
+	 * Updates both axis for graphs that support them
+	 * @param xLabel user input for x axis
+	 * @param yLabel user input for y axis
+	 */
 	function updateAxis(xLabel: string | undefined, yLabel: string | undefined) {
 		if (!chart.options.scales) return;
 		chart.options.scales = {
@@ -71,6 +88,9 @@
 		};
 	}
 
+	/**
+	 * If the graph is a scatter plot the point radius is updated
+	 */
 	function updatePointRadius() {
 		pointRadius < 1 ? (pointRadius = 1) : pointRadius;
 		chart.data.datasets.forEach((d) => {
@@ -79,6 +99,9 @@
 		});
 	}
 
+	/**
+	 * The font size is updated for all graphs
+	 */
 	function updateFontSize() {
 		fontSize < 1 ? (fontSize = 1) : fontSize;
 		Chart.defaults.font.size = fontSize;
@@ -97,70 +120,81 @@
 	<Modal title="Edit Chart" bind:open={clickOutsideModal} autoclose outsideclose>
 		{#if ['histogram', 'scatter', 'pie', 'boxplot'].includes(chartType)}
 			<div class="flex items-center justify-between">
-				<p>Title:</p>
+				<p class="w-[25%]">Title:</p>
 				<input
 					type="text"
 					placeholder={'Enter title'}
 					bind:value={title}
 					data-testid="title-input"
+					class="w-[50%] border-darkblue rounded-md"
 				/>
-				<input type="checkbox" bind:checked={hasTitle} />
+				<div class="w-[25%] flex justify-end">
+					<input type="checkbox" bind:checked={hasTitle} class="mr-2 h-5 rounded-sm border-2 transition-all duration-200 ease-in-out"/>
+				</div>
 			</div>
-			{#if chartType === 'histogram' || chartType === 'scatter'}
+			{#if ['histogram', 'scatter', 'boxplot'].includes(chartType)}
 				<div class="flex items-center justify-between">
-					<p>X Axis:</p>
+					<p class="w-[25%]">X Axis:</p>
 					<input
 						type="text"
 						placeholder={'Enter x axis label'}
 						bind:value={xAxis}
 						data-testid="xaxis-input"
+						class="w-[50%] border-darkblue rounded-md"
 					/>
-					<input type="checkbox" bind:checked={hasXLabel} />
+					<div class="w-[25%] flex justify-end">
+						<input type="checkbox" bind:checked={hasXLabel} class="mr-2 h-5 rounded-sm border-2 transition-all duration-200 ease-in-out"/>
+					</div>
 				</div>
 				<div class="flex items-center justify-between">
-					<p>Y Axis:</p>
+					<p class="w-[25%]">Y Axis:</p>
 					<input
 						type="text"
 						placeholder={'Enter y axis label'}
 						bind:value={yAxis}
 						data-testid="yaxis-input"
+						class="w-[50%] border-darkblue rounded-md"
 					/>
-					<input type="checkbox" bind:checked={hasYLabel} />
+					<div class="w-[25%] flex justify-end">
+						<input type="checkbox" bind:checked={hasYLabel} class="mr-2 h-5 rounded-sm border-2 transition-all duration-200 ease-in-out"/>
+					</div>
 				</div>
 			{/if}
 			<div class="flex items-center justify-between">
-				<p>Text size:</p>
+				<p class="w-[25%]">Text size:</p>
 				<input
 					type="number"
 					placeholder={'Enter text size'}
 					bind:value={fontSize}
 					data-testid="font-size-input"
+					class="w-[50%] border-darkblue rounded-md"
 				/>
-				<div></div>
+				<div class="w-[25%]"/>
 			</div>
 			{#if chartType === 'scatter'}
 				<div class="flex items-center justify-between">
-					<p>Point radius:</p>
+					<p class="w-[25%]">Point radius:</p>
 					<input
 						type="number"
 						placeholder={'Enter point radius'}
 						bind:value={pointRadius}
 						data-testid="point-radius-input"
+						class="w-[50%] border-darkblue rounded-md"
 					/>
-					<div></div>
+					<div class="w-[25%]"/>
 				</div>
 			{/if}
 			<div class="flex items-center justify-between">
-				<p>Background color:</p>
+				<p class="w-[25%]">Background color:</p>
 				<input type="color" bind:value={backgroundColor} class="h-10 w-10 rounded-md" />
 			</div>
 			{#if chartType === 'histogram'}
 				<div class="flex items-center justify-between">
-					<p>Bar color:</p>
+					<p class="w-[25%]">Bar color:</p>
 					<input type="color" bind:value={barColor} class="h-10 w-10 rounded-md" />
 				</div>
 				<div class="flex items-center justify-between">
-					<p>Border color:</p>
+					<p class="w-[25%]">Border color:</p>
 					<input type="color" bind:value={borderColor} class="h-10 w-10 rounded-md" />
 				</div>
 			{/if}
