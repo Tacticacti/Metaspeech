@@ -193,7 +193,6 @@ describe('getChartConfig tests', () => {
 
 		const groupedDf = df.groupBy();
 		const data = getBoxPlotData(groupedDf);
-		console.log('aaaaaa');
 
 		const config = getChartConfig(data, groupedDf);
 

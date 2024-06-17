@@ -28,6 +28,12 @@
 		if(data.groupedColumns.length == 2) chart!.options!.plugins!.legend!.title!.text = data.groupedColumns[1].name;
 
 		chart.options.scales = {
+			y: {
+					title: {
+						display: true,
+						text: data.aggregateColumn?.name
+					}
+				},
 			x: {
 				title: {
 					display: true,
