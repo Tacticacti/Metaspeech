@@ -129,7 +129,7 @@ function to2Decimal(num: number): string {
 	return num.toFixed(2).replace(/\.?0+$/, '');
 }
 
-type Cell = {
+export type Cell = {
 	content: string;
 	rowSpan: number;
 	colSpan: number;
