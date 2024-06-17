@@ -1,7 +1,7 @@
 import type { DataType, Group, GroupBy, GroupedDataFrame } from '$lib/Types';
 import type { ChartConfiguration, ChartData } from 'chart.js';
 import { setColor } from '../utils/CanvasUtils';
-import { getTitleText, keyArrayToString, keyToString } from '../sharedFunctions';
+import { getTitleText, keyToString } from '../sharedFunctions';
 import { possibleBoxplotColours } from '$lib/Constants';
 
 /**
@@ -14,7 +14,9 @@ export function getBoxPlotData(data: GroupedDataFrame) {
 	if (data.groupedColumns.length === 1) {
 		return {
 			// define label tree
-			labels: data.groups.map((group) => group.keys[0]),
+			labels: data.groups
+				.map((group) => group.keys[0])
+				.map((key) => keyToString(key, data.groupedColumns[0].groupBy as GroupBy)),
 			datasets: [
 				{
 					label: '',
@@ -31,14 +33,17 @@ export function getBoxPlotData(data: GroupedDataFrame) {
 	}
 	// need 3d array for values
 	const arr: number[][][] = getArrayForDatasets(data);
-	const [keyToIndex1, keyToIndex2] = keyToIndexMap(data);
+	const [firstKeyIndexMap, secondKeyIndexMap] = keyToIndexMap(data);
 
 	const datasets = [];
 
 	for (let i = 0; i < arr.length; i++) {
-		let label = [...keyToIndex1.keys()][i] as string;
-		if(data?.groupedColumns[0]?.groupBy){
-			label = keyToString([...keyToIndex1.keys()][i], data.groupedColumns[0].groupBy as GroupBy)
+		let label = [...secondKeyIndexMap.keys()][i] as string;
+		if (data?.groupedColumns[0]?.groupBy) {
+			label = keyToString(
+				[...secondKeyIndexMap.keys()][i],
+				data.groupedColumns[1].groupBy as GroupBy
+			);
 		}
 		datasets.push({
 			label: label,
@@ -51,12 +56,13 @@ export function getBoxPlotData(data: GroupedDataFrame) {
 			data: arr[i]
 		});
 	}
-	let labels = [...keyToIndex2.keys()];
-	if(data?.groupedColumns[1]?.groupBy){
-		labels = [...keyToIndex2.keys()].map(key => key as DataType).map(key => keyToString(key, data.groupedColumns[1].groupBy as GroupBy))
+	let labels = [...firstKeyIndexMap.keys()];
+	if (data?.groupedColumns[0]?.groupBy) {
+		labels = [...firstKeyIndexMap.keys()]
+			.map((key) => key as DataType)
+			.map((key) => keyToString(key, data.groupedColumns[0].groupBy as GroupBy));
 	}
-	console.log(labels);
-	
+
 	return {
 		labels: labels,
 		datasets: datasets
@@ -89,20 +95,21 @@ export function keyToIndexMap(data: GroupedDataFrame) {
  * @returns 3d array
  */
 export function getArrayForDatasets(data: GroupedDataFrame) {
-	const [keyToIndex1, keyToIndex2] = keyToIndexMap(data);
+	const [firstKeyIndexMap, secondKeyIndexMap] = keyToIndexMap(data);
 
 	const arr: number[][][] = [];
-	for (let i = 0; i < keyToIndex1.size; i++) {
+	for (let i = 0; i < secondKeyIndexMap.size; i++) {
 		const temp: number[][] = [];
-		for (let j = 0; j < keyToIndex2.size; j++) {
+		for (let j = 0; j < firstKeyIndexMap.size; j++) {
 			temp.push([]);
 		}
 		arr.push(temp);
 	}
 	for (let i = 0; i < data.groups.length; i++) {
 		const group: Group = data.groups[i];
-		arr[keyToIndex1.get(group.keys[0]) as number][keyToIndex2.get(group.keys[1]) as number] =
-			group.values.filter((val) => val !== undefined).map((val) => Number(val)) as number[];
+		arr[secondKeyIndexMap.get(group.keys[1]) as number][
+			firstKeyIndexMap.get(group.keys[0]) as number
+		] = group.values.filter((val) => val !== undefined).map((val) => Number(val)) as number[];
 	}
 	return arr;
 }
@@ -113,13 +120,13 @@ export function getArrayForDatasets(data: GroupedDataFrame) {
  * @returns new grouped data frame
  */
 export function flipKeys(data: GroupedDataFrame) {
-	if(data.groupedColumns.length !== 2){
+	if (data.groupedColumns.length !== 2) {
 		return data;
 	}
 
 	const temp = data.groupedColumns[0];
 	data.groupedColumns[0] = data.groupedColumns[1];
-	data.groupedColumns[1] = temp; 
+	data.groupedColumns[1] = temp;
 
 	const groups = data.groups;
 	for (let i = 0; i < groups.length; i++) {

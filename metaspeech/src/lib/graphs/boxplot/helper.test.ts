@@ -42,7 +42,7 @@ describe('getBoxPlotData tests', () => {
 
 		const data = getBoxPlotData(groupedDf);
 		expect(data).toBeDefined();
-		expect(data?.labels).toStrictEqual([18, 32]);
+		expect(data?.labels).toStrictEqual(['18', '32']);
 		expect(data?.datasets[0].data).toStrictEqual([[1, 2], [4]]);
 	});
 	it('2 grouped columns', () => {
@@ -58,13 +58,13 @@ describe('getBoxPlotData tests', () => {
 
 		const data = getBoxPlotData(groupedDf);
 		expect(data).toBeDefined();
-		expect(data?.labels).toStrictEqual(['F', 'M']);
+		expect(data?.labels).toStrictEqual(['18', '20']);
 		expect(data?.datasets.length).toBe(2);
 
-		expect(data?.datasets[0].label).toBe('18');
+		expect(data?.datasets[0].label).toBe('F');
 		expect(data?.datasets[0].data).toStrictEqual([[1, 2], []]);
 
-		expect(data?.datasets[1].label).toBe('20');
+		expect(data?.datasets[1].label).toBe('M');
 		expect(data?.datasets[1].data).toStrictEqual([[], [1]]);
 	});
 });
@@ -82,9 +82,11 @@ describe('getArrayForDatasets tests', () => {
 		const groupedDf = df.groupBy();
 
 		const arr = getArrayForDatasets(groupedDf);
+		console.log(arr);
+
 		expect(arr).toStrictEqual([
-			[[1, 2], [1]],
-			[[3], [1]]
+			[[1, 2], [3]],
+			[[1], [1]]
 		]);
 	});
 	it('with missing values', () => {
@@ -118,14 +120,13 @@ describe('getArrayForDatasets tests', () => {
 
 		const arr = getArrayForDatasets(groupedDf);
 		expect(arr).toStrictEqual([
-			[[2], [1]],
-			[[3], [1]]
+			[[2], [3]],
+			[[1], [1]]
 		]);
 	});
 });
 
 describe('flipKeys tests', () => {
-	
 	it('1 grouped column', () => {
 		const df = new DataFrame();
 		df.set(fromText('age,gender,cars\n18,F,1\n20,M,1\n18,F,2\n20,F,3\n18,M,1'));
@@ -169,7 +170,7 @@ describe('flipKeys tests', () => {
 		expect(groupedDf.groups[1].keys).toStrictEqual([20, 'M']);
 		expect(groupedDf.groups[2].keys).toStrictEqual([20, 'F']);
 		expect(groupedDf.groups[3].keys).toStrictEqual([18, 'M']);
-		expect(groupedDf.groupedColumns.map(col => col.name)).toStrictEqual(['age', 'gender']);
+		expect(groupedDf.groupedColumns.map((col) => col.name)).toStrictEqual(['age', 'gender']);
 
 		groupedDf = flipKeys(groupedDf);
 
@@ -177,7 +178,7 @@ describe('flipKeys tests', () => {
 		expect(groupedDf.groups[1].keys).toStrictEqual(['M', 20]);
 		expect(groupedDf.groups[2].keys).toStrictEqual(['F', 20]);
 		expect(groupedDf.groups[3].keys).toStrictEqual(['M', 18]);
-		expect(groupedDf.groupedColumns.map(col => col.name)).toStrictEqual(['gender', 'age']);
+		expect(groupedDf.groupedColumns.map((col) => col.name)).toStrictEqual(['gender', 'age']);
 	});
 });
 
@@ -193,7 +194,6 @@ describe('getChartConfig tests', () => {
 		const groupedDf = df.groupBy();
 		const data = getBoxPlotData(groupedDf);
 		console.log('aaaaaa');
-		
 
 		const config = getChartConfig(data, groupedDf);
 

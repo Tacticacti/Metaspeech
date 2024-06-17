@@ -25,12 +25,12 @@
 		chart.data = boxplotData;
 
 		chart!.options!.plugins!.legend!.title!.text = data.groupedColumns[0].name;
-		
+
 		chart.options.scales = {
 			x: {
 				title: {
 					display: true,
-					text: data.groupedColumns[1].name
+					text: data.groupedColumns[0].name
 				}
 			}
 		};
