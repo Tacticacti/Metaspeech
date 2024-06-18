@@ -12,6 +12,7 @@
 	import { setColor } from '$lib/graphs/utils/CanvasUtils';
 	import { sortGroups } from '$lib/dataframe/DataFrame';
 	import GraphContainer from '../GraphContainer.svelte';
+	import EditChart from '../utils/EditChart.svelte';
 
 	let canvas: HTMLCanvasElement;
 	let chart: Chart;
@@ -118,8 +119,8 @@
 
 <GraphContainer>
 	<div slot="option-slot" class="flex w-full items-center justify-around">
-		<div>
-			{#if legendCol?.type === 'number'}
+		{#if legendCol?.type === 'number'}
+			<div>
 				<button
 					data-testid="scatter-swap-columns"
 					on:click={swapGroupColumns}
@@ -127,11 +128,10 @@
 				>
 					Swap x-axis and legend
 				</button>
-			{/if}
-		</div>
-		<div class="flex justify-center">
-			<Export {chart} />
-		</div>
+			</div>
+		{/if}
+		<Export {chart} />
+		<EditChart {chart} chartType="scatter"></EditChart>
 	</div>
 	<div slot="graph-slot">
 		<canvas data-testid="canvas-element" bind:this={canvas} class="mb-4" />

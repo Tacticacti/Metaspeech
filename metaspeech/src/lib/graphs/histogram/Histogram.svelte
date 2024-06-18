@@ -8,6 +8,7 @@
 	import { createConfig, createDatasets, handleData } from './helper';
 	import GraphContainer from '../GraphContainer.svelte';
 	import Export from '$lib/components/exporter/GraphImageExport.svelte';
+	import EditChart from '../utils/EditChart.svelte';
 
 	export let data: GroupedDataFrame;
 	$: sortGroups(data.groups);
@@ -46,7 +47,7 @@
 	});
 
 	onDestroy(() => {
-		chart?.destroy();
+		//chart?.destroy();
 	});
 </script>
 
@@ -71,9 +72,8 @@
 				</select>
 			{/if}
 		</div>
-		<div class="flex justify-center">
-			<Export {chart} />
-		</div>
+		<Export {chart} />
+		<EditChart {chart} chartType="histogram" />
 	</div>
 	<div slot="graph-slot">
 		<canvas data-testid="canvas-element" bind:this={canvas} />
