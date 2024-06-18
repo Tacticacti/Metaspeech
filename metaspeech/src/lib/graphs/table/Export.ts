@@ -1,4 +1,7 @@
-import { type Cell } from './Table';
+import type { GroupedDataFrame } from '$lib/Types';
+import { sortGroups } from '$lib/dataframe/DataFrame';
+import { keyToString } from '../sharedFunctions';
+import { type AggregateOption, type Cell } from './Table';
 
 /**
  * Copy a table to the clipboard as LaTeX
@@ -63,4 +66,36 @@ function writeRow(row: Cell[]): string {
 function replaceLaTeXSpecialChars(text: string): string {
 	const specialChars = ['\\', '&', '_', '%', '$', '#', '{', '}', '~', '^'];
 	return specialChars.reduce((result, char) => result.replaceAll(char, '\\' + char), text);
+}
+
+/**
+ * Download the data as a TSV file
+ * @param data The data to download
+ * @param option The option selected for the aggregate function
+ */
+export function downloadAsTSV(data: GroupedDataFrame, option: AggregateOption): void {
+	const groups = sortGroups(data.groups);
+	let text = '';
+
+	// write header
+	text += data.groupedColumns.map((column) => column.name).join('\t');
+	text += '\t';
+	text += data.aggregateColumn ? data.aggregateColumn.name + ' ' + option.name : option.name;
+	text += '\n';
+
+	// write data
+	for (let i = 0; i < groups.length; i++) {
+		const group = groups[i];
+		text += group.keys.map((k, i) => keyToString(k, data.groupedColumns[i].groupBy!)).join('\t');
+		text += '\t';
+		text += option.fn(data, group);
+		text += '\n';
+	}
+
+	//download
+	const blob = new Blob([text], { type: 'text/tsv' });
+	const a = document.createElement('a');
+	a.href = URL.createObjectURL(blob);
+	a.download = 'data.tsv';
+	a.click();
 }

@@ -7,7 +7,7 @@
 		type AggregateOption,
 		createTable
 	} from './Table';
-	import { copyTableToClipboardAsLaTeX } from './Export';
+	import { copyTableToClipboardAsLaTeX, downloadAsTSV } from './Export';
 
 	export let data: GroupedDataFrame;
 	const aggregateOptions = data?.aggregateColumn ? aggregateOptions_single : aggregateOptions_none;
@@ -29,13 +29,20 @@
 				{/each}
 			</select>
 		</div>
-		<div class="flex justify-center">
+		<div class="flex justify-center space-x-4">
 			<button
 				class="inline-block cursor-pointer rounded-lg border border-gray-300 bg-gray-100 px-4 py-2 text-sm font-semibold text-gray-800 shadow-md transition-colors duration-300 ease-in-out hover:bg-gray-200 hover:text-blue-500"
 				on:click={() => copyTableToClipboardAsLaTeX(table)}
 				data-testid="copy-as-latex"
 			>
 				Copy as LaTeX
+			</button>
+			<button
+				class="inline-block cursor-pointer rounded-lg border border-gray-300 bg-gray-100 px-4 py-2 text-sm font-semibold text-gray-800 shadow-md transition-colors duration-300 ease-in-out hover:bg-gray-200 hover:text-blue-500"
+				on:click={() => downloadAsTSV(data, selectedOption)}
+				data-testid="download-as-tsv"
+			>
+				Download as TSV
 			</button>
 		</div>
 	</div>
