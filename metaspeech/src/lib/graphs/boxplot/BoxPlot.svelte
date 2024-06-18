@@ -28,9 +28,9 @@
 		//@ts-expect-error not sure the type of this obj
 		chart.data = boxplotData;
 
-		chart!.options!.plugins!.legend!.title!.text = data.groupedColumns[0].name;
-		if (data.groupedColumns.length == 2)
-			chart!.options!.plugins!.legend!.title!.text = data.groupedColumns[1].name;
+		let xAxisScaleText = data.groupedColumns.length > 0 ? data.groupedColumns[0].name : 'All';
+		chart!.options!.plugins!.legend!.title!.text =
+			data.groupedColumns.length === 2 ? data.groupedColumns[1].name : '';
 
 		chart.options.scales = {
 			y: {
@@ -42,7 +42,7 @@
 			x: {
 				title: {
 					display: true,
-					text: data.groupedColumns[0].name
+					text: xAxisScaleText
 				}
 			}
 		};

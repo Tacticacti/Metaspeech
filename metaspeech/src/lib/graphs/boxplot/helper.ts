@@ -10,7 +10,24 @@ import { possibleBoxplotColours } from '$lib/Constants';
  * @returns datasets
  */
 export function getBoxPlotData(data: GroupedDataFrame) {
-	if (data.groupedColumns.length < 1 || data.groupedColumns.length > 2) return undefined;
+	if (data.groupedColumns.length > 2) return undefined;
+	if (data.groupedColumns.length === 0) {
+		return {
+			labels: [''],
+			datasets: [
+				{
+					label: '',
+					backgroundColor: 'rgba(255,0,0,0.5)',
+					borderColor: 'red',
+					borderWidth: 1,
+					outlierColor: '#999999',
+					padding: 0,
+					itemRadius: 5,
+					data: [data.groups[0].values]
+				}
+			]
+		};
+	}
 	if (data.groupedColumns.length === 1) {
 		return {
 			// define label tree
@@ -151,8 +168,9 @@ export function getChartConfig(boxplotData: ChartData, data: GroupedDataFrame): 
 		beforeDraw: setColor
 	};
 
-	let legendText = data.groupedColumns[0].name;
-	if (data.groupedColumns.length === 2) legendText = data.groupedColumns[1].name;
+	const xAxisScaleText = data.groupedColumns.length > 0 ? data.groupedColumns[0].name : 'All';
+	const legendText = data.groupedColumns.length === 2 ? data.groupedColumns[1].name : '';
+
 	const cfg: ChartConfiguration = {
 		type: 'boxplot',
 		data: boxplotData,
@@ -190,7 +208,7 @@ export function getChartConfig(boxplotData: ChartData, data: GroupedDataFrame): 
 				x: {
 					title: {
 						display: true,
-						text: data.groupedColumns[0].name
+						text: xAxisScaleText
 					}
 				}
 			}

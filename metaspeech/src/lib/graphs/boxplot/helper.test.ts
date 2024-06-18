@@ -13,7 +13,9 @@ describe('getBoxPlotData tests', () => {
 		const groupedDf = df.groupBy();
 
 		const data = getBoxPlotData(groupedDf);
-		expect(data).toBeUndefined();
+		expect(data).toBeDefined();
+		expect(data?.labels).toStrictEqual(['']);
+		expect(data?.datasets[0].data).toStrictEqual([[1, 4, 2]]);
 	});
 	it('3 grouped columns', () => {
 		const df = new DataFrame();
