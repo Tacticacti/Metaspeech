@@ -351,7 +351,7 @@ describe('get scatter datasets test', () => {
 
 		const expected: ScatterDataset[] = [
 			{
-				label: '[0-2]',
+				label: '[0-3)',
 				data: [
 					[19, 30],
 					[19, 40],
@@ -364,7 +364,7 @@ describe('get scatter datasets test', () => {
 				style: styles[0]
 			},
 			{
-				label: '[3-5]',
+				label: '[3-6)',
 				data: [
 					[39, 80],
 					[39, 40]

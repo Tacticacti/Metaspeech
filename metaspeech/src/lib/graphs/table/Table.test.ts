@@ -154,8 +154,8 @@ describe('edge cases', () => {
 		const r = render(sut, { props: { data: df } });
 		await selectOption(r, user, 'Mean');
 
-		r.getByTestId('cell-[10-19]');
-		r.getByTestId('cell-[20-29]');
+		r.getByTestId('cell-[10-20)');
+		r.getByTestId('cell-[20-30)');
 		r.getByTestId('cell-1');
 		r.getByTestId('cell-3');
 	});
@@ -169,8 +169,8 @@ describe('edge cases', () => {
 		const r = render(sut, { props: { data: df } });
 		await selectOption(r, user, 'Mean');
 
-		r.getByTestId('cell-[10-19]');
-		r.getByTestId('cell-[20-29]');
+		r.getByTestId('cell-[10-20)');
+		r.getByTestId('cell-[20-30)');
 		r.getByTestId('cell-a');
 		r.getByTestId('cell-b');
 	});
@@ -184,8 +184,8 @@ describe('edge cases', () => {
 		const r = render(sut, { props: { data: df } });
 		await selectOption(r, user, 'Mean');
 
-		r.getByTestId('cell-[10-19]');
-		r.getByTestId('cell-[20-29]');
+		r.getByTestId('cell-[10-20)');
+		r.getByTestId('cell-[20-30)');
 		r.getByTestId('cell-a');
 		r.getByTestId('cell-b');
 	});
