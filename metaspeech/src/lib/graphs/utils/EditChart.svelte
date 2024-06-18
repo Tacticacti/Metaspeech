@@ -17,6 +17,7 @@
 	let backgroundColor: string = '#ffffff';
 	let barColor: string = '#3232c8';
 	let borderColor: string = '#000000';
+	let fontColor: string = '#000000';
 
 	/**
 	 * Checks to remove values from chart
@@ -41,10 +42,11 @@
 	}
 
 	/**
-	 * Updates background color of graphs
+	 * Updates background color of graphs and font color
 	 * If the graphs is a histogram it also updates bar and border color
 	 */
 	function updateColor() {
+		Chart.defaults.color = fontColor;
 		if (!chart.options.plugins) return;
 		// @ts-expect-error the customBackground is assumed
 		chart.options.plugins.customCanvasBackgroundColor.color = backgroundColor;
@@ -196,6 +198,10 @@
 					<div class="w-[25%]" />
 				</div>
 			{/if}
+			<div class="flex items-center justify-between">
+				<p class="w-[25%]">Font color:</p>
+				<input type="color" bind:value={fontColor} class="h-10 w-10 rounded-md" />
+			</div>
 			<div class="flex items-center justify-between">
 				<p class="w-[25%]">Background color:</p>
 				<input type="color" bind:value={backgroundColor} class="h-10 w-10 rounded-md" />
