@@ -470,7 +470,11 @@ export function fromText(
 	columnDelimiter: string = ',',
 	rowDelimiter: string = '\n'
 ): DataFrameLike {
-	const rows = text.split(rowDelimiter).map((row) => row.split(columnDelimiter));
+	let rows = text.split(rowDelimiter).map((row) => row.split(columnDelimiter));
+	if (rowDelimiter === '\n') {
+		rows = rows.map((row) => row.map((cell) => cell.replaceAll('\r', '').trim()));
+	}
+
 	const columns = rows.shift()!.map((c) => c ?? '');
 
 	if (rows.length === 0 || columns.length === 0) {
