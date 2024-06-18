@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { Modal } from 'flowbite-svelte';
 	import { Chart } from 'chart.js/auto';
+	import { onMount } from 'svelte';
 
 	export let chart: Chart;
 	export let chartType: string;
@@ -108,6 +109,14 @@
 		fontSize < 1 ? (fontSize = 1) : fontSize;
 		Chart.defaults.font.size = fontSize;
 	}
+
+	onMount(() => {
+		title = chart?.options?.plugins?.title?.text?.toString() ?? 'New title';
+		// @ts-expect-error type error
+		xAxis = chart?.options?.scales?.x?.title?.text?.toString() ?? 'New x axis label';
+		// @ts-expect-error type error
+		yAxis = chart?.options?.scales?.y?.title?.text?.toString() ?? 'New y axis label';
+	});
 </script>
 
 <div class="flex items-center">
@@ -125,7 +134,7 @@
 				<p class="w-[25%]">Title:</p>
 				<input
 					type="text"
-					placeholder={'Enter title'}
+					placeholder={chart?.options?.plugins?.title?.text?.toString() ?? 'Enter title'}
 					bind:value={title}
 					data-testid="title-input"
 					class="w-[50%] rounded-md border-darkblue"
@@ -143,7 +152,7 @@
 					<p class="w-[25%]">X Axis:</p>
 					<input
 						type="text"
-						placeholder={'Enter x axis label'}
+						placeholder={chart?.options?.scales?.x?.title?.text?.toString() ?? 'Enter x axis label'}
 						bind:value={xAxis}
 						data-testid="xaxis-input"
 						class="w-[50%] rounded-md border-darkblue"
@@ -160,7 +169,7 @@
 					<p class="w-[25%]">Y Axis:</p>
 					<input
 						type="text"
-						placeholder={'Enter y axis label'}
+						placeholder={chart?.options?.scales?.y?.title?.text?.toString() ?? 'Enter y axis label'}
 						bind:value={yAxis}
 						data-testid="yaxis-input"
 						class="w-[50%] rounded-md border-darkblue"
