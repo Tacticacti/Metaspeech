@@ -29,8 +29,10 @@
 		chart.data = boxplotData;
 
 		let xAxisScaleText = data.groupedColumns.length > 0 ? data.groupedColumns[0].name : 'All';
-		chart!.options!.plugins!.legend!.title!.text =
-			data.groupedColumns.length === 2 ? data.groupedColumns[1].name : '';
+		if (chart?.options?.plugins?.legend?.title?.text) {
+			chart.options.plugins.legend.title.text =
+				data.groupedColumns.length === 2 ? data.groupedColumns[1].name : '';
+		}
 
 		chart.options.scales = {
 			y: {

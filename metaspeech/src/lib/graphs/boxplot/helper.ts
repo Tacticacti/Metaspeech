@@ -157,6 +157,37 @@ export function flipKeys(data: GroupedDataFrame) {
 }
 
 /**
+ * generates legend object for chart if 2 columns are in groupby.
+ * @param data current grouped dataframe
+ * @returns chart obj
+ */
+export function getLegend(data: GroupedDataFrame) {
+	if (data.groupedColumns.length !== 2) return {};
+	const legendText = data.groupedColumns[1].name;
+	return {
+		display: true,
+		position: 'right',
+		title: {
+			display: true,
+			text: legendText
+		},
+		labels: {
+			usePointStyle: true
+		}
+	};
+}
+/**
+ * generates title for boxplot from current dataframe
+ * @param data current dataframe
+ * @returns title string
+ */
+export function getBoxPlotTitleText(data: GroupedDataFrame): string {
+	if (data.groupedColumns.length === 0) {
+		return 'Distribution of ' + data!.aggregateColumn!.name; //aggregateColumn cant be undefined. otherwise boxplot cant be selected
+	}
+	return getTitleText(data);
+}
+/**
  * exports config for chart
  * @param boxplotData current box plot data, which includes labels and datasets
  * @param data current grouped data frame
@@ -169,7 +200,6 @@ export function getChartConfig(boxplotData: ChartData, data: GroupedDataFrame): 
 	};
 
 	const xAxisScaleText = data.groupedColumns.length > 0 ? data.groupedColumns[0].name : 'All';
-	const legendText = data.groupedColumns.length === 2 ? data.groupedColumns[1].name : '';
 
 	const cfg: ChartConfiguration = {
 		type: 'boxplot',
@@ -177,26 +207,15 @@ export function getChartConfig(boxplotData: ChartData, data: GroupedDataFrame): 
 
 		options: {
 			plugins: {
-				// @ts-expect-error Needs a specific type for plugin
 				customCanvasBackgroundColor: {
 					color: 'white'
 				},
 				title: {
 					display: true,
-					text: getTitleText(data)
-					//'Boxplot of (' + $selectedColumns.join(', ') + ')'
+					text: getBoxPlotTitleText(data)
 				},
-				legend: {
-					display: true,
-					position: 'right',
-					title: {
-						display: true,
-						text: legendText
-					},
-					labels: {
-						usePointStyle: true
-					}
-				}
+				//@ts-expect-error no idea what is the problem with this one
+				legend: getLegend(data)
 			},
 			scales: {
 				y: {
