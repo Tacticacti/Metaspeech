@@ -54,16 +54,24 @@
 	function filter(useMatching: boolean) {
 		validateInputs();
 
-		const originalCount = get(df.rows).length;
+		const original = df.get();
 
 		df.filter((row) => matches(row[selectedIndex]) !== useMatching);
 
 		const newCount = get(df.rows).length;
 
-		if (newCount === originalCount) {
+		if (newCount === original.rows.length) {
 			const errorMessage = useRange
 				? `No matching rows found for range ${min}-${max} in column "${selectedColumn.name}".`
 				: `No matching rows found for value "${filterValue}" in column "${selectedColumn.name}".`;
+			throw new Error(errorMessage);
+		}
+
+		if (newCount === 0) {
+			df.set(original);
+
+			const errorMessage = 'Filtering cancelled. No rows would be left in the table.';
+
 			throw new Error(errorMessage);
 		}
 	}
