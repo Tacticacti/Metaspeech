@@ -3,7 +3,7 @@ import sut from '$lib/graphs/table/Table.svelte';
 import { vi, describe, it, expect } from 'vitest';
 import type { Column, DataType, Group, GroupBy, GroupedDataFrame } from '$lib/Types';
 import userEvent, { type UserEvent } from '@testing-library/user-event';
-import { copyTableToClipboardAsLaTeX } from './Export';
+import { copyTableToClipboardAsLaTeX, downloadAsTSV } from './Export';
 
 function column(groupBy: GroupBy | undefined): Column {
 	return {
@@ -208,14 +208,27 @@ describe('edge cases', () => {
 	});
 });
 
-it('should allow exporting to LaTeX', async () => {
-	const user = userEvent.setup();
-	const df: GroupedDataFrame = {
-		groupedColumns: [column({ type: 'specific' })],
-		aggregateColumn: column(undefined),
-		groups: [group(['a'], [1]), group(['b'], [2, 4])]
-	};
-	const r = render(sut, { props: { data: df } });
-	await user.click(r.getByTestId('copy-as-latex'));
-	expect(copyTableToClipboardAsLaTeX).toHaveBeenCalled();
+describe('export', () => {
+	it('should allow exporting to LaTeX', async () => {
+		const user = userEvent.setup();
+		const df: GroupedDataFrame = {
+			groupedColumns: [column({ type: 'specific' })],
+			aggregateColumn: column(undefined),
+			groups: [group(['a'], [1]), group(['b'], [2, 4])]
+		};
+		const r = render(sut, { props: { data: df } });
+		await user.click(r.getByTestId('copy-as-latex'));
+		expect(copyTableToClipboardAsLaTeX).toHaveBeenCalled();
+	});
+	it('should allow exporting to TSV', async () => {
+		const user = userEvent.setup();
+		const df: GroupedDataFrame = {
+			groupedColumns: [column({ type: 'specific' })],
+			aggregateColumn: column(undefined),
+			groups: [group(['a'], [1]), group(['b'], [2, 4])]
+		};
+		const r = render(sut, { props: { data: df } });
+		await user.click(r.getByTestId('download-as-tsv'));
+		expect(downloadAsTSV).toHaveBeenCalled();
+	});
 });
