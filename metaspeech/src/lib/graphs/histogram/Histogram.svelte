@@ -67,7 +67,11 @@
 					{/each}
 				</select>
 			{:else}
-				<select bind:value={selectedFunction} data-testid="nonaggregation-select" class="my-2 inline-block cursor-pointer rounded-lg border border-gray-300 bg-gray-100 px-4 py-2 text-sm font-semibold text-gray-800 shadow-md transition-colors duration-300 ease-in-out">
+				<select
+					bind:value={selectedFunction}
+					data-testid="nonaggregation-select"
+					class="my-2 inline-block cursor-pointer rounded-lg border border-gray-300 bg-gray-100 px-4 py-2 text-sm font-semibold text-gray-800 shadow-md transition-colors duration-300 ease-in-out"
+				>
 					{#each possibleFunctionsForNonAggregation as func}
 						<option value={func} data-testid="nonaggregation-{func}">{func}</option>
 					{/each}

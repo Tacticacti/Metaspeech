@@ -20,12 +20,13 @@
 	let borderColor: string = '#000000';
 	let fontColor: string = '#000000';
 
-	let titlePlaceholder: string = chart?.options?.plugins?.title?.text?.toString() ?? 'Enter title'
+	let titlePlaceholder: string = chart?.options?.plugins?.title?.text?.toString() ?? 'Enter title';
 	// @ts-expect-error type error
-	let xAxisPlaceholder: string = chart?.options?.scales?.x?.title?.text?.toString() ?? 'Enter x axis label'
+	let xAxisPlaceholder: string =
+		chart?.options?.scales?.x?.title?.text?.toString() ?? 'Enter x axis label';
 	// @ts-expect-error type error
-	let yAxisPlaceholder: string = chart?.options?.scales?.y?.title?.text?.toString() ?? 'Enter y axis label'
-	
+	let yAxisPlaceholder: string =
+		chart?.options?.scales?.y?.title?.text?.toString() ?? 'Enter y axis label';
 
 	/**
 	 * Checks to remove values from chart
@@ -97,7 +98,6 @@
 			}
 		};
 	}
-	
 
 	/**
 	 * If the graph is a scatter plot the point radius is updated
@@ -123,7 +123,7 @@
 		// @ts-expect-error type error
 		xAxis = chart?.options?.scales?.x?.title?.text?.toString() ?? '';
 		// @ts-expect-error type error
-		yAxis = chart?.options?.scales?.y?.title?.text?.toString() ?? '';		
+		yAxis = chart?.options?.scales?.y?.title?.text?.toString() ?? '';
 	});
 </script>
 
