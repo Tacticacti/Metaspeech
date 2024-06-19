@@ -3,6 +3,7 @@
 	import type { DataFrameLike } from '$lib/Types';
 	import info from '$assets/icons/info.svg';
 	import { Tooltip, Button } from 'flowbite-svelte';
+	import Toast from '$components/Toast.svelte';
 
 	const columns1 = df.columns;
 	$: columns2 = second_data?.columns;
@@ -15,6 +16,8 @@
 	 */
 	function handleRowWiseMerge() {
 		df.join(second_data);
+		message = 'File merged by indexes';
+		showCustomToast();
 	}
 
 	/**
@@ -22,6 +25,22 @@
 	 */
 	function joinColumns() {
 		df.keyedJoin(second_data, merge_col_1, merge_col_2);
+		message = 'File merged by keys';
+		showCustomToast();
+	}
+
+	/**
+	 * Everything for the toast
+	 */
+	let showToast: boolean = false;
+	let message: string = 'File merged by keys';
+
+	function showCustomToast() {
+		showToast = true;
+	}
+
+	function handleClose() {
+		showToast = false;
 	}
 </script>
 
@@ -71,3 +90,7 @@
 		</div>
 	{/if}
 </div>
+
+{#if showToast}
+	<Toast {message} color="green" duration={3000} on:close={handleClose} />
+{/if}

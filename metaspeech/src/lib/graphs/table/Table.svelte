@@ -8,12 +8,24 @@
 		createTable
 	} from './Table';
 	import { copyTableToClipboardAsLaTeX, downloadAsTSV } from './Export';
+	import Toast from '$components/Toast.svelte';
 
 	export let data: GroupedDataFrame;
 	const aggregateOptions = data?.aggregateColumn ? aggregateOptions_single : aggregateOptions_none;
 	let selectedOption: AggregateOption;
 
 	$: table = createTable(data, selectedOption);
+
+	let showToast: boolean = false;
+	let message: string = 'Copied to LaTeX';
+
+	function showCustomToast() {
+		showToast = true;
+	}
+
+	function handleClose() {
+		showToast = false;
+	}
 </script>
 
 <GraphContainer>
@@ -32,14 +44,22 @@
 		<div class="flex justify-center space-x-4">
 			<button
 				class="inline-block cursor-pointer rounded-lg border border-gray-300 bg-gray-100 px-4 py-2 text-sm font-semibold text-gray-800 shadow-md transition-colors duration-300 ease-in-out hover:bg-gray-200 hover:text-blue-500"
-				on:click={() => copyTableToClipboardAsLaTeX(table)}
+				on:click={() => {
+					copyTableToClipboardAsLaTeX(table);
+					message = 'Copied to LaTeX';
+					showCustomToast();
+				}}
 				data-testid="copy-as-latex"
 			>
 				Copy as LaTeX
 			</button>
 			<button
 				class="inline-block cursor-pointer rounded-lg border border-gray-300 bg-gray-100 px-4 py-2 text-sm font-semibold text-gray-800 shadow-md transition-colors duration-300 ease-in-out hover:bg-gray-200 hover:text-blue-500"
-				on:click={() => downloadAsTSV(data, selectedOption)}
+				on:click={() => {
+					downloadAsTSV(data, selectedOption);
+					message = 'Downloaded as TSV';
+					showCustomToast();
+				}}
 				data-testid="download-as-tsv"
 			>
 				Download as TSV
@@ -67,6 +87,10 @@
 		</table>
 	</div>
 </GraphContainer>
+
+{#if showToast}
+	<Toast {message} color="green" duration={3000} on:close={handleClose} />
+{/if}
 
 <style>
 	table {

@@ -5,6 +5,7 @@
 	import { get } from 'svelte/store';
 	import { Button, Checkbox, Input, Select } from 'flowbite-svelte';
 	import filterImg from '$assets/icons/filter.png';
+	import Toast from '$components/Toast.svelte';
 
 	const columns = df.columns;
 
@@ -66,6 +67,9 @@
 				: `No matching rows found for value "${filterValue}" in column "${selectedColumn.name}".`;
 			throw new Error(errorMessage);
 		}
+
+		message = useMatching ? 'Matched rows removed' : 'Unamtched rows removed';
+		showCustomToast();
 	}
 
 	/**
@@ -82,6 +86,20 @@
 		}
 
 		return (value?.toString() ?? '') === filterValue;
+	}
+
+	/**
+	 * Everything for the toast
+	 */
+	let showToast: boolean = false;
+	let message: string = 'Matched rows removed';
+
+	function showCustomToast() {
+		showToast = true;
+	}
+
+	function handleClose() {
+		showToast = false;
 	}
 </script>
 
@@ -152,4 +170,8 @@
 			</Button>
 		</div>
 	</div>
+{/if}
+
+{#if showToast}
+	<Toast {message} color="green" duration={3000} on:close={handleClose} />
 {/if}
