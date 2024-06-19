@@ -162,7 +162,7 @@ export function flipKeys(data: GroupedDataFrame) {
  * @returns chart obj
  */
 export function getLegend(data: GroupedDataFrame) {
-	if (data.groupedColumns.length !== 2){
+	if (data.groupedColumns.length !== 2) {
 		return {
 			display: true
 		};
