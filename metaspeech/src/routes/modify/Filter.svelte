@@ -92,20 +92,6 @@
 
 		return (value?.toString() ?? '') === filterValue;
 	}
-
-	/**
-	 * Everything for the toast
-	 */
-	let showToast: boolean = false;
-	let message: string = 'Matched rows removed';
-
-	function showCustomToast() {
-		showToast = true;
-	}
-
-	function handleClose() {
-		showToast = false;
-	}
 </script>
 
 <div class="flex">
