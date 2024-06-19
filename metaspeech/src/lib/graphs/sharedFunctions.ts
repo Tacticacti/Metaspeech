@@ -182,9 +182,9 @@ export function keyToString(key: DataType, groupBy: GroupBy): string {
 		const index = key as number;
 
 		const start = index * size;
-		const end = start + size - 1;
+		const end = start + size;
 
-		return `[${start}-${end}]`;
+		return `[${start}-${end})`;
 	}
 
 	return key.toString();

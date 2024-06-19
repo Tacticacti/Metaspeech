@@ -153,6 +153,21 @@ describe('importing a DataFrame', () => {
 		});
 	});
 
+	it('should accept clrf as a new line', () => {
+		const df = fromText('a,b\r\n1,2\r\n3,4');
+
+		expect(df).toEqual({
+			columns: [
+				{ name: 'a', type: 'number', hasMissing: false },
+				{ name: 'b', type: 'number', hasMissing: false }
+			],
+			rows: [
+				[1, 2],
+				[3, 4]
+			]
+		});
+	});
+
 	it('only a new line', () => {
 		const df = fromText('\n');
 		// TODO: check if this is really the desired behavior in this edge case
