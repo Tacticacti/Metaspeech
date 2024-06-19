@@ -9,6 +9,11 @@
 	export let graph: GraphMeta;
 
 	/**
+	 * Whether the graph is selected
+	 */
+	export let isSelected: boolean;
+
+	/**
 	 * Data about the grouping of the graph
 	 */
 	export let data: GroupedDataFrame;
@@ -25,6 +30,7 @@
 	tabindex="0"
 	data-testid={graph.title}
 	class="box-content flex h-12 w-44 flex-row flex-wrap justify-between rounded-md border border-gray-400 p-1 px-3 hover:bg-gray-300 disabled:bg-gray-300"
+	class:selected={isSelected}
 	on:click
 	on:mouseover
 	on:focus
@@ -42,3 +48,11 @@
 		{noRenderReasons[graph.title] || 'unknown reason why disabled'}
 	</Tooltip>
 {/if}
+
+<style>
+	.selected {
+		--tw-bg-opacity: 1;
+		background-color: rgb(61 79 117 / var(--tw-bg-opacity));
+		color: white;
+	}
+</style>

@@ -3,7 +3,7 @@ import sut from '$lib/graphs/table/Table.svelte';
 import { vi, describe, it, expect } from 'vitest';
 import type { Column, DataType, Group, GroupBy, GroupedDataFrame } from '$lib/Types';
 import userEvent, { type UserEvent } from '@testing-library/user-event';
-import { copyTableToClipboardAsLaTeX, downloadAsTSV } from './Export';
+import { copyTableToClipboardAsLaTeX, copyAsText } from './Export';
 
 function column(groupBy: GroupBy | undefined): Column {
 	return {
@@ -154,8 +154,8 @@ describe('edge cases', () => {
 		const r = render(sut, { props: { data: df } });
 		await selectOption(r, user, 'Mean');
 
-		r.getByTestId('cell-[10-19]');
-		r.getByTestId('cell-[20-29]');
+		r.getByTestId('cell-[10-20)');
+		r.getByTestId('cell-[20-30)');
 		r.getByTestId('cell-1');
 		r.getByTestId('cell-3');
 	});
@@ -169,8 +169,8 @@ describe('edge cases', () => {
 		const r = render(sut, { props: { data: df } });
 		await selectOption(r, user, 'Mean');
 
-		r.getByTestId('cell-[10-19]');
-		r.getByTestId('cell-[20-29]');
+		r.getByTestId('cell-[10-20)');
+		r.getByTestId('cell-[20-30)');
 		r.getByTestId('cell-a');
 		r.getByTestId('cell-b');
 	});
@@ -184,8 +184,8 @@ describe('edge cases', () => {
 		const r = render(sut, { props: { data: df } });
 		await selectOption(r, user, 'Mean');
 
-		r.getByTestId('cell-[10-19]');
-		r.getByTestId('cell-[20-29]');
+		r.getByTestId('cell-[10-20)');
+		r.getByTestId('cell-[20-30)');
 		r.getByTestId('cell-a');
 		r.getByTestId('cell-b');
 	});
@@ -229,6 +229,6 @@ describe('export', () => {
 		};
 		const r = render(sut, { props: { data: df } });
 		await user.click(r.getByTestId('download-as-tsv'));
-		expect(downloadAsTSV).toHaveBeenCalled();
+		expect(copyAsText).toHaveBeenCalled();
 	});
 });

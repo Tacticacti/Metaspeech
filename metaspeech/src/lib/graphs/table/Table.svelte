@@ -7,7 +7,8 @@
 		type AggregateOption,
 		createTable
 	} from './Table';
-	import { copyTableToClipboardAsLaTeX, downloadAsTSV } from './Export';
+	import { copyTableToClipboardAsLaTeX, copyAsText } from './Export';
+	import { Tooltip } from 'flowbite-svelte';
 	import Toast from '$components/Toast.svelte';
 
 	export let data: GroupedDataFrame;
@@ -50,20 +51,30 @@
 					showCustomToast();
 				}}
 				data-testid="copy-as-latex"
+				id="copy-as-latex"
 			>
 				Copy as LaTeX
 			</button>
 			<button
 				class="inline-block cursor-pointer rounded-lg border border-gray-300 bg-gray-100 px-4 py-2 text-sm font-semibold text-gray-800 shadow-md transition-colors duration-300 ease-in-out hover:bg-gray-200 hover:text-blue-500"
 				on:click={() => {
-					downloadAsTSV(data, selectedOption);
+					copyAsText(table)
 					message = 'Downloaded as TSV';
 					showCustomToast();
 				}}
 				data-testid="download-as-tsv"
+				id="copy-as-tsv"
 			>
-				Download as TSV
+				Copy as text (.tsv)
 			</button>
+			<Tooltip
+				triggeredBy="[id^='copy-as-']"
+				trigger="click"
+				placement="bottom"
+				class="z-50 w-48 bg-gray-600 text-sm font-light opacity-90"
+			>
+				Copied!
+			</Tooltip>
 		</div>
 	</div>
 	<div slot="graph-slot" class="mb-10 overflow-x-auto">

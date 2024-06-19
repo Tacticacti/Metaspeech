@@ -25,9 +25,9 @@ export const COPYRIGHT_YEAR = 2024;
  */
 export const graphs: GraphMeta[] = [
 	{
-		title: 'Histogram',
+		title: 'Barchart',
 		description:
-			'A histogram is a graphical representation of the distribution of numerical data. It groups data into bins and displays the frequency of data points in each bin using bars.',
+			'A barchart is a graphical representation of the distribution of numerical data. It groups data into bins and displays the frequency of data points in each bin using bars.',
 		img: Histogram_img,
 		canRender: () => true,
 		graph: Histogram

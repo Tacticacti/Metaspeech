@@ -6,7 +6,7 @@
 	import info from '$assets/icons/info.svg';
 
 	const columns = df.columns;
-	$: aggregatableColumns = $columns.filter((c) => c.type === 'number' && !c.groupBy);
+	$: aggregatableColumns = $columns.filter((c) => c.type === 'number');
 	$: aggregateBy = $columns.find((c) => c.aggregate);
 
 	/**
@@ -68,7 +68,8 @@
 					class="z-20 w-48 bg-gray-600 text-sm font-light opacity-90"
 					data-testid="info-bubble-groupby"
 				>
-					Select <span class="font-bold">any</span> columns that you want to group together.
+					Select <span class="font-bold">any</span> columns that you want to group together. Essentially,
+					these columns will be shown on the x-axis.
 				</Tooltip>
 			</span>
 			<div class="mt-5 flex w-fit flex-col">
@@ -114,7 +115,8 @@
 					class="z-20 w-48 bg-gray-600 text-sm font-light opacity-90"
 					data-testid="info-bubble-show"
 				>
-					Select <span class="font-bold">one</span> numeric column to show for each subgroup.
+					Select <span class="font-bold">one</span> numeric column to show for each subgroup. Essentially,
+					this data will be shown on the y-axis.
 				</Tooltip>
 			</span>
 			<div class="mt-5 flex w-fit flex-col">
@@ -130,12 +132,16 @@
 				</label>
 				<div class="mb-2 size-1 w-full rounded-lg bg-gray-300"></div>
 				{#each aggregatableColumns as column}
-					<label class="mb-2 flex items-center">
+					<label
+						class="mb-2 flex items-center"
+						title={column.groupBy ? 'Cannot select for show: this column is grouped' : ''}
+					>
 						<input
-							class="mr-2 h-5 w-5 border-2 transition-all duration-200 ease-in-out"
+							class="mr-2 h-5 w-5 border-2 transition-all duration-200 ease-in-out disabled:opacity-50"
 							type="radio"
 							name="show"
 							checked={column.aggregate}
+							disabled={!!column.groupBy}
 							on:input={() => selectColumnForShowing(column)}
 						/>
 						<span class="w-64 truncate">
