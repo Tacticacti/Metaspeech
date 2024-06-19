@@ -50,7 +50,7 @@
 				data-testid="file-input"
 			/>
 			<label
-				class="my-2 inline-block cursor-pointer rounded-lg border border-gray-300 bg-gray-100 px-4 py-2 text-lg font-bold text-gray-800 shadow-md transition-colors duration-300 ease-in-out hover:bg-gray-200 hover:text-blue-500"
+				class="my-2 inline-block cursor-pointer rounded-lg border border-gray-300 bg-darkblue px-4 py-2 text-lg font-bold text-gray-100 shadow-md transition-colors duration-300 ease-in-out hover:bg-blue-900"
 				for="append-data"
 			>
 				Merge File

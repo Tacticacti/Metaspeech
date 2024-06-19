@@ -5,6 +5,7 @@
 	import { get } from 'svelte/store';
 	import { Button, Checkbox, Input, Select } from 'flowbite-svelte';
 	import filterImg from '$assets/icons/filter.png';
+	import { Tooltip } from 'flowbite-svelte';
 
 	const columns = df.columns;
 
@@ -148,6 +149,7 @@
 					class="mr-2 rounded-md px-5 py-3 font-bold text-darkblue"
 					on:click={() => filter(true)}
 					data-testid="remove-matching-button"
+					id="filter-matching"
 				>
 					Remove matching
 				</Button>
@@ -156,9 +158,18 @@
 					class="rounded-md px-5 py-3 font-bold text-darkblue"
 					on:click={() => filter(false)}
 					data-testid="remove-nonmatching-button"
+					id="filter-nonmatching"
 				>
 					Remove non-matching
 				</Button>
+				<Tooltip
+					triggeredBy="[id^='filter-']"
+					trigger="click"
+					placement="bottom"
+					class="z-50 w-48 bg-gray-600 text-sm font-light opacity-90"
+				>
+					Filtered!
+				</Tooltip>
 			</div>
 		</div>
 	{/if}

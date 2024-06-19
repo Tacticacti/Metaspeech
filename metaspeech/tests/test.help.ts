@@ -91,7 +91,6 @@ export function getPrevFileButton(page: Page, file: string) {
 }
 
 export function getDeleteButtons(page: Page): Locator {
-	//return page.getByRole('button', { name: 'X' })
 	return page.getByTestId('btn-delete-file');
 }
 
