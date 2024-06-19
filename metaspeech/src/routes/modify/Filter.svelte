@@ -93,71 +93,73 @@
 	}
 </script>
 
-<Button
-	class="max-h-14 max-w-32 rounded-lg bg-darkblue px-12 py-4 font-bold text-offwhite hover:bg-blue-900"
-	on:click={() => (isOpen = !isOpen)}
->
-	<img src={filterImg} class="mr-4 h-8 w-8 invert" alt="Filter icon" />
-	Filter
-</Button>
+<div class="flex">
+	<Button
+		class="mr-5 max-h-14 max-w-32 rounded-lg bg-darkblue px-12 py-4 font-bold text-offwhite hover:bg-blue-900"
+		on:click={() => (isOpen = !isOpen)}
+	>
+		<img src={filterImg} class="mr-4 h-8 w-8 invert" alt="Filter icon" />
+		Filter
+	</Button>
 
-{#if isOpen}
-	<div class="flex flex-wrap justify-center" data-testid="filter-window">
-		<Select class="mr-2 max-w-28" bind:value={selectedIndex} data-testid="column-select">
-			{#each $columns as col, index}
-				<option value={index}>{col.name}</option>
-			{/each}
-		</Select>
-		{#if selectedColumn?.type === 'number'}
-			<Checkbox class="mx-2" bind:checked={useRangeChecked} data-testid="userange-check">
-				Select Range
-			</Checkbox>
-		{/if}
+	{#if isOpen}
+		<div class="justify-left flex flex-wrap" data-testid="filter-window">
+			<Select class="mr-2 max-w-28" bind:value={selectedIndex} data-testid="column-select">
+				{#each $columns as col, index}
+					<option value={index}>{col.name}</option>
+				{/each}
+			</Select>
+			{#if selectedColumn?.type === 'number'}
+				<Checkbox class="mx-2" bind:checked={useRangeChecked} data-testid="userange-check">
+					Select Range
+				</Checkbox>
+			{/if}
 
-		{#if useRange}
-			<div class="mr-5 flex justify-center">
+			{#if useRange}
+				<div class="mr-5 flex justify-center">
+					<Input
+						class="mr-1 max-w-16"
+						type="number"
+						placeholder="min"
+						bind:value={min}
+						data-testid="minrange-input"
+					/>
+					<Input
+						class="max-w-16"
+						type="number"
+						placeholder="max"
+						bind:value={max}
+						data-testid="maxrange-input"
+					/>
+				</div>
+			{:else}
 				<Input
-					class="mr-1 max-w-16"
-					type="number"
-					placeholder="min"
-					bind:value={min}
-					data-testid="minrange-input"
+					class="mr-2 max-w-28"
+					type="text"
+					placeholder="Value to filter"
+					bind:value={filterValue}
+					data-testid="textfilter-input"
 				/>
-				<Input
-					class="max-w-16"
-					type="number"
-					placeholder="max"
-					bind:value={max}
-					data-testid="maxrange-input"
-				/>
+			{/if}
+
+			<div class="flex flex-wrap justify-center">
+				<Button
+					color="light"
+					class="mr-2 rounded-md px-5 py-3 font-bold text-darkblue"
+					on:click={() => filter(true)}
+					data-testid="remove-matching-button"
+				>
+					Remove matching
+				</Button>
+				<Button
+					color="light"
+					class="rounded-md px-5 py-3 font-bold text-darkblue"
+					on:click={() => filter(false)}
+					data-testid="remove-nonmatching-button"
+				>
+					Remove non-matching
+				</Button>
 			</div>
-		{:else}
-			<Input
-				class="mr-2 max-w-28"
-				type="text"
-				placeholder="Value to filter"
-				bind:value={filterValue}
-				data-testid="textfilter-input"
-			/>
-		{/if}
-
-		<div class="flex flex-wrap justify-center">
-			<Button
-				color="light"
-				class="mr-2 rounded-md px-5 py-3 font-bold text-darkblue"
-				on:click={() => filter(true)}
-				data-testid="remove-matching-button"
-			>
-				Remove matching
-			</Button>
-			<Button
-				color="light"
-				class="rounded-md px-5 py-3 font-bold text-darkblue"
-				on:click={() => filter(false)}
-				data-testid="remove-nonmatching-button"
-			>
-				Remove non-matching
-			</Button>
 		</div>
-	</div>
-{/if}
+	{/if}
+</div>

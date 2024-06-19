@@ -55,13 +55,13 @@
 <div class="flex justify-center gap-5 p-5">
 	<Importer on:input={handleInput} id="import-data" data-testid="import" />
 	<label
-		class="my-2 inline-block cursor-pointer rounded-lg border border-gray-300 bg-gray-100 px-4 py-2 text-lg font-bold text-gray-800 shadow-md transition-colors duration-300 ease-in-out hover:bg-gray-200 hover:text-blue-500"
+		class="my-2 inline-block cursor-pointer rounded-lg border border-gray-300 bg-darkblue px-4 py-2 text-lg font-bold text-gray-50 shadow-md transition-colors duration-300 ease-in-out hover:bg-gray-200 hover:text-blue-500"
 		for="import-data"
 	>
 		Select Data
 	</label>
 	<button
-		class="my-2 inline-block cursor-pointer rounded-lg border border-gray-300 bg-gray-100 px-4 py-2 text-lg font-bold text-gray-800 shadow-md transition-colors duration-300 ease-in-out hover:bg-gray-200 hover:text-blue-500"
+		class="my-2 inline-block cursor-pointer rounded-lg border border-gray-300 bg-darkblue px-4 py-2 text-lg font-bold text-gray-50 shadow-md transition-colors duration-300 ease-in-out hover:bg-gray-200 hover:text-blue-500"
 		on:click={() => goto('/previous')}
 		data-testid="previous-btn"
 	>
@@ -81,6 +81,8 @@
 	<h3 class="text-gray-500">How it works</h3>
 	<div class="mt-5 flex flex-col items-center justify-around md:flex-row">
 		<Card text={'Upload your data as a TSV, JSON, XLS, or TXT in the correct format.'} />
+		<p class="mx-10 rotate-90 transform text-4xl text-darkblue md:m-0 md:rotate-0">&rarr;</p>
+		<Card text={'Modify data by filtering and merging extra data.'} />
 		<p class="mx-10 rotate-90 transform text-4xl text-darkblue md:m-0 md:rotate-0">&rarr;</p>
 		<Card text={'Select which parameters and graph you want us to create.'} />
 		<p class="mx-10 rotate-90 transform text-4xl text-darkblue md:m-0 md:rotate-0">&rarr;</p>
