@@ -7,7 +7,8 @@ import {
 	jsonTestData,
 	jsonCorruptedTestData
 } from './testData.help';
-import { mergeTypes } from '$lib/Constants';
+
+const mergeTypes = ['Match in order', 'Join with key'];
 
 test.describe('Modify page tests', () => {
 	test.describe('Page layout tests', () => {
@@ -400,7 +401,7 @@ test.describe('Modify page tests', () => {
 				buffer: Buffer.from(jsonData)
 			});
 
-			const indexMergeButton = helper.getMergeIndexButton(page);
+			const indexMergeButton = helper.getMergeButton(page);
 			await indexMergeButton.click();
 
 			await expect(helper.getColumnHeaderInput(page, 'Id')).toBeVisible();
