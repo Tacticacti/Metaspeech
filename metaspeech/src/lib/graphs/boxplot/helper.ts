@@ -164,7 +164,7 @@ export function flipKeys(data: GroupedDataFrame) {
 export function getLegend(data: GroupedDataFrame) {
 	if (data.groupedColumns.length !== 2) {
 		return {
-			display: true
+			display: false
 		};
 	}
 	const legendText = data.groupedColumns[1].name;

@@ -224,7 +224,7 @@ describe('getLegend tests', () => {
 		const groupedDf = df.groupBy();
 		const legend = getLegend(groupedDf);
 
-		expect(legend).toStrictEqual({});
+		expect(legend).toStrictEqual({ display: false });
 	});
 	it('3 grouped columns', () => {
 		const df = new DataFrame();
@@ -239,7 +239,7 @@ describe('getLegend tests', () => {
 		const groupedDf = df.groupBy();
 		const legend = getLegend(groupedDf);
 
-		expect(legend).toStrictEqual({});
+		expect(legend).toStrictEqual({ display: false });
 	});
 	it('2 grouped columns', () => {
 		const df = new DataFrame();
