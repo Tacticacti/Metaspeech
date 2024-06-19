@@ -32,10 +32,25 @@ describe('handleData tests', () => {
 
 		const groupedDf = df.groupBy();
 
-		const [labels, values] = handleData('Sum', groupedDf);
+		const [labels, values] = handleData('Mean', groupedDf);
 
 		expect(labels).toStrictEqual(['18', '32']);
 		expect(values).toStrictEqual([1, 4]);
+	});
+	it('check if mean+stddev is executed and gives correct output', () => {
+		const df = new DataFrame();
+		df.set(fromText('age,cars\n18,1\n32,4\n18,2\n32,8'));
+
+		const columns = get(df.columns);
+		columns[1].aggregate = true;
+		columns[0].groupBy = { type: 'specific' };
+
+		const groupedDf = df.groupBy();
+
+		const [labels, values] = handleData('Mean + Standard Deviation', groupedDf);
+
+		expect(labels).toStrictEqual(['18', '32']);
+		expect(values).toStrictEqual([{y: 1.5, yMin: 1, yMax: 2}, {y: 6, yMin: 4, yMax: 8}]);
 	});
 	it('check if abs freq is executed and gives correct output', () => {
 		const df = new DataFrame();
