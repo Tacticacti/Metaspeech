@@ -4,8 +4,14 @@ import {
 	calculateAbsoluteFrequency,
 	calculateRelativeFrequency
 } from '$lib/graphs/sharedFunctions';
-import type { GroupedDataFrame } from '$lib/Types';
+
+import type { GroupedDataFrame, BarChartData } from '$lib/Types';
 import { type ChartConfiguration, type ChartDataset } from 'chart.js';
+import 'chartjs-chart-error-bars';
+
+type BarChartDataset = ChartDataset<'barWithErrorBars'>;
+type BarChartConfiguration = ChartConfiguration<'barWithErrorBars'>;
+
 import { getTitleText, getScaleXAxisText, getScaleYAxisText } from '$lib/graphs/sharedFunctions';
 
 /**
@@ -31,12 +37,17 @@ function setColor(chart, ignored: string, options: ChartOptions) {
  * @param data current data frame
  * @returns bin strings and values for chart
  */
-export function handleData(selectedFunction: string, data: GroupedDataFrame): [string[], number[]] {
+export function handleData(
+	selectedFunction: string,
+	data: GroupedDataFrame
+): [string[], BarChartData[]] {
 	switch (selectedFunction) {
 		case 'Sum':
 			return calculateSum(data);
 		case 'Mean':
-			return calculateMean(data);
+			return calculateMean(data, false);
+		case 'Mean + Standard Deviation':
+			return calculateMean(data, true);
 		case 'Count':
 			return calculateAbsoluteFrequency(data);
 		case 'Percentage':
@@ -52,8 +63,12 @@ export function handleData(selectedFunction: string, data: GroupedDataFrame): [s
  * @param selectedFunction selected function name
  * @returns datasets for chart
  */
-export function createDatasets(data: GroupedDataFrame, values: number[], selectedFunction: string) {
-	const datasets = [
+export function createDatasets(
+	data: GroupedDataFrame,
+	values: BarChartData[],
+	selectedFunction: string
+) {
+	return [
 		{
 			label: createDatasetsLabel(data, values, selectedFunction),
 			data: values,
@@ -62,7 +77,6 @@ export function createDatasets(data: GroupedDataFrame, values: number[], selecte
 			borderWidth: 1
 		}
 	];
-	return datasets;
 }
 
 /**
@@ -74,7 +88,7 @@ export function createDatasets(data: GroupedDataFrame, values: number[], selecte
  */
 export function createDatasetsLabel(
 	data: GroupedDataFrame,
-	values: number[],
+	values: BarChartData[],
 	selectedFunction: string
 ) {
 	if (data.aggregateColumn) {
@@ -96,17 +110,17 @@ export function createDatasetsLabel(
  */
 export function createConfig(
 	labels: string[],
-	datasets: ChartDataset[],
+	datasets: BarChartDataset[],
 	data: GroupedDataFrame,
 	selectedFunction: string
-): ChartConfiguration {
+): BarChartConfiguration {
 	const plugin = {
 		id: 'customCanvasBackgroundColor',
 		beforeDraw: setColor
 	};
 
-	const cfg: ChartConfiguration = {
-		type: 'bar',
+	const cfg: BarChartConfiguration = {
+		type: 'barWithErrorBars',
 		data: {
 			labels: labels,
 			datasets: datasets

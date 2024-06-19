@@ -1,4 +1,4 @@
-import type { GroupedDataFrame, Group, DataType, GroupBy, Column } from '$lib/Types';
+import type { GroupedDataFrame, Group, DataType, GroupBy, Column, BarChartData } from '$lib/Types';
 
 /**
  * generates title for graph from current dataframe
@@ -14,7 +14,7 @@ export function getTitleText(
 	}
 	let title: string;
 	if (data.aggregateColumn && selectedFunction)
-		title = selectedFunction + ' ' + data.aggregateColumn.name + ' x ';
+		title = selectedFunction + ' of ' + data.aggregateColumn.name + ' x ';
 	else if (data.aggregateColumn) title = data.aggregateColumn.name + ' x ';
 	else title = 'Frequency of ';
 
@@ -63,9 +63,12 @@ export function getScaleYAxisText(data: GroupedDataFrame, selectedFunction: stri
  * @param data current dataframe for which we want to calculate mean
  * @returns returns bin strings + mean values for each of the bins
  */
-export function calculateMean(data: GroupedDataFrame): [string[], number[]] {
+export function calculateMean(
+	data: GroupedDataFrame,
+	calculateStandardDeviation: boolean
+): [string[], BarChartData[]] {
 	const bins: string[] = [];
-	const values: number[] = [];
+	const values: BarChartData[] = [];
 	for (let i = 0; i < data.groups.length; i++) {
 		const group: Group = data.groups[i];
 		const name: string = keyArrayToString(group.keys, data.groupedColumns);
@@ -76,7 +79,26 @@ export function calculateMean(data: GroupedDataFrame): [string[], number[]] {
 			//to select a non numeric column in parameter page
 			//Make sure to pass only numeric columns!
 		}
-		values.push(sum / group.values.length);
+
+		const mean = sum / group.values.length;
+
+		if (!calculateStandardDeviation) {
+			values.push(mean);
+			continue;
+		}
+
+		const groupValues = group.values as number[];
+
+		//Credits to Boris
+		const sd = Math.sqrt(
+			groupValues.reduce((acc, v) => acc + (v - mean) ** 2, 0) / groupValues.length
+		);
+
+		const y = mean;
+		const yMin = +(y - sd).toFixed(3);
+		const yMax = +(y + sd).toFixed(3);
+
+		values.push({ y, yMin, yMax });
 	}
 	return [bins, values];
 }
