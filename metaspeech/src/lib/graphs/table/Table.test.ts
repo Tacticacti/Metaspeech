@@ -3,7 +3,7 @@ import sut from '$lib/graphs/table/Table.svelte';
 import { vi, describe, it, expect } from 'vitest';
 import type { Column, DataType, Group, GroupBy, GroupedDataFrame } from '$lib/Types';
 import userEvent, { type UserEvent } from '@testing-library/user-event';
-import { copyTableToClipboardAsLaTeX, downloadAsTSV } from './Export';
+import { copyTableToClipboardAsLaTeX, copyAsText } from './Export';
 
 function column(groupBy: GroupBy | undefined): Column {
 	return {
@@ -229,6 +229,6 @@ describe('export', () => {
 		};
 		const r = render(sut, { props: { data: df } });
 		await user.click(r.getByTestId('download-as-tsv'));
-		expect(downloadAsTSV).toHaveBeenCalled();
+		expect(copyAsText).toHaveBeenCalled();
 	});
 });

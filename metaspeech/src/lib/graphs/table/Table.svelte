@@ -7,7 +7,7 @@
 		type AggregateOption,
 		createTable
 	} from './Table';
-	import { copyTableToClipboardAsLaTeX, downloadAsTSV } from './Export';
+	import { copyTableToClipboardAsLaTeX, copyAsText } from './Export';
 
 	export let data: GroupedDataFrame;
 	const aggregateOptions = data?.aggregateColumn ? aggregateOptions_single : aggregateOptions_none;
@@ -39,10 +39,10 @@
 			</button>
 			<button
 				class="inline-block cursor-pointer rounded-lg border border-gray-300 bg-gray-100 px-4 py-2 text-sm font-semibold text-gray-800 shadow-md transition-colors duration-300 ease-in-out hover:bg-gray-200 hover:text-blue-500"
-				on:click={() => downloadAsTSV(data, selectedOption)}
+				on:click={() => copyAsText(data, selectedOption)}
 				data-testid="download-as-tsv"
 			>
-				Download as TSV
+				Copy as text (.tsv)
 			</button>
 		</div>
 	</div>
