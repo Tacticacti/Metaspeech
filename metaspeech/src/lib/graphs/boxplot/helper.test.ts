@@ -1,6 +1,13 @@
 import { DataFrame, fromText } from '$lib/dataframe/DataFrame';
 import { get } from 'svelte/store';
-import { flipKeys, getArrayForDatasets, getBoxPlotData, getChartConfig } from './helper';
+import {
+	flipKeys,
+	getArrayForDatasets,
+	getBoxPlotData,
+	getBoxPlotTitleText,
+	getChartConfig,
+	getLegend
+} from './helper';
 
 describe('getBoxPlotData tests', () => {
 	it('0 grouped columns', () => {
@@ -13,7 +20,9 @@ describe('getBoxPlotData tests', () => {
 		const groupedDf = df.groupBy();
 
 		const data = getBoxPlotData(groupedDf);
-		expect(data).toBeUndefined();
+		expect(data).toBeDefined();
+		expect(data?.labels).toStrictEqual(['']);
+		expect(data?.datasets[0].data).toStrictEqual([[1, 4, 2]]);
 	});
 	it('3 grouped columns', () => {
 		const df = new DataFrame();
@@ -200,5 +209,81 @@ describe('getChartConfig tests', () => {
 		// expect(config.options?.plugins?.title?.text).toBe('cars x age');
 		// //@ts-expect-error don't know why there is type error
 		// expect(config.options?.scales.y?.title?.text).toBe('cars');
+	});
+});
+
+describe('getLegend tests', () => {
+	it('1 grouped column', () => {
+		const df = new DataFrame();
+		df.set(fromText('age,gender,cars\n18,F,1\n20,M,1\n18,F,2\n20,F,3\n18,M,1'));
+
+		const columns = get(df.columns);
+		columns[2].aggregate = true;
+		columns[0].groupBy = { type: 'specific' };
+
+		const groupedDf = df.groupBy();
+		const legend = getLegend(groupedDf);
+
+		expect(legend).toStrictEqual({});
+	});
+	it('3 grouped columns', () => {
+		const df = new DataFrame();
+		df.set(fromText('age,gender,cars\n18,F,1\n20,M,1\n18,F,2\n20,F,3\n18,M,1'));
+
+		const columns = get(df.columns);
+		columns[2].aggregate = true;
+		columns[0].groupBy = { type: 'specific' };
+		columns[1].groupBy = { type: 'specific' };
+		columns[2].groupBy = { type: 'specific' };
+
+		const groupedDf = df.groupBy();
+		const legend = getLegend(groupedDf);
+
+		expect(legend).toStrictEqual({});
+	});
+	it('2 grouped columns', () => {
+		const df = new DataFrame();
+		df.set(fromText('age,gender,cars\n18,F,1\n20,M,1\n18,F,2\n20,F,3\n18,M,1'));
+
+		const columns = get(df.columns);
+		columns[2].aggregate = true;
+		columns[0].groupBy = { type: 'specific' };
+		columns[1].groupBy = { type: 'specific' };
+
+		const groupedDf = df.groupBy();
+		const legend = getLegend(groupedDf);
+
+		expect(legend.display).toBe(true);
+		expect(legend.position).toBe('right');
+		expect(legend.title).toStrictEqual({ display: true, text: 'gender' });
+		expect(legend.labels).toStrictEqual({ usePointStyle: true });
+	});
+});
+
+describe('getBoxPlotTitleText tests', () => {
+	it('0 grouped columns', () => {
+		const df = new DataFrame();
+		df.set(fromText('age,gender,cars\n18,F,1\n20,M,1\n18,F,2\n20,F,3\n18,M,1'));
+
+		const columns = get(df.columns);
+		columns[2].aggregate = true;
+
+		const groupedDf = df.groupBy();
+		const title = getBoxPlotTitleText(groupedDf);
+
+		expect(title).toBe('Distribution of cars');
+	});
+	it('else', () => {
+		const df = new DataFrame();
+		df.set(fromText('age,gender,cars\n18,F,1\n20,M,1\n18,F,2\n20,F,3\n18,M,1'));
+
+		const columns = get(df.columns);
+		columns[2].aggregate = true;
+		columns[0].groupBy = { type: 'specific' };
+
+		const groupedDf = df.groupBy();
+		const title = getBoxPlotTitleText(groupedDf);
+
+		expect(title).toBe('cars x age');
 	});
 });

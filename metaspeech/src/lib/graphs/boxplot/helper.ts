@@ -10,7 +10,24 @@ import { possibleBoxplotColours } from '$lib/Constants';
  * @returns datasets
  */
 export function getBoxPlotData(data: GroupedDataFrame) {
-	if (data.groupedColumns.length < 1 || data.groupedColumns.length > 2) return undefined;
+	if (data.groupedColumns.length > 2) return undefined;
+	if (data.groupedColumns.length === 0) {
+		return {
+			labels: [''],
+			datasets: [
+				{
+					label: '',
+					backgroundColor: 'rgba(255,0,0,0.5)',
+					borderColor: 'red',
+					borderWidth: 1,
+					outlierColor: '#999999',
+					padding: 0,
+					itemRadius: 5,
+					data: [data.groups[0].values]
+				}
+			]
+		};
+	}
 	if (data.groupedColumns.length === 1) {
 		return {
 			// define label tree
@@ -140,6 +157,37 @@ export function flipKeys(data: GroupedDataFrame) {
 }
 
 /**
+ * generates legend object for chart if 2 columns are in groupby.
+ * @param data current grouped dataframe
+ * @returns chart obj
+ */
+export function getLegend(data: GroupedDataFrame) {
+	if (data.groupedColumns.length !== 2) return {};
+	const legendText = data.groupedColumns[1].name;
+	return {
+		display: true,
+		position: 'right',
+		title: {
+			display: true,
+			text: legendText
+		},
+		labels: {
+			usePointStyle: true
+		}
+	};
+}
+/**
+ * generates title for boxplot from current dataframe
+ * @param data current dataframe
+ * @returns title string
+ */
+export function getBoxPlotTitleText(data: GroupedDataFrame): string {
+	if (data.groupedColumns.length === 0) {
+		return 'Distribution of ' + data!.aggregateColumn!.name; //aggregateColumn cant be undefined. otherwise boxplot cant be selected
+	}
+	return getTitleText(data);
+}
+/**
  * exports config for chart
  * @param boxplotData current box plot data, which includes labels and datasets
  * @param data current grouped data frame
@@ -151,34 +199,23 @@ export function getChartConfig(boxplotData: ChartData, data: GroupedDataFrame): 
 		beforeDraw: setColor
 	};
 
-	let legendText = data.groupedColumns[0].name;
-	if (data.groupedColumns.length === 2) legendText = data.groupedColumns[1].name;
+	const xAxisScaleText = data.groupedColumns.length > 0 ? data.groupedColumns[0].name : 'All';
+
 	const cfg: ChartConfiguration = {
 		type: 'boxplot',
 		data: boxplotData,
 
 		options: {
 			plugins: {
-				// @ts-expect-error Needs a specific type for plugin
 				customCanvasBackgroundColor: {
 					color: 'white'
 				},
 				title: {
 					display: true,
-					text: getTitleText(data)
-					//'Boxplot of (' + $selectedColumns.join(', ') + ')'
+					text: getBoxPlotTitleText(data)
 				},
-				legend: {
-					display: true,
-					position: 'right',
-					title: {
-						display: true,
-						text: legendText
-					},
-					labels: {
-						usePointStyle: true
-					}
-				}
+				//@ts-expect-error no idea what is the problem with this one
+				legend: getLegend(data)
 			},
 			scales: {
 				y: {
@@ -190,7 +227,7 @@ export function getChartConfig(boxplotData: ChartData, data: GroupedDataFrame): 
 				x: {
 					title: {
 						display: true,
-						text: data.groupedColumns[0].name
+						text: xAxisScaleText
 					}
 				}
 			}
