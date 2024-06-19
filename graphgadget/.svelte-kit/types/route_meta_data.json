@@ -1,0 +1,18 @@
+{
+	"/": [
+		"src/routes/+layout.ts",
+		"src/routes/+layout.ts"
+	],
+	"/modify": [
+		"src/routes/+layout.ts"
+	],
+	"/previous": [
+		"src/routes/+layout.ts"
+	],
+	"/select": [
+		"src/routes/+layout.ts"
+	],
+	"/view": [
+		"src/routes/+layout.ts"
+	]
+}
