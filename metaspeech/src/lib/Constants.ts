@@ -149,3 +149,9 @@ export const possibleBoxplotColours = [
 	'rgba(0,125,125,0.5)',
 	'rgba(0,0,255,0.5)'
 ];
+
+/**
+ * Constants for merge types in the modify page
+ */
+
+export const mergeTypes = ['Match in order', 'Join with key'];

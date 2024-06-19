@@ -6,6 +6,7 @@ import '@testing-library/jest-dom';
 import * as h from './page.help';
 import userEvent from '@testing-library/user-event';
 import { fromText } from '$lib/dataframe/DataFrame';
+import { mergeTypes } from '$lib/Constants';
 
 vi.mock('$components/importer/Importer.svelte');
 vi.mock('./filter.svelte');
@@ -52,7 +53,7 @@ describe('merging', () => {
 
 		await h.rerender(r);
 
-		const mergeButton = h.getIndexMergeButton(r);
+		const mergeButton = h.getMergeButton(r);
 		expect(mergeButton).toBeInTheDocument();
 
 		await fireEvent.click(mergeButton!);
@@ -65,7 +66,10 @@ describe('merging', () => {
 
 		await fireEvent.input(r.getByTestId('file-input'));
 
-		const mergeButton = h.getKeyedMergeButton(r);
+		h.getMergeTypeSelect(r)!.options[1].selected = true;
+		await h.rerender(r);
+
+		const mergeButton = h.getMergeButton(r);
 		expect(mergeButton).toBeInTheDocument();
 
 		await fireEvent.click(mergeButton!);
@@ -78,7 +82,11 @@ describe('merging', () => {
 
 		await fireEvent.input(r.getByTestId('file-input'));
 
-		const mergeButton = h.getKeyedMergeButton(r);
+		h.getMergeTypeSelect(r)!.options[1].selected = true;
+
+		await h.rerender(r);
+		
+		const mergeButton = h.getMergeButton(r);
 		expect(mergeButton).toBeInTheDocument;
 
 		await fireEvent.click(mergeButton!);
