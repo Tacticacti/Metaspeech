@@ -50,7 +50,10 @@ describe('handleData tests', () => {
 		const [labels, values] = handleData('Mean + Standard Deviation', groupedDf);
 
 		expect(labels).toStrictEqual(['18', '32']);
-		expect(values).toStrictEqual([{y: 1.5, yMin: 1, yMax: 2}, {y: 6, yMin: 4, yMax: 8}]);
+		expect(values).toStrictEqual([
+			{ y: 1.5, yMin: 1, yMax: 2 },
+			{ y: 6, yMin: 4, yMax: 8 }
+		]);
 	});
 	it('check if abs freq is executed and gives correct output', () => {
 		const df = new DataFrame();
