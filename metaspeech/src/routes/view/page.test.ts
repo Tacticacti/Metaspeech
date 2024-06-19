@@ -17,7 +17,7 @@ describe('View', () => {
 		const r = render(sut);
 
 		expect(r.getByTestId('Table')).to.exist;
-		expect(r.getByTestId('Histogram')).to.exist;
+		expect(r.getByTestId('Barchart')).to.exist;
 		expect(r.getByTestId('Pie Chart')).to.exist;
 		expect(r.getByTestId('Scatter')).to.exist;
 		expect(r.getByTestId('Box Plot')).to.exist;
@@ -40,7 +40,7 @@ describe('View', () => {
 		df.groupBy();
 		const r = render(sut);
 
-		const button = r.getByTestId('Histogram');
+		const button = r.getByTestId('Barchart');
 		await user.hover(button);
 
 		const tooltip = r.queryByTestId('Histogram-tooltip');
@@ -112,7 +112,7 @@ describe('View', () => {
 		df.groupBy();
 		const r = render(sut);
 
-		const button = r.getByTestId('Histogram');
+		const button = r.getByTestId('Barchart');
 		await user.click(button);
 
 		const container = r.queryByTestId('graph-container');
@@ -124,7 +124,7 @@ describe('View', () => {
 		df.groupBy();
 		const r = render(sut);
 
-		const button = r.getByTestId('Histogram');
+		const button = r.getByTestId('Barchart');
 		await user.click(button);
 
 		const editButton = r.getByText('Edit');
@@ -141,7 +141,7 @@ describe('View', () => {
 		df.groupBy();
 		const r = render(sut);
 
-		const button = r.getByTestId('Histogram');
+		const button = r.getByTestId('Barchart');
 		await user.click(button);
 
 		const editButton = r.getByText('Edit');
@@ -161,7 +161,7 @@ describe('View', () => {
 		df.groupBy();
 		const r = render(sut);
 
-		const button = r.getByTestId('Histogram');
+		const button = r.getByTestId('Barchart');
 		await user.click(button);
 
 		const editButton = r.getByText('Edit');
@@ -181,7 +181,7 @@ describe('View', () => {
 		df.groupBy();
 		const r = render(sut);
 
-		const button = r.getByTestId('Histogram');
+		const button = r.getByTestId('Barchart');
 		await user.click(button);
 
 		const editButton = r.getByText('Edit');
@@ -201,7 +201,7 @@ describe('View', () => {
 		df.groupBy();
 		const r = render(sut);
 
-		const button = r.getByTestId('Histogram');
+		const button = r.getByTestId('Barchart');
 		await user.click(button);
 
 		const editButton = r.getByText('Edit');

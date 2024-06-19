@@ -33,7 +33,7 @@ export function getSelectData(page: Page): Locator {
 }
 
 export function getAppendFile(page: Page): Locator {
-	return page.getByText('Append File');
+	return page.getByText('Merge File');
 }
 
 export function getPreviousData(page: Page): Locator {
@@ -91,7 +91,6 @@ export function getPrevFileButton(page: Page, file: string) {
 }
 
 export function getDeleteButtons(page: Page): Locator {
-	//return page.getByRole('button', { name: 'X' })
 	return page.getByTestId('btn-delete-file');
 }
 

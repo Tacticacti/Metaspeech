@@ -35,14 +35,14 @@
 			{#each $columns as header, i (header)}
 				<div class="flex w-full min-w-48">
 					<input
-						class="w-full overflow-x-scroll rounded-l-md bg-darkblue text-offwhite hover:bg-lightblue"
+						class="w-full overflow-x-scroll bg-darkblue text-offwhite hover:bg-lightblue"
 						type="text"
 						on:change={(e) => columnValueChanged(e, header)}
 						value={header.name}
 						data-testid="header-{header.name}-input"
 					/>
 					<button
-						class="rounded-r-md bg-red-400 px-4 text-offwhite hover:bg-red-500"
+						class="bg-red-400 px-4 text-offwhite hover:bg-red-500"
 						on:click={() => df.deleteColumn(i)}
 						data-testid="header-{header.name}-delete"
 						>X
