@@ -20,6 +20,14 @@
 	let borderColor: string = '#000000';
 	let fontColor: string = '#000000';
 
+	let titlePlaceholder: string = chart?.options?.plugins?.title?.text?.toString() ?? 'Enter title';
+	// @ts-expect-error type error
+	let xAxisPlaceholder: string =
+		chart?.options?.scales?.x?.title?.text?.toString() ?? 'Enter x axis label';
+	// @ts-expect-error type error
+	let yAxisPlaceholder: string =
+		chart?.options?.scales?.y?.title?.text?.toString() ?? 'Enter y axis label';
+
 	/**
 	 * Checks to remove values from chart
 	 */
@@ -111,11 +119,11 @@
 	}
 
 	onMount(() => {
-		title = chart?.options?.plugins?.title?.text?.toString() ?? 'New title';
+		title = chart?.options?.plugins?.title?.text?.toString() ?? '';
 		// @ts-expect-error type error
-		xAxis = chart?.options?.scales?.x?.title?.text?.toString() ?? 'New x axis label';
+		xAxis = chart?.options?.scales?.x?.title?.text?.toString() ?? '';
 		// @ts-expect-error type error
-		yAxis = chart?.options?.scales?.y?.title?.text?.toString() ?? 'New y axis label';
+		yAxis = chart?.options?.scales?.y?.title?.text?.toString() ?? '';
 	});
 </script>
 
@@ -134,7 +142,7 @@
 				<p class="w-[25%] text-gray-800">Title:</p>
 				<input
 					type="text"
-					placeholder={chart?.options?.plugins?.title?.text?.toString() ?? 'Enter title'}
+					placeholder={titlePlaceholder}
 					bind:value={title}
 					data-testid="title-input"
 					class="w-[50%] rounded-md border-darkblue"
@@ -152,7 +160,7 @@
 					<p class="w-[25%] text-gray-800">X Axis:</p>
 					<input
 						type="text"
-						placeholder={chart?.options?.scales?.x?.title?.text?.toString() ?? 'Enter x axis label'}
+						placeholder={xAxisPlaceholder}
 						bind:value={xAxis}
 						data-testid="xaxis-input"
 						class="w-[50%] rounded-md border-darkblue"
@@ -169,7 +177,7 @@
 					<p class="w-[25%] text-gray-800">Y Axis:</p>
 					<input
 						type="text"
-						placeholder={chart?.options?.scales?.y?.title?.text?.toString() ?? 'Enter y axis label'}
+						placeholder={yAxisPlaceholder}
 						bind:value={yAxis}
 						data-testid="yaxis-input"
 						class="w-[50%] rounded-md border-darkblue"
@@ -208,7 +216,7 @@
 				</div>
 			{/if}
 			<div class="flex items-center justify-between">
-				<p class="w-[25%] text-gray-800">Font color:</p>
+				<p class="w-[25%] text-gray-800">Text color:</p>
 				<input type="color" bind:value={fontColor} class="h-10 w-10 rounded-md" />
 			</div>
 			<div class="flex items-center justify-between">
