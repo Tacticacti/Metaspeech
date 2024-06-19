@@ -4,6 +4,7 @@
 	import info from '$assets/icons/info.svg';
 	import { Tooltip, Button } from 'flowbite-svelte';
 	import { mergeTypes } from '$lib/Constants';
+	import Toast from '$components/Toast.svelte';
 
 	const columns1 = df.columns;
 	$: columns2 = second_data?.columns;
@@ -20,6 +21,8 @@
 	function handleMerge() {
 		if (selectedMergeType === mergeTypes[0]) {
 			df.join(second_data!);
+			message = 'File merged by indexes';
+			showCustomToast();
 			second_data = undefined;
 			return;
 		}
@@ -29,7 +32,23 @@
 		}
 
 		df.keyedJoin(second_data!, merge_col_1, merge_col_2);
+		message = 'File merged by keys';
+		showCustomToast();
 		second_data = undefined;
+	}
+
+	/**
+	 * Everything for the toast
+	 */
+	let showToast: boolean = false;
+	let message: string = 'File merged by keys';
+
+	function showCustomToast() {
+		showToast = true;
+	}
+
+	function handleClose() {
+		showToast = false;
 	}
 </script>
 
@@ -101,3 +120,7 @@
 		</div>
 	{/if}
 </div>
+
+{#if showToast}
+	<Toast {message} color="green" duration={3000} on:close={handleClose} />
+{/if}

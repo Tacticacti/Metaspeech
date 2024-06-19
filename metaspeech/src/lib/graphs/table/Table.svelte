@@ -33,7 +33,9 @@
 		<div class="flex justify-center space-x-4">
 			<button
 				class="inline-block cursor-pointer rounded-lg border border-gray-300 bg-gray-100 px-4 py-2 text-sm font-semibold text-gray-800 shadow-md transition-colors duration-300 ease-in-out hover:bg-gray-200 hover:text-blue-500"
-				on:click={() => copyTableToClipboardAsLaTeX(table)}
+				on:click={() => {
+					copyTableToClipboardAsLaTeX(table);
+				}}
 				data-testid="copy-as-latex"
 				id="copy-as-latex"
 			>
@@ -41,7 +43,9 @@
 			</button>
 			<button
 				class="inline-block cursor-pointer rounded-lg border border-gray-300 bg-gray-100 px-4 py-2 text-sm font-semibold text-gray-800 shadow-md transition-colors duration-300 ease-in-out hover:bg-gray-200 hover:text-blue-500"
-				on:click={() => copyAsText(table)}
+				on:click={() => {
+					copyAsText(table);
+				}}
 				data-testid="download-as-tsv"
 				id="copy-as-tsv"
 			>

@@ -121,9 +121,10 @@ describe('info icon hover', () => {
 
 		await fireEvent.input(r.getByTestId('file-input'));
 		const icon: HTMLButtonElement = h.getInfoIcon(r)!;
-		await user.hover(icon);
 
 		expect(h.getInfoBubble(r)).not.toBeInTheDocument();
+
+		await user.hover(icon);
 		const bubble = h.getInfoBubble(r);
 		expect(bubble).to.exist;
 	});
