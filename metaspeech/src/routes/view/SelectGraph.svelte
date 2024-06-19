@@ -30,6 +30,7 @@
 			{#each graphs as item}
 				<SelectGraphButton
 					graph={item}
+					isSelected={selected === item}
 					{data}
 					on:click={() => show(item, true)}
 					on:mouseover={() => show(item, false)}

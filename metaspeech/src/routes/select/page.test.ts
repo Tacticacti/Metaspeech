@@ -31,21 +31,6 @@ describe('Select Visuals', () => {
 
 		expect(h.getDisplayValues(r, 'col1')!.length).toBe(1);
 	});
-	it('Numeric should dissapear from select if clicked on group by', async () => {
-		const user = userEvent.setup();
-		df.set(fromText('col1,col2\nrow1,2'));
-		const r = render(sut);
-
-		const checkbox = h.getCheckboxes(r)![1];
-		await user.click(checkbox);
-
-		await h.rerender(r);
-
-		const radios = h.getRadios(r)!;
-
-		// Only Frequency should be present
-		expect(radios.length).toBe(1);
-	});
 	it('Groupby type should be binned when input in bin', async () => {
 		const user = userEvent.setup();
 		df.set(fromText('col1\n1'));

@@ -131,7 +131,7 @@
 	<Modal title="Edit Chart" bind:open={clickOutsideModal} autoclose outsideclose>
 		{#if ['histogram', 'scatter', 'pie', 'boxplot'].includes(chartType)}
 			<div class="flex items-center justify-between">
-				<p class="w-[25%]">Title:</p>
+				<p class="w-[25%] text-gray-800">Title:</p>
 				<input
 					type="text"
 					placeholder={chart?.options?.plugins?.title?.text?.toString() ?? 'Enter title'}
@@ -149,7 +149,7 @@
 			</div>
 			{#if ['histogram', 'scatter', 'boxplot'].includes(chartType)}
 				<div class="flex items-center justify-between">
-					<p class="w-[25%]">X Axis:</p>
+					<p class="w-[25%] text-gray-800">X Axis:</p>
 					<input
 						type="text"
 						placeholder={chart?.options?.scales?.x?.title?.text?.toString() ?? 'Enter x axis label'}
@@ -166,7 +166,7 @@
 					</div>
 				</div>
 				<div class="flex items-center justify-between">
-					<p class="w-[25%]">Y Axis:</p>
+					<p class="w-[25%] text-gray-800">Y Axis:</p>
 					<input
 						type="text"
 						placeholder={chart?.options?.scales?.y?.title?.text?.toString() ?? 'Enter y axis label'}
@@ -183,20 +183,20 @@
 					</div>
 				</div>
 			{/if}
-			<div class="flex items-center justify-between">
-				<p class="w-[25%]">Text size:</p>
+			<div class="justify-left flex items-center">
+				<p class="w-[25%] text-gray-800">Text size:</p>
 				<input
 					type="number"
 					placeholder={'Enter text size'}
 					bind:value={fontSize}
 					data-testid="font-size-input"
-					class="w-[50%] rounded-md border-darkblue"
+					class="w-[20%] rounded-md border-darkblue"
 				/>
 				<div class="w-[25%]" />
 			</div>
 			{#if chartType === 'scatter'}
 				<div class="flex items-center justify-between">
-					<p class="w-[25%]">Point radius:</p>
+					<p class="w-[25%] text-gray-800">Point radius:</p>
 					<input
 						type="number"
 						placeholder={'Enter point radius'}
@@ -208,20 +208,20 @@
 				</div>
 			{/if}
 			<div class="flex items-center justify-between">
-				<p class="w-[25%]">Font color:</p>
+				<p class="w-[25%] text-gray-800">Font color:</p>
 				<input type="color" bind:value={fontColor} class="h-10 w-10 rounded-md" />
 			</div>
 			<div class="flex items-center justify-between">
-				<p class="w-[25%]">Background color:</p>
+				<p class="w-[25%] text-gray-800">Background color:</p>
 				<input type="color" bind:value={backgroundColor} class="h-10 w-10 rounded-md" />
 			</div>
 			{#if chartType === 'histogram'}
 				<div class="flex items-center justify-between">
-					<p class="w-[25%]">Bar color:</p>
+					<p class="w-[25%] text-gray-800">Bar color:</p>
 					<input type="color" bind:value={barColor} class="h-10 w-10 rounded-md" />
 				</div>
 				<div class="flex items-center justify-between">
-					<p class="w-[25%]">Border color:</p>
+					<p class="w-[25%] text-gray-800">Border color:</p>
 					<input type="color" bind:value={borderColor} class="h-10 w-10 rounded-md" />
 				</div>
 			{/if}

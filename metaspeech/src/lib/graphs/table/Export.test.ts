@@ -1,7 +1,6 @@
-import { copyTableToClipboardAsLaTeX, downloadAsTSV } from './Export';
-import { vi, it, expect } from 'vitest';
-import { aggregateOptions_none, aggregateOptions_single, type Cell } from './Table';
-import type { GroupedDataFrame } from '$lib/Types';
+import { copyAsText, copyTableToClipboardAsLaTeX } from './Export';
+import { vi, it, expect, type MockInstance } from 'vitest';
+import { type Cell } from './Table';
 
 function header(
 	content: string,
@@ -18,20 +17,16 @@ function corner(skip: boolean, rows: number, cols: number): Cell {
 	return { content: '', skip, colSpan: cols, rowSpan: rows, class: undefined };
 }
 
-const spy = vi.fn();
-let old: unknown;
+let spy: MockInstance<[data: string], Promise<void>>;
 beforeEach(() => {
-	old = navigator.clipboard;
-	Object.defineProperty(navigator, 'clipboard', {
-		value: {
-			writeText: spy
-		}
-	});
-});
-afterEach(() => {
-	Object.defineProperty(navigator, 'clipboard', {
-		value: old
-	});
+	if (navigator.clipboard === undefined) {
+		Object.defineProperty(navigator, 'clipboard', {
+			value: {
+				writeText: () => {}
+			}
+		});
+	}
+	spy = vi.spyOn(navigator.clipboard, 'writeText');
 });
 
 describe('copyTableToClipboardAsLaTeX', () => {
@@ -114,104 +109,44 @@ describe('copyTableToClipboardAsLaTeX', () => {
 });
 
 describe('downloadAsTsv', () => {
-	it('should download as tsv', () => {
-		const element = {
-			click: vi.fn(),
-			href: '',
-			download: ''
-		};
-		const createElement = vi
-			.spyOn(document, 'createElement')
-			.mockReturnValueOnce(element as unknown as HTMLAnchorElement);
-		const data: GroupedDataFrame = {
-			groups: [
-				{
-					keys: ['a'],
-					values: Array(5)
-				},
-				{
-					keys: ['b'],
-					values: Array(20)
-				}
-			],
-			groupedColumns: [
-				{
-					name: 'x',
-					groupBy: {
-						type: 'specific'
-					},
-					hasMissing: false,
-					type: 'number'
-				}
-			]
-		};
+	it('should copy to clipboard', () => {
+		const table: Cell[][] = [[header('a')], [data('b')]];
 
-		global.URL.createObjectURL = vi.fn().mockReturnValueOnce('dummy');
-
-		downloadAsTSV(data, aggregateOptions_none[0]);
-
-		expect(createElement).toHaveBeenCalledWith('a');
-		expect(element.href).toBe('dummy');
-		expect(global.URL.createObjectURL).toHaveBeenCalledWith(
-			new Blob(['x\tCount\na\t5\na\t20\n'], { type: 'text/tsv' })
-		);
-		expect(element.download).toBe('data.tsv');
-		expect(element.click).toHaveBeenCalledOnce();
-
-		// @ts-expect-error clear the mock
-		global.URL.createObjectURL = undefined;
+		copyAsText(table);
+		expect(spy).toHaveBeenCalledOnce();
 	});
-	it('should download as tsv', () => {
-		const element = {
-			click: vi.fn(),
-			href: '',
-			download: ''
-		};
-		const createElement = vi
-			.spyOn(document, 'createElement')
-			.mockReturnValueOnce(element as unknown as HTMLAnchorElement);
-		const data: GroupedDataFrame = {
-			groups: [
-				{
-					keys: ['a'],
-					values: [2, 4]
-				},
-				{
-					keys: ['b'],
-					values: [3, 5]
-				}
-			],
-			groupedColumns: [
-				{
-					name: 'x',
-					groupBy: {
-						type: 'specific'
-					},
-					hasMissing: false,
-					type: 'number'
-				}
-			],
-			aggregateColumn: {
-				name: 'y',
-				aggregate: true,
-				hasMissing: false,
-				type: 'number'
-			}
-		};
 
-		global.URL.createObjectURL = vi.fn().mockReturnValueOnce('dummy');
+	it('should copy simple table to clipboard', () => {
+		const table: Cell[][] = [
+			[header('a'), header('b')],
+			[data('1'), data('2')]
+		];
 
-		downloadAsTSV(data, aggregateOptions_single[0]);
+		copyAsText(table);
+		expect(spy).toHaveBeenCalledWith(['a\tb', '1\t2'].join('\n'));
+	});
 
-		expect(createElement).toHaveBeenCalledWith('a');
-		expect(element.href).toBe('dummy');
-		expect(global.URL.createObjectURL).toHaveBeenCalledWith(
-			new Blob(['x\ty Mean\na\t3\na\t5\n'], { type: 'text/tsv' })
+	it('should copy complex table to clipboard', () => {
+		// prettier-ignore
+		const table: Cell[][] = [
+			[corner(false, 2, 2),      corner(true, 2, 2), header('a', false, 2), header('a', true, 2), header('b', false, 2), header('b', true, 2)],
+			[corner(true, 2, 2),       corner(true, 2, 2), header('a1'),          header('a2'),         header('b1'),          header('b2')],
+			[header('x', false, 1, 2), header('x1'),       data('1'),             data('2'),            data('3'),             data('4')],
+			[header('x', true, 1, 2),  header('x2'),       data('5'),             data('6'),            data('7'),             data('8')],
+			[header('y', false, 1, 2), header('y1'),       data('9'),             data('10'),           data('11'),            data('12')],
+			[header('y', true, 1, 2),  header('y2'),       data('13'),            data('14'),           data('15'),            data('16')],
+		];
+
+		copyAsText(table);
+		expect(spy).toHaveBeenCalledWith(
+			[
+				'\t\ta\t\tb\t',
+				'\t\ta1\ta2\tb1\tb2',
+				'x\tx1\t1\t2\t3\t4',
+				'\tx2\t5\t6\t7\t8',
+				'y\ty1\t9\t10\t11\t12',
+				'\ty2\t13\t14\t15\t16'
+			].join('\n')
 		);
-		expect(element.download).toBe('data.tsv');
-		expect(element.click).toHaveBeenCalledOnce();
-
-		// @ts-expect-error clear the mock
-		global.URL.createObjectURL = undefined;
 	});
 });
