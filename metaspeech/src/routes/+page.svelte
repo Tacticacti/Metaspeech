@@ -80,7 +80,9 @@
 </div>
 
 <div class="h-[40vh] p-5">
-	<h2 class="text-xl font-bold text-darkblue">Your go-to tool for intuitive data visualization of speech meta data</h2>
+	<h2 class="text-xl font-bold text-darkblue">
+		Your go-to tool for intuitive data visualization of speech meta data
+	</h2>
 	<h3 class="text-gray-500">How it works</h3>
 	<div class="mt-5 flex flex-col items-center justify-around md:flex-row">
 		<Card text={'Upload your data in TSV, JSON, XLS, or TXT file format.'} />

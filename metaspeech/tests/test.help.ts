@@ -41,7 +41,7 @@ export function getPreviousData(page: Page): Locator {
 }
 
 export function getStoreClientData(page: Page): Locator {
-	return page.getByLabel('Keep session saved (client');
+	return page.getByLabel('Keep session saved (only on broswer');
 }
 
 export function getLogo(page: Page): Locator {
