@@ -29,11 +29,11 @@ export function getCloseErrorModal(page: Page): Locator {
 /* Initial page elements */
 
 export function getSelectData(page: Page): Locator {
-	return page.getByText('Select Data');
+	return page.getByText('Upload data');
 }
 
 export function getAppendFile(page: Page): Locator {
-	return page.getByText('Merge File');
+	return page.getByText('Merge with another file');
 }
 
 export function getPreviousData(page: Page): Locator {

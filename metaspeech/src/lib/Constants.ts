@@ -154,4 +154,4 @@ export const possibleBoxplotColours = [
  * Constants for merge types in the modify page
  */
 
-export const mergeTypes = ['Match in order', 'Join with key'];
+export const mergeTypes = ['Merge files row-by-row', 'Merge files by key'];

@@ -53,7 +53,7 @@
 				class="my-2 inline-block cursor-pointer rounded-lg border border-gray-300 bg-darkblue px-4 py-2 text-lg font-bold text-gray-100 shadow-md transition-colors duration-300 ease-in-out hover:bg-blue-900"
 				for="append-data"
 			>
-				Merge File
+				Merge with another file
 			</label>
 		</div>
 	</div>

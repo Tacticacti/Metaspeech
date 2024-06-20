@@ -8,7 +8,7 @@ import {
 	jsonCorruptedTestData
 } from './testData.help';
 
-const mergeTypes = ['Match in order', 'Join with key'];
+const mergeTypes = ['Merge files row-by-row', 'Merge files by key'];
 
 test.describe('Modify page tests', () => {
 	test.describe('Page layout tests', () => {
