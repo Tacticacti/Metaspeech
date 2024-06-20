@@ -147,6 +147,10 @@ export function getInfoButton(page: Page): Locator {
 	return page.getByRole('button', { name: 'info icon' });
 }
 
+export function getMergeTypeSelect(page: Page): Locator {
+	return page.getByTestId('merge-type-select');
+}
+
 export function getColumnOneSelect(page: Page): Locator {
 	return page.getByTestId('col1-select');
 }
@@ -155,11 +159,8 @@ export function getColumnTwoSelect(page: Page): Locator {
 	return page.getByTestId('col2-select');
 }
 
-export function getMergeIndexButton(page: Page): Locator {
-	return page.getByTestId('merge-index-button');
-}
-export function getMergeKeyedButton(page: Page): Locator {
-	return page.getByTestId('merge-keyed-button');
+export function getMergeButton(page: Page): Locator {
+	return page.getByTestId('merge-button');
 }
 
 export function getColumnHeaderInput(page: Page, headerName: string): Locator {

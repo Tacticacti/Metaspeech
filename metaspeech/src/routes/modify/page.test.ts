@@ -6,6 +6,7 @@ import '@testing-library/jest-dom';
 import * as h from './page.help';
 import userEvent from '@testing-library/user-event';
 import { fromText } from '$lib/dataframe/DataFrame';
+import { mergeTypes } from '$lib/Constants';
 
 vi.mock('$components/importer/Importer.svelte');
 vi.mock('./filter.svelte');
@@ -52,7 +53,7 @@ describe('merging', () => {
 
 		await h.rerender(r);
 
-		const mergeButton = h.getIndexMergeButton(r);
+		const mergeButton = h.getMergeButton(r);
 		expect(mergeButton).toBeInTheDocument();
 
 		await fireEvent.click(mergeButton!);
@@ -62,28 +63,53 @@ describe('merging', () => {
 	it('should be able to column-merge two DataFrames', async () => {
 		df.set(fromText('a,d\n1,4'));
 		const r = render(sut);
+		const user = userEvent.setup();
 
 		await fireEvent.input(r.getByTestId('file-input'));
 
-		const mergeButton = h.getKeyedMergeButton(r);
+		await user.selectOptions(h.getMergeTypeSelect(r)!, mergeTypes[1]);
+		expect(h.getCol1Select(r)).toBeVisible();
+		expect(h.getCol2Select(r)).toBeVisible();
+
+		const mergeButton = h.getMergeButton(r);
 		expect(mergeButton).toBeInTheDocument();
 
 		await fireEvent.click(mergeButton!);
 
 		expect(df.get()).toEqual(fromText('a,d,b,c\n1,4,2,3'));
+
+		// TODO fix this
+		// expect(h.getInfoBubble(r)).not.toBeInTheDocument();
+
+		// await user.hover(h.getCol1Select(r)!);
+
+		// expect(h.getInfoBubble(r)).to.exist;
 	});
 	it('should be able to column-merge two DataFrames', async () => {
 		df.set(fromText('d,e\n1,4'));
 		const r = render(sut);
+		const user = userEvent.setup();
 
 		await fireEvent.input(r.getByTestId('file-input'));
 
-		const mergeButton = h.getKeyedMergeButton(r);
+		h.getMergeTypeSelect(r)!.options[1].selected = true;
+
+		await user.selectOptions(h.getMergeTypeSelect(r)!, mergeTypes[1]);
+		expect(h.getCol1Select(r)).toBeVisible();
+		expect(h.getCol2Select(r)).toBeVisible();
+
+		const mergeButton = h.getMergeButton(r);
 		expect(mergeButton).toBeInTheDocument;
 
 		await fireEvent.click(mergeButton!);
-
 		expect(df.get()).toEqual(fromText('d,e,b,c\n1,4,2,3'));
+
+		// TODO fix this
+		// expect(h.getInfoBubble(r)).not.toBeInTheDocument();
+
+		// await user.hover(h.getCol2Select(r)!);
+
+		// expect(h.getInfoBubble(r)).to.exist;
 	});
 });
 
@@ -95,8 +121,10 @@ describe('info icon hover', () => {
 
 		await fireEvent.input(r.getByTestId('file-input'));
 		const icon: HTMLButtonElement = h.getInfoIcon(r)!;
-		await user.hover(icon);
 
+		expect(h.getInfoBubble(r)).not.toBeInTheDocument();
+
+		await user.hover(icon);
 		const bubble = h.getInfoBubble(r);
 		expect(bubble).to.exist;
 	});

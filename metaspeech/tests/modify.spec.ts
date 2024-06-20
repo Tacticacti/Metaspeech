@@ -8,6 +8,8 @@ import {
 	jsonCorruptedTestData
 } from './testData.help';
 
+const mergeTypes = ['Match in order', 'Join with key'];
+
 test.describe('Modify page tests', () => {
 	test.describe('Page layout tests', () => {
 		test.beforeEach(async ({ page }) => {
@@ -357,26 +359,22 @@ test.describe('Modify page tests', () => {
 
 		test('Test if all elements are visible', async ({ page }) => {
 			await expect(helper.getInfoButton(page)).toBeVisible();
-			await expect(helper.getColumnOneSelect(page)).toBeVisible();
-			await expect(helper.getColumnTwoSelect(page)).toBeVisible();
-			await expect(helper.getMergeIndexButton(page)).toBeVisible();
-			await expect(helper.getMergeKeyedButton(page)).toBeVisible();
+			await expect(helper.getMergeButton(page)).toBeVisible();
+			await expect(helper.getMergeTypeSelect(page)).toBeVisible();
 		});
 
 		test('Test elements contain expected information', async ({ page }) => {
-			await expect(helper.getColumnOneSelect(page)).toHaveValue('0');
-			await expect(helper.getColumnTwoSelect(page)).toHaveValue('0');
-
 			const infoButton = helper.getInfoButton(page);
 			await infoButton.hover();
 
+			await expect(helper.getMergeTypeSelect(page)).toHaveValue(mergeTypes[0]);
+
 			const tooltip = helper.getInfoBubble(page);
 			await expect(tooltip).toBeVisible();
-			await expect(tooltip).toContainText(/Use the Index merge to attach columns in their index/);
 		});
 
 		test('Test index merge button', async ({ page }) => {
-			const indexMergeButton = helper.getMergeIndexButton(page);
+			const indexMergeButton = helper.getMergeButton(page);
 
 			await indexMergeButton.click();
 
@@ -385,7 +383,8 @@ test.describe('Modify page tests', () => {
 		});
 
 		test('Test keyed merge button', async ({ page }) => {
-			const keyedMergeButton = helper.getMergeKeyedButton(page);
+			await helper.getMergeTypeSelect(page).selectOption(mergeTypes[1]);
+			const keyedMergeButton = helper.getMergeButton(page);
 
 			await keyedMergeButton.click();
 
@@ -402,7 +401,7 @@ test.describe('Modify page tests', () => {
 				buffer: Buffer.from(jsonData)
 			});
 
-			const indexMergeButton = helper.getMergeIndexButton(page);
+			const indexMergeButton = helper.getMergeButton(page);
 			await indexMergeButton.click();
 
 			await expect(helper.getColumnHeaderInput(page, 'Id')).toBeVisible();
