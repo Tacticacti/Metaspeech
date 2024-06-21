@@ -59,7 +59,7 @@
 			class="my-2 inline-block cursor-pointer rounded-lg border border-gray-300 bg-darkblue px-4 py-2 text-lg font-bold text-gray-50 shadow-md transition-colors duration-300 ease-in-out hover:bg-blue-900"
 			for="import-data"
 		>
-			Select Data
+			Upload data
 		</label>
 	</div>
 	<Tooltip>Remember to use data ethically and responsibly.</Tooltip>
@@ -75,20 +75,22 @@
 <div class="mt-4 flex items-center justify-center text-center">
 	<Label class="flex items-center space-x-2">
 		<Checkbox id="store-data" bind:checked={shouldStoreData} data-testid="store-data-cb" />
-		<span>Keep session saved (client only)</span>
+		<span>Keep session saved (only on broswer)</span>
 	</Label>
 </div>
 
 <div class="h-[40vh] p-5">
-	<h2 class="text-xl font-bold text-darkblue">Your go-to tool for intuitive data visualization</h2>
+	<h2 class="text-xl font-bold text-darkblue">
+		Your go-to tool for intuitive data visualization of speech meta data
+	</h2>
 	<h3 class="text-gray-500">How it works</h3>
 	<div class="mt-5 flex flex-col items-center justify-around md:flex-row">
-		<Card text={'Upload your data as a TSV, JSON, XLS, or TXT in the correct format.'} />
+		<Card text={'Upload your data in TSV, JSON, XLS, or TXT file format.'} />
 		<p class="mx-10 rotate-90 transform text-4xl text-darkblue md:m-0 md:rotate-0">&rarr;</p>
-		<Card text={'Modify data by filtering and merging extra data.'} />
+		<Card text={'Filter the data and/or merge with an additional file.'} />
 		<p class="mx-10 rotate-90 transform text-4xl text-darkblue md:m-0 md:rotate-0">&rarr;</p>
-		<Card text={'Select which parameters and graph you want us to create.'} />
+		<Card text={'Select the parameters you want to visualize and the type of graph.'} />
 		<p class="mx-10 rotate-90 transform text-4xl text-darkblue md:m-0 md:rotate-0">&rarr;</p>
-		<Card text={'Either look at your graph in the browser or download it as a JPEG or PNG.'} />
+		<Card text={'Edit the graph and/or download it as a JPEG or PNG file.'} />
 	</div>
 </div>
