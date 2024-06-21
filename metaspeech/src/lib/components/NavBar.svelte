@@ -39,7 +39,7 @@
 		} else if (route === '/select') {
 			return '55%';
 		} else if (route === '/view') {
-			return '88%';
+			return '100%';
 		}
 
 		return '8%';

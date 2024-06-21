@@ -59,9 +59,11 @@
 		"@e965/xlsx": "^0.20.2-released.0",
 		"@sgratzl/chartjs-chart-boxplot": "^4.3.1",
 		"all": "^0.0.0",
-		"chart.js": "^4.4.2",
+		"chart.js": "^4.4.3",
+		"chartjs-chart-error-bars": "^4.4.1",
 		"csv-stringify": "^6.5.0",
 		"exceljs": "^4.4.0",
+		"gitinspector": "^0.5.0-dev-2",
 		"gridjs": "^6.2.0"
 	}
 }

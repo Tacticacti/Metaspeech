@@ -25,9 +25,9 @@ export const COPYRIGHT_YEAR = 2024;
  */
 export const graphs: GraphMeta[] = [
 	{
-		title: 'Histogram',
+		title: 'Barchart',
 		description:
-			'A histogram is a graphical representation of the distribution of numerical data. It groups data into bins and displays the frequency of data points in each bin using bars.',
+			'A barchart is a graphical representation of the distribution of numerical data. It groups data into bins and displays the frequency of data points in each bin using bars.',
 		img: Histogram_img,
 		canRender: () => true,
 		graph: Histogram
@@ -66,7 +66,10 @@ export const graphs: GraphMeta[] = [
 		description:
 			'In descriptive statistics, a box plot or boxplot is a type of chart often used in explanatory data analysis. Box plots visually show the distribution of numerical data and skewness by displaying the data quartiles (or percentiles) and averages.',
 		img: BoxPlot_img,
-		canRender: (data) => data.aggregateColumn !== undefined,
+		canRender: (data) =>
+			data.groupedColumns.length <= 2 &&
+			data.aggregateColumn != undefined &&
+			data.aggregateColumn.type == 'number',
 		graph: BoxPlot
 	}
 ];
@@ -138,3 +141,17 @@ export const scatterStyles: ScatterStyle[] = [
 		pointStyle: 'triangle'
 	}
 ];
+//possible colours used in the boxplot
+export const possibleBoxplotColours = [
+	'rgba(255,0,0,0.5)',
+	'rgba(125,125,0,0.5)',
+	'rgba(0,255,0,0.5)',
+	'rgba(0,125,125,0.5)',
+	'rgba(0,0,255,0.5)'
+];
+
+/**
+ * Constants for merge types in the modify page
+ */
+
+export const mergeTypes = ['Merge files row-by-row', 'Merge files by key'];

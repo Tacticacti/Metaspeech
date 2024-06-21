@@ -110,3 +110,14 @@ export type ScatterDataset = {
 	label: string;
 	style: ScatterStyle;
 };
+
+/**
+ * A type with data for the barchart, which can be a number or a number with error bar
+ */
+export type BarChartData =
+	| {
+			y: number;
+			yMin: number;
+			yMax: number;
+	  }
+	| number;

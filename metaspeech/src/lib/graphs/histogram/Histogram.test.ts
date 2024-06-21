@@ -29,7 +29,7 @@ describe('When user views', () => {
 		const select = getByTestId('aggregation-select') as HTMLSelectElement;
 
 		expect(select).to.exist;
-		expect(select.options.length).toBe(2);
+		expect(select.options.length).toBe(3);
 		expect(select.value).toBe('Mean');
 	});
 	it(' check if abs freq and rel freq exists', () => {

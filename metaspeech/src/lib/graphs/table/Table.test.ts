@@ -1,8 +1,9 @@
 import { render, type RenderResult } from '@testing-library/svelte';
 import sut from '$lib/graphs/table/Table.svelte';
-import { describe, it, expect } from 'vitest';
+import { vi, describe, it, expect } from 'vitest';
 import type { Column, DataType, Group, GroupBy, GroupedDataFrame } from '$lib/Types';
 import userEvent, { type UserEvent } from '@testing-library/user-event';
+import { copyTableToClipboardAsLaTeX, copyAsText } from './Export';
 
 function column(groupBy: GroupBy | undefined): Column {
 	return {
@@ -21,6 +22,8 @@ function group(keys: DataType[], values: DataType[]): Group {
 function selectOption(r: RenderResult<sut>, user: UserEvent, option: string): Promise<void> {
 	return user.selectOptions(r.getByTestId('aggregate'), r.getByTestId(option));
 }
+
+vi.mock('./Export');
 
 describe('When user views', () => {
 	it('should render', () => {
@@ -151,8 +154,8 @@ describe('edge cases', () => {
 		const r = render(sut, { props: { data: df } });
 		await selectOption(r, user, 'Mean');
 
-		r.getByTestId('cell-[10-19]');
-		r.getByTestId('cell-[20-29]');
+		r.getByTestId('cell-[10-20)');
+		r.getByTestId('cell-[20-30)');
 		r.getByTestId('cell-1');
 		r.getByTestId('cell-3');
 	});
@@ -166,8 +169,8 @@ describe('edge cases', () => {
 		const r = render(sut, { props: { data: df } });
 		await selectOption(r, user, 'Mean');
 
-		r.getByTestId('cell-[10-19]');
-		r.getByTestId('cell-[20-29]');
+		r.getByTestId('cell-[10-20)');
+		r.getByTestId('cell-[20-30)');
 		r.getByTestId('cell-a');
 		r.getByTestId('cell-b');
 	});
@@ -181,8 +184,8 @@ describe('edge cases', () => {
 		const r = render(sut, { props: { data: df } });
 		await selectOption(r, user, 'Mean');
 
-		r.getByTestId('cell-[10-19]');
-		r.getByTestId('cell-[20-29]');
+		r.getByTestId('cell-[10-20)');
+		r.getByTestId('cell-[20-30)');
 		r.getByTestId('cell-a');
 		r.getByTestId('cell-b');
 	});
@@ -202,5 +205,30 @@ describe('edge cases', () => {
 			]
 		};
 		render(sut, { props: { data: df } });
+	});
+});
+
+describe('export', () => {
+	it('should allow exporting to LaTeX', async () => {
+		const user = userEvent.setup();
+		const df: GroupedDataFrame = {
+			groupedColumns: [column({ type: 'specific' })],
+			aggregateColumn: column(undefined),
+			groups: [group(['a'], [1]), group(['b'], [2, 4])]
+		};
+		const r = render(sut, { props: { data: df } });
+		await user.click(r.getByTestId('copy-as-latex'));
+		expect(copyTableToClipboardAsLaTeX).toHaveBeenCalled();
+	});
+	it('should allow exporting to TSV', async () => {
+		const user = userEvent.setup();
+		const df: GroupedDataFrame = {
+			groupedColumns: [column({ type: 'specific' })],
+			aggregateColumn: column(undefined),
+			groups: [group(['a'], [1]), group(['b'], [2, 4])]
+		};
+		const r = render(sut, { props: { data: df } });
+		await user.click(r.getByTestId('download-as-tsv'));
+		expect(copyAsText).toHaveBeenCalled();
 	});
 });

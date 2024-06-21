@@ -29,11 +29,11 @@ export function getCloseErrorModal(page: Page): Locator {
 /* Initial page elements */
 
 export function getSelectData(page: Page): Locator {
-	return page.getByText('Select Data');
+	return page.getByText('Upload data');
 }
 
 export function getAppendFile(page: Page): Locator {
-	return page.getByText('Append File');
+	return page.getByText('Merge with another file');
 }
 
 export function getPreviousData(page: Page): Locator {
@@ -41,7 +41,7 @@ export function getPreviousData(page: Page): Locator {
 }
 
 export function getStoreClientData(page: Page): Locator {
-	return page.getByLabel('Keep session saved (client');
+	return page.getByLabel('Keep session saved (only on broswer');
 }
 
 export function getLogo(page: Page): Locator {
@@ -91,7 +91,6 @@ export function getPrevFileButton(page: Page, file: string) {
 }
 
 export function getDeleteButtons(page: Page): Locator {
-	//return page.getByRole('button', { name: 'X' })
 	return page.getByTestId('btn-delete-file');
 }
 
@@ -148,6 +147,10 @@ export function getInfoButton(page: Page): Locator {
 	return page.getByRole('button', { name: 'info icon' });
 }
 
+export function getMergeTypeSelect(page: Page): Locator {
+	return page.getByTestId('merge-type-select');
+}
+
 export function getColumnOneSelect(page: Page): Locator {
 	return page.getByTestId('col1-select');
 }
@@ -156,11 +159,8 @@ export function getColumnTwoSelect(page: Page): Locator {
 	return page.getByTestId('col2-select');
 }
 
-export function getMergeIndexButton(page: Page): Locator {
-	return page.getByTestId('merge-index-button');
-}
-export function getMergeKeyedButton(page: Page): Locator {
-	return page.getByTestId('merge-keyed-button');
+export function getMergeButton(page: Page): Locator {
+	return page.getByTestId('merge-button');
 }
 
 export function getColumnHeaderInput(page: Page, headerName: string): Locator {

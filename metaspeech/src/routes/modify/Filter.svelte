@@ -5,6 +5,7 @@
 	import { get } from 'svelte/store';
 	import { Button, Checkbox, Input, Select } from 'flowbite-svelte';
 	import filterImg from '$assets/icons/filter.png';
+	import { Tooltip } from 'flowbite-svelte';
 
 	const columns = df.columns;
 
@@ -54,16 +55,24 @@
 	function filter(useMatching: boolean) {
 		validateInputs();
 
-		const originalCount = get(df.rows).length;
+		const original = df.get();
 
 		df.filter((row) => matches(row[selectedIndex]) !== useMatching);
 
 		const newCount = get(df.rows).length;
 
-		if (newCount === originalCount) {
+		if (newCount === original.rows.length) {
 			const errorMessage = useRange
 				? `No matching rows found for range ${min}-${max} in column "${selectedColumn.name}".`
 				: `No matching rows found for value "${filterValue}" in column "${selectedColumn.name}".`;
+			throw new Error(errorMessage);
+		}
+
+		if (newCount === 0) {
+			df.set(original);
+
+			const errorMessage = 'Filtering cancelled. No rows would be left in the table.';
+
 			throw new Error(errorMessage);
 		}
 	}
@@ -85,71 +94,83 @@
 	}
 </script>
 
-<Button
-	class="max-h-14 max-w-32 rounded-lg bg-darkblue px-12 py-4 font-bold text-offwhite hover:bg-blue-900"
-	on:click={() => (isOpen = !isOpen)}
->
-	<img src={filterImg} class="mr-4 h-8 w-8 invert" alt="Filter icon" />
-	Filter
-</Button>
+<div class="flex">
+	<Button
+		class="mr-5 max-h-14 max-w-32 rounded-lg bg-darkblue px-12 py-4 font-bold text-offwhite hover:bg-blue-900"
+		on:click={() => (isOpen = !isOpen)}
+	>
+		<img src={filterImg} class="mr-4 h-8 w-8 invert" alt="Filter icon" />
+		Filter
+	</Button>
 
-{#if isOpen}
-	<div class="flex flex-wrap justify-center" data-testid="filter-window">
-		<Select class="mr-2 max-w-28" bind:value={selectedIndex} data-testid="column-select">
-			{#each $columns as col, index}
-				<option value={index}>{col.name}</option>
-			{/each}
-		</Select>
-		{#if selectedColumn?.type === 'number'}
-			<Checkbox class="mx-2" bind:checked={useRangeChecked} data-testid="userange-check">
-				Select Range
-			</Checkbox>
-		{/if}
+	{#if isOpen}
+		<div class="justify-left flex flex-wrap" data-testid="filter-window">
+			<Select class="mr-2 max-w-28" bind:value={selectedIndex} data-testid="column-select">
+				{#each $columns as col, index}
+					<option value={index}>{col.name}</option>
+				{/each}
+			</Select>
+			{#if selectedColumn?.type === 'number'}
+				<Checkbox class="mx-2" bind:checked={useRangeChecked} data-testid="userange-check">
+					Select Range
+				</Checkbox>
+			{/if}
 
-		{#if useRange}
-			<div class="mr-5 flex justify-center">
+			{#if useRange}
+				<div class="mr-5 flex justify-center">
+					<Input
+						class="mr-1 max-w-16"
+						type="number"
+						placeholder="min"
+						bind:value={min}
+						data-testid="minrange-input"
+					/>
+					<Input
+						class="max-w-16"
+						type="number"
+						placeholder="max"
+						bind:value={max}
+						data-testid="maxrange-input"
+					/>
+				</div>
+			{:else}
 				<Input
-					class="mr-1 max-w-16"
-					type="number"
-					placeholder="min"
-					bind:value={min}
-					data-testid="minrange-input"
+					class="mr-2 max-w-28"
+					type="text"
+					placeholder="Value to filter"
+					bind:value={filterValue}
+					data-testid="textfilter-input"
 				/>
-				<Input
-					class="max-w-16"
-					type="number"
-					placeholder="max"
-					bind:value={max}
-					data-testid="maxrange-input"
-				/>
+			{/if}
+
+			<div class="flex flex-wrap justify-center">
+				<Button
+					color="light"
+					class="mr-2 rounded-md px-5 py-3 font-bold text-darkblue"
+					on:click={() => filter(true)}
+					data-testid="remove-matching-button"
+					id="filter-matching"
+				>
+					Remove matching
+				</Button>
+				<Button
+					color="light"
+					class="rounded-md px-5 py-3 font-bold text-darkblue"
+					on:click={() => filter(false)}
+					data-testid="remove-nonmatching-button"
+					id="filter-nonmatching"
+				>
+					Remove non-matching
+				</Button>
+				<Tooltip
+					triggeredBy="[id^='filter-']"
+					trigger="click"
+					placement="bottom"
+					class="z-50 w-48 bg-gray-600 text-sm font-light opacity-90"
+				>
+					Filtered!
+				</Tooltip>
 			</div>
-		{:else}
-			<Input
-				class="mr-2 max-w-28"
-				type="text"
-				placeholder="Value to filter"
-				bind:value={filterValue}
-				data-testid="textfilter-input"
-			/>
-		{/if}
-
-		<div class="flex flex-wrap justify-center">
-			<Button
-				color="light"
-				class="mr-2 rounded-md px-5 py-3 font-bold text-darkblue"
-				on:click={() => filter(true)}
-				data-testid="remove-matching-button"
-			>
-				Remove matching
-			</Button>
-			<Button
-				color="light"
-				class="rounded-md px-5 py-3 font-bold text-darkblue"
-				on:click={() => filter(false)}
-				data-testid="remove-nonmatching-button"
-			>
-				Remove non-matching
-			</Button>
 		</div>
-	</div>
-{/if}
+	{/if}
+</div>
