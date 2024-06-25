@@ -155,3 +155,44 @@ export const possibleBoxplotColours = [
  */
 
 export const mergeTypes = ['Merge files row-by-row', 'Merge files by key'];
+
+/**
+ * Possible styles for bars
+ */
+export const barchartStyles = [
+	{
+		backgroundColor: 'red)',
+		borderColor: 'rgba(0, 0, 0, 1)',
+		borderWidth: 1
+	},
+	{
+		backgroundColor: 'green',
+		borderColor: 'rgba(0, 0, 0, 1)',
+		borderWidth: 1
+	},
+	{
+		backgroundColor: 'blue',
+		borderColor: 'rgba(0, 0, 0, 1)',
+		borderWidth: 1
+	},
+	{
+		backgroundColor: 'yellow',
+		borderColor: 'rgba(0, 0, 0, 1)',
+		borderWidth: 1
+	},
+	{
+		backgroundColor: 'orange',
+		borderColor: 'rgba(0, 0, 0, 1)',
+		borderWidth: 1
+	},
+	{
+		backgroundColor: 'pink',
+		borderColor: 'rgba(0, 0, 0, 1)',
+		borderWidth: 1
+	},
+	{
+		backgroundColor: 'purple',
+		borderColor: 'rgba(0, 0, 0, 1)',
+		borderWidth: 1
+	}
+];

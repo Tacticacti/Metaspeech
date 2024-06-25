@@ -9,6 +9,9 @@ export function getTitleText(
 	data: GroupedDataFrame,
 	selectedFunction: string | null = null
 ): string {
+	// Checks if there are colums selected, if not then this is just Absolute Frequency
+	// Else the title is the values x group of columns
+
 	if (data.groupedColumns.length === 0) {
 		return 'Total Frequency';
 	}
