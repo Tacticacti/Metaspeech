@@ -6,15 +6,12 @@ import {
 } from '$lib/graphs/sharedFunctions';
 
 import type { GroupedDataFrame, BarChartData } from '$lib/Types';
-import { type ChartConfiguration, type ChartDataset } from 'chart.js';
 import 'chartjs-chart-error-bars';
 
 import { setColor } from '$lib/graphs/utils/CanvasUtils';
 
-type BarChartDataset = ChartDataset<'barWithErrorBars'>;
-type BarChartConfiguration = ChartConfiguration<'barWithErrorBars'>;
-
 import { getTitleText, getScaleXAxisText, getScaleYAxisText } from '$lib/graphs/sharedFunctions';
+import type { BarChartDataset, BarChartConfiguration } from '$lib/Types';
 
 /**
  * determines which aggregation or frequency function to use

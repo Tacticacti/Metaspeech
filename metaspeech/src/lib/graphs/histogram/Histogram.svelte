@@ -1,20 +1,24 @@
 <script lang="ts">
-	import type { GroupedDataFrame } from '$lib/Types';
-	import { afterUpdate } from 'svelte';
+	import type { BarChartConfiguration, GroupedDataFrame } from '$lib/Types';
+	import { onMount, afterUpdate } from 'svelte';
 	import { Chart } from 'chart.js';
 	import 'chartjs-chart-error-bars';
 	import { sortGroups } from '$lib/dataframe/DataFrame';
 	import { onDestroy } from 'svelte';
-	import { getScaleYAxisText } from '$lib/graphs/sharedFunctions';
-	import { createConfig, createDatasets, handleData } from './helper';
+	import { getScaleXAxisText, getScaleYAxisText, getTitleText } from '$lib/graphs/sharedFunctions';
+	import { createDatasets, handleData } from './helper';
 	import GraphContainer from '../GraphContainer.svelte';
 	import Export from '$lib/components/exporter/GraphImageExport.svelte';
 	import EditChart from '../utils/EditChart.svelte';
 	import { BarWithErrorBarsChart } from 'chartjs-chart-error-bars';
+	import { setColor } from '$lib/graphs/utils/CanvasUtils';
 
 	export let data: GroupedDataFrame;
 	$: sortGroups(data.groups);
 	let aggregationHappens: boolean = data.aggregateColumn !== undefined;
+
+	// let legendColumn = data.groupedColumns[0];
+	// $: [labels, datasets] = createBarDatasets();
 
 	let selectedFunction: string = aggregationHappens ? 'Mean' : 'Count';
 	let possibleFunctionsForAggregation: string[] = ['Mean', 'Mean + Standard Deviation', 'Sum'];
@@ -23,24 +27,59 @@
 	let chart: Chart;
 	let canvas: HTMLCanvasElement;
 
+	onMount(() => {
+		const plugin = {
+			id: 'customCanvasBackgroundColor',
+			beforeDraw: setColor
+		};
+
+		const cfg: BarChartConfiguration = {
+			type: 'barWithErrorBars',
+			data: {
+				datasets: []
+			},
+
+			// @ts-expect-error plugin needs a type same as above
+			plugins: [plugin]
+		};
+
+		chart = new BarWithErrorBarsChart(canvas, cfg);
+	});
+
 	afterUpdate(() => {
 		const [labels, values] = handleData(selectedFunction, data);
-
 		const datasets = createDatasets(data, values, selectedFunction);
 
-		const cfg = createConfig(labels, datasets, data, selectedFunction);
+		chart.data = {
+			labels: labels,
+			datasets: datasets
+		};
 
-		chart ??= new BarWithErrorBarsChart(canvas, cfg);
-
-		chart.options.plugins!.title!.text = cfg.options!.plugins!.title!.text;
-
-		chart.data.labels = labels;
-		chart.data.datasets = datasets;
-		chart.options.scales = {
-			y: {
+		chart.options = {
+			plugins: {
+				// @ts-expect-error Needs a specific type for plugin
+				customCanvasBackgroundColor: {
+					color: 'white'
+				},
 				title: {
 					display: true,
-					text: getScaleYAxisText(data, selectedFunction)
+					// Checks if there are colums selected, if not then this is just Absolute Frequency
+					// Else the title is the values x group of columns
+					text: getTitleText(data, selectedFunction)
+				}
+			},
+			scales: {
+				x: {
+					title: {
+						display: true,
+						text: getScaleXAxisText(data)
+					}
+				},
+				y: {
+					title: {
+						display: true,
+						text: getScaleYAxisText(data, selectedFunction)
+					}
 				}
 			}
 		};

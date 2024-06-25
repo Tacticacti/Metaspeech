@@ -1,3 +1,4 @@
+import type { ChartDataset, ChartConfiguration } from 'chart.js';
 import { type ComponentType, SvelteComponent } from 'svelte';
 
 // #region Errors
@@ -121,3 +122,7 @@ export type BarChartData =
 			yMax: number;
 	  }
 	| number;
+
+/* Chart js bar charts with error bar */
+export type BarChartDataset = ChartDataset<'barWithErrorBars'>;
+export type BarChartConfiguration = ChartConfiguration<'barWithErrorBars'>;
