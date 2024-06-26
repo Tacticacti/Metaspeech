@@ -25,7 +25,7 @@
 		</div>
 	</div>
 	<div class="flex w-full flex-col items-center p-4 lg:w-1/2">
-		<h1 class="mb-4 text-xl text-black">Select a graph</h1>
+		<h1 class="mb-4 text-xl text-black">Select the type of graph or table</h1>
 		<div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
 			{#each graphs as item}
 				<SelectGraphButton

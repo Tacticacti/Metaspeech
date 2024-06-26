@@ -80,9 +80,10 @@ export const graphs: GraphMeta[] = [
 export const noRenderReasons: Record<string, string> = {
 	Table: 'Unknown reason for not rendering.',
 	Histogram: 'Unknown reason for not rendering.',
-	'Pie Chart': "Cannot be shown if the 'show' is not count/percentage or if group is empty.",
+	'Pie Chart':
+		' Pie chart can only be chosen when count/percentage is to shown and when the selected columns in groupby is non-empty.',
 	Scatter:
-		'Cannot be shown if no number column without binning is selected for grouping or if the column to show is count/percentage.',
+		'Need at least one numeric column in groupby(without binning) and select one numeric column in show(not count/percentage option)',
 	'Box Plot': 'Cannot be shown if no column is selected to show.'
 };
 
