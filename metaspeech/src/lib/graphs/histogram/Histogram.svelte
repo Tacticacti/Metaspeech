@@ -18,26 +18,26 @@
 	let aggregationHappens: boolean = data.aggregateColumn !== undefined;
 
 	let legendColumn = data.groupedColumns[0];
-	// $: [labels, datasets] = getBarChartData(data, selectedFunction, legendColumn);
+	$: [labels, datasets] = getBarChartData(data, selectedFunction, legendColumn);
 
-	const datasets = [
-		{
-			label: 'M',
-			labels: ['1', '2', '4', '6'],
-			data: [10, 20, 40, 60],
-			backgroundColor: 'red',
-			borderColor: 'rgba(0, 0, 0, 1)',
-			borderWidth: 1
-		},
-		{
-			label: 'F',
-			labels: ['1', '3', '4', '5'],
-			data: [10, 30, 40, 50],
-			backgroundColor: 'blue',
-			borderColor: 'rgba(0, 0, 0, 1)',
-			borderWidth: 1
-		},
-	];
+	// const datasets = [
+	// 	{
+	// 		label: 'M',
+	// 		labels: ['1', '2', '4', '6'],
+	// 		data: [10, 20, 40, 60],
+	// 		backgroundColor: 'red',
+	// 		borderColor: 'rgba(0, 0, 0, 1)',
+	// 		borderWidth: 1
+	// 	},
+	// 	{
+	// 		label: 'F',
+	// 		labels: ['1', '3', '4', '5'],
+	// 		data: [10, 30, 40, 50],
+	// 		backgroundColor: 'blue',
+	// 		borderColor: 'rgba(0, 0, 0, 1)',
+	// 		borderWidth: 1
+	// 	},
+	// ];
 
 	let selectedFunction: string = aggregationHappens ? 'Mean' : 'Count';
 	let possibleFunctionsForAggregation: string[] = ['Mean', 'Mean + Standard Deviation', 'Sum'];
@@ -67,8 +67,7 @@
 
 	afterUpdate(() => {
 		chart.data = {
-			// labels: labels,
-			// labels: ['1', '2', '4', '6'],
+			labels: labels,
 			datasets: datasets
 		};
 
