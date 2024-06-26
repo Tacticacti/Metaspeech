@@ -39,13 +39,13 @@ function fillData(
 	labels: string[],
 	data: BarChartData[],
 	allStringLabels: string[]
-) : BarChartData[] {
+): BarChartData[] {
 	const newData: BarChartData[] = [];
 
-	for(let idxAll = 0, idxFew = 0; idxAll < allStringLabels.length; ++ idxAll) {
+	for (let idxAll = 0, idxFew = 0; idxAll < allStringLabels.length; ++idxAll) {
 		if (labels[idxFew] === allStringLabels[idxAll]) {
 			newData.push(data[idxFew]);
-			++ idxFew;
+			++idxFew;
 		} else {
 			// Does not have these keys, so push a 0 to show empty bar
 			newData.push(0);
@@ -57,7 +57,7 @@ function fillData(
 
 function contains(allLabels: DataType[][], keys: DataType[]): boolean {
 	for (const labelArray of allLabels) {
-		if (labelArray.length !== keys.length)  {
+		if (labelArray.length !== keys.length) {
 			continue;
 		}
 
@@ -81,16 +81,16 @@ export function getBarChartData(
 	data: GroupedDataFrame,
 	selectedFunction: string,
 	legendColumn: Column
-) : [string[], BarChartDataset[]] {
+): [string[], BarChartDataset[]] {
 	const map = new Map<string, GroupedDataFrame>();
 	const indexLegend = data.groupedColumns.indexOf(legendColumn);
-	const newGroupedColumns = data.groupedColumns.filter(c => c !== legendColumn);
+	const newGroupedColumns = data.groupedColumns.filter((c) => c !== legendColumn);
 
 	// Here do regrouping to split into different data frames
 	// So that we can reuse functionality to calculate mean etc.
 
 	for (const group of data.groups) {
-		const legendKey = group.keys[indexLegend]+"";
+		const legendKey = group.keys[indexLegend] + '';
 		const nonLegendKeys = group.keys.filter((_, i) => i !== indexLegend);
 
 		if (!map.has(legendKey)) {
@@ -101,10 +101,10 @@ export function getBarChartData(
 			});
 		}
 
-		map.get(legendKey)!.groups.push({ keys: nonLegendKeys, values: group.values})
+		map.get(legendKey)!.groups.push({ keys: nonLegendKeys, values: group.values });
 	}
 
-	let allLabels = new Array<DataType[]>();
+	const allLabels = new Array<DataType[]>();
 
 	for (const groupedDf of map.values()) {
 		// Union of all keys of each dataset
@@ -117,19 +117,17 @@ export function getBarChartData(
 
 	allLabels.sort();
 
-	const allStringLabels = allLabels.map(keys => keyArrayToString(keys, data.groupedColumns))
+	const allStringLabels = allLabels.map((keys) => keyArrayToString(keys, data.groupedColumns));
 
 	const datasets = [...map.entries()].map(([legend, groupedDf], index) => {
 		sortGroups(groupedDf.groups);
-		let [labels, data] = handleData(selectedFunction, groupedDf);
+		const [labels, data] = handleData(selectedFunction, groupedDf);
 
-		data = fillData(labels, data, allStringLabels);
-		
 		return {
 			label: legend,
-			data,
+			data: fillData(labels, data, allStringLabels),
 			...barchartStyles[index % barchartStyles.length]
-		}
+		};
 	});
 
 	return [allStringLabels, datasets];
