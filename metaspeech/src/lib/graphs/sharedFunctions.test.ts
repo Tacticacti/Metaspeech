@@ -66,10 +66,10 @@ describe('scaleXAxisText tests ', () => {
 		const df = new DataFrame();
 		df.set(fromText('age,cars\n18,1\n32,4\n18,2'));
 
-		const groupedDf = df.groupBy();
-		const axis = getScaleXAxisText(groupedDf);
+		df.groupBy();
+		const axis = getScaleXAxisText([]);
 
-		expect(axis).toBe('all');
+		expect(axis).toBe('All');
 	});
 	it('1 grouped columns', () => {
 		const df = new DataFrame();
@@ -81,7 +81,7 @@ describe('scaleXAxisText tests ', () => {
 
 		const groupedDf = df.groupBy();
 
-		const axis = getScaleXAxisText(groupedDf);
+		const axis = getScaleXAxisText(groupedDf.groupedColumns);
 
 		expect(axis).toBe('age');
 	});
@@ -97,7 +97,7 @@ describe('scaleXAxisText tests ', () => {
 
 		const groupedDf = df.groupBy();
 
-		const axis = getScaleXAxisText(groupedDf);
+		const axis = getScaleXAxisText(groupedDf.groupedColumns);
 
 		expect(axis).toBe('Group: (age, trains)');
 	});
@@ -164,7 +164,7 @@ describe('calculate mean tests', () => {
 
 		const groupedDf = df.groupBy();
 
-		const [labels, values] = calculateMean(groupedDf);
+		const [labels, values] = calculateMean(groupedDf, false);
 
 		expect(labels).toStrictEqual(['18']);
 		expect(values).toStrictEqual([1]);
@@ -179,7 +179,7 @@ describe('calculate mean tests', () => {
 
 		const groupedDf = df.groupBy();
 
-		const [labels, values] = calculateMean(groupedDf);
+		const [labels, values] = calculateMean(groupedDf, false);
 
 		expect(labels).toStrictEqual(['18']);
 		expect(values).toStrictEqual([2]);
@@ -194,7 +194,7 @@ describe('calculate mean tests', () => {
 
 		const groupedDf = df.groupBy();
 
-		const [labels, values] = calculateMean(groupedDf);
+		const [labels, values] = calculateMean(groupedDf, false);
 
 		expect(labels).toStrictEqual(['18', '22']);
 		expect(values).toStrictEqual([1, 3]);
@@ -210,7 +210,7 @@ describe('calculate mean tests', () => {
 
 		const groupedDf = df.groupBy();
 
-		const [labels, values] = calculateMean(groupedDf);
+		const [labels, values] = calculateMean(groupedDf, false);
 
 		expect(labels).toStrictEqual(['18', '32', '17', '16']);
 		expect(values).toStrictEqual([1.5, 4, 1, 0]);

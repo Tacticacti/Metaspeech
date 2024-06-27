@@ -5,7 +5,8 @@ import {
 	calculateSum,
 	calculateAbsoluteFrequency,
 	calculateRelativeFrequency,
-	keyArrayToString
+	keyArrayToString,
+	keyToString
 } from '$lib/graphs/sharedFunctions';
 
 import type { GroupedDataFrame, BarChartData, Column, BarChartDataset, DataType } from '$lib/Types';
@@ -80,8 +81,12 @@ function contains(allLabels: DataType[][], keys: DataType[]): boolean {
 export function getBarChartData(
 	data: GroupedDataFrame,
 	selectedFunction: string,
-	legendColumn: Column
+	legendColumn: Column | undefined
 ): [string[], BarChartDataset[]] {
+	if (legendColumn === undefined) {
+		return [[], []];
+	}
+
 	const map = new Map<string, GroupedDataFrame>();
 	const indexLegend = data.groupedColumns.indexOf(legendColumn);
 	const newGroupedColumns = data.groupedColumns.filter((c) => c !== legendColumn);
@@ -90,7 +95,7 @@ export function getBarChartData(
 	// So that we can reuse functionality to calculate mean etc.
 
 	for (const group of data.groups) {
-		const legendKey = group.keys[indexLegend] + '';
+		const legendKey = keyToString(group.keys[indexLegend], legendColumn.groupBy!);
 		const nonLegendKeys = group.keys.filter((_, i) => i !== indexLegend);
 
 		if (!map.has(legendKey)) {
@@ -117,7 +122,7 @@ export function getBarChartData(
 
 	allLabels.sort();
 
-	const allStringLabels = allLabels.map((keys) => keyArrayToString(keys, data.groupedColumns));
+	const allStringLabels = allLabels.map((keys) => keyArrayToString(keys, newGroupedColumns));
 
 	const datasets = [...map.entries()].map(([legend, groupedDf], index) => {
 		sortGroups(groupedDf.groups);

@@ -37,8 +37,9 @@ describe('View', () => {
 	it('histogram should be enabled', async () => {
 		const user = userEvent.setup();
 		df.set(fromText('col1,col2\n1,2'));
-		df.groupBy();
-		const r = render(sut);
+		const gdf = df.groupBy();
+
+		const r = render(sut, { data: gdf });
 
 		const button = r.getByTestId('Barchart');
 		await user.hover(button);
