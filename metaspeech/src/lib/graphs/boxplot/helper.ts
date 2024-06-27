@@ -2,7 +2,7 @@ import type { DataType, Group, GroupBy, GroupedDataFrame } from '$lib/Types';
 import type { ChartConfiguration, ChartData } from 'chart.js';
 import { setColor } from '../utils/CanvasUtils';
 import { getTitleText, keyToString } from '../sharedFunctions';
-import { possibleBoxplotColours } from '$lib/Constants';
+import { possibleColors } from '$lib/Constants';
 
 /**
  * generates datasets for the boxplot. when 1 column is selected: trivial. when 2 columns are selected: tricky.
@@ -64,8 +64,8 @@ export function getBoxPlotData(data: GroupedDataFrame) {
 		}
 		datasets.push({
 			label: label,
-			backgroundColor: possibleBoxplotColours[i % possibleBoxplotColours.length],
-			borderColor: possibleBoxplotColours[i % possibleBoxplotColours.length],
+			backgroundColor: possibleColors[i % possibleColors.length],
+			borderColor: possibleColors[i % possibleColors.length],
 			borderWidth: 1,
 			outlierColor: '#999999',
 			padding: 0,

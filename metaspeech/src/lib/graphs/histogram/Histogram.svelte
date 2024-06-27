@@ -62,6 +62,14 @@
 				title: {
 					display: true,
 					text: getTitleText(data, selectedFunction, legendColumn)
+				},
+				legend: {
+					display: legendColumn !== undefined,
+					position: 'right',
+					title: {
+						display: true,
+						text: legendColumn?.name
+					}
 				}
 			},
 			scales: {
