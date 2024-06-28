@@ -83,7 +83,7 @@ export function getBarChartData(
 	selectedFunction: string,
 	legendColumn: Column | undefined
 ): [string[], BarChartDataset[]] {
-	if (legendColumn === undefined) {
+	if (legendColumn === undefined || legendColumn === null) {
 		return [[], []];
 	}
 
