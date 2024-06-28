@@ -81,10 +81,11 @@ export const noRenderReasons: Record<string, string> = {
 	Table: 'Unknown reason for not rendering.',
 	Histogram: 'Unknown reason for not rendering.',
 	'Pie Chart':
-		' Pie chart can only be chosen when count/percentage is to shown and when the selected columns in groupby is non-empty.',
+		' Pie chart can only be shown if count/percentage is selected in show and when the selected columns in groupby is non-empty.',
 	Scatter:
-		'Need at least one numeric column in groupby(without binning) and select one numeric column in show(not count/percentage option)',
-	'Box Plot': 'Cannot be shown if no column is selected to show.'
+		'Scatter plot can only be shown if at least one numeric column in groupby(without binning) and selected one numeric column in show(not count/percentage option)',
+	'Box Plot':
+		'Box plot can only be shown if selected less than 3 columns in group by and selected column in show(not count/percentage).'
 };
 
 /**
