@@ -3,9 +3,6 @@
 		<div class="flex w-full justify-around">
 			<slot name="option-slot">No option Available</slot>
 		</div>
-		<div class="flex w-full justify-around">
-			<slot name="extra-option-slot"></slot>
-		</div>
 	</div>
 	<div>
 		<slot name="graph-slot"></slot>

@@ -276,8 +276,8 @@ export function compareDataTypeArray(a: DataType[], b: DataType[]): number {
  */
 export function compareDataType(a: DataType, b: DataType): number {
 	if (a === b) return 0;
-	if (a === undefined) return -1;
-	if (b === undefined) return 1;
+	if (a === undefined) return 1;
+	if (b === undefined) return -1;
 
 	if (typeof a === 'number' && typeof b === 'number') {
 		return a - b;

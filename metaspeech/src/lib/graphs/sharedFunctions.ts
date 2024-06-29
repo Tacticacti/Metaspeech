@@ -7,12 +7,8 @@ import type { GroupedDataFrame, Group, DataType, GroupBy, Column, BarChartData }
  */
 export function getTitleText(
 	data: GroupedDataFrame,
-	selectedFunction: string | null = null,
-	legendColumn: Column | null = null
+	selectedFunction: string | null = null
 ): string {
-	// Checks if there are colums selected, if not then this is just Absolute Frequency
-	// Else the title is the values x group of columns
-
 	if (data.groupedColumns.length === 0) {
 		return 'Total Frequency';
 	}
@@ -22,22 +18,9 @@ export function getTitleText(
 	else if (data.aggregateColumn) title = data.aggregateColumn.name + ' x ';
 	else title = 'Frequency of ';
 
-	if (data.groupedColumns.length > 1) {
-		title +=
-			'(' +
-			data.groupedColumns
-				.filter((column) => column !== legendColumn)
-				.map((column) => column.name)
-				.join(', ') +
-			')';
-	} else {
-		title += data.groupedColumns[0].name;
-	}
-
-	if (legendColumn !== null) {
-		title += ` grouped by ${legendColumn.name}`;
-	}
-
+	if (data.groupedColumns.length > 1)
+		title += '(' + data.groupedColumns.map((column) => column.name).join(', ') + ')';
+	else title += data.groupedColumns[0].name;
 	return title;
 }
 
@@ -46,14 +29,14 @@ export function getTitleText(
  * @param data current dataframe
  * @returns scale string
  */
-export function getScaleXAxisText(groupedColumns: Column[]): string {
-	if (groupedColumns.length === 0) {
-		return 'All';
+export function getScaleXAxisText(data: GroupedDataFrame): string {
+	if (data.groupedColumns.length === 0) {
+		return 'all';
 	}
-	if (groupedColumns.length > 1) {
-		return 'Group: (' + groupedColumns.map((column) => column.name).join(', ') + ')';
+	if (data.groupedColumns.length > 1) {
+		return 'Group: (' + data.groupedColumns.map((column) => column.name).join(', ') + ')';
 	}
-	return groupedColumns[0].name;
+	return data.groupedColumns[0].name;
 }
 
 /**
