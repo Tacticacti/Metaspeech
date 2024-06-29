@@ -1,25 +1,20 @@
 <script lang="ts">
-	import type { BarChartConfiguration, GroupedDataFrame } from '$lib/Types';
-	import { onMount, afterUpdate } from 'svelte';
+	import type { GroupedDataFrame } from '$lib/Types';
+	import { afterUpdate } from 'svelte';
 	import { Chart } from 'chart.js';
 	import 'chartjs-chart-error-bars';
 	import { sortGroups } from '$lib/dataframe/DataFrame';
 	import { onDestroy } from 'svelte';
-	import { getScaleXAxisText, getScaleYAxisText, getTitleText } from '$lib/graphs/sharedFunctions';
-	import { getBarChartData } from './helper';
+	import { getScaleYAxisText } from '$lib/graphs/sharedFunctions';
+	import { createConfig, createDatasets, handleData } from './helper';
 	import GraphContainer from '../GraphContainer.svelte';
 	import Export from '$lib/components/exporter/GraphImageExport.svelte';
 	import EditChart from '../utils/EditChart.svelte';
 	import { BarWithErrorBarsChart } from 'chartjs-chart-error-bars';
-	import { setColor } from '$lib/graphs/utils/CanvasUtils';
 
 	export let data: GroupedDataFrame;
 	$: sortGroups(data.groups);
 	let aggregationHappens: boolean = data.aggregateColumn !== undefined;
-
-	let legendColumn = data.groupedColumns[0];
-	$: [labels, datasets] = getBarChartData(data, selectedFunction, legendColumn);
-	$: newGroupedColumns = data.groupedColumns.filter((column) => column !== legendColumn);
 
 	let selectedFunction: string = aggregationHappens ? 'Mean' : 'Count';
 	let possibleFunctionsForAggregation: string[] = ['Mean', 'Mean + Standard Deviation', 'Sum'];
@@ -28,62 +23,24 @@
 	let chart: Chart;
 	let canvas: HTMLCanvasElement;
 
-	onMount(() => {
-		const plugin = {
-			id: 'customCanvasBackgroundColor',
-			beforeDraw: setColor
-		};
-
-		const cfg: BarChartConfiguration = {
-			type: 'barWithErrorBars',
-			data: {
-				datasets: []
-			},
-
-			// @ts-expect-error plugin needs a type same as above
-			plugins: [plugin]
-		};
-
-		chart = new BarWithErrorBarsChart(canvas, cfg);
-	});
-
 	afterUpdate(() => {
-		chart.data = {
-			labels: labels,
-			datasets: datasets
-		};
+		const [labels, values] = handleData(selectedFunction, data);
 
-		chart.options = {
-			plugins: {
-				// @ts-expect-error Needs a specific type for plugin
-				customCanvasBackgroundColor: {
-					color: 'white'
-				},
+		const datasets = createDatasets(data, values, selectedFunction);
+
+		const cfg = createConfig(labels, datasets, data, selectedFunction);
+
+		chart ??= new BarWithErrorBarsChart(canvas, cfg);
+
+		chart.options.plugins!.title!.text = cfg.options!.plugins!.title!.text;
+
+		chart.data.labels = labels;
+		chart.data.datasets = datasets;
+		chart.options.scales = {
+			y: {
 				title: {
 					display: true,
-					text: getTitleText(data, selectedFunction, legendColumn)
-				},
-				legend: {
-					display: legendColumn !== undefined,
-					position: 'right',
-					title: {
-						display: true,
-						text: legendColumn?.name
-					}
-				}
-			},
-			scales: {
-				x: {
-					title: {
-						display: true,
-						text: getScaleXAxisText(newGroupedColumns)
-					}
-				},
-				y: {
-					title: {
-						display: true,
-						text: getScaleYAxisText(data, selectedFunction)
-					}
+					text: getScaleYAxisText(data, selectedFunction)
 				}
 			}
 		};
@@ -124,20 +81,6 @@
 		<Export {chart} />
 		<EditChart {chart} chartType="histogram" />
 	</div>
-
-	<div slot="extra-option-slot" class="flex w-full items-center">
-		<p class="font-bold text-white">Select a Legend Column:</p>
-		<select
-			bind:value={legendColumn}
-			class="mx-4 my-2 inline-block cursor-pointer rounded-lg border border-gray-300 bg-gray-100 px-4 py-2 text-sm font-semibold text-gray-800 shadow-md transition-colors duration-300 ease-in-out"
-			data-testid="barchart-legend-select"
-		>
-			{#each data.groupedColumns as col}
-				<option value={col} data-testid="barchart-legend-{col.name}">{col.name}</option>
-			{/each}
-		</select>
-	</div>
-
 	<div slot="graph-slot">
 		<canvas data-testid="canvas-element" bind:this={canvas} />
 	</div>

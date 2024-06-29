@@ -1,4 +1,9 @@
-import { handleData } from '$lib/graphs/histogram/helper';
+import {
+	createConfig,
+	createDatasets,
+	createDatasetsLabel,
+	handleData
+} from '$lib/graphs/histogram/helper';
 import { DataFrame, fromText } from '$lib/dataframe/DataFrame';
 import { get } from 'svelte/store';
 
@@ -97,99 +102,99 @@ describe('handleData tests', () => {
 	});
 });
 
-// describe('createDatasets tests', () => {
-// 	it('create datasets with aggregated column', () => {
-// 		const df = new DataFrame();
-// 		df.set(fromText('age,cars\n18,1\n32,4\n18,2'));
+describe('createDatasets tests', () => {
+	it('create datasets with aggregated column', () => {
+		const df = new DataFrame();
+		df.set(fromText('age,cars\n18,1\n32,4\n18,2'));
 
-// 		const columns = get(df.columns);
-// 		columns[1].aggregate = true;
-// 		columns[0].groupBy = { type: 'specific' };
+		const columns = get(df.columns);
+		columns[1].aggregate = true;
+		columns[0].groupBy = { type: 'specific' };
 
-// 		const groupedDf = df.groupBy();
-// 		const values: number[] = [5, 7];
-// 		const selectedFunction: string = 'some function';
+		const groupedDf = df.groupBy();
+		const values: number[] = [5, 7];
+		const selectedFunction: string = 'some function';
 
-// 		const datasets = createDatasets(groupedDf, values, selectedFunction);
-// 		expect(datasets).to.exist;
-// 	});
-// 	it('create datasets with abs freq', () => {
-// 		const df = new DataFrame();
-// 		df.set(fromText('age,cars\n18,1\n32,4\n18,2'));
+		const datasets = createDatasets(groupedDf, values, selectedFunction);
+		expect(datasets).to.exist;
+	});
+	it('create datasets with abs freq', () => {
+		const df = new DataFrame();
+		df.set(fromText('age,cars\n18,1\n32,4\n18,2'));
 
-// 		const columns = get(df.columns);
-// 		columns[1].aggregate = true;
+		const columns = get(df.columns);
+		columns[1].aggregate = true;
 
-// 		const groupedDf = df.groupBy();
-// 		const values: number[] = [5, 7];
-// 		const selectedFunction: string = 'Count';
+		const groupedDf = df.groupBy();
+		const values: number[] = [5, 7];
+		const selectedFunction: string = 'Count';
 
-// 		const datasets = createDatasets(groupedDf, values, selectedFunction);
-// 		expect(datasets).to.exist;
-// 	});
-// });
+		const datasets = createDatasets(groupedDf, values, selectedFunction);
+		expect(datasets).to.exist;
+	});
+});
 
-// describe('createDatasetsLabel tests', () => {
-// 	it('create label with aggregated column', () => {
-// 		const df = new DataFrame();
-// 		df.set(fromText('age,cars\n18,1\n32,4\n18,2'));
+describe('createDatasetsLabel tests', () => {
+	it('create label with aggregated column', () => {
+		const df = new DataFrame();
+		df.set(fromText('age,cars\n18,1\n32,4\n18,2'));
 
-// 		const columns = get(df.columns);
-// 		columns[1].aggregate = true;
-// 		columns[0].groupBy = { type: 'specific' };
+		const columns = get(df.columns);
+		columns[1].aggregate = true;
+		columns[0].groupBy = { type: 'specific' };
 
-// 		const groupedDf = df.groupBy();
-// 		const values: number[] = [5, 7];
-// 		const selectedFunction: string = 'some function';
+		const groupedDf = df.groupBy();
+		const values: number[] = [5, 7];
+		const selectedFunction: string = 'some function';
 
-// 		const label = createDatasetsLabel(groupedDf, values, selectedFunction);
-// 		expect(label).toBe('cars');
-// 	});
-// 	it('create label with abs freq', () => {
-// 		const df = new DataFrame();
-// 		df.set(fromText('age,cars\n18,1\n32,4\n18,2'));
+		const label = createDatasetsLabel(groupedDf, values, selectedFunction);
+		expect(label).toBe('cars');
+	});
+	it('create label with abs freq', () => {
+		const df = new DataFrame();
+		df.set(fromText('age,cars\n18,1\n32,4\n18,2'));
 
-// 		const columns = get(df.columns);
-// 		columns[0].groupBy = { type: 'specific' };
+		const columns = get(df.columns);
+		columns[0].groupBy = { type: 'specific' };
 
-// 		const groupedDf = df.groupBy();
-// 		const values: number[] = [5, 7];
-// 		const selectedFunction: string = 'Count';
+		const groupedDf = df.groupBy();
+		const values: number[] = [5, 7];
+		const selectedFunction: string = 'Count';
 
-// 		const label = createDatasetsLabel(groupedDf, values, selectedFunction);
-// 		expect(label).toBe('Count');
-// 	});
-// 	it('create label with rel freq', () => {
-// 		const df = new DataFrame();
-// 		df.set(fromText('age,cars\n18,1\n32,4\n18,2'));
+		const label = createDatasetsLabel(groupedDf, values, selectedFunction);
+		expect(label).toBe('Count');
+	});
+	it('create label with rel freq', () => {
+		const df = new DataFrame();
+		df.set(fromText('age,cars\n18,1\n32,4\n18,2'));
 
-// 		const columns = get(df.columns);
-// 		columns[0].groupBy = { type: 'specific' };
+		const columns = get(df.columns);
+		columns[0].groupBy = { type: 'specific' };
 
-// 		const groupedDf = df.groupBy();
-// 		const values: number[] = [5, 7];
-// 		const selectedFunction: string = 'Percentage';
+		const groupedDf = df.groupBy();
+		const values: number[] = [5, 7];
+		const selectedFunction: string = 'Percentage';
 
-// 		const label = createDatasetsLabel(groupedDf, values, selectedFunction);
-// 		expect(label).toBe('Percentage');
-// 	});
-// });
+		const label = createDatasetsLabel(groupedDf, values, selectedFunction);
+		expect(label).toBe('Percentage');
+	});
+});
 
-// it('create config test', () => {
-// 	const df = new DataFrame();
-// 	df.set(fromText('age,cars\n18,1\n32,4\n18,2'));
+it('create config test', () => {
+	const df = new DataFrame();
+	df.set(fromText('age,cars\n18,1\n32,4\n18,2'));
 
-// 	const columns = get(df.columns);
-// 	columns[1].aggregate = true;
-// 	columns[0].groupBy = { type: 'specific' };
+	const columns = get(df.columns);
+	columns[1].aggregate = true;
+	columns[0].groupBy = { type: 'specific' };
 
-// 	const groupedDf = df.groupBy();
-// 	const labels: string[] = ['18', '32'];
-// 	const values: number[] = [5, 7];
-// 	const selectedFunction: string = 'some function';
+	const groupedDf = df.groupBy();
+	const labels: string[] = ['18', '32'];
+	const values: number[] = [5, 7];
+	const selectedFunction: string = 'some function';
 
-// 	const datasets = createDatasets(groupedDf, values, selectedFunction);
-// 	const config = createConfig(labels, datasets, groupedDf, selectedFunction);
+	const datasets = createDatasets(groupedDf, values, selectedFunction);
+	const config = createConfig(labels, datasets, groupedDf, selectedFunction);
 
-// 	expect(config).to.exist;
-// });
+	expect(config).to.exist;
+});
