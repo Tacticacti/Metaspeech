@@ -152,151 +152,151 @@ export const mergeTypes = ['Merge files row-by-row', 'Merge files by key'];
  * Possible legend colors
  */
 export const possibleColors: string[] = [
-	'Orange',
-	'Chartreuse',
-	'MediumPurple',
-	'OliveDrab',
-	'Sienna',
-	'MistyRose',
-	'MediumSpringGreen',
-	'MediumOrchid',
-	'DarkSlateGrey',
-	'SkyBlue',
-	'PowderBlue',
-	'SaddleBrown',
-	'OldLace',
-	'MediumSeaGreen',
-	'DarkCyan',
-	'DarkSlateBlue',
-	'GoldenRod',
-	'LightBlue',
-	'DarkViolet',
-	'DarkSlateGray',
-	'Orchid',
-	'Black',
-	'Khaki',
-	'Snow',
-	'Coral',
-	'Red',
-	'Peru',
-	'DarkSeaGreen',
-	'GhostWhite',
-	'AliceBlue',
-	'MintCream',
-	'Maroon',
-	'Gray',
-	'AntiqueWhite',
-	'SeaShell',
-	'Aqua',
-	'LightCoral',
-	'HoneyDew',
-	'LightSalmon',
-	'LightSteelBlue',
-	'MediumTurquoise',
-	'SlateBlue',
-	'LemonChiffon',
-	'MediumSlateBlue',
-	'White',
-	'LawnGreen',
-	'Green',
-	'DarkGreen',
-	'PaleGoldenRod',
-	'DarkRed',
-	'MediumAquaMarine',
-	'Salmon',
-	'LightSeaGreen',
-	'Fuchsia',
-	'CornflowerBlue',
-	'OrangeRed',
-	'SlateGray',
-	'DarkKhaki',
-	'Blue',
-	'LightGreen',
-	'PeachPuff',
-	'DimGray',
-	'Navy',
-	'Gold',
-	'Gainsboro',
-	'Cornsilk',
-	'RoyalBlue',
-	'MediumBlue',
-	'DarkGray',
-	'Pink',
-	'DarkTurquoise',
-	'DarkMagenta',
-	'Moccasin',
-	'WhiteSmoke',
-	'Purple',
-	'DarkSalmon',
-	'DarkGoldenRod',
-	'CadetBlue',
-	'SlateGrey',
-	'Silver',
-	'Tan',
-	'BlueViolet',
-	'GreenYellow',
-	'SeaGreen',
-	'Aquamarine',
-	'Lavender',
-	'FloralWhite',
-	'LightSkyBlue',
-	'Crimson',
-	'Tomato',
-	'Indigo',
-	'Brown',
-	'Azure',
-	'Lime',
-	'Magenta',
-	'RebeccaPurple',
-	'Bisque',
-	'MediumVioletRed',
-	'Ivory',
-	'NavajoWhite',
-	'PaleGreen',
-	'LavenderBlush',
-	'DeepSkyBlue',
-	'LightGoldenRodYellow',
-	'PaleTurquoise',
-	'YellowGreen',
-	'IndianRed',
-	'Plum',
-	'LightPink',
-	'DeepPink',
-	'Beige',
-	'ForestGreen',
-	'MidnightBlue',
-	'Olive',
-	'Violet',
-	'BurlyWood',
-	'PapayaWhip',
-	'Yellow',
-	'SpringGreen',
-	'LightYellow',
-	'DarkOliveGreen',
-	'RosyBrown',
-	'Wheat',
-	'BlanchedAlmond',
-	'SteelBlue',
-	'LightGray',
-	'LimeGreen',
-	'PaleVioletRed',
-	'DarkGrey',
-	'HotPink',
-	'Linen',
-	'DarkOrange',
-	'Cyan',
-	'Teal',
-	'FireBrick',
-	'Thistle',
-	'Chocolate',
-	'DarkBlue',
-	'DodgerBlue',
-	'LightSlateGray',
-	'LightCyan',
-	'SandyBrown',
-	'LightGrey',
-	'Turquoise',
-	'DarkOrchid'
+	'#FFA500', // Orange
+	'#7FFF00', // Chartreuse
+	'#9370DB', // MediumPurple
+	'#6B8E23', // OliveDrab
+	'#A0522D', // Sienna
+	'#FFE4E1', // MistyRose
+	'#00FA9A', // MediumSpringGreen
+	'#BA55D3', // MediumOrchid
+	'#2F4F4F', // DarkSlateGrey
+	'#87CEEB', // SkyBlue
+	'#B0E0E6', // PowderBlue
+	'#8B4513', // SaddleBrown
+	'#FDF5E6', // OldLace
+	'#3CB371', // MediumSeaGreen
+	'#008B8B', // DarkCyan
+	'#483D8B', // DarkSlateBlue
+	'#DAA520', // GoldenRod
+	'#ADD8E6', // LightBlue
+	'#9400D3', // DarkViolet
+	'#2F4F4F', // DarkSlateGray
+	'#DA70D6', // Orchid
+	'#000000', // Black
+	'#F0E68C', // Khaki
+	'#FFFAFA', // Snow
+	'#FF7F50', // Coral
+	'#FF0000', // Red
+	'#CD853F', // Peru
+	'#8FBC8F', // DarkSeaGreen
+	'#F8F8FF', // GhostWhite
+	'#F0F8FF', // AliceBlue
+	'#F5FFFA', // MintCream
+	'#800000', // Maroon
+	'#808080', // Gray
+	'#FAEBD7', // AntiqueWhite
+	'#FFF5EE', // SeaShell
+	'#00FFFF', // Aqua
+	'#F08080', // LightCoral
+	'#F0FFF0', // HoneyDew
+	'#FFA07A', // LightSalmon
+	'#B0C4DE', // LightSteelBlue
+	'#48D1CC', // MediumTurquoise
+	'#6A5ACD', // SlateBlue
+	'#FFFACD', // LemonChiffon
+	'#7B68EE', // MediumSlateBlue
+	'#FFFFFF', // White
+	'#7CFC00', // LawnGreen
+	'#008000', // Green
+	'#006400', // DarkGreen
+	'#EEE8AA', // PaleGoldenRod
+	'#8B0000', // DarkRed
+	'#66CDAA', // MediumAquaMarine
+	'#FA8072', // Salmon
+	'#20B2AA', // LightSeaGreen
+	'#FF00FF', // Fuchsia
+	'#6495ED', // CornflowerBlue
+	'#FF4500', // OrangeRed
+	'#708090', // SlateGray
+	'#BDB76B', // DarkKhaki
+	'#0000FF', // Blue
+	'#90EE90', // LightGreen
+	'#FFDAB9', // PeachPuff
+	'#696969', // DimGray
+	'#000080', // Navy
+	'#FFD700', // Gold
+	'#DCDCDC', // Gainsboro
+	'#FFF8DC', // Cornsilk
+	'#4169E1', // RoyalBlue
+	'#0000CD', // MediumBlue
+	'#A9A9A9', // DarkGray
+	'#FFC0CB', // Pink
+	'#00CED1', // DarkTurquoise
+	'#8B008B', // DarkMagenta
+	'#FFE4B5', // Moccasin
+	'#F5F5F5', // WhiteSmoke
+	'#800080', // Purple
+	'#E9967A', // DarkSalmon
+	'#B8860B', // DarkGoldenRod
+	'#5F9EA0', // CadetBlue
+	'#708090', // SlateGrey
+	'#C0C0C0', // Silver
+	'#D2B48C', // Tan
+	'#8A2BE2', // BlueViolet
+	'#ADFF2F', // GreenYellow
+	'#2E8B57', // SeaGreen
+	'#7FFFD4', // Aquamarine
+	'#E6E6FA', // Lavender
+	'#FFFAF0', // FloralWhite
+	'#87CEFA', // LightSkyBlue
+	'#DC143C', // Crimson
+	'#FF6347', // Tomato
+	'#4B0082', // Indigo
+	'#A52A2A', // Brown
+	'#F0FFFF', // Azure
+	'#00FF00', // Lime
+	'#FF00FF', // Magenta
+	'#663399', // RebeccaPurple
+	'#FFE4C4', // Bisque
+	'#C71585', // MediumVioletRed
+	'#FFFFF0', // Ivory
+	'#FFDEAD', // NavajoWhite
+	'#98FB98', // PaleGreen
+	'#FFF0F5', // LavenderBlush
+	'#00BFFF', // DeepSkyBlue
+	'#FAFAD2', // LightGoldenRodYellow
+	'#AFEEEE', // PaleTurquoise
+	'#9ACD32', // YellowGreen
+	'#CD5C5C', // IndianRed
+	'#DDA0DD', // Plum
+	'#FFB6C1', // LightPink
+	'#FF1493', // DeepPink
+	'#F5F5DC', // Beige
+	'#228B22', // ForestGreen
+	'#191970', // MidnightBlue
+	'#808000', // Olive
+	'#EE82EE', // Violet
+	'#DEB887', // BurlyWood
+	'#FFEFD5', // PapayaWhip
+	'#FFFF00', // Yellow
+	'#00FF7F', // SpringGreen
+	'#FFFFE0', // LightYellow
+	'#556B2F', // DarkOliveGreen
+	'#BC8F8F', // RosyBrown
+	'#F5DEB3', // Wheat
+	'#FFEBCD', // BlanchedAlmond
+	'#4682B4', // SteelBlue
+	'#D3D3D3', // LightGray
+	'#32CD32', // LimeGreen
+	'#DB7093', // PaleVioletRed
+	'#A9A9A9', // DarkGrey
+	'#FF69B4', // HotPink
+	'#FAF0E6', // Linen
+	'#FF8C00', // DarkOrange
+	'#00FFFF', // Cyan
+	'#008080', // Teal
+	'#B22222', // FireBrick
+	'#D8BFD8', // Thistle
+	'#D2691E', // Chocolate
+	'#00008B', // DarkBlue
+	'#1E90FF', // DodgerBlue
+	'#778899', // LightSlateGray
+	'#E0FFFF', // LightCyan
+	'#F4A460', // SandyBrown
+	'#D3D3D3', // LightGrey
+	'#40E0D0', // Turquoise
+	'#9932CC' // DarkOrchid
 ];
 
 /**
