@@ -39,7 +39,8 @@ export function handleData(
 function fillData(
 	labels: string[],
 	data: BarChartData[],
-	allStringLabels: string[]
+	allStringLabels: string[],
+	selectedFunction: string
 ): BarChartData[] {
 	const newData: BarChartData[] = [];
 
@@ -49,7 +50,12 @@ function fillData(
 			++idxFew;
 		} else {
 			// Does not have these keys, so push a 0 to show empty bar
-			newData.push(0);
+
+			if (selectedFunction === 'Mean + Standard Deviation') {
+				newData.push({ y: 0, yMin: 0, yMax: 0 });
+			} else {
+				newData.push(0);
+			}
 		}
 	}
 
@@ -130,7 +136,7 @@ export function getBarChartData(
 
 		return {
 			label: legend,
-			data: fillData(labels, data, allStringLabels),
+			data: fillData(labels, data, allStringLabels, selectedFunction),
 			...barchartStyles[index % barchartStyles.length]
 		};
 	});
