@@ -50,7 +50,20 @@
 	}
 </script>
 
-<div class="flex h-[90vh] flex-col items-center justify-around">
+<div class="flex h-[90vh] flex-col">
+	<div class="my-6 flex w-full justify-between">
+		<div></div>
+		<Button
+			href="/view"
+			class="mr-5 w-32 rounded-lg bg-darkblue text-sm font-bold text-offwhite"
+			data-testid="next-link"
+		>
+			<div class="flex items-center justify-center">
+				Next
+				<img src={nextImg} class=" ml-4 h-8 w-8 invert" alt="Next icon" />
+			</div>
+		</Button>
+	</div>
 	<div class="flex w-full justify-center border-4 py-5">
 		<div class="mx-20 flex w-full max-w-[100vh] flex-col items-center">
 			<span class="flex items-center text-xl font-bold">
@@ -154,14 +167,4 @@
 			</div>
 		</div>
 	</div>
-	<Button
-		href="/view"
-		class="w-48 rounded-lg bg-darkblue text-sm font-bold text-offwhite"
-		data-testid="next-link"
-	>
-		<div class="flex items-center justify-center">
-			Next
-			<img src={nextImg} class=" ml-4 h-8 w-8 invert" alt="Next icon" />
-		</div>
-	</Button>
 </div>
