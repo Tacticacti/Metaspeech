@@ -91,6 +91,16 @@
 		chart.update();
 	});
 
+	let isCanvasReady = false;
+
+	// Ensure canvas is mounted and ready
+	onMount(() => {
+		if (canvas) {
+			// Perform any necessary initialization with the canvas here
+			isCanvasReady = true;
+		}
+	});
+
 	onDestroy(() => {
 		chart?.destroy();
 	});
@@ -122,7 +132,11 @@
 			{/if}
 		</div>
 		<Export {chart} />
-		<EditChart {chart} chartType="histogram" />
+		{#if isCanvasReady}
+			{#key legendColumn}
+				<EditChart {chart} chartType="histogram" />
+			{/key}
+		{/if}
 	</div>
 
 	<div slot="extra-option-slot" class="flex w-full items-center">

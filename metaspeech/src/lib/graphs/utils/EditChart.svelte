@@ -16,16 +16,17 @@
 	let pointRadius: number = 7;
 	let fontSize: number = Chart.defaults.font.size || 12;
 	let backgroundColor: string = '#ffffff';
-	let barColor: string = '#3232c8';
 	let borderColor: string = '#000000';
 	let fontColor: string = '#000000';
+	let datasetLabels: string[] = [];
+	let legendColors: string[] = [];
 
 	let titlePlaceholder: string = chart?.options?.plugins?.title?.text?.toString() ?? 'Enter title';
-	// @ts-expect-error type error
 	let xAxisPlaceholder: string =
+		// @ts-expect-error type error
 		chart?.options?.scales?.x?.title?.text?.toString() ?? 'Enter x axis label';
-	// @ts-expect-error type error
 	let yAxisPlaceholder: string =
+		// @ts-expect-error type error
 		chart?.options?.scales?.y?.title?.text?.toString() ?? 'Enter y axis label';
 
 	/**
@@ -60,8 +61,8 @@
 		// @ts-expect-error the customBackground is assumed
 		chart.options.plugins.customCanvasBackgroundColor.color = backgroundColor;
 		if (!(chartType === 'histogram')) return;
-		chart.data.datasets.forEach((d) => {
-			d.backgroundColor = barColor;
+		chart.data.datasets.forEach((d, index) => {
+			d.backgroundColor = legendColors[index];
 			d.borderColor = borderColor;
 		});
 	}
@@ -124,6 +125,15 @@
 		xAxis = chart?.options?.scales?.x?.title?.text?.toString() ?? '';
 		// @ts-expect-error type error
 		yAxis = chart?.options?.scales?.y?.title?.text?.toString() ?? '';
+		// datasets = chart?.data.datasets ?? [];
+
+		if (chartType !== 'histogram') return;
+		datasetLabels = chart.config.data.datasets
+			.map((dataset) => dataset.label)
+			.filter((label): label is string => label !== undefined);
+		legendColors = chart.config.data.datasets
+			.map((dataset) => dataset.backgroundColor)
+			.map((color) => (typeof color === 'string' ? color : '#000000'));
 	});
 </script>
 
@@ -225,13 +235,20 @@
 			</div>
 			{#if chartType === 'histogram'}
 				<div class="flex items-center justify-between">
-					<p class="w-[25%] text-gray-800">Bar color:</p>
-					<input type="color" bind:value={barColor} class="h-10 w-10 rounded-md" />
-				</div>
-				<div class="flex items-center justify-between">
 					<p class="w-[25%] text-gray-800">Border color:</p>
 					<input type="color" bind:value={borderColor} class="h-10 w-10 rounded-md" />
 				</div>
+				{#if chart.config.data.datasets && chart.config.data.datasets.length <= 10 && chart.config.data.datasets.length >= 1}
+					<div class="flex flex-col space-y-4">
+						<p class="w-[25%] font-semibold text-gray-800">Legend colors:</p>
+						{#each datasetLabels as label, index}
+							<div class="flex items-center justify-between">
+								<p class="w-[25%] text-gray-800">{label}:</p>
+								<input type="color" bind:value={legendColors[index]} class="h-10 w-10 rounded-md" />
+							</div>
+						{/each}
+					</div>
+				{/if}
 			{/if}
 		{/if}
 		<svelte:fragment slot="footer">
