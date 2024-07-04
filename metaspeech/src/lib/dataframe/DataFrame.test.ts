@@ -485,13 +485,13 @@ describe('compare DataType array tests', () => {
 		const a: DataType = undefined;
 		const b: DataType = 2;
 
-		expect(compareDataType(a, b)).toBe(1);
+		expect(compareDataType(a, b)).toBe(-1);
 	});
 	it('b is undefined', () => {
 		const a: DataType = 1;
 		const b: DataType = undefined;
 
-		expect(compareDataType(a, b)).toBe(-1);
+		expect(compareDataType(a, b)).toBe(1);
 	});
 	it('both are numbers', () => {
 		const a: DataType = 1;

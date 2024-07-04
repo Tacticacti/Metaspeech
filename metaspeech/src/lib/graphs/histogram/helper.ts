@@ -1,20 +1,15 @@
+import { barchartStyles } from '$lib/Constants';
+import { sortGroups } from '$lib/dataframe/DataFrame';
 import {
 	calculateMean,
 	calculateSum,
 	calculateAbsoluteFrequency,
-	calculateRelativeFrequency
+	calculateRelativeFrequency,
+	keyArrayToString,
+	keyToString
 } from '$lib/graphs/sharedFunctions';
 
-import type { GroupedDataFrame, BarChartData } from '$lib/Types';
-import { type ChartConfiguration, type ChartDataset } from 'chart.js';
-import 'chartjs-chart-error-bars';
-
-import { setColor } from '$lib/graphs/utils/CanvasUtils';
-
-type BarChartDataset = ChartDataset<'barWithErrorBars'>;
-type BarChartConfiguration = ChartConfiguration<'barWithErrorBars'>;
-
-import { getTitleText, getScaleXAxisText, getScaleYAxisText } from '$lib/graphs/sharedFunctions';
+import type { GroupedDataFrame, BarChartData, Column, BarChartDataset, DataType } from '$lib/Types';
 
 /**
  * determines which aggregation or frequency function to use
@@ -41,106 +36,104 @@ export function handleData(
 	return [[], []];
 }
 
-/**
- * creates datasets which are used later on to create a chart
- * @param data current grouped dataframe
- * @param values current aggragated values
- * @param selectedFunction selected function name
- * @returns datasets for chart
- */
-export function createDatasets(
-	data: GroupedDataFrame,
-	values: BarChartData[],
-	selectedFunction: string
-) {
-	return [
-		{
-			label: createDatasetsLabel(data, values, selectedFunction),
-			data: values,
-			backgroundColor: 'rgba(51, 50, 200, 1)',
-			borderColor: 'rgba(0, 0, 0, 1)',
-			borderWidth: 1
-		}
-	];
-}
-
-/**
- * makes label for datasets object
- * @param data current grouped dataframe
- * @param values current values
- * @param selectedFunction current selected function
- * @returns label for datasets
- */
-export function createDatasetsLabel(
-	data: GroupedDataFrame,
-	values: BarChartData[],
-	selectedFunction: string
-) {
-	if (data.aggregateColumn) {
-		return data.aggregateColumn.name;
-	}
-	if (selectedFunction === 'Count') {
-		return 'Count';
-	}
-	return 'Percentage';
-}
-
-/**
- * creates config object for chart
- * @param labels bin names
- * @param datasets values for each of the bins
- * @param data current grouped dataframe
- * @param selectedFunction user selected function
- * @returns config object
- */
-export function createConfig(
+function fillData(
 	labels: string[],
-	datasets: BarChartDataset[],
-	data: GroupedDataFrame,
-	selectedFunction: string
-): BarChartConfiguration {
-	const plugin = {
-		id: 'customCanvasBackgroundColor',
-		beforeDraw: setColor
-	};
+	data: BarChartData[],
+	allStringLabels: string[]
+): BarChartData[] {
+	const newData: BarChartData[] = [];
 
-	const cfg: BarChartConfiguration = {
-		type: 'barWithErrorBars',
-		data: {
-			labels: labels,
-			datasets: datasets
-		},
+	for (let idxAll = 0, idxFew = 0; idxAll < allStringLabels.length; ++idxAll) {
+		if (labels[idxFew] === allStringLabels[idxAll]) {
+			newData.push(data[idxFew]);
+			++idxFew;
+		} else {
+			// Does not have these keys, so push a 0 to show empty bar
+			newData.push(0);
+		}
+	}
 
-		options: {
-			plugins: {
-				// @ts-expect-error Needs a specific type for plugin
-				customCanvasBackgroundColor: {
-					color: 'white'
-				},
-				title: {
-					display: true,
-					// Checks if there are colums selected, if not then this is just Absolute Frequency
-					// Else the title is the values x group of columns
-					text: getTitleText(data, selectedFunction)
-				}
-			},
-			scales: {
-				x: {
-					title: {
-						display: true,
-						text: getScaleXAxisText(data)
-					}
-				},
-				y: {
-					title: {
-						display: true,
-						text: getScaleYAxisText(data, selectedFunction)
-					}
-				}
+	return newData;
+}
+
+function contains(allLabels: DataType[][], keys: DataType[]): boolean {
+	for (const labelArray of allLabels) {
+		if (labelArray.length !== keys.length) {
+			continue;
+		}
+
+		let equal = true;
+		for (let i = 0; i < labelArray.length; ++i) {
+			if (labelArray[i] !== keys[i]) {
+				equal = false;
+				break;
 			}
-		},
-		//@ts-expect-error dont know plugin type
-		plugins: [plugin]
-	};
-	return cfg;
+		}
+
+		if (equal) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
+export function getBarChartData(
+	data: GroupedDataFrame,
+	selectedFunction: string,
+	legendColumn: Column | undefined
+): [string[], BarChartDataset[]] {
+	if (legendColumn === undefined || legendColumn === null) {
+		return [[], []];
+	}
+
+	const map = new Map<string, GroupedDataFrame>();
+	const indexLegend = data.groupedColumns.indexOf(legendColumn);
+	const newGroupedColumns = data.groupedColumns.filter((c) => c !== legendColumn);
+
+	// Here do regrouping to split into different data frames
+	// So that we can reuse functionality to calculate mean etc.
+
+	for (const group of data.groups) {
+		const legendKey = keyToString(group.keys[indexLegend], legendColumn.groupBy!);
+		const nonLegendKeys = group.keys.filter((_, i) => i !== indexLegend);
+
+		if (!map.has(legendKey)) {
+			map.set(legendKey, {
+				groups: [],
+				groupedColumns: newGroupedColumns,
+				aggregateColumn: data.aggregateColumn
+			});
+		}
+
+		map.get(legendKey)!.groups.push({ keys: nonLegendKeys, values: group.values });
+	}
+
+	const allLabels = new Array<DataType[]>();
+
+	for (const groupedDf of map.values()) {
+		// Union of all keys of each dataset
+		for (const group of groupedDf.groups) {
+			if (!contains(allLabels, group.keys)) {
+				allLabels.push(group.keys);
+			}
+		}
+	}
+
+	allLabels.sort();
+
+	const allStringLabels = allLabels.map((keys) => keyArrayToString(keys, newGroupedColumns));
+
+	const datasets = [...map.entries()].map(([legend, groupedDf], index) => {
+		sortGroups(groupedDf.groups);
+		const [labels, data] = handleData(selectedFunction, groupedDf);
+
+		return {
+			label: legend,
+			data: fillData(labels, data, allStringLabels),
+			...barchartStyles[index % barchartStyles.length]
+		};
+	});
+
+	return [allStringLabels, datasets];
 }
