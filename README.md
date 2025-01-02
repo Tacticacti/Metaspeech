@@ -3,9 +3,6 @@ This project is a part of the TU Delft 2023/2024 Software Project. During which 
 
 MetaSpeech is a website that visualizes, primarily but not limited to, speech meta data.
 
-![main pipeline](https://gitlab.ewi.tudelft.nl/cse2000-software-project/2023-2024/cluster-s/15a/code/badges/main/pipeline.svg?ignore_skipped=true&key_text=main+pipeline&key_width=90)
-![main statement coverage](https://gitlab.ewi.tudelft.nl/cse2000-software-project/2023-2024/cluster-s/15a/code/badges/main/coverage.svg?key_text=main+statement+coverage&key_width=157)
-
 ### Technology stack
 [![HTML5](https://img.shields.io/badge/HTML5-E34F26?logo=html5&labelColor=gray)](https://en.wikipedia.org/wiki/HTML5)
 [![CSS3](https://img.shields.io/badge/CSS3-1572B6?logo=css3&labelColor=gray)](https://en.wikipedia.org/wiki/css3)
